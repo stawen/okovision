@@ -7,5 +7,5 @@ Ainsi je recupere le log généré toutes les 2 heures et je les integre dans ma
 
 # Quelle techno ?
 Js + PHP + MariaDb, le tout sur un nas Synologie.
-Mais vous pouvez le faire tourner sur une RPI ou n'importe quelle distrib linux.
+Mais vous pouvez le faire tourner sur une RPI où n'importe quelle distrib linux.
 
