@@ -1,0 +1,24 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge" /><link href="css/smoothness/jquery-ui.min.css" rel="stylesheet" type="text/css" /><link href="css/smoothness/jquery-ui.theme.min.css" rel="stylesheet" type="text/css" /><link href="css/smoothness/jquery-ui.structure.min.css" rel="stylesheet" type="text/css" /><link href="css/style.css" rel="stylesheet" type="text/css" /><script src="js/jquery/jquery-1.11.2.min.js" type="text/javascript"></script><script src="js/jquery/jquery-migrate-1.2.1.min.js" type="text/javascript"></script><script src="js/jquery/jquery-ui.min.js" type="text/javascript"></script><script src="star_rating/star_rating.js" type="text/javascript"></script><script src="color_picker/color_picker.js" type="text/javascript"></script><script src="js/image_editor.js" type="text/javascript"></script><link id="page_favicon" href="/favicon.ico" rel="icon" type="image/x-icon" /><title>favicon.ico Generator</title><meta name="description" content="favicon.cc is a tool to create or download favicon.ico icons, that get displayed in the address bar of every browser." /><meta name="keywords" content="favicon.ico, favicon, favicon generator, favicon editor, icons, free, creative commons, create, download" /><meta content="no" http-equiv="imagetoolbar"><meta name="robots" content="index,follow" /><!-- (c) 2015 Copyright Xoron GmbH --></head><body><div><a href="/"><img src="images/favicon.cc/logo.png" alt="favicon.ico Generator" style="height: 105px; width: 350px;" /></a></div><table class="center"><tbody><tr><td></td><td><div class="rounded-box" ><div class="rounded-top"><div class="rounded-bottom"><div class="rounded-left"><div class="rounded-right"><div class="rounded-right-bottom"><div class="rounded-left-top"><div class="rounded-right-top"><div class="rounded-left-bottom"><div class="rounded-box-content"><h1>Error</h1>wrong parameters<p />
+			<div style="float: left;">
+				<a href="javascript:history.back()">Back</a>
+			</div>
+			<div style="float: right; margin-left: 1em;">
+				<a href="/">Homepage</a>
+			</div>
+			<div style="clear: both;"></div>
+		</div></div></div></div></div></div></div></div></div></div></td></tr></tr></tbody></table>
+		<div style="margin-top: 1em;">
+	
+			<hr />
+			<span class="footer">
+				&copy; 2015 Xoron GmbH
+				- <a href="/">Home</a> 
+				- <a rel="nofollow" href="/?action=about_us">About us</a>
+				- <a rel="nofollow" href="/?action=privacy">Privacy</a>
+				- <a rel="nofollow" href="/?action=terms_and_conditions">Terms and Conditions</a>
+				- <a rel="nofollow" href="/?action=send_email_request">Contact</a>
+			
+			</span>
+			<br />
+		</div>
+	</body></html>
