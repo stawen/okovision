@@ -8,7 +8,7 @@ class data{
 	private $result = null;
 	private $filtre = null;
 	private $okoHistoFull_WhereByDay = "FROM oko_histo_full WHERE mod(MINUTE(heure),5) = 0 and jour = ";
-	private $okoHistoFull_WhereByDayFull = "FROM oko_histo_full WHERE jour = ";
+	//private $okoHistoFull_WhereByDay = "FROM oko_histo_full WHERE jour = ";
 	
 	public function __construct() {
 		$this->log = new Logger();
@@ -112,6 +112,19 @@ class data{
 		
 		echo $this->getJson4graphe($categorie,$this->okoHistoFull_WhereByDay."'".$jour."'");
 	}
+	/* 
+	Comparaison avec les forumeur
+	*/
+	public function getAutres($jour){
+		$categorie = array( 'Delta Départ eau' => 'Tc_depart_eau_consigne - Tc_depart_eau',
+							'Delta T°C Ambiante eau' => 'Tc_ambiante_consigne - Tc_ambiante',
+							'T°C Chaudiere' => 'Tc_chaudiere',
+							'T°C Flamme / 10' => 'Tc_flamme / 10',
+							'% Bois' => '(vis_alimentation_tps / (vis_alimentation_tps + vis_alimentation_tps_pause))*100',
+						);
+		
+		echo $this->getJson4graphe($categorie,$this->okoHistoFull_WhereByDay."'".$jour."'");
+	}
 	
 	public function getIndicateur($jour){
 		$categorie = array( 'Tc_ext_max' => 'max(Tc_exterieur)',
@@ -157,80 +170,16 @@ class data{
 							);
 	}
 	
-
-/****
-Fonction pour recuperer toutes les data associé au timestamp
-***/
-
-
-	private function getDataWithTime($q){	
-		$this->getSQL($q);
-		$data = null;
-	
-		while($r = mysql_fetch_row($this->result)) {
-			
-			$date = new DateTime($r[0]." ".$r[1], new DateTimeZone('Europe/Paris'));
-			$utc = ($date->getTimestamp() + $date->getOffset()) * 1000;	
-			$data .= "[".$utc.",".$r[2]."],";
-			
-		}
+	public function getTotalConsoSaison($saison){
+		$categorie = array( 'consoTotal' => 'sum(conso_kg)'
+							);
 		
-		$data = substr($data,0,strlen($data)-1);
-		mysql_free_result($this->result);
-		
-		return '['.$data.']';
+		echo $this->getJson($categorie,
+							'FROM oko_resume_day '
+							.'WHERE oko_resume_day.jour BETWEEN "2014-09-01" AND "2015-09-01"'
+							);
 	}
 	
-	private function getJson4graphe2($f,$where){
-		
-	
-		$resultat = "";
-		
-		foreach ($f as $label => $colonneSql){
-			$req = "SELECT jour, DATE_FORMAT(heure,'%H:%i:%s'), ".$colonneSql." ".$where;
-			$this->log->info($req);
-			
-			$resultat .= '{ "name": "'.$label.'",';
-			$resultat .= '"data": '.$this->getDataWithTime($req);
-			$resultat .= '},';
-			
-			
-		}
-		//on retire la derniere virgule qui ne sert à rien
-		$resultat = substr($resultat,0,strlen($resultat)-1);
-		
-		header("Content-type: text/json");
-		return '['.$resultat.']';
-	}
-	
-/**************************
-***************************
-***************************/	
-	public function getTest($jour){
-		
-		$categorie = array( 'T°C Exterieur' => 'Tc_exterieur',
-							'T°C Ambiante' => 'Tc_ambiante',
-							'T°C Ambiante Consigne' => 'Tc_ambiante_consigne',
-							'T°C Depart Chauffage' => 'Tc_depart_eau'
-						);
-		
-		/*
-		$categorie = array( 'T°C Chaudiere' => 'Tc_chaudiere',
-							'T°C Chaudiere Consigne' => 'Tc_chaudiere_consigne',
-							'Circulateur (On/Off)' => 'Circulateur_chauffage',
-							'T°C Depart Chauffage' => 'Tc_depart_eau'
-						);
-		*/
-		/*
-			$categorie = array( 'ECS' => 'Tc_ecs',
-							'Bas du ballon' => 'Tc_ballon_bas',
-							'Panneau Solaire' => 'Tc_panneau_solaire',
-							'Pompe Solaire (On/off)' => 'Pompe_solaire',
-							'Circulateur ECS (On/off)' => 'Circulateur_ecs'
-						);
-		*/
-		echo $this->getJson4graphe2($categorie,$this->okoHistoFull_WhereByDayFull."'".$jour."'");
-	}
 
 }
 
