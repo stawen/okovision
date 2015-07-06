@@ -1,10 +1,13 @@
 <?php
 
+DEFINE('CONTEXT',$_SERVER['CONTEXT_DOCUMENT_ROOT']);
+date_default_timezone_set('Europe/Paris');
+
 DEFINE('PATH','http://chaudiere/logfiles/pelletronic/touch_');
-DEFINE('DEST_PATH','/home/xxx/okovision/depo/import');
+DEFINE('DEST_FTP_PATH','/home/xxx/okovision/depo/import');
 DEFINE('EXTENTION','.csv');
-DEFINE('CSVFILE',DEST_PATH.EXTENTION);
-DEFINE('LOGFILE','/home/xxx/okovision/www/_logs/okovision.log');
+DEFINE('CSVFILE',DEST_FTP_PATH.EXTENTION);
+DEFINE('LOGFILE',CONTEXT.'/_logs/okovision.log');
 //affiche les lignes de debug dans les logs
 DEFINE('DEBUG', false);
 //affiches les lignes de debug dans l'html
@@ -12,7 +15,7 @@ DEFINE('VIEW_DEBUG', false);
 
 //BDD
 DEFINE('BDD_IP','localhost');
-DEFINE('BDD_USER','root');
+DEFINE('BDD_USER','');
 DEFINE('BDD_PASS','');
 DEFINE('BDD_SCHEMA','okovision');
 
