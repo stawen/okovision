@@ -1,6 +1,6 @@
 <?php
-include_once '/home/xxx/okovision/www/config.php';
-include_once '/home/xxx/okovision/www/_include/logger.class.php';
+include_once 'config.php';
+include_once '_include/logger.class.php';
 
 class oko2ftp {
 	

@@ -1,0 +1,4 @@
+06.07.2015 | 17:03:09 | INFO    | SELECT jour, DATE_FORMAT(heure,'%H:%i:%s'), Tc_exterieur FROM oko_histo_full WHERE jour = '2015-07-06'
+06.07.2015 | 17:03:10 | INFO    | SELECT jour, DATE_FORMAT(heure,'%H:%i:%s'), Tc_ambiante FROM oko_histo_full WHERE jour = '2015-07-06'
+06.07.2015 | 17:03:10 | INFO    | SELECT jour, DATE_FORMAT(heure,'%H:%i:%s'), Tc_ambiante_consigne FROM oko_histo_full WHERE jour = '2015-07-06'
+06.07.2015 | 17:03:10 | INFO    | SELECT jour, DATE_FORMAT(heure,'%H:%i:%s'), Tc_depart_eau FROM oko_histo_full WHERE jour = '2015-07-06'
