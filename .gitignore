@@ -2,3 +2,4 @@ config.php
 id_rsa*
 *@eaDir
 @eaDir/
+okovision.log
