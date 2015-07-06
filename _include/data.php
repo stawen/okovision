@@ -89,7 +89,8 @@ class data{
 							'Circulateur ECS (On/off)' => 'Circulateur_ecs'
 						);
 		
-		echo $this->getJson4graphe($categorie,$this->okoHistoFull_WhereByDay."'".$jour."'");
+		//echo $this->getJson4graphe($categorie,$this->okoHistoFull_WhereByDay."'".$jour."'");
+		echo $this->getJson4graphe2($categorie,$this->okoHistoFull_WhereByDayFull."'".$jour."'");
 	}
 	
 	public function getChauffage($jour){
@@ -99,7 +100,8 @@ class data{
 							'T°C Depart Chauffage' => 'Tc_depart_eau'
 						);
 		
-		echo $this->getJson4graphe($categorie,$this->okoHistoFull_WhereByDay."'".$jour."'");
+		//echo $this->getJson4graphe($categorie,$this->okoHistoFull_WhereByDay."'".$jour."'");
+		echo $this->getJson4graphe2($categorie,$this->okoHistoFull_WhereByDayFull."'".$jour."'");
 	
 	}
 	
@@ -110,7 +112,8 @@ class data{
 							'T°C Depart Chauffage' => 'Tc_depart_eau'
 						);
 		
-		echo $this->getJson4graphe($categorie,$this->okoHistoFull_WhereByDay."'".$jour."'");
+		//echo $this->getJson4graphe($categorie,$this->okoHistoFull_WhereByDay."'".$jour."'");
+		echo $this->getJson4graphe2($categorie,$this->okoHistoFull_WhereByDayFull."'".$jour."'");
 	}
 	
 	public function getIndicateur($jour){
@@ -214,21 +217,6 @@ Fonction pour recuperer toutes les data associé au timestamp
 							'T°C Depart Chauffage' => 'Tc_depart_eau'
 						);
 		
-		/*
-		$categorie = array( 'T°C Chaudiere' => 'Tc_chaudiere',
-							'T°C Chaudiere Consigne' => 'Tc_chaudiere_consigne',
-							'Circulateur (On/Off)' => 'Circulateur_chauffage',
-							'T°C Depart Chauffage' => 'Tc_depart_eau'
-						);
-		*/
-		/*
-			$categorie = array( 'ECS' => 'Tc_ecs',
-							'Bas du ballon' => 'Tc_ballon_bas',
-							'Panneau Solaire' => 'Tc_panneau_solaire',
-							'Pompe Solaire (On/off)' => 'Pompe_solaire',
-							'Circulateur ECS (On/off)' => 'Circulateur_ecs'
-						);
-		*/
 		echo $this->getJson4graphe2($categorie,$this->okoHistoFull_WhereByDayFull."'".$jour."'");
 	}
 

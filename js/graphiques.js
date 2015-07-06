@@ -166,7 +166,7 @@ $(document).ready(function() {
 		
 	   $.getJSON("ajax.php?type=ecs&date=" + jour, function(json) {
 				//console.log('success');	
-				graphe(json,div_ecs,titre_ecs);
+				grapheWithTime(json,div_ecs,titre_ecs);
 				//console.log(json);
 			})
 			.error(function() { 
@@ -177,7 +177,7 @@ $(document).ready(function() {
 			
 		$.getJSON("ajax.php?type=chauffage&date=" + jour, function(json) {
 				//console.log('success');	
-				graphe(json,div_chauffage,titre_chauffage);
+				grapheWithTime(json,div_chauffage,titre_chauffage);
 				//console.log(json);
 			})
 			.error(function() { 
@@ -187,7 +187,7 @@ $(document).ready(function() {
 			});
 		$.getJSON("ajax.php?type=temperature&date=" + jour, function(json) {
 				//console.log('success');	
-				graphe(json,div_tempe,titre_tempe);
+				grapheWithTime(json,div_tempe,titre_tempe);
 				//console.log(json);
 			})
 			.error(function() { 
