@@ -5,4 +5,4 @@ test.php
 _logs\*
 *@eaDir
 @eaDir/
-okovision.log
+_logs\okovision.log
