@@ -1,4 +1,4 @@
-<?PHP
+﻿<?PHP
 include_once 'config.php';
 include_once '_include/logger.class.php';
 
@@ -115,6 +115,19 @@ class data{
 		//echo $this->getJson4graphe($categorie,$this->okoHistoFull_WhereByDay."'".$jour."'");
 		echo $this->getJson4graphe2($categorie,$this->okoHistoFull_WhereByDayFull."'".$jour."'");
 	}
+	/* 
+	Comparaison avec les forumeur
+	*/
+	public function getAutres($jour){
+		$categorie = array( 'Delta Départ eau' => 'Tc_depart_eau_consigne - Tc_depart_eau',
+							'Delta T°C Ambiante eau' => 'Tc_ambiante_consigne - Tc_ambiante',
+							'T°C Chaudiere' => 'Tc_chaudiere',
+							'T°C Flamme / 10' => 'Tc_flamme / 10',
+							'% Bois' => '(vis_alimentation_tps / (vis_alimentation_tps + vis_alimentation_tps_pause))*100',
+						);
+		
+		echo $this->getJson4graphe($categorie,$this->okoHistoFull_WhereByDay."'".$jour."'");
+	}
 	
 	public function getIndicateur($jour){
 		$categorie = array( 'Tc_ext_max' => 'max(Tc_exterieur)',
@@ -219,6 +232,7 @@ Fonction pour recuperer toutes les data associé au timestamp
 		
 		echo $this->getJson4graphe2($categorie,$this->okoHistoFull_WhereByDayFull."'".$jour."'");
 	}
+	
 
 }
 
