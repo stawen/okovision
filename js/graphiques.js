@@ -60,6 +60,71 @@ $(document).ready(function() {
 		});
 	}
 	
+	function grapheWithTime(json, where, titre){		
+			
+		var chart = new Highcharts.Chart({		
+			chart: {		
+				renderTo: where,		
+				type: 'spline',		
+				zoomType: 'x',		
+				panning: true,		
+				panKey: 'shift'		
+			},		
+			global: {		
+                useUTC: false		
+            },		
+			title: {		
+				text: titre		
+			},		
+			legend:{		
+				align: 'right',		
+				verticalAlign: 'middle',		
+				layout: 'vertical'		
+			},		
+			xAxis: {		
+				type: 'datetime',		
+                dateTimeLabelFormats: { 		
+                    minute: '%H:%M',		
+                    hour: '%H:%M'		
+                   		
+                },		
+				labels: {		
+					rotation : -45,		
+				},		
+				title: {		
+					text: 'Heures',		
+				}		
+			},		
+			yAxis: [{		
+					title: {		
+						text: 'T°C',		
+					},		
+					min : 0 //,	max : 100		
+				},{		
+					title: {		
+							text: 'ON/OFF'		
+						},		
+					opposite: true		
+				}],		
+			credits: {		
+				enabled : true,		
+				text : 'OkoVision'		
+			},		
+			plotOptions: {		
+				spline: {		
+					marker: {		
+						enabled: false		
+					}		
+				}		
+			},		
+			tooltip: {		
+                shared: true,		
+                crosshairs: true		
+            },		
+			series: json		
+		});		
+	}
+	
 	function graphe_error(where,titre){
 		var chart = new Highcharts.Chart({
 			chart: {
@@ -223,6 +288,13 @@ $(document).ready(function() {
 		}
 	});
 	
+	$(document).ajaxStart(function () {		
+            $(".se-pre-con").fadeIn();		
+    });		
+      		
+    $(document).ajaxStop(function () {		
+            $(".se-pre-con").fadeOut();		
+    });	
 	
 	generer_graphic();
 

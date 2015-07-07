@@ -5,6 +5,7 @@ include('_templates/menu.php');
 include('ajax.php');
 
 ?>   
+<div class="se-pre-con"></div>
 
     <div class="container theme-showcase" role="main">
 		<div class="page-header" align="center">

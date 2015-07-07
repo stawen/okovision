@@ -1,4 +1,4 @@
-﻿<?PHP
+<?PHP
 include_once 'config.php';
 include_once '_include/logger.class.php';
 
@@ -174,6 +174,16 @@ class data{
 	}
 	
 
+	public function getTotalConsoSaison($saison){
+		$categorie = array( 'consoTotal' => 'sum(conso_kg)'
+							);
+		
+		echo $this->getJson($categorie,
+							'FROM oko_resume_day '
+							.'WHERE oko_resume_day.jour BETWEEN "2014-09-01" AND "2015-09-01"'
+							);
+	}
+	
 /****
 Fonction pour recuperer toutes les data associé au timestamp
 ***/
