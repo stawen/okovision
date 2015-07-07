@@ -1,7 +1,8 @@
 <?php
 
-include('/volume1/web/okovision/_include/okofen.php');
-include('/volume1/web/okovision/_include/oko2ftp.php');
+include_once('config.php');
+include(CONTEXT.'/_include/okofen.php');
+include(CONTEXT.'/_include/oko2ftp.php');
 
 $oko = new okofen();
 $oko2web = new oko2ftp();

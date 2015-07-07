@@ -1,5 +1,4 @@
 <?php
-include_once 'config.php';
 include_once '_include/logger.class.php';
 
 class oko2ftp {
