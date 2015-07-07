@@ -36,7 +36,7 @@ $(document).ready(function() {
 					},
 					min : -5 ,	max : 40 
 				},{
-					gridLineWidth: 1,
+					gridLineWidth: 0,
 					title: {
 							text: 'Kg et DJU',
 							style: {
@@ -207,7 +207,6 @@ $(document).ready(function() {
 		generer_graphic();
 	});
 	
-	
 	$( "#bt_avant" ).click(function() {
 	    
 		if( $( "#mois"  ).val() == 1){
@@ -232,7 +231,21 @@ $(document).ready(function() {
 		generer_graphic();
 	});
 	
+	
 	generer_graphic();
+	
+	
+	$.getJSON("ajax.php?type=totalsaison&saison="+ $( "#saison" ).val(), function(json) {
+				console.log('success conso');	
+				$.each(json,function(i,indic){
+					$( "#consoPelletTotal" ).text(DecSepa(indic.consoTotal + " Kg"));
+				});
+				
+			})
+			.error(function() { 
+				console.log('error Total du mois');	
+			});	
+	
 
 });
   

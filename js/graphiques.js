@@ -60,72 +60,6 @@ $(document).ready(function() {
 		});
 	}
 	
-	function grapheWithTime(json, where, titre){
-	
-		var chart = new Highcharts.Chart({
-			chart: {
-				renderTo: where,
-				type: 'spline',
-				zoomType: 'x',
-				panning: true,
-				panKey: 'shift'
-			},
-			global: {
-                useUTC: false
-            },
-			title: {
-				text: titre
-			},
-			legend:{
-				align: 'right',
-				verticalAlign: 'middle',
-				layout: 'vertical'
-			},
-			xAxis: {
-				type: 'datetime',
-                dateTimeLabelFormats: { 
-                    minute: '%H:%M',
-                    hour: '%H:%M'
-                   
-                },
-				labels: {
-					rotation : -45,
-				},
-				title: {
-					text: 'Heures',
-				}
-			},
-			yAxis: [{
-					title: {
-						text: 'T°C',
-					},
-					min : 0 //,	max : 100
-				},{
-					title: {
-							text: 'ON/OFF'
-						},
-					opposite: true
-				}],
-			credits: {
-				enabled : true,
-				text : 'OkoVision'
-			},
-			plotOptions: {
-				spline: {
-					marker: {
-						enabled: false
-					}
-				}
-			},
-			tooltip: {
-                shared: true,
-                crosshairs: true
-            },
-			series: json
-		});
-	}
-	
-	
 	function graphe_error(where,titre){
 		var chart = new Highcharts.Chart({
 			chart: {
@@ -158,8 +92,8 @@ $(document).ready(function() {
 		var div_chauffage = 'chauffage_graphic';	
 		var titre_tempe = 'Température';	
 		var div_tempe = 'temperature_graphic';
-		var titre_test = 'Test';	
-		var div_test = 'test_graphic';
+		var titre_autres = 'Autres';	
+		var div_autres = 'autres_graphic';
 		
 		var jour = $.datepicker.formatDate('yy-mm-dd',$.datepicker.parseDate('dd/mm/yy', $( "#date_encours" ).val()));
 		//console.log(jour);
@@ -194,17 +128,17 @@ $(document).ready(function() {
 				//console.log('error');	
 				graphe_error(div_tempe,titre_tempe);
 				
-			});
-		$.getJSON("ajax.php?type=test&date=" + jour, function(json) {
+			});	
+		$.getJSON("ajax.php?type=autres&date=" + jour, function(json) {
 				//console.log('success');	
-				grapheWithTime(json,div_test,titre_test);
+				graphe(json,div_autres,titre_autres);
 				//console.log(json);
 			})
 			.error(function() { 
 				//console.log('error');	
-				graphe_error(div_test,titre_test);
+				graphe_error(div_autres,titre_autres);
 				
-			});	
+			});		
 		$.getJSON("ajax.php?type=indicateur&date=" + jour, function(json) {
 				console.log('success');	
 				$.each(json,function(i,indic){
@@ -288,14 +222,6 @@ $(document).ready(function() {
 			$(this).children('span').attr("class", 'glyphicon glyphicon-plus-sign');
 		}
 	});
-
-    $(document).ajaxStart(function () {
-            $(".se-pre-con").fadeIn();
-    });
-      
-    $(document).ajaxStop(function () {
-            $(".se-pre-con").fadeOut();
-    });	
 	
 	
 	generer_graphic();
