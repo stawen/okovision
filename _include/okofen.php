@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 include_once 'config.php';
 include_once '_include/logger.class.php';
 include_once '_include/timeExec.php';
@@ -188,7 +188,7 @@ class okofen {
 			
 			$n=mysql_query($query, $connect );
 			if (!$n){
-				$this->log->error("makeSynteseByDay | creation synthèse du ".$yesterday);
+				$this->log->error("makeSynteseByDay | creation synthèse du ".$yesterday." impossible");
 			}else{
 				$this->log->info("makeSynteseByDay | SUCCESS | creation synthèse du ".$yesterday);
 			}
