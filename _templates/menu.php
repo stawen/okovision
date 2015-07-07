@@ -6,7 +6,7 @@
 	global $page;
 	
 	$menu = Array(  'index.php' => 'Accueil',
-	                'histo.php' => 'Historique'
+					'histo.php' => 'Historique'
 			);	
 	
 	foreach ($menu as $url => $title){
@@ -33,6 +33,7 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <?php getmenu(); ?>
+			
            </ul>
 		  
 		  <div class="navbar-form navbar-right">
@@ -42,6 +43,7 @@
 				echo '	<input type="text" id="date_encours" class="form-control" style="width:100px";  value="'.date("d/m/Y").'">';
 				echo '<button type="button" id="date_apres" class="btn btn-primary"><strong>>></strong></button>';
 			}
+			
           ?>
 		  </div> 
         </div><!--/.nav-collapse -->

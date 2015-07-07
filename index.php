@@ -1,7 +1,9 @@
 <?php
+include_once 'config.php';
 include('_templates/header.php');
 include('_templates/menu.php');
 include('ajax.php');
+
 ?>   
 <div class="se-pre-con"></div>
 
@@ -25,9 +27,8 @@ include('ajax.php');
 			<a id="bt_tc"><span class="glyphicon glyphicon-minus-sign"></span></a> <span id="txt_tc" class="label label-primary" style="display: none; font-size: 14px">Température</span>
 			<div id="temperature_graphic" style="width:100%; height:400px;"></div>
 		</div>
-		<div class="page-header">
-		    <div id="test_graphic" style="width:100%; height:400px;"></div>
-		</div>
+		
+		
 		
 			
 		

@@ -1,5 +1,5 @@
 <?php
-include('_templates/header.php');
+include('_templates/header.php'); 
 include('_templates/menu.php');
 ?>   
 

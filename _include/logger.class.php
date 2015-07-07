@@ -1,5 +1,6 @@
-﻿<?php
-include_once '/home/xxx/okovision/www/_include/exceptions.logger.class.php';
+<?php
+
+include_once '_include/exceptions.logger.class.php';
 
 /**
  * Logger class.
