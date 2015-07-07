@@ -23,9 +23,6 @@ if (is_ajax()) {
 			case "indicateur":
 				$d->getIndicateur($_GET['date']);
 				break;	
-			case "autres":
-				$d->getAutres($_GET['date']);
-				break;		
 		}		
 	}
 	if (isset($_GET['type']) && ( (isset($_GET['month']) && isset($_GET['year']) ) || isset($_GET['saison']) ) ){
@@ -38,7 +35,10 @@ if (is_ajax()) {
 				break;
 			case "totalsaison":
 				$d->getTotalConsoSaison($_GET['saison']);
-				break;		
+				break;
+			case "synthese":
+				$d->getSyntheseSaison($_GET['saison']);
+				break;
 		}
 	}
 	

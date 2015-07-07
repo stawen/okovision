@@ -41,6 +41,7 @@ class data{
 		return $data;
 	}
 	
+	
 	private function getJson4graphe($f,$where){
 		
 		$resultat = array();
@@ -81,6 +82,55 @@ class data{
 		return json_encode($data, JSON_NUMERIC_CHECK);
 	}
 	
+	/****
+	Fonction pour recuperer toutes les data associé au timestamp
+	***/
+
+
+	private function getDataWithTime($q){	
+		$this->getSQL($q);
+		$data = null;
+	
+		while($r = mysql_fetch_row($this->result)) {
+			
+			$date = new DateTime($r[0]." ".$r[1], new DateTimeZone('Europe/Paris'));
+			$utc = ($date->getTimestamp() + $date->getOffset()) * 1000;	
+			$data .= "[".$utc.",".$r[2]."],";
+			
+		}
+		
+		$data = substr($data,0,strlen($data)-1);
+		mysql_free_result($this->result);
+		
+		return '['.$data.']';
+	}
+	
+	private function getJson4grapheWithTime($f,$where){
+		
+	
+		$resultat = "";
+		
+		foreach ($f as $label => $colonneSql){
+			$req = "SELECT jour, DATE_FORMAT(heure,'%H:%i:%s'), ".$colonneSql." ".$where;
+			$this->log->debug($req);
+			
+			$resultat .= '{ "name": "'.$label.'",';
+			$resultat .= '"data": '.$this->getDataWithTime($req);
+			$resultat .= '},';
+			
+			
+		}
+		//on retire la derniere virgule qui ne sert à rien
+		$resultat = substr($resultat,0,strlen($resultat)-1);
+		
+		header("Content-type: text/json");
+		return '['.$resultat.']';
+	}
+	
+	
+	/****
+	 fonction pour recuperer les information de production ECS
+	 */
 	public function getEcs($jour){
 		$categorie = array( 'ECS' => 'Tc_ecs',
 							'Bas du ballon' => 'Tc_ballon_bas',
@@ -89,10 +139,12 @@ class data{
 							'Circulateur ECS (On/off)' => 'Circulateur_ecs'
 						);
 		
-		//echo $this->getJson4graphe($categorie,$this->okoHistoFull_WhereByDay."'".$jour."'");
-		echo $this->getJson4graphe2($categorie,$this->okoHistoFull_WhereByDayFull."'".$jour."'");
+		echo $this->getJson4grapheWithTime($categorie,$this->okoHistoFull_WhereByDayFull."'".$jour."'");
 	}
 	
+	/****
+	 fonction pour recuperer les information de production Chauffage
+	 */
 	public function getChauffage($jour){
 		$categorie = array( 'T°C Chaudiere' => 'Tc_chaudiere',
 							'T°C Chaudiere Consigne' => 'Tc_chaudiere_consigne',
@@ -100,11 +152,13 @@ class data{
 							'T°C Depart Chauffage' => 'Tc_depart_eau'
 						);
 		
-		//echo $this->getJson4graphe($categorie,$this->okoHistoFull_WhereByDay."'".$jour."'");
-		echo $this->getJson4graphe2($categorie,$this->okoHistoFull_WhereByDayFull."'".$jour."'");
+		echo $this->getJson4grapheWithTime($categorie,$this->okoHistoFull_WhereByDayFull."'".$jour."'");
 	
 	}
 	
+	/****
+	 fonction pour recuperer les information de temperature
+	 */
 	public function getTemperature($jour){
 		$categorie = array( 'T°C Exterieur' => 'Tc_exterieur',
 							'T°C Ambiante' => 'Tc_ambiante',
@@ -112,23 +166,13 @@ class data{
 							'T°C Depart Chauffage' => 'Tc_depart_eau'
 						);
 		
-		//echo $this->getJson4graphe($categorie,$this->okoHistoFull_WhereByDay."'".$jour."'");
-		echo $this->getJson4graphe2($categorie,$this->okoHistoFull_WhereByDayFull."'".$jour."'");
-	}
-	/* 
-	Comparaison avec les forumeur
-	*/
-	public function getAutres($jour){
-		$categorie = array( 'Delta Départ eau' => 'Tc_depart_eau_consigne - Tc_depart_eau',
-							'Delta T°C Ambiante eau' => 'Tc_ambiante_consigne - Tc_ambiante',
-							'T°C Chaudiere' => 'Tc_chaudiere',
-							'T°C Flamme / 10' => 'Tc_flamme / 10',
-							'% Bois' => '(vis_alimentation_tps / (vis_alimentation_tps + vis_alimentation_tps_pause))*100',
-						);
-		
-		echo $this->getJson4graphe($categorie,$this->okoHistoFull_WhereByDay."'".$jour."'");
+		echo $this->getJson4grapheWithTime($categorie,$this->okoHistoFull_WhereByDayFull."'".$jour."'");
 	}
 	
+	
+	/****
+	 fonction pour recuperer les information d'indication dans les labels'
+	 */
 	public function getIndicateur($jour){
 		$categorie = array( 'Tc_ext_max' => 'max(Tc_exterieur)',
 							'Tc_ext_min' => 'min(Tc_exterieur)',
@@ -140,6 +184,11 @@ class data{
 							);
 	}
 	
+	
+	
+	/****
+	 fonction pour recuperer les information d'agregation
+	 */
 	public function getHistoConsoByMonth($month,$year){
 		$categorie = array( 'T°C Exterieur (Max)' => 'tc_ext_max',
 							'T°C Exterieur (Min)' => 'tc_ext_min',
@@ -173,10 +222,16 @@ class data{
 							);
 	}
 	
-
+	/*
+	* TODO : variabiliser la requette
+	*/
 	public function getTotalConsoSaison($saison){
-		$categorie = array( 'consoTotal' => 'sum(conso_kg)'
-							);
+		$categorie = array( 'Tc_ext_max' => 'max(Tc_ext_max)',
+							'Tc_ext_min' => 'min(Tc_ext_min)',
+							'conso' => 'sum(conso_kg)',
+							'dju' => 'sum(dju)',
+							'nbcycle' => 'sum(nb_cycle)'
+						);
 		
 		echo $this->getJson($categorie,
 							'FROM oko_resume_day '
@@ -184,66 +239,28 @@ class data{
 							);
 	}
 	
-/****
-Fonction pour recuperer toutes les data associé au timestamp
-***/
+	
 
-
-	private function getDataWithTime($q){	
-		$this->getSQL($q);
-		$data = null;
-	
-		while($r = mysql_fetch_row($this->result)) {
-			
-			$date = new DateTime($r[0]." ".$r[1], new DateTimeZone('Europe/Paris'));
-			$utc = ($date->getTimestamp() + $date->getOffset()) * 1000;	
-			$data .= "[".$utc.",".$r[2]."],";
-			
-		}
-		
-		$data = substr($data,0,strlen($data)-1);
-		mysql_free_result($this->result);
-		
-		return '['.$data.']';
-	}
-	
-	private function getJson4graphe2($f,$where){
-		
-	
-		$resultat = "";
-		
-		foreach ($f as $label => $colonneSql){
-			$req = "SELECT jour, DATE_FORMAT(heure,'%H:%i:%s'), ".$colonneSql." ".$where;
-			$this->log->info($req);
-			
-			$resultat .= '{ "name": "'.$label.'",';
-			$resultat .= '"data": '.$this->getDataWithTime($req);
-			$resultat .= '},';
-			
-			
-		}
-		//on retire la derniere virgule qui ne sert à rien
-		$resultat = substr($resultat,0,strlen($resultat)-1);
-		
-		header("Content-type: text/json");
-		return '['.$resultat.']';
-	}
-	
-/**************************
-***************************
-***************************/	
-	public function getTest($jour){
-		
-		$categorie = array( 'T°C Exterieur' => 'Tc_exterieur',
-							'T°C Ambiante' => 'Tc_ambiante',
-							'T°C Ambiante Consigne' => 'Tc_ambiante_consigne',
-							'T°C Depart Chauffage' => 'Tc_depart_eau'
+	public function getSyntheseSaison($saison){
+		$categorie = array( 'T°C Exterieur (Max)' => 'max(Tc_ext_max)',
+							'T°C Exterieur (Min)' => 'min(Tc_ext_min)',
+							'Consommation Pellet (Kg)' => 'sum(conso_kg)',
+							'DJU' => 'sum(dju)',
+							'NB Cycle' => 'sum(nb_cycle)'
+							
 						);
-		
-		echo $this->getJson4graphe2($categorie,$this->okoHistoFull_WhereByDayFull."'".$jour."'");
+						
+		echo $this->getJson4graphe($categorie,
+							'FROM oko_resume_day, oko_config '
+							.'WHERE oko_config.id = '.$saison.' '
+							.'AND oko_resume_day.jour BETWEEN oko_config.date_debut AND oko_config.date_fin '
+							.'GROUP BY MONTH(oko_resume_day.jour) '
+							.'ORDER BY YEAR(oko_resume_day.jour), MONTH(oko_resume_day.jour) ASC'
+							);				
 	}
 	
 
+	
 }
 
 ?>

@@ -28,9 +28,7 @@ include('ajax.php');
 			<div id="temperature_graphic" style="width:100%; height:400px;"></div>
 		</div>
 		
-		<div class="page-header">
-			<div id="autres_graphic" style="width:100%; height:400px;"></div>
-		</div>
+		
 		
 			
 		

@@ -49,12 +49,17 @@ include('_templates/menu.php');
 			<div class="col-md-12" id="histo-temperature" style="width:100%; height:500px;"></div>
 			<div class="col-md-12"></div>
 		</div>
-	
+		
 		<div class="page-header" >
-			<div class="col-md-3">
-				<span class="glyphicon glyphicon-hand-right"></span> Conso Total : <span id="consoPelletTotal" class="label label-primary">0000 Kg</span> &nbsp;&nbsp;
+			<div class="col-md-9">
+				<span class="glyphicon glyphicon-hand-right"></span> Conso : <span id="consoPelletSaison" class="label label-primary">00,00 Kg</span> &nbsp;&nbsp;
+				<span class="glyphicon glyphicon-arrow-up"></span> T°C Max (ext) : <span id="tcmaxSaison" class="label label-success">00,0 °C</span> &nbsp;&nbsp;
+				<span class="glyphicon glyphicon-arrow-right"></span> T°C Moy (ext) : <span id="tcmoySaison" class="label label-info">00,0 °C</span> &nbsp;&nbsp;
+				<span class="glyphicon glyphicon-arrow-down"></span> T°C Min (ext) : <span id="tcminSaison" class="label label-warning">00,0 °C</span> &nbsp;&nbsp;
+				<span class="glyphicon glyphicon-cloud"></span> DJU : <span id="djuSaison" class="label label-primary">0</span><br/>
+				<span class="glyphicon glyphicon-hand-right"></span> Nb Cycle : <span id="cycleSaison" class="label label-primary">0</span>
 			</div>
-			<div class="col-md-9" align="right">
+			<div class="col-md-3" align="right">
 				<select id="saison" name="saison">
 					<option value="1" selected="selected">2014-2015</option>
 				</select>
