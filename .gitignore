@@ -8,3 +8,4 @@ _logs\*
 _logs\okovision.log
 Thumbs.db
 import.csv
+_tmp/import.csv

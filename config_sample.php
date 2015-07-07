@@ -14,7 +14,7 @@ DEFINE('BDD_PASS','');
 DEFINE('BDD_SCHEMA','okovision');
 
 //CONNEXION SERVER DISTANT
-DEFINE('FTP_SERVEUR', '');
+DEFINE('FTP_SERVEUR', ''); 
 DEFINE('FTP_USER', ''); 
 DEFINE('FTP_PASS', '');
 DEFINE('REP_DEPOT', '');
@@ -27,20 +27,17 @@ DEFINE('TC_REF', 20);
 DEFINE('POIDS_PELLET_PAR_MINUTE', 153);
 
 
-
-
 /****
 	DONT'T TOUCH 
 ****/
 //Parametres globaux
-DEFINE('CONTEXT',$_SERVER['CONTEXT_DOCUMENT_ROOT']);
+DEFINE('CONTEXT',dirname($_SERVER['SCRIPT_FILENAME']));
 date_default_timezone_set('Europe/Paris');
 
 //configuration fichier d'echange
 DEFINE('PATH','http://chaudiere/logfiles/pelletronic/touch_');
-DEFINE('DEST_CSV_PATH',CONTEXT.'_tmp/import.csv');
 DEFINE('EXTENTION','.csv');
-DEFINE('CSVFILE',DEST_CSV_PATH.EXTENTION);
+DEFINE('CSVFILE',CONTEXT.'/_tmp/import.csv');
 DEFINE('LOGFILE',CONTEXT.'/_logs/okovision.log');
 
 //PARAMETRE BDD
@@ -51,7 +48,7 @@ DEFINE('BDD_DECIMAL','.');
 //Formule savante
 DEFINE('COEFF_CONSO', POIDS_PELLET_PAR_MINUTE/60/1000);
 DEFINE('FUNC_CONSO_PELLET','round(sum( ((60 / (vis_alimentation_tps + vis_alimentation_tps_pause)) * vis_alimentation_tps)) * '.COEFF_CONSO.',2)');
-DEFINE('FUNC_DJU','IF( '.TC_REF.' <= MIN(Tc_exterieur), 0, round( '.TC_REF.' - (MAX(Tc_exterieur) + MIN(Tc_exterieur))/2,2))');
+DEFINE('FUNC_DJU','IF( '.TC_REF.' <= (MAX(Tc_exterieur) + MIN(Tc_exterieur))/2, 0, round( '.TC_REF.' - (MAX(Tc_exterieur) + MIN(Tc_exterieur))/2,2))');
 
 
 
