@@ -7,3 +7,4 @@ _logs\*
 @eaDir/
 _logs\okovision.log
 Thumbs.db
+import.csv
