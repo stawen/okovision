@@ -30,7 +30,7 @@ DEFINE('POIDS_PELLET_PAR_MINUTE', 153); //default -> 150
 /***
 * OPTIONNEL -> ceci peut etre laissé avec les valeurs par defaut
 */
-//CONNEXION SERVER DISTANT pour consultation exterieur (optionnel)
+//CONNEXION SERVER DISTANT pour consultation exterieur (optionnel) utile si SEND_TO_WEB est à true
 DEFINE('FTP_SERVEUR', ''); 
 DEFINE('FTP_USER', ''); 
 DEFINE('FTP_PASS', '');
