@@ -1,16 +1,12 @@
 config.php
-id_rsa*
-<<<<<<< HEAD
 *@eaDir
 @eaDir/
-=======
 test.php
 *.log
 _logs\*
 *@eaDir
 @eaDir/
-_logs\okovision.log
 Thumbs.db
 import.csv
-_tmp/import.csv
->>>>>>> origin/V0.9.2
+
+
