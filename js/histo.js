@@ -2,6 +2,13 @@
 
 $(document).ready(function() {
 	
+	Highcharts.setOptions({
+        lang: {
+            thousandsSep: ' ',
+            decimalPoint: ','
+        }
+    });
+		
 	function graphe_error(where,titre){
 		var chart = new Highcharts.Chart({
 			chart: {
