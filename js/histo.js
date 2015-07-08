@@ -282,7 +282,7 @@ $(document).ready(function() {
 														//panKey: 'shift'
 													},
 													title: {
-														text: "Synthse Saison"
+														text: "Synthèse Saison " + $('#saison option:selected').text()
 													},
 													legend:{
 														align: 'right',
@@ -353,8 +353,8 @@ $(document).ready(function() {
 										        });
 				})
 				.error(function() { 
-					console.log('error graphe synthse saison');	
-					graphe_error("saison_graphic","Synthese saison");
+					console.log('error graphe synthèse saison');	
+					graphe_error("saison_graphic","Synthèse saison");
 					
 				});
 	}
