@@ -8,9 +8,9 @@ $oko = new okofen();
 $oko2web = new oko2ftp();
 
 //on telecharge le csv depuis la chaudiere
-$oko->getChaudiereData();
+if(GET_CHAUDIERE_DATA) $oko->getChaudiereData();
 //envoi du fichier vers le serveur web distant
-$oko2web->send2web();
+if(SEND_TO_WEB) $oko2web->send2web();
 //integre le csv dans la base
 $oko->csv2bdd();
 //on lance le traitement
