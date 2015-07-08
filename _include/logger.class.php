@@ -1,6 +1,6 @@
 <?php
 
-include_once '_include/exceptions.logger.class.php';
+include_once CONTEXT.'/_include/exceptions.logger.class.php';
 
 /**
  * Logger class.

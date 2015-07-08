@@ -1,6 +1,6 @@
 <?PHP
 include_once 'config.php';
-include_once '_include/logger.class.php';
+include_once CONTEXT.'/_include/logger.class.php';
 
 class data{
 
