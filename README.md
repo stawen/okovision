@@ -16,3 +16,6 @@ mettre en graphique toutes les informations fournies par la chaudiere.
 J'ai donc mis au point cette application web. Elle me permet d'analyser et de suivre ma consommation de pellet.
 
 
+# TODO
+- Variabiliser l'activation des actions FTP
+- 
