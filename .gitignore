@@ -9,3 +9,4 @@ Thumbs.db
 *.csv
 import.csv
 /_tmp/*
+_logs/okovision.log
