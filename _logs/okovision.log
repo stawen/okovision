@@ -1,0 +1,5 @@
+08.07.2015 | 21:47:52 | INFO    | getChaudiereData | Recuperation du fichier http://chaudiere/logfiles/pelletronic/touch_20150708.csv
+08.07.2015 | 21:47:52 | INFO    | getChaudiereData | SUCCESS - données chaudiere récupérées
+08.07.2015 | 21:47:52 | INFO    | Send2Web | envoi du fichier vers www.draunet.com
+08.07.2015 | 21:47:57 | INFO    | Send2Web | envoi terminé
+08.07.2015 | 21:48:01 | INFO    | csv2bdd | SUCCESS - import du CSV dans la BDD - 1211 lignes en 4.447 sec 
