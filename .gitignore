@@ -13,3 +13,5 @@ import.csv
 _tmp/import.csv
 _tmp\import.csv
 *.csv
+_logs/okovision.log
+_tmp/import.csv
