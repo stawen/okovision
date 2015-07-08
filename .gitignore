@@ -3,9 +3,13 @@ id_rsa*
 test.php
 *.log
 _logs\*
+_logs/*
 *@eaDir
 @eaDir/
-/_logs/okovision.log
+_logs/okovision.log
+_logs\okovision.log
 Thumbs.db
 import.csv
-/_tmp/import.csv
+_tmp/import.csv
+_tmp\import.csv
+*.csv
