@@ -5,7 +5,7 @@ test.php
 _logs\*
 *@eaDir
 @eaDir/
-_logs\okovision.log
+/_logs/okovision.log
 Thumbs.db
 import.csv
-_tmp/import.csv
+/_tmp/import.csv
