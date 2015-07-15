@@ -1,0 +1,22 @@
+- Creation des graphiques (Front Page)
+	-> choix du nom du graphique
+		-> choix des données a mettre dans le graphique
+
+- Configuration
+	- Choisir la T°C de reference
+	- Choisir le poids de pellet pour 60 secondes de vis tremi
+	- definir saison de chauffage
+  	- Chemin http de la chaudiere (Ip ou Nom)
+	- Parametrage BDD
+	- Association structure fichier CSV de l'installation Okofen avec le nom des colonnes
+	- Transfert csv sur serveur distant (Oui / non)+
+	- 
+	
+- Actions Manuelles
+	- Recuperation csv depuis la chaudiere
+		- Liste les fichiers presents sur la chaudieres
+		- Choisir le fichier a importer (si date fichier different de date du jour alors faire la synthese automatiquement)
+	- Import du CSV depuis upload via interface web
+	- Faire la synthese journaliere
+		- Afficher les jours n'ayant pas de synthese journaliere et proposer de la faire
+		- Choisir un jour precis pour mettre a jour la synthese

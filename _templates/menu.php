@@ -34,6 +34,27 @@
           <ul class="nav navbar-nav">
             <?php getmenu(); ?>
 			
+			<li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                    <li class="dropdown-header">Gestion des graphiques</li>
+                    <li><a href="gstrapport.php">Gestion rapport journalier</a></li>
+                    <li class="divider"></li>
+                   
+                    <li class="dropdown-header">Configuration Equipements</li>
+                    <li><a href="gsteqt.php">Gestion des équipements Knx</a></li>
+                    <li><a href="gstpgaction.php">Gestion des actions</a></li>
+                    <li class="divider"></li>
+                   
+                    <li class="dropdown-header">Systeme</li>    
+                    <li><a href="#">Visualisation du bus Knx</a></li>
+                    <li><a href="configuration.php">Configuration</a></li>
+                    <li><a href="#">Mise à jour</a></li>
+                </ul>
+            </li>
+			
            </ul>
 		  
 		  <div class="navbar-form navbar-right">
