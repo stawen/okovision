@@ -39,19 +39,23 @@
                     <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                 </a>
                 <ul class="dropdown-menu" role="menu">
-                    <li class="dropdown-header">Gestion des graphiques</li>
-                    <li><a href="gstrapport.php">Gestion rapport journalier</a></li>
+                    <li class="dropdown-header">Graphiques</li>
+                    <li><a href="#">Gestion rapports journaliers</a></li>
                     <li class="divider"></li>
                    
-                    <li class="dropdown-header">Configuration Equipements</li>
-                    <li><a href="gsteqt.php">Gestion des équipements Knx</a></li>
-                    <li><a href="gstpgaction.php">Gestion des actions</a></li>
+                    <li class="dropdown-header">Actions Manuelles</li>    
+                    <li><a href="#">Mise à jour des données (depuis chaudiere)</a></li>
+                    <li><a href="#">Mise à jour des données (import)</a></li>
+                    <li><a href="#">Calcul Synthèse journaliere</a></li>
                     <li class="divider"></li>
+                    
+                    <li class="dropdown-header">Configuration</li>
+                    <li><a href="#">Informations Generales</a></li> <!-- T°C de ref, Gr pellet pour 60 secondes // transfert sur serveur distant // mode debug ? -->
+                    <li><a href="#">Saisons</a></li>
+                    <li><a href="#">Matrice de lecture du CSV</a></li>
+                    
                    
-                    <li class="dropdown-header">Systeme</li>    
-                    <li><a href="#">Visualisation du bus Knx</a></li>
-                    <li><a href="configuration.php">Configuration</a></li>
-                    <li><a href="#">Mise à jour</a></li>
+                    
                 </ul>
             </li>
 			

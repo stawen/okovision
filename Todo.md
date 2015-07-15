@@ -6,8 +6,8 @@
 	- Choisir la T°C de reference
 	- Choisir le poids de pellet pour 60 secondes de vis tremi
 	- definir saison de chauffage
-  	- Chemin http de la chaudiere (Ip ou Nom)
-	- Parametrage BDD
+  	- (Chemin http de la chaudiere (Ip ou Nom))
+	- (Parametrage BDD)
 	- Association structure fichier CSV de l'installation Okofen avec le nom des colonnes
 	- Transfert csv sur serveur distant (Oui / non)+
 	- 

@@ -112,7 +112,7 @@ class data{
 		
 		foreach ($f as $label => $colonneSql){
 			$req = "SELECT jour, DATE_FORMAT(heure,'%H:%i:%s'), ".$colonneSql." ".$where;
-			$this->log->debug($req);
+			//$this->log->debug($req);
 			
 			$resultat .= '{ "name": "'.$label.'",';
 			$resultat .= '"data": '.$this->getDataWithTime($req);
