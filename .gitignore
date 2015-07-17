@@ -39,6 +39,7 @@ Thumbs.db
 #######################
 *.csv
 config.php
+config.json
 test.php
 
 *@eaDir
