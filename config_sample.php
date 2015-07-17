@@ -1,5 +1,11 @@
 <?php
 
+if (!file_exists("config.json")) {
+   header("Location: setup.php");
+   exit;
+}
+$config = json_decode(file_get_contents("config.json"), true);
+
 /* You can Touch */
 
 //affiche les lignes de debug dans les logs
@@ -11,22 +17,22 @@ DEFINE('VIEW_DEBUG', false); //default -> false
 // exemple : 192.168.0.23 ou chaudiere ou 
 // en precisant le port 192.168.0.23:8180 => <ip>:<port>
 // si hebergement exterieur et que la chaudiere est accessible via l'exterieur => toto.ddns.net ou toto.ddns.net:<port>
-DEFINE('CHAUDIERE','chaudiere'); // <ip>:<port> //json
+DEFINE('CHAUDIERE',$config['chaudiere']); // <ip>:<port> //json
 //BDD
 DEFINE('BDD_IP','###_BDD_IP_###'); //default -> localhost
 DEFINE('BDD_USER','###_BDD_USER_###');
-DEFINE('BDD_PASS','###_BDD_USER_###');
+DEFINE('BDD_PASS','###_BDD_PASS_###');
 DEFINE('BDD_SCHEMA','okovision'); //default -> okovision
 
 
 
 
 //T°c de reference dans la maison, ici 20 °c
-DEFINE('TC_REF', 20); //default -> 20 //json
+DEFINE('TC_REF', $config['tc_ref']); //default -> 20 //json
 //apres une mesure, deduire le poids des epplet en gr fourni 
 //par la vis sans fin vers le foyer pour 1 minutes de fonctionnement
-DEFINE('POIDS_PELLET_PAR_MINUTE', 153); //default -> 150  //json
-
+DEFINE('POIDS_PELLET_PAR_MINUTE', $config['poids_pellet']); //default -> 150  //json
+DEFINE('SURFACE_HOUSE', $config['surface_maison']); //default -> 150  //json
 /***
 * OPTIONNEL -> ceci peut etre laissé avec les valeurs par defaut
 */
@@ -36,9 +42,9 @@ DEFINE('FTP_USER', '###_FTP_USER_###');
 DEFINE('FTP_PASS', '###_FTP_PASS_###');
 DEFINE('REP_DEPOT', '###_FTP_DEPOT_###');
 // Activation/Desctivation de la recuperation du fichier sur la chaudiere
-DEFINE('GET_CHAUDIERE_DATA', true); // default -> true //json
+DEFINE('GET_CHAUDIERE_DATA', ($config['get_data_from_chaudiere']==1)?true:false); // default -> true //json
 // Activation/Desctivation du transfert du fichier de la chaudiere vers une autre serveur en + de celui hebergeant l'application.
-DEFINE('SEND_TO_WEB', false); // default -> false //json
+DEFINE('SEND_TO_WEB', ($config['send_to_web']==1)?true:false); // default -> false //json
 
 
 
@@ -47,7 +53,7 @@ DEFINE('SEND_TO_WEB', false); // default -> false //json
 ****/
 //Parametres globaux
 //DEFINE('CONTEXT',dirname($_SERVER['SCRIPT_FILENAME'])); //json
-DEFINE('CONTEXT', getcwd() );
+DEFINE('CONTEXT', '###_CONTEXT_###' );
 date_default_timezone_set('Europe/Paris');
 
 //configuration fichier d'echange
