@@ -3,7 +3,7 @@
 /* You can Touch */
 
 //affiche les lignes de debug dans les logs
-DEFINE('DEBUG', false); //default -> false
+DEFINE('DEBUG', false); //default -> false 
 //affiches les lignes de debug dans l'html
 DEFINE('VIEW_DEBUG', false); //default -> false
 
@@ -11,34 +11,34 @@ DEFINE('VIEW_DEBUG', false); //default -> false
 // exemple : 192.168.0.23 ou chaudiere ou 
 // en precisant le port 192.168.0.23:8180 => <ip>:<port>
 // si hebergement exterieur et que la chaudiere est accessible via l'exterieur => toto.ddns.net ou toto.ddns.net:<port>
-DEFINE('CHAUDIERE','chaudiere'); // <ip>:<port>
+DEFINE('CHAUDIERE','chaudiere'); // <ip>:<port> //json
 //BDD
-DEFINE('BDD_IP','localhost'); //default -> localhost
-DEFINE('BDD_USER','');
-DEFINE('BDD_PASS','');
+DEFINE('BDD_IP','###_BDD_IP_###'); //default -> localhost
+DEFINE('BDD_USER','###_BDD_USER_###');
+DEFINE('BDD_PASS','###_BDD_USER_###');
 DEFINE('BDD_SCHEMA','okovision'); //default -> okovision
 
 
 
 
 //T°c de reference dans la maison, ici 20 °c
-DEFINE('TC_REF', 20); //default -> 20
+DEFINE('TC_REF', 20); //default -> 20 //json
 //apres une mesure, deduire le poids des epplet en gr fourni 
 //par la vis sans fin vers le foyer pour 1 minutes de fonctionnement
-DEFINE('POIDS_PELLET_PAR_MINUTE', 153); //default -> 150
+DEFINE('POIDS_PELLET_PAR_MINUTE', 153); //default -> 150  //json
 
 /***
 * OPTIONNEL -> ceci peut etre laissé avec les valeurs par defaut
 */
 //CONNEXION SERVER DISTANT pour consultation exterieur (optionnel) utile si SEND_TO_WEB est à true
-DEFINE('FTP_SERVEUR', ''); 
-DEFINE('FTP_USER', ''); 
-DEFINE('FTP_PASS', '');
-DEFINE('REP_DEPOT', '');
+DEFINE('FTP_SERVEUR', '###_FTP_SERVEUR_###'); 
+DEFINE('FTP_USER', '###_FTP_USER_###'); 
+DEFINE('FTP_PASS', '###_FTP_PASS_###');
+DEFINE('REP_DEPOT', '###_FTP_DEPOT_###');
 // Activation/Desctivation de la recuperation du fichier sur la chaudiere
-DEFINE('GET_CHAUDIERE_DATA', true); // default -> true
+DEFINE('GET_CHAUDIERE_DATA', true); // default -> true //json
 // Activation/Desctivation du transfert du fichier de la chaudiere vers une autre serveur en + de celui hebergeant l'application.
-DEFINE('SEND_TO_WEB', false); // default -> false
+DEFINE('SEND_TO_WEB', false); // default -> false //json
 
 
 
@@ -46,7 +46,8 @@ DEFINE('SEND_TO_WEB', false); // default -> false
 	DONT'T TOUCH 
 ****/
 //Parametres globaux
-DEFINE('CONTEXT',dirname($_SERVER['SCRIPT_FILENAME']));
+//DEFINE('CONTEXT',dirname($_SERVER['SCRIPT_FILENAME'])); //json
+DEFINE('CONTEXT', getcwd() );
 date_default_timezone_set('Europe/Paris');
 
 //configuration fichier d'echange

@@ -1,8 +1,12 @@
 <?php
-include_once 'config.php';
-include('_templates/header.php');
-include('_templates/menu.php');
-include('ajax.php');
+if (!file_exists("config.php")) {
+   header("Location: setup.php");
+}else{
+	include_once 'config.php';
+	include('_templates/header.php');
+	include('_templates/menu.php');
+	include('ajax.php');
+}
 
 ?>   
 <div class="se-pre-con"></div>
