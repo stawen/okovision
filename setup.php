@@ -5,16 +5,20 @@
 	}
 	
 	function testBddConnection($s){
-		$db = new mysqli($s['db_adress'], $s['db_user'], $s['db_password'], 'mysql');
+		mysqli_report(MYSQLI_REPORT_STRICT);
+		
 		$r = true;
 		
-		if ($db->connect_errno) {
-		   $r=false;
+		try{
+			$db = new mysqli($s['db_adress'], $s['db_user'], $s['db_password'], 'mysql');
+		} catch (Exception $e ) {
+			$r=false;
+     		
 		}
-		
 		$t['response'] = $r;
         header("Content-type: text/json");
 		echo json_encode($t, JSON_NUMERIC_CHECK);
+		
 		exit;
 	}
 	
@@ -29,9 +33,6 @@
 				
 			}		
 		}
-		
-		
-	
 	}
 	
 ?>
@@ -50,8 +51,8 @@
 		</div>
 		
 		
-				<fieldset>
-						<form class="form-horizontal">
+			<fieldset>
+				<form class="form-horizontal">
 				<!-- Form Name -->
 					<legend>Connexion à votre base de donnée</legend>
 					
@@ -81,16 +82,13 @@
 					</div>
 					
 					<!-- Button -->
-					
-					  
-					
-				</form>
-				<label class="col-md-4 control-label" for="bt_testConnection">Tester la connexion :</label>
+					<label class="col-md-4 control-label"  for="bt_testConnection">Tester la connexion :</label>
 					  <div class="col-md-3">
-					    <button id="bt_testConnection" name="bt_testConnection" class="btn btn-primary" type="submit">Connect</button>
+					    <button id="bt_testConnection" name="bt_testConnection" class="btn btn-primary">Connect</button>
 					  </div>
-				</fieldset>
-				
+					</form>
+			</fieldset>
+			
 
 			<form class="form-horizontal">
 				<fieldset>
