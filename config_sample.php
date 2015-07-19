@@ -42,7 +42,7 @@ DEFINE('FTP_USER', '###_FTP_USER_###');
 DEFINE('FTP_PASS', '###_FTP_PASS_###');
 DEFINE('REP_DEPOT', '###_FTP_DEPOT_###');
 // Activation/Desctivation de la recuperation du fichier sur la chaudiere
-DEFINE('GET_CHAUDIERE_DATA', ($config['get_data_from_chaudiere']==1)?true:false); // default -> true //json
+DEFINE('GET_CHAUDIERE_DATA_BY_IP', ($config['get_data_from_chaudiere']==1)?true:false); // default -> true //json
 // Activation/Desctivation du transfert du fichier de la chaudiere vers une autre serveur en + de celui hebergeant l'application.
 DEFINE('SEND_TO_WEB', ($config['send_to_web']==1)?true:false); // default -> false //json
 
@@ -57,7 +57,8 @@ DEFINE('CONTEXT', '###_CONTEXT_###' );
 date_default_timezone_set('Europe/Paris');
 
 //configuration fichier d'echange
-DEFINE('PATH','http://'.CHAUDIERE.'/logfiles/pelletronic/touch_');
+DEFINE('URL','/logfiles/pelletronic');
+DEFINE('PATH','http://'.CHAUDIERE.URL.'/touch_');
 DEFINE('EXTENTION','.csv');
 DEFINE('CSVFILE',CONTEXT.'/_tmp/import.csv');
 DEFINE('LOGFILE',CONTEXT.'/_logs/okovision.log');

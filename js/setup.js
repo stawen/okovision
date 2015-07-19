@@ -4,7 +4,7 @@ $(document).ready(function() {
 	//$('#formConnect').submit(function() {
 		//if ( $('#db_adress').val() !== "" && $('#db_user').val() !== "" && $('#db_password').val() !== "" ){
 		
-				$(this).text("....");
+				//$(this).text("....");
 				
 				var tab = {
 					db_adress: $('#db_adress').val(),
@@ -20,10 +20,12 @@ $(document).ready(function() {
 					success: function(a) {
 						console.log(a.response);
 						if (a.response) {
-							$("#bt_testConnection").text("Succes");
+							//$("#bt_testConnection").text("Succes");
+							$.growlValidate("Connexion reussi !");
 							//console.log("ok");
 						} else {
-							$("#bt_testConnection").text("Error !");
+							//$("#bt_testConnection").text("Error !");
+							$.growlErreur("Echec de connexion à la base de données !!");
 							//console.log("nok");
 						}
 		
@@ -74,7 +76,7 @@ $(document).ready(function() {
 					async: false,
 					success: function(a) {
 						console.log("succes");
-						window.location.replace("configuration.php#matrice");
+						window.location.replace("admin.php#matrice");
 					}
 				});
 	    
