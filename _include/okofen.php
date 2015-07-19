@@ -47,14 +47,20 @@ class okofen {
 		}
 	}
 	
-	public function getChaudiereData(){
-		if ($this->newDay()){
-			$today = date('Ymd' ,mktime(0, 0, 0, date("m")  , date("d")-1, date("Y")) );
+	public function getChaudiereData($trigger = 'cron', $url){
+		
+		if($trigger <> 'onDemande'){
+    		if ($this->newDay()){
+    			$today = date('Ymd' ,mktime(0, 0, 0, date("m")  , date("d")-1, date("Y")) );
+    		}else{
+    			$today = date("Ymd"); // 20010310
+    		}
+    
+    		$link = PATH.$today.EXTENTION;
 		}else{
-			$today = date("Ymd"); // 20010310
+		    $link = $url;
 		}
-
-		$link = PATH.$today.EXTENTION;
+		
 		$this->log->info('getChaudiereData | Recuperation du fichier '.$link);
 		//on lance le dl
 		$result = $this->download($link,CSVFILE);
@@ -62,8 +68,10 @@ class okofen {
 		if (!$result){
 			 throw new Exception('Download error...');
 			 $this->log->error('getChaudiereData | Données chaudiere non recupérées');
+			 return false;
 		}else{
 			$this->log->info('getChaudiereData | SUCCESS - données chaudiere récupérées');
+			return true;
 		}
 
 	}
@@ -73,6 +81,7 @@ class okofen {
 		$connect = mysql_connect(BDD_IP,BDD_USER,BDD_PASS);
 		if (!$connect){
 		   $this->log->error('csv2bdd | Connection MySQL impossible : ' . mysql_error());
+		   return false;
 		}
 		
 		$t = new timeExec();
@@ -148,7 +157,7 @@ class okofen {
 		$this->log->info("csv2bdd | SUCCESS - import du CSV dans la BDD - ".$ln." lignes en ".$t->getTime()." sec ");
 		
 		mysql_close($connect); // closing connection
-
+        return true;
 
 	}
 	//function de convertion du format decimal de l'import au format bdd
@@ -159,11 +168,15 @@ class okofen {
 	// Fonction lancant les requettes de synthèse du jour, elle ne s'active que si nous sommes dans le traitement de minuit. Elle fera la synthese
 	// des jours precedents.
 	
-	public function makeSynteseByDay(){
+	public function makeSynteseByDay($trigger = 'cron',$dayChossen){
 		
-		if ($this->newDay()){
-			//Il est minuit nous lançons la synthèse, sinon non
-			$yesterday = date('Y-m-d' ,mktime(0, 0, 0, date("m")  , date("d")-1, date("Y")) );
+		if ($this->newDay() || $trigger <> 'onDemande'){
+			//Il est minuit nous lançons la synthèse, sinon nous prenons la date du choisie
+			if($trigger =='onDemande'){
+			    $day = date('Y-m-d' ,mktime(0, 0, 0, date("m")  , date("d")-1, date("Y")) );
+			}else{
+			    $day = $dayChossen;
+			}
 			
 			// specify connection info
 			$connect = mysql_connect(BDD_IP,BDD_USER,BDD_PASS);
@@ -181,15 +194,15 @@ class okofen {
 						.FUNC_CONSO_PELLET." AS conso_kg, "
 						.FUNC_DJU." As dju, "
 						."sum(Debut_cycle) as nb_cycle "
-						."FROM oko_histo_full where jour = '".$yesterday."'";
+						."FROM oko_histo_full where jour = '".$day."'";
 						
 			$this->log->debug("makeSynteseByDay | ".$query);
 			
 			$n=mysql_query($query, $connect );
 			if (!$n){
-				$this->log->error("makeSynteseByDay | creation synthèse du ".$yesterday." impossible");
+				$this->log->error("makeSynteseByDay | creation synthèse du ".$day." impossible");
 			}else{
-				$this->log->info("makeSynteseByDay | SUCCESS | creation synthèse du ".$yesterday);
+				$this->log->info("makeSynteseByDay | SUCCESS | creation synthèse du ".$day);
 			}
 			mysql_close($connect); // closing connection
 			

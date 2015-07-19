@@ -1,12 +1,43 @@
 <?PHP
+
 include_once('_include/data.php'); 
+include_once('_include/administration.class.php'); 
+
 
 function is_ajax() {
-  return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+  //return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+  return true;
 }
 
 if (is_ajax()) {
 	$d = new data();
+	
+	$a = new administration();
+	
+		if (isset($_GET['type']) && isset($_GET['action']) ){
+	
+    		switch ($_GET['type']){
+    			case "admin":
+    				switch ($_GET['action']){
+    				    case "testIp":
+    				        if( isset( $_GET['ip'] ) ){
+    				            $a->ping($_GET['ip']);
+    				        }
+    				        break; 
+    				    case "saveInfoGe":
+    				        $a->saveInfoGenerale($_POST);
+    				        break;
+    				    case "getFileFromChaudiere":
+    				        $a->getFileFromChaudiere();
+    				        break; 
+                        case "importFileFromChaudiere":
+                            $a->importFileFromChaudiere($_POST);
+                            break;
+    				}
+    				break; //
+    		}		
+	    }
+
 	
 	if (isset($_GET['type']) && isset($_GET['date']) ){
 	
