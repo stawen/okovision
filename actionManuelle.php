@@ -5,6 +5,7 @@
 	include('ajax.php');
 ?>
 <div class="container theme-showcase" role="main">
+<br/>
     <div class="page-header" >
     
         <ul class="nav nav-tabs" role="tablist">
@@ -19,7 +20,7 @@
                 <table id="listeFichierFromChaudiere" class="table table-hover">
                     <thead>
                         <tr>
-                            <th class="col-md-10">Nom</th>
+                            <th class="col-md-10">Fichiers disponibles sur la chaudiere</th>
                             <th class="col-md-2"></th>
                         </tr>
                     </thead>

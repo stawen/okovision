@@ -16,16 +16,15 @@ class data{
 	
 	private function getSQL($query){
 		
-		$connect = mysql_connect(BDD_IP,BDD_USER,BDD_PASS);
-		if (!$connect){
-		   $this->log->error('Ajax | Connection MySQL impossible : ' . mysql_error());
-		}
-		$cid = mysql_select_db(BDD_SCHEMA,$connect);
+		$mysqli = new mysqli(BDD_IP,BDD_USER,BDD_PASS,BDD_SCHEMA);
 		
-		$this->result =  mysql_query($query,$connect);
+		if ($mysqli->connect_errno) {
+		    $this->log->error('Ajax | Connection MySQL impossible : ' . $mysqli->connect_error );
+        }
+		$this->result =  $mysqli->query($query);
 		
 		$this->log->debug("Ajax | GetSQL - ".$query);
-		mysql_close($connect); // closing connection
+		$mysqli->close(); // closing connection
 	}
 	
 	
@@ -33,11 +32,11 @@ class data{
 		$this->getSQL($q);
 		
 		$data = array();
-		while($r = mysql_fetch_row($this->result)) {
+		while($r = $this->result->fetch_row() ) {
 			$data[] = $r[0];
 		}
 		
-		mysql_free_result($this->result);
+		$this->result->free_result();
 		return $data;
 	}
 	
@@ -71,12 +70,11 @@ class data{
 		$this->getSQL($req);
 		
 		$data = array();
-		while($r = mysql_fetch_object($this->result)) {
+		while($r = $this->result->fetch_object()) {
 			$data[] = $r;
 		}
 		
-		mysql_free_result($this->result);
-		
+		$this->result->free_result();
 		
 		header("Content-type: text/json");
 		return json_encode($data, JSON_NUMERIC_CHECK);
@@ -91,8 +89,8 @@ class data{
 		$this->getSQL($q);
 		$data = null;
 	
-		while($r = mysql_fetch_row($this->result)) {
-			
+		while($r = $this->result->fetch_row()) {	
+		    
 			$date = new DateTime($r[0]." ".$r[1], new DateTimeZone('Europe/Paris'));
 			$utc = ($date->getTimestamp() + $date->getOffset()) * 1000;	
 			$data .= "[".$utc.",".$r[2]."],";
@@ -100,7 +98,7 @@ class data{
 		}
 		
 		$data = substr($data,0,strlen($data)-1);
-		mysql_free_result($this->result);
+		$this->result->free_result();
 		
 		return '['.$data.']';
 	}

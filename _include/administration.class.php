@@ -1,6 +1,6 @@
 <?php
 
-//include_once CONTEXT.'/_include/logger.class.php';
+include_once(CONTEXT.'/_include/logger.class.php');
 include_once(CONTEXT.'/_include/okofen.php'); 
 
 class administration{

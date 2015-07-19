@@ -137,7 +137,7 @@ class logger {
 	public function debug($message) {
 		if(DEBUG){
 			$this->log($message,Logger::DEBUG);
-			if (VIEW_DEBUG) print_r ('<pre>'.$message.'</pre>');
+			//if (VIEW_DEBUG) print_r ('<pre>'.$message.'</pre>');
 		}
 	}
 }

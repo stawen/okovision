@@ -6,6 +6,7 @@
 ?>
 
 <div class="container theme-showcase" role="main">
+<br/>
     <div class="page-header" >
         <ul class="nav nav-tabs" role="tablist">
           <li role="presentation"><a href="#infoge" aria-controls="infoge" role="tab" data-toggle="tab">Informations Generales</a></li>

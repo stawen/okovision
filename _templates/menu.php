@@ -1,4 +1,4 @@
-﻿ <?php
+ <?php
  
   $page = basename($_SERVER['SCRIPT_NAME']);
  
@@ -74,3 +74,4 @@
         </div><!--/.nav-collapse -->
       </div>
     </div>
+    <br/>

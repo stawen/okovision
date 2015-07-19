@@ -5,9 +5,16 @@ include_once CONTEXT.'/_include/timeExec.php';
 class okofen {
 	
 	private $log = null;
-
+    private $mysqli;
+    
 	public function __construct() {
 		$this->log = new Logger();
+		
+		$this->mysqli = new mysqli(BDD_IP,BDD_USER,BDD_PASS,BDD_SCHEMA);
+		
+		if ($this->mysqli->connect_errno) {
+		    $this->log->error('Class Okofen | Connection MySQL impossible : ' . $this->mysqli->connect_error );
+        }
 	}
 
 	
@@ -24,7 +31,7 @@ class okofen {
 			if (fwrite($wh, fread($rh, 4096)) === FALSE) {
 				return false;
 			}
-			echo ' ';
+			//echo ' ';
 			flush();
 		}
 
@@ -66,7 +73,7 @@ class okofen {
 		$result = $this->download($link,CSVFILE);
 
 		if (!$result){
-			 throw new Exception('Download error...');
+			 //throw new Exception('Download error...');
 			 $this->log->error('getChaudiereData | Données chaudiere non recupérées');
 			 return false;
 		}else{
@@ -77,17 +84,8 @@ class okofen {
 	}
 
 	public function csv2bdd(){
-		// specify connection info
-		$connect = mysql_connect(BDD_IP,BDD_USER,BDD_PASS);
-		if (!$connect){
-		   $this->log->error('csv2bdd | Connection MySQL impossible : ' . mysql_error());
-		   return false;
-		}
-		
 		$t = new timeExec();
 		
-		$cid = mysql_select_db(BDD_SCHEMA,$connect);
-
 		$file = fopen(CSVFILE, 'r');
 		$ln = 0;
 		$old_status = "0";
@@ -97,7 +95,7 @@ class okofen {
 			$ligne = fgets($file);
 			if($ln != 0){
 				$d = explode(CSV_SEPARATEUR, $ligne);
-				if($d[1]<>''){
+				if(isset($d[1])){
 					//Detection demarrage d'un cycle
 					if( $d[29] == "3" && $d[29] <> $old_status){
 						$start_cycle = 1;
@@ -146,7 +144,7 @@ class okofen {
 							")";
 				
 
-					$n=mysql_query($query, $connect );
+					$n = $this->mysqli->query($query);
 					//$this->log->debug($query);
 					$old_status = $d[29];	
 				}
@@ -156,7 +154,8 @@ class okofen {
 		fclose($file);
 		$this->log->info("csv2bdd | SUCCESS - import du CSV dans la BDD - ".$ln." lignes en ".$t->getTime()." sec ");
 		
-		mysql_close($connect); // closing connection
+		//mysql_close($connect); // closing connection
+		$this->mysqli->close(); // closing connection
         return true;
 
 	}
@@ -178,14 +177,6 @@ class okofen {
 			    $day = $dayChossen;
 			}
 			
-			// specify connection info
-			$connect = mysql_connect(BDD_IP,BDD_USER,BDD_PASS);
-			if (!$connect){
-				$this->log->error('makeSynteseByDay | Connection MySQL impossible : ' . mysql_error());
-			}
-			
-			$cid = mysql_select_db(BDD_SCHEMA,$connect);
-			
 			$query = "INSERT INTO oko_resume_day "
 					."SELECT "
 						." jour, "
@@ -198,13 +189,16 @@ class okofen {
 						
 			$this->log->debug("makeSynteseByDay | ".$query);
 			
-			$n=mysql_query($query, $connect );
+			//$n=mysql_query($query, $connect );
+			$n = $this->mysqli->query($query);
+			
 			if (!$n){
 				$this->log->error("makeSynteseByDay | creation synthèse du ".$day." impossible");
 			}else{
 				$this->log->info("makeSynteseByDay | SUCCESS | creation synthèse du ".$day);
 			}
-			mysql_close($connect); // closing connection
+			//mysql_close($connect); // closing connection
+			$this->mysqli->close(); // closing connection
 			
 		}
 	
