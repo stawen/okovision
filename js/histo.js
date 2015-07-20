@@ -203,7 +203,7 @@ $(document).ready(function() {
 	function generer_synthese_saison(){
 		
 		$.getJSON("ajax.php?type=totalsaison&saison="+ $( "#saison" ).val(), function(json) {
-				console.log('success conso');	
+				//console.log('success conso');	
 				$.each(json,function(i,indic){
 					$( "#tcmaxSaison" ).text(DecSepa(indic.Tc_ext_max + " °C"));
 					$( "#tcminSaison" ).text(DecSepa(indic.Tc_ext_min + " °C"));
@@ -219,8 +219,8 @@ $(document).ready(function() {
 			});	
 		
 		$.getJSON("ajax.php?type=synthese&saison=" + $( "#saison" ).val(), function(json) {
-					console.log('Synthese success');	
-					console.log(json);
+					//console.log('Synthese success');	
+					//console.log(json);
 					
 					
 					//Personnalisation des données

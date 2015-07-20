@@ -1,22 +1,17 @@
 <?php
-include_once CONTEXT.'/_include/logger.class.php';
-include_once CONTEXT.'/_include/timeExec.php';
+include_once '/_include/connectDb.class.php';
+include_once  '_include/timeExec.php';
 
-class okofen {
+class okofen extends connectDb{
 	
-	private $log = null;
-    private $mysqli;
-    
+	
 	public function __construct() {
-		$this->log = new Logger();
-		
-		$this->mysqli = new mysqli(BDD_IP,BDD_USER,BDD_PASS,BDD_SCHEMA);
-		
-		if ($this->mysqli->connect_errno) {
-		    $this->log->error('Class Okofen | Connection MySQL impossible : ' . $this->mysqli->connect_error );
-        }
+		parent::__construct();
 	}
-
+	
+	public function __destruct() {
+		parent::__destruct();
+	}
 	
 	//fonction de telechargement de fichier sur internet
 	// download('http://xxx','/usr/var/tmp)');
@@ -47,7 +42,7 @@ class okofen {
 		$hour = date("H"); //17
 		//$this->log->debug("hour::".$hour);
 		if ($hour == '00'){
-			$this->log->debug("Minuit");
+			//$this->log->debug("Minuit");
 			return true;
 		}else{
 			return false;
@@ -144,7 +139,7 @@ class okofen {
 							")";
 				
 
-					$n = $this->mysqli->query($query);
+					$n = $this->db->query($query);
 					//$this->log->debug($query);
 					$old_status = $d[29];	
 				}
@@ -155,7 +150,7 @@ class okofen {
 		$this->log->info("csv2bdd | SUCCESS - import du CSV dans la BDD - ".$ln." lignes en ".$t->getTime()." sec ");
 		
 		//mysql_close($connect); // closing connection
-		$this->mysqli->close(); // closing connection
+		//$this->mysqli->close(); // closing connection
         return true;
 
 	}
@@ -187,19 +182,17 @@ class okofen {
 						."sum(Debut_cycle) as nb_cycle "
 						."FROM oko_histo_full where jour = '".$day."'";
 						
-			$this->log->debug("makeSynteseByDay | ".$query);
+			$this->log->info("makeSynteseByDay | ".$query);
 			
 			//$n=mysql_query($query, $connect );
-			$n = $this->mysqli->query($query);
+			$n = $this->db->query($query);
 			
 			if (!$n){
 				$this->log->error("makeSynteseByDay | creation synthèse du ".$day." impossible");
 			}else{
 				$this->log->info("makeSynteseByDay | SUCCESS | creation synthèse du ".$day);
 			}
-			//mysql_close($connect); // closing connection
-			$this->mysqli->close(); // closing connection
-			
+		
 		}
 	
 	}

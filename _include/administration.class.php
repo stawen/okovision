@@ -1,19 +1,16 @@
 <?php
+include_once 'config.php';
+include_once '_include/connectDb.class.php';
+include_once '_include/okofen.php'; 
 
-include_once(CONTEXT.'/_include/logger.class.php');
-include_once(CONTEXT.'/_include/okofen.php'); 
-
-class administration{
+class administration extends connectDb{
 	
 	public function __construct() {
-		//$this->log = new Logger();
+		parent::__construct();
 	}
-	/*
-	 * *
-	 * Destructor of Logger
-	 */
-	public function __destruct() {
 	
+	public function __destruct() {
+		parent::__destruct();
 	}
 	
 	private function sendResponse($t){
@@ -26,8 +23,6 @@ class administration{
 		$waitTimeoutInSeconds = 1; 
 		
 		$r = array();
-		
-	//	print_r("ici");exit;
 		
 		if($fp = fsockopen($ip,80,$errCode,$errStr,$waitTimeoutInSeconds)){   
 		   // It worked 

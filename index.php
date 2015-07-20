@@ -3,10 +3,12 @@ if (!file_exists("config.php")) {
    header("Location: setup.php");
 }else{
 	include_once 'config.php';
-	include('_templates/header.php');
-	include('_templates/menu.php');
-	include('ajax.php');
+	include_once '_templates/header.php';
+	include_once '_templates/menu.php';
+	include_once 'ajax.php';
 }
+
+
 
 ?>   
 <div class="se-pre-con"></div>

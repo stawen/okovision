@@ -1,30 +1,28 @@
 <?PHP
 include_once 'config.php';
-include_once CONTEXT.'/_include/logger.class.php';
+include_once '_include/connectDb.class.php';
 
-class data{
 
-	private $log = null;
+class data extends connectDb{
+
 	private $result = null;
 	private $filtre = null;
+
 	private $okoHistoFull_WhereByDay = "FROM oko_histo_full WHERE mod(MINUTE(heure),5) = 0 and jour = ";
 	private $okoHistoFull_WhereByDayFull = "FROM oko_histo_full WHERE jour = ";
 	
 	public function __construct() {
-		$this->log = new Logger();
+		parent::__construct();
+	}
+	
+	public function __destruct() {
+		parent::__destruct();
 	}
 	
 	private function getSQL($query){
 		
-		$mysqli = new mysqli(BDD_IP,BDD_USER,BDD_PASS,BDD_SCHEMA);
-		
-		if ($mysqli->connect_errno) {
-		    $this->log->error('Ajax | Connection MySQL impossible : ' . $mysqli->connect_error );
-        }
-		$this->result =  $mysqli->query($query);
-		
+		$this->result =  $this->db->query($query);
 		$this->log->debug("Ajax | GetSQL - ".$query);
-		$mysqli->close(); // closing connection
 	}
 	
 	

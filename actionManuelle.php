@@ -1,15 +1,17 @@
 <?php
 	include_once 'config.php';
-	include('_templates/header.php');
-	include('_templates/menu.php');
-	include('ajax.php');
+	include_once '_templates/header.php';
+	include_once '_templates/menu.php';
+	include_once 'ajax.php';
 ?>
 <div class="container theme-showcase" role="main">
 <br/>
     <div class="page-header" >
     
         <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation"><a href="#majip" aria-controls="majip" role="tab" data-toggle="tab">Importation des données (depuis chaudiere)</a></li>
+        <?php if(GET_CHAUDIERE_DATA_BY_IP){ ?>
+            <li role="presentation"><a href="#majip" aria-controls="majip" role="tab" data-toggle="tab">Importation des données (depuis chaudiere)</a></li> 
+        <?php } ?>
             <li role="presentation"><a href="#majusb" aria-controls="majusb" role="tab" data-toggle="tab">Importation des données (upload)</a></li>
             <li role="presentation"><a href="#synthese" aria-controls="synthese" role="tab" data-toggle="tab">Calcul Synthèse journaliere</a></li>
         </ul>

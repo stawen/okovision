@@ -1,8 +1,7 @@
 <?PHP
 
-include_once('_include/data.php'); 
-include_once('_include/administration.class.php'); 
-
+include_once '_include/data.php'; 
+include_once '_include/administration.class.php'; 
 
 function is_ajax() {
   //return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
@@ -33,6 +32,10 @@ if (is_ajax()) {
                         case "importFileFromChaudiere":
                             $a->importFileFromChaudiere($_POST);
                             break;
+                        case "importFileFromUpload":
+                            $a->importFileFromUpload($_POST);
+                            break;
+                            
     				}
     				break; //
     		}		
