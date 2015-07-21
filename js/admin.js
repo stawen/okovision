@@ -69,4 +69,30 @@ $(document).ready(function() {
         
     });
     
+    
+    $('#fileupload').fileupload({
+    	
+    	url: 'files.php',
+        dataType: 'json',
+        autoUpload: true,
+        acceptFileTypes: /(\.|\/)(csv)$/i,
+        maxFileSize: 3000000,
+        formData: {fichier: 'matrice.csv', action: 'matrice'},
+        start: function (e) {
+    		console.log('Uploads started');
+		},
+        done: function (e, data) {
+            
+        },
+        progress: function (e, data) {
+        	var progress = parseInt(data.loaded / data.total * 100, 10);
+        	console.log('ici::'+ progress);
+        	$('#bar').css(
+	            'width',
+            	progress + '%'
+        	);
+    	}
+    });
+
+    
 });

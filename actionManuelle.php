@@ -41,6 +41,7 @@
 include('_templates/footer.php');
 ?>
 <!--appel des scripts personnels de la page -->
+
 	<script src="js/actionManuelle.js"></script>
     </body>
 </html>

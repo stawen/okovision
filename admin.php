@@ -92,7 +92,30 @@
             
             
             <div role="tabpanel" class="tab-pane" id="saisons">.saison..</div>
-            <div role="tabpanel" class="tab-pane" id="matrice">..matrice.</div>
+            <div role="tabpanel" class="tab-pane" id="matrice">
+            	<br/>
+            	Votre installation Okofen est spécifique. Le format du fichier CSV qu'elle produite est unique. Vous devez alors "apprendre" à okovision comment lire ce fichier.
+            	<br/> Tout d'abord, importer le fichier via le bouton ci-dessous
+            	<br/><br/>
+            	<span class="btn btn-success fileinput-button">
+			        <i class="glyphicon glyphicon-plus"></i>
+			        <span>Fichier CSV produit par la chaudiere</span>
+			        <!-- The file input field used as target for the file upload widget -->
+			        <input id="fileupload" type="file" name="files[]">
+			    </span>
+			    <br/><br/>
+			    <!-- The global progress bar -->
+			   <div class="progress">
+  					<div id="bar" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+    					
+  					</div>
+				</div>
+				
+				
+				
+			    <!-- The container for the uploaded files -->
+			    <div id="files" class="files"></div>
+            </div>
            
           </div>
     </div>
@@ -102,6 +125,9 @@
 include('_templates/footer.php');
 ?>
 <!--appel des scripts personnels de la page -->
+	<!-- script src="js/jquery.ui.widget.js"></script -->
+  	<!--script src="js/jquery.iframe-transport.js"></script-->
+  	<script src="js/jquery.fileupload.js"></script>
 	<script src="js/admin.js"></script>
     </body>
 </html>
