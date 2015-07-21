@@ -39,7 +39,8 @@ class UploadHandler
     );
 
     protected $image_objects = array();
-
+    
+    
     function __construct($options = null, $initialize = true, $error_messages = null) {
         $this->response = array();
         $this->options = array(
@@ -169,6 +170,8 @@ class UploadHandler
             $this->initialize();
         }
     }
+    
+    
 
     protected function initialize() {
         switch ($this->get_server_var('REQUEST_METHOD')) {
@@ -190,6 +193,10 @@ class UploadHandler
             default:
                 $this->header('HTTP/1.1 405 Method Not Allowed');
         }
+    }
+    
+    public function getOption(){
+        return $this->options;
     }
 
     protected function get_full_url() {

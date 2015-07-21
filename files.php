@@ -19,13 +19,20 @@ require('_include/UploadHandler.php');
 $upload_handler = new UploadHandler();
 
 if(isset($_POST['action'])){
+	
 	if($_POST['action'] == 'matrice'){
-		print_r($_POST['fichier']);
-		print_r($_FILES['files']['name'][0]);
-	//rename("/tmp/tmp_file.txt", "/home/user/login/docs/my_file.txt");
+		//print_r($_POST['fichier']);
+		//print_r($_FILES['files']['name'][0]);
+		$rep = $upload_handler->getOption()['upload_dir'];
+		
+		if(file_exists ( $rep.$_POST['fichier'] )){
+			unlink($rep.$_POST['fichier']);
+		}
+		
+		
+		rename($rep.$_FILES['files']['name'][0], $rep.$_POST['fichier']);
 	}
 }
  
-print_r("-----------------------------------------------");
-print_r ($upload_handler->options); exit;
+
 ?>

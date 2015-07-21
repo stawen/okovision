@@ -111,10 +111,21 @@
   					</div>
 				</div>
 				
-				
-				
-			    <!-- The container for the uploaded files -->
-			    <div id="files" class="files"></div>
+				<div id="concordance" style="display: none;">
+				    <table id="listeColonne" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="col-md-5">Nom Original</th>
+                            <th class="col-md-2"></th>
+                            <th class="col-md-5">Nom Okovision</th>
+                        </tr>
+                    </thead>
+                
+                    <tbody>
+                    </tbody>
+            
+                </table>
+				<div>
             </div>
            
           </div>
