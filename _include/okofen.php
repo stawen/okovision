@@ -1,4 +1,9 @@
 <?php
+/*****************************************************
+* Projet : Okovision - Supervision chaudiere OeKofen
+* Auteur : Stawen Dronek
+* Utilisation commerciale interdite sans mon accord
+******************************************************/
 include_once '/_include/connectDb.class.php';
 include_once  '_include/timeExec.php';
 
@@ -85,6 +90,8 @@ class okofen extends connectDb{
 		$ln = 0;
 		$old_status = "0";
 		$start_cycle = 0;
+		$query = "";
+		
 		while (!feof($file))
 		{
 			$ligne = fgets($file);
@@ -99,7 +106,7 @@ class okofen extends connectDb{
 					}
 					//creation de la requette sql
 					
-					$query = "INSERT IGNORE INTO oko_histo_full VALUES (".
+					$query .= "INSERT IGNORE INTO oko_histo_full VALUES (".
 							"STR_TO_DATE('".$d[0]."','%d.%m.%Y'),'". //date
 							$d[1]."',". 				// heure
 							$this->cvtDec($d[2]).",". 	// T°C exterieur
@@ -136,10 +143,10 @@ class okofen extends connectDb{
 							//Enregistrement de 1 si nous commençons un cycle d'allumage
 							//Statut 3 = allumage
 							$start_cycle.
-							")";
+							");\n";
 				
 
-					$n = $this->db->query($query);
+					//$n = $this->db->query($query);
 					//$this->log->debug($query);
 					$old_status = $d[29];	
 				}
@@ -147,6 +154,9 @@ class okofen extends connectDb{
 			$ln++;
 		}
 		fclose($file);
+		
+		$this->db->multi_query($query);
+		
 		$this->log->info("csv2bdd | SUCCESS - import du CSV dans la BDD - ".$ln." lignes en ".$t->getTime()." sec ");
 		
 		//mysql_close($connect); // closing connection
