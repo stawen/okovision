@@ -1,3 +1,8 @@
+/*****************************************************
+* Projet : Okovision - Supervision chaudiere OeKofen
+* Auteur : Stawen Dronek
+* Utilisation commerciale interdite sans mon accord
+******************************************************/
 $(document).ready(function() {
     
     function getFileFromChaudiere(){
@@ -52,7 +57,7 @@ $(document).ready(function() {
 			data: $.param(tab),
 			async: true,
 		    success: function(a) {
-			    console.log("success :"+a);
+			    //console.log("success :"+a);
 			    if (a.response === true) {
 				    $.growlValidate("Importation réussi de " + $(this).closest("tr").find("td:nth-child(1)").text() );
 				   

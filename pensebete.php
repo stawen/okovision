@@ -1,4 +1,10 @@
 <?php
+/*****************************************************
+* Projet : Okovision - Supervision chaudiere OeKofen
+* Auteur : Stawen Dronek
+* Utilisation commerciale interdite sans mon accord
+******************************************************/
+
 include_once '/volume1/web/okovision/config.php';
 
 function init_calendar(){

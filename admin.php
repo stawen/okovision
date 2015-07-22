@@ -1,4 +1,10 @@
 <?php
+/*****************************************************
+* Projet : Okovision - Supervision chaudiere OeKofen
+* Auteur : Stawen Dronek
+* Utilisation commerciale interdite sans mon accord
+******************************************************/
+
 	include_once 'config.php';
 	include_once '_templates/header.php';
 	include_once '_templates/menu.php';
@@ -94,25 +100,26 @@
             <div role="tabpanel" class="tab-pane" id="saisons">.saison..</div>
             <div role="tabpanel" class="tab-pane" id="matrice">
             	<br/>
-            	Votre installation Okofen est spécifique. Le format du fichier CSV qu'elle produite est unique. Vous devez alors "apprendre" à okovision comment lire ce fichier.
+            	Votre installation Okofen est spécifique. Le format du fichier CSV quelle produit est unique. Vous devez alors "apprendre" à okovision comment lire ce fichier.
             	<br/> Tout d'abord, importer le fichier via le bouton ci-dessous
             	<br/><br/>
-            	<span class="btn btn-success fileinput-button">
-			        <i class="glyphicon glyphicon-plus"></i>
-			        <span>Fichier CSV produit par la chaudiere</span>
-			        <!-- The file input field used as target for the file upload widget -->
-			        <input id="fileupload" type="file" name="files[]">
-			    </span>
-			    <br/><br/>
-			    <!-- The global progress bar -->
-			   <div class="progress">
-  					<div id="bar" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    					
-  					</div>
+            	<div id="selectFile">
+	            	<span class="btn btn-success fileinput-button">
+				        <i class="glyphicon glyphicon-plus"></i>
+				        <span>Fichier CSV produit par la chaudiere</span>
+				        <!-- The file input field used as target for the file upload widget -->
+				        <input id="fileupload" type="file" name="files[]">
+				    </span>
+				    <br/><br/>
+				    <!-- The global progress bar -->
+				   <div class="progress">
+	  					<div id="bar" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+	    					
+	  					</div>
+					</div>
 				</div>
-				
 				<div id="concordance" style="display: none;">
-				    <table id="listeColonne" class="table table-hover">
+				    <table id="headerCsv" class="table table-hover">
                     <thead>
                         <tr>
                             <th class="col-md-5">Nom Original</th>

@@ -1,5 +1,10 @@
  <?php
- 
+ /*****************************************************
+* Projet : Okovision - Supervision chaudiere OeKofen
+* Auteur : Stawen Dronek
+* Utilisation commerciale interdite sans mon accord
+******************************************************/
+
   $page = basename($_SERVER['SCRIPT_NAME']);
  
  function getMenu(){

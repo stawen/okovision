@@ -1,3 +1,8 @@
+/*****************************************************
+* Projet : Okovision - Supervision chaudiere OeKofen
+* Auteur : Stawen Dronek
+* Utilisation commerciale interdite sans mon accord
+******************************************************/
 $(document).ready(function() {
     
     
@@ -72,17 +77,17 @@ $(document).ready(function() {
     
     $('#fileupload').fileupload({
     	
-    	url: 'files.php',
+    	url: 'ajax.php?type=admin&action=uploadMatrice',
         dataType: 'json',
         autoUpload: true,
         acceptFileTypes: /(\.|\/)(csv)$/i,
         maxFileSize: 3000000,
-        formData: {fichier: 'matrice.csv', action: 'matrice'},
+        formData: {actionFile: 'matrice'},
         start: function (e) {
-    		console.log('Uploads started');
+    		//console.log('Uploads started');
 		},
         done: function (e, data) {
-            
+           	makeMatrice();
         },
         progress: function (e, data) {
         	var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -93,6 +98,36 @@ $(document).ready(function() {
         	);
     	}
     });
+    
+    function makeMatrice(){
+    	
+    	$.getJSON("ajax.php?type=admin&action=getHeaderFromOkoCsv" , function(json) {
+			
+				if (json.response === true) {
+				    $("#headerCsv > tbody").html("");
+					
+					$.each(json.CsvHeader, function(key, val) {
+					    //console.log(val.file);
+					    //$('#select_graphe').append('<option value="' + val.id + '">' + val.name + '</option>');
+					   $('#headerCsv > tbody:last').append('<tr> \
+					                                        	<td> </td>\
+					                                        	<td> </td>\
+					                                        	<td> </td>\
+					                                        </tr>');
+					});
+					
+					$("#selectFile").hide();
+					$("#concordance").show();
+					
+				} else {
+					$.growlWarning("Le fichier CSV de reference n'est pas trouvé.");
+				}
+			})
+			.error(function() { 
+				$.growlErreur('Error  - Probleme de communication !');
+			});	
+    	
+    }
 
     
 });

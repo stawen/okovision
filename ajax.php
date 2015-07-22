@@ -1,4 +1,9 @@
 <?PHP
+/*****************************************************
+* Projet : Okovision - Supervision chaudiere OeKofen
+* Auteur : Stawen Dronek
+* Utilisation commerciale interdite sans mon accord
+******************************************************/
 
 include_once '_include/data.php'; 
 include_once '_include/administration.class.php'; 
@@ -35,7 +40,12 @@ if (is_ajax()) {
                         case "importFileFromUpload":
                             $a->importFileFromUpload($_POST);
                             break;
-                            
+                        case "uploadMatrice":
+                        	$a->uploadMatrice($_POST,$_FILES);
+                            break;
+                        case "getHeaderFromOkoCsv";
+                        	$a->getHeaderFromOkoCsv();
+                        	break;
     				}
     				break; //
     		}		

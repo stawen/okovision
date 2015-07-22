@@ -1,4 +1,9 @@
 <?php
+/*****************************************************
+* Projet : Okovision - Supervision chaudiere OeKofen
+* Auteur : Stawen Dronek
+* Utilisation commerciale interdite sans mon accord
+******************************************************/
 	include_once 'config.php';
 	include_once '_templates/header.php';
 	include_once '_templates/menu.php';

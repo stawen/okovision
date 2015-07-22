@@ -1,7 +1,14 @@
 <?php
+/*****************************************************
+* Projet : Okovision - Supervision chaudiere OeKofen
+* Auteur : Stawen Dronek
+* Utilisation commerciale interdite sans mon accord
+******************************************************/
+
 include_once 'config.php';
 include_once '_include/connectDb.class.php';
 include_once '_include/okofen.php'; 
+include_once '_include/UploadHandler.php'; 
 
 class administration extends connectDb{
 	
@@ -108,6 +115,28 @@ class administration extends connectDb{
 	    
 	    $this->sendResponse($r);
 	    
+	}
+	
+	public function uploadMatrice($s,$f){
+		$upload_handler = new UploadHandler();
+
+		if(isset($s['actionFile'])){
+			
+			if($s['actionFile'] == 'matrice'){
+				$matrice = 'matrice.csv';
+				$rep = $upload_handler->getOption()['upload_dir'];
+				
+				if(file_exists ( $rep.$matrice )){
+					unlink($rep.$matrice);
+				}
+				
+				rename($rep.$f['files']['name'][0], $rep.$matrice);
+			}
+		}
+	}
+	
+	public function getHeaderFromOkoCsv(){
+		
 	}
 
 }

@@ -1,4 +1,10 @@
 <?php
+/*****************************************************
+* Projet : Okovision - Supervision chaudiere OeKofen
+* Auteur : Stawen Dronek
+* Utilisation commerciale interdite sans mon accord
+******************************************************/
+
 if (!file_exists("config.php")) {
    header("Location: setup.php");
 }else{
