@@ -8448,7 +8448,7 @@ INSERT INTO `oko_dateref` (`jour`) VALUES
 	('2037-09-01');
 /*!40000 ALTER TABLE `oko_dateref` ENABLE KEYS */;
 
-
+/*
 -- Export de la structure de table okovision. oko_histo_full
 DROP TABLE IF EXISTS `oko_histo_full`;
 CREATE TABLE IF NOT EXISTS `oko_histo_full` (
@@ -8489,6 +8489,7 @@ CREATE TABLE IF NOT EXISTS `oko_histo_full` (
   PRIMARY KEY (`jour`,`heure`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+*/
 
 -- Export de la structure de table okovision. oko_resume_day
 DROP TABLE IF EXISTS `oko_resume_day`;
@@ -8502,8 +8503,43 @@ CREATE TABLE IF NOT EXISTS `oko_resume_day` (
   PRIMARY KEY (`jour`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Export de données de la table okovision.oko_resume_day: ~282 rows (environ)
-DELETE FROM `oko_resume_day`;
+DROP TABLE IF EXISTS `oko_historique`;
+CREATE TABLE IF NOT EXISTS `oko_historique` (
+  `oko_capteur_id` int(3) NOT NULL,
+  `jour` date NOT NULL,
+  `heure` time NOT NULL,
+  `value` float NOT NULL,
+  PRIMARY KEY (`oko_capteur_id`,`jour`,`heure`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `oko_graphe`;
+CREATE TABLE IF NOT EXISTS `oko_graphe` (
+  `id` tinyint(3) NOT NULL AUTO_INCREMENT,
+  `name` tinytext NOT NULL,
+  `position` tinyint(3) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `oko_capteur`;
+CREATE TABLE IF NOT EXISTS `oko_capteur` (
+  `id` int(3) NOT NULL AUTO_INCREMENT,
+  `name` mediumtext NOT NULL,
+  `position_column_csv` int(2) NOT NULL,
+  `original_name` mediumtext NOT NULL,
+  `type` mediumtext DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `oko_asso_capteur_graphe`;
+CREATE TABLE IF NOT EXISTS `oko_asso_capteur_graphe` (
+  `oko_graphe_id` tinyint(3) NOT NULL,
+  `oko_capteur_id` tinyint(3) NOT NULL,
+  `position` tinyint(3) NOT NULL DEFAULT '0',
+  `correction_effect` mediumtext DEFAULT NULL,
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
