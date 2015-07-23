@@ -105,7 +105,7 @@ $(document).ready(function() {
 			
 				if (json.response === true) {
 				    $("#headerCsv > tbody").html("");
-					
+					/*
 					$.each(json.CsvHeader, function(key, val) {
 					    //console.log(val.file);
 					    //$('#select_graphe').append('<option value="' + val.id + '">' + val.name + '</option>');
@@ -115,7 +115,7 @@ $(document).ready(function() {
 					                                        	<td> </td>\
 					                                        </tr>');
 					});
-					
+					*/
 					$("#selectFile").hide();
 					$("#concordance").show();
 					

@@ -136,7 +136,13 @@ class administration extends connectDb{
 	}
 	
 	public function getHeaderFromOkoCsv(){
-		
+		$r = array();
+	    $r['response'] = true;
+	    
+	    $lock = array("Datum","Zeit","AT [°C]","PE1 Einschublaufzeit[zs]","PE1 Pausenzeit[zs]","PE1 Status");
+	    
+	    
+	    $this->sendResponse($r);
 	}
 
 }

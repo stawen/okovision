@@ -24,5 +24,3 @@ Oui, a titre personnel vous pouvez, n'hesitez pas a me remonter des bugs ou ques
 #Puis-je aider ?
 Oui bien sur, si tu es developpeur et que tu as envie, il y a surement des ameliorations à faire
 et si tu n'es pas dans l'informatique, il y a toujours d'autres moyen comme etant "Testeur" des nouvelles versions.
-
-
