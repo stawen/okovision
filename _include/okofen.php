@@ -4,7 +4,7 @@
 * Auteur : Stawen Dronek
 * Utilisation commerciale interdite sans mon accord
 ******************************************************/
-include_once '/_include/connectDb.class.php';
+include_once '_include/connectDb.class.php';
 include_once  '_include/timeExec.php';
 
 class okofen extends connectDb{
