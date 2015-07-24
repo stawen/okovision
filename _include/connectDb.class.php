@@ -21,6 +21,7 @@ class connectDb {
 			    $this->log->info('GLOBAL | Connection MySQL impossible : ' . $this->db->connect_error );
 			    exit;
 		}
+		$this->db->set_charset("utf8");
 	}
 	/*
 	 * *

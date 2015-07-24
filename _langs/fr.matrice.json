@@ -1,0 +1,161 @@
+{
+    "Datum": {
+        "name": "jour",
+        "type": ""
+    },
+    "Zeit": {
+        "name": "heure",
+        "type": ""
+    },
+    "AT [°C]": {
+        "name": "T°C Exterieure",
+        "type": "tc_ext"
+    },
+    "KT Ist [°C]": {
+        "name": "T°C Chaudiere",
+        "type": ""
+    },
+    "KT Soll [°C]": {
+        "name": "T°C Chaudiere Consigne",
+        "type": ""
+    },
+    "BR": {
+        "name": "Contact Bruleur (On/Off)",
+        "type": ""
+    },
+    "HK1 VL Ist[°C]": {
+        "name": "T°C Départ",
+        "type": ""
+    },
+    "HK1 VL Soll[°C]": {
+        "name": "T°C Départ Consigne",
+        "type": ""
+    },
+    "HK1 RT Ist[°C]": {
+        "name": "T°C Ambiante",
+        "type": ""
+    },
+    "HK1 RT Soll[°C]": {
+        "name": "T°C Ambiante Consigne",
+        "type": ""
+    },
+    "HK1 Pumpe": {
+        "name": "Circulateur Chauffage (On/Off)",
+        "type": ""
+    },
+    
+    
+    
+    "WW1 EinT Ist[°C]": {
+        "name": "T°C ECS",
+        "type": ""
+    },
+    "WW1 AusT Ist[°C]": {
+        "name": "T°C ECS (arret)",
+        "type": ""
+    },
+    "WW1 Soll[°C]": {
+        "name": "T°C ECS Consigne",
+        "type": ""
+    },
+    "WW1 Pumpe": {
+        "name": "Circulateur ECS",
+        "type": ""
+    },
+    
+    
+    "Zubrp1 Pumpe": {
+        "name": "Pompe (indefini)",
+        "type": ""
+    },
+    
+    
+    "SK1 Koll[°C]": {
+        "name": "T°C panneau solaire",
+        "type": ""
+    },
+    "SK1 SPUnten[°C]": {
+        "name": "T°C Ballon Bas",
+        "type": ""
+    },
+    "SK1 Pumpe[%]": {
+        "name": "Pompe Solaire (On/Off)",
+        "type": ""
+    },
+    
+    "PE1 KT[°C]": {
+        "name": "OKO 1 - T°C Chaudiere",
+        "type": ""
+    },
+    "PE1 KT_SOLL[°C]": {
+        "name": "OKO 1 - T°C Chaudiere Consigne",
+        "type": ""
+    },
+    "PE1 FRT Ist[°C]": {
+        "name": "T°C Flamme",
+        "type": ""
+    },
+    "PE1 FRT Soll[°C]": {
+        "name": "T°C Flamme Consigne",
+        "type": ""
+    },
+    "PE1 Einschublaufzeit[zs]": {
+        "name": "Vis Alimentation marche (ms)",
+        "type": "tps_vis"
+    },
+    "PE1 Pausenzeit[zs]": {
+        "name": "Vis Alimentation pause (ms)",
+        "type": "tps_vis_pause"
+    },
+    "PE1 Luefterdrehzahl[%]": {
+        "name": "Ventilation Bruleur (%)",
+        "type": ""
+    },
+    "PE1 Saugzugdrehzahl[%]": {
+        "name": "Ventilation fumée (%)",
+        "type": ""
+    },
+    "PE1 Unterdruck Ist[Pa]": {
+        "name": "Dépression (Pa)",
+        "type": ""
+    },
+    "PE1 Unterdruck Soll[Pa]": {
+        "name": "Depression Consigne (Pa)",
+        "type": ""
+    },
+    "PE1 Status": {
+        "name": "Statut Chaudiere",
+        "type": "status"
+    },
+    "PE1 Motor ES": {
+        "name": "Moteur alimentation chaudiere (On/Off)",
+        "type": ""
+    },
+    "PE1 Motor RA": {
+        "name": "Moteur extraxtion silo (On/Off)",
+        "type": ""
+    },
+    "PE1 Motor RES1": {
+        "name": "Moteur tremie intermediaire",
+        "type": ""
+    },
+    "PE1 Motor TURBINE": {
+        "name": "Moteur ASPIRATION",
+        "type": ""
+    },
+    "PE1 Motor ZUEND": {
+        "name": "Moteur Allumage",
+        "type": ""
+    },
+    "PE1 Motor UW[%]": {
+        "name": "Pompe du circuit primaire (%)",
+        "type": ""
+    },
+    "PE1 Motor RM": {
+        "name": "Moteur ramonage",
+        "type": ""
+    }
+    
+}
+
+    

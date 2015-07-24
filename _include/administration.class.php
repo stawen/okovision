@@ -107,7 +107,7 @@ class administration extends connectDb{
 	    $status = $oko->getChaudiereData('onDemande',$s['url']);
 	    
 	    if($status){
-	        $import = $oko->csv2bdd();
+	        //$import = $oko->csv2bdd();
 	    }else{
 	        $r['response'] = false;
 	    }
@@ -129,18 +129,71 @@ class administration extends connectDb{
 				if(file_exists ( $rep.$matrice )){
 					unlink($rep.$matrice);
 				}
+				//si rename ok, alors init de la table capteur
+				if(rename($rep.$f['files']['name'][0], $rep.$matrice)){
+					$this->initMatriceFromFile();
+				}
 				
-				rename($rep.$f['files']['name'][0], $rep.$matrice);
 			}
 		}
+	}
+	/*
+	* Function : Insert into oko_capteur all capteur in csv file from okofen
+	*/
+	private function initMatriceFromFile(){
+		//translation
+		$capteur = json_decode(file_get_contents("_langs/fr.matrice.json"), true);
+	    //open matrice file just uploaded, first line
+	    $line = mb_convert_encoding(fgets(fopen('_tmp/matrice.csv', 'r')),'UTF-8'); 
+		//on retire le dernier ; de la ligne
+		$line = substr($line,0,strlen($line)-1);
+		$query = ""; 
+	
+		$column = explode(CSV_SEPARATEUR, $line);
+		
+		foreach ($column as $position => $t){
+			//set only capteur not day and hour
+			if($position != 0 && $position != 1){
+				$title = trim($t);
+				
+				if (isset($capteur[$title])){
+					$name = $capteur[$title]['name'];
+					$type = $capteur[$title]['type'];
+				}else{
+					$name = $title;
+					$type = "";
+				}
+				
+				$q = "INSERT INTO oko_capteur(name,position_column_csv,original_name,type) VALUES('".$name."',".$position.",'".$title."','".$type."');" ;
+				
+				$this->log->debug("Create oko_capteur | ".$q);
+				$query .= $q;
+			}
+    	}
+		
+		$this->db->multi_query($query);
+		
 	}
 	
 	public function getHeaderFromOkoCsv(){
 		$r = array();
-	    $r['response'] = true;
 	    
-	    $lock = array("Datum","Zeit","AT [°C]","PE1 Einschublaufzeit[zs]","PE1 Pausenzeit[zs]","PE1 Status");
 	    
+	    //$lock = array("Datum","Zeit","AT [°C]","PE1 Einschublaufzeit[zs]","PE1 Pausenzeit[zs]","PE1 Status");
+	    $q = "select id, name, original_name, type from oko_capteur order by id";
+	    $this->log->debug("Select oko_capteur | ".$q);
+	    
+	    if($this->db->query($q)){
+	    	$r['response'] = true;
+	    	$r['data'] = $this->db->fetch_object();
+	    	/*
+	    	while($res = $this->db->fetch_object()){
+				$r[] = $res;
+			}*/
+	    	
+	    }else{
+	    	$r['response'] = false;
+	    }
 	    
 	    $this->sendResponse($r);
 	}

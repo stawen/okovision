@@ -42,6 +42,21 @@
         
         /* execute multi query */
         $mysqli->multi_query(file_get_contents('install/install.sql'));
+        
+        /* init de la table des dates de reference */
+        $start_day = mktime(0, 0, 0, 9  , 1, 2014); //1er septembre 2014
+		$stop_day = mktime(0, 0, 0, 9  , 1, 2037); //justqu'au 1er septembre 2037, on verra en 2037 si j'utilise encore l'app.
+		$nb_day = ($stop_day - $start_day)/86400;
+		$query = "";
+		for ($i = 0; $i<= $nb_day; $i++){
+			$day = date('Y-m-d' ,mktime(0, 0, 0, date("m",$start_day)  , date("d",$start_day)+$i, date("Y",$start_day)) );
+			$query .= "INSERT INTO oko_dateref (jour) VALUES ('".$day."');";
+			/* execute multi query */
+        	$mysqli->multi_query($query);
+		}
+	
+        
+        
         $mysqli->close();
 	    
 	    /* Make Config.php */
