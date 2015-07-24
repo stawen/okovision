@@ -43,8 +43,11 @@ if (is_ajax()) {
                         case "uploadMatrice":
                         	$a->uploadMatrice($_POST,$_FILES);
                             break;
-                        case "getHeaderFromOkoCsv";
+                        case "getHeaderFromOkoCsv":
                         	$a->getHeaderFromOkoCsv();
+                        	break;
+                        case "statusMatrice";
+                        	$a->statusMatrice();
                         	break;
     				}
     				break; //

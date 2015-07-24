@@ -30,8 +30,8 @@
 * OK - Ecran de parametrage pour gerer les données du fichier json
 * OK - Prevoir un ecran d'install si json pas present, et creation du fichier config.php
 * Revision de la structure des données - Creation de procedures stockées pour accelerer le chargement du csv
-* Traduction des colonnes dans le CSV et identifiaction du patern de nommage du constructeur
-* Ecran de matrice de correspondance csv pour import des données
+* OK - Traduction des colonnes dans le CSV et identifiaction du patern de nommage du constructeur
+* OK - Ecran de matrice de correspondance csv pour import des données
 * Import d'un csv via interface web 
 * Import manuel du fichier csv distant
 * Declancher synthese journaliere pour les jours n'existant pas

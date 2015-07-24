@@ -87,6 +87,7 @@ $(document).ready(function() {
     		//console.log('Uploads started');
 		},
         done: function (e, data) {
+           	$("#selectFile").hide();
            	makeMatrice();
         },
         progress: function (e, data) {
@@ -105,18 +106,18 @@ $(document).ready(function() {
 			
 				if (json.response === true) {
 				    $("#headerCsv > tbody").html("");
-					/*
-					$.each(json.CsvHeader, function(key, val) {
-					    //console.log(val.file);
+					
+					$.each(json.data, function(key, val) {
+					    console.log(val);
 					    //$('#select_graphe').append('<option value="' + val.id + '">' + val.name + '</option>');
 					   $('#headerCsv > tbody:last').append('<tr> \
-					                                        	<td> </td>\
-					                                        	<td> </td>\
-					                                        	<td> </td>\
+					                                        	<td>'+ val.original_name +'</td>\
+					                                        	<td>'+ val.name +'</td>\
+					                                        	<td>'+ ((val.type!="")?'<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>':'') +'</td>\
 					                                        </tr>');
 					});
-					*/
-					$("#selectFile").hide();
+				
+					
 					$("#concordance").show();
 					
 				} else {
@@ -128,6 +129,25 @@ $(document).ready(function() {
 			});	
     	
     }
+    
+    $('.nav-tabs a').on('shown.bs.tab', function (e) {
+        window.location.hash = e.target.hash;
+        
+        if(e.target.hash == 'matrice'){
+	        $.getJSON("ajax.php?type=admin&action=statusMatrice", function(json) {
+				
+					if (json.response === true) {
+						$("#selectFile").hide();
+					    makeMatrice();
+					}
+				})
+				.error(function() { 
+					$.growlErreur('Error  - Probleme de communication ! !');
+				});	
+        }
+    });
+    
 
+	
     
 });

@@ -45,9 +45,7 @@ $(document).ready(function() {
     
     // Change hash for page-reload
     
-    $('.nav-tabs a').on('shown.bs.tab', function (e) {
-        window.location.hash = e.target.hash;
-    });
+    
     
     
     $(window).on('hashchange', function() {

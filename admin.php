@@ -122,9 +122,10 @@
 				    <table id="headerCsv" class="table table-hover">
                     <thead>
                         <tr>
-                            <th class="col-md-5">Nom Original</th>
-                            <th class="col-md-2"></th>
-                            <th class="col-md-5">Nom Okovision</th>
+                            <th class="col-md-3">Nom Original</th>
+                            <th class="col-md-3">Nom Okovision</th>
+                            <th class="col-md-6"></th>
+                            
                         </tr>
                     </thead>
                 

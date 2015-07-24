@@ -146,7 +146,9 @@ class administration extends connectDb{
 	    //open matrice file just uploaded, first line
 	    $line = mb_convert_encoding(fgets(fopen('_tmp/matrice.csv', 'r')),'UTF-8'); 
 		//on retire le dernier ; de la ligne
-		$line = substr($line,0,strlen($line)-1);
+		$line = substr($line,0,strlen($line)-2);
+		$this->log->debug("CSV First Line | ".$line);
+		
 		$query = ""; 
 	
 		$column = explode(CSV_SEPARATEUR, $line);
@@ -176,26 +178,47 @@ class administration extends connectDb{
 	}
 	
 	public function getHeaderFromOkoCsv(){
+		
 		$r = array();
-	    
-	    
 	    //$lock = array("Datum","Zeit","AT [°C]","PE1 Einschublaufzeit[zs]","PE1 Pausenzeit[zs]","PE1 Status");
 	    $q = "select id, name, original_name, type from oko_capteur order by id";
 	    $this->log->debug("Select oko_capteur | ".$q);
 	    
-	    if($this->db->query($q)){
+	    $result = $this->db->query($q);
+	    
+	    if($result){
 	    	$r['response'] = true;
-	    	$r['data'] = $this->db->fetch_object();
-	    	/*
-	    	while($res = $this->db->fetch_object()){
-				$r[] = $res;
-			}*/
-	    	
+	    	$tmp = array();
+	    	while($res = $result->fetch_object()){
+				array_push($tmp,$res);
+			}
+	    	$r['data']=$tmp;
 	    }else{
 	    	$r['response'] = false;
 	    }
 	    
 	    $this->sendResponse($r);
+	}
+	
+	public function statusMatrice(){
+		$q = "select count(*) from oko_capteur";
+	    
+	    
+	    $result = $this->db->query($q);
+	    
+	    $r['response'] = false;
+	    
+	    if($result){
+	    	$res = $result->fetch_row();
+	    	$this->log->debug("Nb capteur | ".$res[0]);
+	    	
+	    	if ($res[0] > 1) {
+	    		$r['response'] = true;
+	    	}
+	    }
+	    
+	    $this->sendResponse($r);
+	    
 	}
 
 }
