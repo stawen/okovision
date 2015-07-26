@@ -1,8 +1,8 @@
 # OKOVISION
 Interface web de supervison d'une chaudiere Okofen
 # Version-V0.1
-- version pré-beta, bjectif validation du concept. Version très spécialisé sur mon installation okofen, ne peut pas etre utilisé ailleurs. La version de dev en cours permettant une portabilité est la v0.9.3 (unstable)
--
+version pré-beta, objectif validation du concept. Version très spécialisé sur mon installation okofen, ne peut pas etre utilisé ailleurs. La version de dev en cours permettant une portabilité est la v0.9.3 (unstable)
+
 # Quelle chaudiere ?
 Pour ma part, j'ai une chaudiere Pellomatic. Elle est relié au reseau IP de mon installation via son port ethernet
 Ainsi je recupere le log généré toutes les 2 heures et je les integre dans ma bdd.
