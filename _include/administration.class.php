@@ -7,7 +7,7 @@
 
 include_once 'config.php';
 include_once '_include/connectDb.class.php';
-include_once '_include/okofen.php'; 
+include_once '_include/okofen.class.php'; 
 include_once '_include/UploadHandler.php'; 
 
 class administration extends connectDb{
@@ -117,7 +117,7 @@ class administration extends connectDb{
 	    
 	}
 	
-	public function uploadMatrice($s,$f){
+	public function uploadCsv($s,$f){
 		$upload_handler = new UploadHandler();
 
 		if(isset($s['actionFile'])){
@@ -132,10 +132,26 @@ class administration extends connectDb{
 				//si rename ok, alors init de la table capteur
 				if(rename($rep.$f['files']['name'][0], $rep.$matrice)){
 					$this->initMatriceFromFile();
+					
 				}
 				
 			}
+			
+			if($s['actionFile'] == 'majusb'){
+				$matrice = 'import.csv';
+				$rep = $upload_handler->getOption()['upload_dir'];
+				
+				if(file_exists ( $rep.$matrice )){
+					unlink($rep.$matrice);
+				}
+				//si rename ok, alors init de la table capteur
+				rename($rep.$f['files']['name'][0], $rep.$matrice);
+				
+			}
+			
 		}
+		$upload_handler->generate_response_manual();
+		
 	}
 	/*
 	* Function : Insert into oko_capteur all capteur in csv file from okofen
@@ -172,8 +188,12 @@ class administration extends connectDb{
 				$query .= $q;
 			}
     	}
+		//insertion d'une reference au demarrage des cycles de chauffe
+		$query .= "INSERT INTO oko_capteur(name,position_column_csv,original_name,type) VALUES('Start Cycle',99,'Start Cycle','startCycle');" ;
 		
-		$this->db->multi_query($query);
+		
+		$result = $this->db->multi_query($query);
+		//$this->db->free();
 		
 	}
 	
@@ -197,6 +217,8 @@ class administration extends connectDb{
 	    	$r['response'] = false;
 	    }
 	    
+	    $result->free();
+	    
 	    $this->sendResponse($r);
 	}
 	
@@ -217,8 +239,16 @@ class administration extends connectDb{
 	    	}
 	    }
 	    
+	    $result->free();
 	    $this->sendResponse($r);
 	    
+	}
+	
+	public function importcsv(){
+		$oko = new okofen();
+		$r['response'] = $oko->csv2bdd();
+		//$r['response'] = true;
+		$this->sendResponse($r);
 	}
 
 }

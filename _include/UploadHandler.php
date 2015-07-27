@@ -158,7 +158,8 @@ class UploadHandler
                     'max_height' => 80
                 )
             ),
-            'print_response' => true
+            'print_response' => false,
+            'automatic_response' => false
         );
         if ($options) {
             $this->options = $options + $this->options;
@@ -180,7 +181,7 @@ class UploadHandler
                 $this->head();
                 break;
             case 'GET':
-                $this->get($this->options['print_response']);
+                $this->get($this->options['print_response']);  
                 break;
             case 'PATCH':
             case 'PUT':
@@ -1277,6 +1278,10 @@ class UploadHandler
         }
         return $content;
     }
+    //oko
+    public function generate_response_manual(){
+        $this->generate_response($this->response, true);
+    }
 
     public function get_response () {
         return $this->response;
@@ -1363,8 +1368,13 @@ class UploadHandler
                 );
             }
         }
-        $response = array($this->options['param_name'] => $files);
-        return $this->generate_response($response, $print_response);
+        //oko
+        if($this->options['automatic_response']){
+            $response = array($this->options['param_name'] => $files);    
+            return $this->generate_response($response, $print_response);
+        }else{
+            $this->response = array($this->options['param_name'] => $files);
+        }
     }
 
     public function delete($print_response = true) {

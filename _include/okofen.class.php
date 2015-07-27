@@ -5,7 +5,8 @@
 * Utilisation commerciale interdite sans mon accord
 ******************************************************/
 include_once '_include/connectDb.class.php';
-include_once  '_include/timeExec.php';
+include_once '_include/timeExec.php';
+include_once '_include/capteur.class.php';
 
 class okofen extends connectDb{
 	
@@ -54,7 +55,13 @@ class okofen extends connectDb{
 		}
 	}
 	
-	public function getChaudiereData($trigger = 'cron', $url){
+	/*
+	* Fonction pour recuperer les fichiers csv present sur la chaudiere
+	* Cron / OnDemand : 
+	*	Cron -> en finction de l'heure d'appel il recupere le fichier du jour ou de la veille
+	*	Ondemande -> recupere celui qui lui est precisé
+	*/
+	public function getChaudiereData($trigger = 'cron', $url = ''){
 		
 		if($trigger <> 'onDemande'){
     		if ($this->newDay()){
@@ -82,86 +89,90 @@ class okofen extends connectDb{
 		}
 
 	}
-
+	/*
+	* integration du fichier csv dans okovision
+	*/
 	public function csv2bdd(){
+		
 		$t = new timeExec();
 		
-		$file = fopen(CSVFILE, 'r');
-		$ln = 0;
-		$old_status = "0";
-		$start_cycle = 0;
-		$query = "";
+		$ob_capteur 	= new capteur();
+		$capteurs 		= $ob_capteur->getForImportCsv(); //l'index du tableau correspond a la colonne du capteur dans le fichier csv
+		$capteurStatus 	= $ob_capteur->getByType('status');
+		$startCycle 	= $ob_capteur->getByType('startCycle');
+		
+		//print_r($capteurStatus);exit;
+		//$capteurStatus['position_column_csv'];
+		
+		
+		$file 			= fopen(CSVFILE, 'r');
+		$ln 			= 0;
+		$old_status  	= 0;
+		$start_cycle 	= 0;
+		$query 			= "";
 		
 		while (!feof($file))
 		{
 			$ligne = fgets($file);
-			if($ln != 0){
-				$d = explode(CSV_SEPARATEUR, $ligne);
-				if(isset($d[1])){
-					//Detection demarrage d'un cycle
-					if( $d[29] == "3" && $d[29] <> $old_status){
-						$start_cycle = 1;
-					}else{
-						$start_cycle = 0;
-					}
-					//creation de la requette sql
-					
-					$query .= "INSERT IGNORE INTO oko_histo_full VALUES (".
-							"STR_TO_DATE('".$d[0]."','%d.%m.%Y'),'". //date
-							$d[1]."',". 				// heure
-							$this->cvtDec($d[2]).",". 	// T°C exterieur
-							$this->cvtDec($d[3]).",". 	// T°C Chaudiere
-							$this->cvtDec($d[4]).",". 	// T°C Chaudiere Consigne
-							((int)$d[5])*100 .",". 		// Contact Bruleur
-							$this->cvtDec($d[6]).",". 	// T°C Départ
-							$this->cvtDec($d[7]).",". 	// T°C Départ Consigne
-							$this->cvtDec($d[8]).",". 	// T°C Ambiante
-							$this->cvtDec($d[9]).",". 	// T°C Ambiante Consigne
-							((int)$d[10])*100 .",". 	// Circulateur Chauffage
-							$this->cvtDec($d[11]).",". 	// T°C ECS
-							$this->cvtDec($d[13]).",". 	// T°C ECS Consigne
-							((int)$d[14])*100 .",". 	// Ciruclateur ECS
-							$this->cvtDec($d[16]).",". 	// T°C panneau solaire
-							$this->cvtDec($d[17]).",". 	// T°C Ballon Bas
-							$this->cvtDec($d[18]).",". 	// Pompe Solaire
-							$this->cvtDec($d[21]).",". 	// T°C Flamme
-							$this->cvtDec($d[22]).",". 	// T°C Flamme Consigne
-							$this->cvtDec($d[23]).",". 	// Vis Alimentation temps (ex: 50zs = 5sec)
-							$this->cvtDec($d[24]).",". 	// Vis Alimentation Temps pause
-							$this->cvtDec($d[25]).",". 	// Ventilation Bruleur
-							$this->cvtDec($d[26]).",". 	// Ventilation fumée
-							$this->cvtDec($d[27]).",". 	// Dépression
-							$this->cvtDec($d[28]).",". 	// Depression Consigne
-							$this->cvtDec($d[29]).",". 	// Statut Chaudiere
-							((int)$d[30])*100 .",". 	// Moteur alimentation chaudiere
-							((int)$d[31])*100 .",". 	// Moteur extraxtion silo
-							((int)$d[32])*100 .",". 	// Moteur tremie intermediaire
-							((int)$d[33])*100 .",". 	// Moteur ASPIRATION
-							((int)$d[34])*100 .",". 	// Moteur Allumage
-							$d[35].",". 				// Pompe du circuit primaire
-							((int)$d[39])*100 .",".		// Moteur ramonage
-							//Enregistrement de 1 si nous commençons un cycle d'allumage
-							//Statut 3 = allumage
-							$start_cycle.
-							");\n";
+			//ne pas prendre en compte la derniere colonne vide
+			$ligne = substr($ligne,0,strlen($ligne)-2);
+			
+			if($ln != 0){ //pour ne pas lire la premiere ligne d'entete du fichier csv
+				$colCsv = explode(CSV_SEPARATEUR, $ligne);
 				
-
-					//$n = $this->db->query($query);
-					//$this->log->debug($query);
-					$old_status = $d[29];	
+				if(isset($colCsv[1])){ //test si ligne non vide
+					
+					$nbColCsv = count($colCsv);
+					
+					$jour 	= $colCsv[0];
+					$heure 	= $colCsv[1];
+					
+					$q 		= 	"";
+					$insert	= 	"INSERT IGNORE INTO oko_historique (jour,heure,oko_capteur_id,value) VALUES (".
+								"STR_TO_DATE('".$jour."','%d.%m.%Y'),".	// jour
+								"'".$heure."',";					// heure
+								
+					//Detection demarrage d'un cycle //Statut 3 = allumage
+					if( $colCsv[$capteurStatus['position_column_csv']] == "3" && $colCsv[$capteurStatus['position_column_csv']] <> $old_status){
+						$st = 1;
+						//creation de la requette pour le comptage des cycle de la chaudiere
+						//Enregistrement de 1 si nous commençons un cycle d'allumage
+						$q 	= 	$insert.
+								$startCycle['id'].",". 	//capteur_id
+						    	$st.");";     		//valeur
+						
+						//on concatene dans la variable $query pour faire du multiquery
+						$this->log->debug($q);
+						$query .= $q;
+					}
+					
+					//creation de la requette sql pour les capteurs
+					//on commence à la deuxieme colonne de la ligne du csv
+					for($i=2;$i<$nbColCsv;$i++){
+					     
+					   	$q 	= 	$insert.								// heure
+								$capteurs[$i]['id'].",". 				//capteur_id
+					    		$this->cvtDec( $colCsv[$i] ).");";     //valeur
+					
+						//on concatene dans la variable $query pour faire du multiquery
+						$this->log->debug($q);
+						$query .= $q;
+					}
+					
+					$old_status = $colCsv[$capteurStatus['position_column_csv']];	
+					
 				}
 			}
 			$ln++;
 		}
 		fclose($file);
 		
-		$this->db->multi_query($query);
+		$result = $this->db->multi_query($query);
+		//$result->free();
 		
 		$this->log->info("csv2bdd | SUCCESS - import du CSV dans la BDD - ".$ln." lignes en ".$t->getTime()." sec ");
 		
-		//mysql_close($connect); // closing connection
-		//$this->mysqli->close(); // closing connection
-        return true;
+		return true;
 
 	}
 	//function de convertion du format decimal de l'import au format bdd

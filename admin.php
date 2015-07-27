@@ -103,7 +103,7 @@
             	Votre installation Okofen est spécifique. Le format du fichier CSV quelle produit est unique. Vous devez alors "apprendre" à okovision comment lire ce fichier.
             	<br/> Tout d'abord, importer le fichier via le bouton ci-dessous
             	<br/><br/>
-            	<div id="selectFile">
+            	<div id="selectFile" style="display: none;">
 	            	<span class="btn btn-success fileinput-button">
 				        <i class="glyphicon glyphicon-plus"></i>
 				        <span>Fichier CSV produit par la chaudiere</span>
@@ -118,7 +118,7 @@
 	  					</div>
 					</div>
 				</div>
-				<div id="concordance" style="display: none;">
+				<div id="concordance">
 				    <table id="headerCsv" class="table table-hover">
                     <thead>
                         <tr>

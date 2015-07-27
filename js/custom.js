@@ -44,7 +44,10 @@ $(document).ready(function() {
     }
     
     // Change hash for page-reload
-    
+    $('.nav-tabs a').on('shown.bs.tab', function (e) {
+    	//console.log("active tab:" + e.target.hash);
+    	window.location.hash = e.target.hash;
+    });
     
     
     
@@ -53,5 +56,26 @@ $(document).ready(function() {
     });
     
     activeTab();
+    
+    $.matriceComplet = function(){
+    
+    	var r = false;
+    	$.ajax({
+			url: 'ajax.php?type=admin&action=statusMatrice',
+			type: 'GET',
+			async: false,
+			success: function(json) {
+				//console.log(json);
+				r =  json.response;
+			},
+            error: function () {
+                $.growlErreur('Error  - Probleme lors de la sauvegarde !');
+              }
+		});
+    	return r;
+    	
+    	
+    }
+    
 	
 });

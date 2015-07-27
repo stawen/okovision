@@ -28,7 +28,7 @@ class connectDb {
 	 * Destructor
 	 */
 	public function __destruct() {
-	
+		$this->db->close();
 	}
 	
 }

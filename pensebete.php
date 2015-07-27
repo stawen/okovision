@@ -113,5 +113,46 @@ Statut_chaudiere :
 compter le nb de cycle : 3
 alimentation pellet dans tremi : 7
 */
+
+/*
+$query .= "INSERT IGNORE INTO oko_histo_full VALUES (".
+							"STR_TO_DATE('".$d[0]."','%d.%m.%Y'),'". //date
+							$d[1]."',". 				// heure
+							$this->cvtDec($d[2]).",". 	// T°C exterieur
+							$this->cvtDec($d[3]).",". 	// T°C Chaudiere
+							$this->cvtDec($d[4]).",". 	// T°C Chaudiere Consigne
+							((int)$d[5])*100 .",". 		// Contact Bruleur
+							$this->cvtDec($d[6]).",". 	// T°C Départ
+							$this->cvtDec($d[7]).",". 	// T°C Départ Consigne
+							$this->cvtDec($d[8]).",". 	// T°C Ambiante
+							$this->cvtDec($d[9]).",". 	// T°C Ambiante Consigne
+							((int)$d[10])*100 .",". 	// Circulateur Chauffage
+							$this->cvtDec($d[11]).",". 	// T°C ECS
+							$this->cvtDec($d[13]).",". 	// T°C ECS Consigne
+							((int)$d[14])*100 .",". 	// Ciruclateur ECS
+							$this->cvtDec($d[16]).",". 	// T°C panneau solaire
+							$this->cvtDec($d[17]).",". 	// T°C Ballon Bas
+							$this->cvtDec($d[18]).",". 	// Pompe Solaire
+							$this->cvtDec($d[21]).",". 	// T°C Flamme
+							$this->cvtDec($d[22]).",". 	// T°C Flamme Consigne
+							$this->cvtDec($d[23]).",". 	// Vis Alimentation temps (ex: 50zs = 5sec)
+							$this->cvtDec($d[24]).",". 	// Vis Alimentation Temps pause
+							$this->cvtDec($d[25]).",". 	// Ventilation Bruleur
+							$this->cvtDec($d[26]).",". 	// Ventilation fumée
+							$this->cvtDec($d[27]).",". 	// Dépression
+							$this->cvtDec($d[28]).",". 	// Depression Consigne
+							$this->cvtDec($d[29]).",". 	// Statut Chaudiere
+							((int)$d[30])*100 .",". 	// Moteur alimentation chaudiere
+							((int)$d[31])*100 .",". 	// Moteur extraxtion silo
+							((int)$d[32])*100 .",". 	// Moteur tremie intermediaire
+							((int)$d[33])*100 .",". 	// Moteur ASPIRATION
+							((int)$d[34])*100 .",". 	// Moteur Allumage
+							$d[35].",". 				// Pompe du circuit primaire
+							((int)$d[39])*100 .",".		// Moteur ramonage
+							//Enregistrement de 1 si nous commençons un cycle d'allumage
+							//Statut 3 = allumage
+							$start_cycle.
+							");\n";
+	*/
 			
 ?>

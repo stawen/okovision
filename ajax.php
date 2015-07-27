@@ -40,14 +40,17 @@ if (is_ajax()) {
                         case "importFileFromUpload":
                             $a->importFileFromUpload($_POST);
                             break;
-                        case "uploadMatrice":
-                        	$a->uploadMatrice($_POST,$_FILES);
+                        case "uploadCsv":
+                        	$a->uploadCsv($_POST,$_FILES);
                             break;
                         case "getHeaderFromOkoCsv":
                         	$a->getHeaderFromOkoCsv();
                         	break;
-                        case "statusMatrice";
+                        case "statusMatrice":
                         	$a->statusMatrice();
+                        	break;
+                        case "importcsv":
+                        	$a->importcsv();
                         	break;
     				}
     				break; //

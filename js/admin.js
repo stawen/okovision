@@ -77,7 +77,7 @@ $(document).ready(function() {
     
     $('#fileupload').fileupload({
     	
-    	url: 'ajax.php?type=admin&action=uploadMatrice',
+    	url: 'ajax.php?type=admin&action=uploadCsv',
         dataType: 'json',
         autoUpload: true,
         acceptFileTypes: /(\.|\/)(csv)$/i,
@@ -87,12 +87,17 @@ $(document).ready(function() {
     		//console.log('Uploads started');
 		},
         done: function (e, data) {
-           	$("#selectFile").hide();
-           	makeMatrice();
+        	//console.log("e:"+e);
+        	//console.log("data:"+ data);
+        	setTimeout(function() {
+        		$("#selectFile").hide();
+           		makeMatrice();
+        	}, 1000);
+           	
         },
         progress: function (e, data) {
         	var progress = parseInt(data.loaded / data.total * 100, 10);
-        	console.log('ici::'+ progress);
+        	//console.log('ici::'+ progress);
         	$('#bar').css(
 	            'width',
             	progress + '%'
@@ -108,7 +113,7 @@ $(document).ready(function() {
 				    $("#headerCsv > tbody").html("");
 					
 					$.each(json.data, function(key, val) {
-					    console.log(val);
+					    //console.log(val);
 					    //$('#select_graphe').append('<option value="' + val.id + '">' + val.name + '</option>');
 					   $('#headerCsv > tbody:last').append('<tr> \
 					                                        	<td>'+ val.original_name +'</td>\
@@ -130,23 +135,17 @@ $(document).ready(function() {
     	
     }
     
-    $('.nav-tabs a').on('shown.bs.tab', function (e) {
-        window.location.hash = e.target.hash;
-        
-        if(e.target.hash == 'matrice'){
-	        $.getJSON("ajax.php?type=admin&action=statusMatrice", function(json) {
-				
-					if (json.response === true) {
-						$("#selectFile").hide();
-					    makeMatrice();
-					}
-				})
-				.error(function() { 
-					$.growlErreur('Error  - Probleme de communication ! !');
-				});	
-        }
-    });
-    
+
+	
+	
+	//console.log("matriceComplet::"+$.matriceComplet());
+	
+	if ($.matriceComplet()){
+		makeMatrice();
+	}else{
+		$("#selectFile").show();
+		$("#concordance").hide();
+	}
 
 	
     

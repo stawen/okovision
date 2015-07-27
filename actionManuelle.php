@@ -39,7 +39,28 @@
                 </table>
             
             </div>
-            <div role="tabpanel" class="tab-pane" id="majusb">..majusb.</div>
+            <div role="tabpanel" class="tab-pane" id="majusb">
+                <br/>
+            	Via cet écran, vous pouvez importer dans okovision les fichiers de CSV produit par votre chaudiere sur un clef USB
+            	<br/><br/>
+            	<div id="selectFile">
+	            	<span class="btn btn-success fileinput-button">
+				        <i class="glyphicon glyphicon-plus"></i>
+				        <span>Fichier CSV produit par la chaudiere</span>
+				        <!-- The file input field used as target for the file upload widget -->
+				        <input id="fileupload" type="file" name="files[]">
+				    </span>
+				    <br/><br/>
+				    <!-- The global progress bar -->
+				   <div class="progress">
+	  					<div id="bar" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+	    					
+	  					</div>
+					</div>
+				</div>
+				<div id="inwork" style="display: none;"><br/><br/><span class="glyphicon glyphicon-refresh glyphicon-spin"></span>  Traitement en cours......</div>
+				<div id="complete" style="display: none;"><br/><br/><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Importation terminée !</div>
+            </div>
             <div role="tabpanel" class="tab-pane" id="synthese">..synthese.</div>
         </div>
 
@@ -47,7 +68,7 @@
 include('_templates/footer.php');
 ?>
 <!--appel des scripts personnels de la page -->
-
+    <script src="js/jquery.fileupload.js"></script>
 	<script src="js/actionManuelle.js"></script>
     </body>
 </html>
