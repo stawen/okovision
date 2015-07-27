@@ -29,6 +29,7 @@ class connectDb {
 	 */
 	public function __destruct() {
 		$this->db->close();
+		//gc_collect_cycles();
 	}
 	
 }
