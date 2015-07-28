@@ -144,7 +144,7 @@ class administration extends connectDb{
 				if(file_exists ( $rep.$matrice )){
 					unlink($rep.$matrice);
 				}
-				//si rename ok, alors init de la table capteur
+			
 				rename($rep.$f['files']['name'][0], $rep.$matrice);
 				
 			}
@@ -217,7 +217,7 @@ class administration extends connectDb{
 	    	$r['response'] = false;
 	    }
 	    
-	    $result->free();
+	    //$result->free();
 	    
 	    $this->sendResponse($r);
 	}
@@ -239,7 +239,7 @@ class administration extends connectDb{
 	    	}
 	    }
 	    
-	    $result->free();
+	    //$result->free();
 	    $this->sendResponse($r);
 	    
 	}
@@ -248,6 +248,83 @@ class administration extends connectDb{
 		$oko = new okofen();
 		$r['response'] = $oko->csv2bdd();
 		//$r['response'] = true;
+		$this->sendResponse($r);
+	}
+
+	public function getSaisons(){
+		
+		$r = array();
+	    //$lock = array("Datum","Zeit","AT [°C]","PE1 Einschublaufzeit[zs]","PE1 Pausenzeit[zs]","PE1 Status");
+	    $q = "select id, saison, DATE_FORMAT(date_debut,'%d/%m/%Y') as date_debut, DATE_FORMAT(date_fin,'%d/%m/%Y') as date_fin from oko_saisons order by date_debut";
+	    $this->log->debug("Select oko_saison | ".$q);
+	    
+	    $result = $this->db->query($q);
+	    
+	    if($result){
+	    	$r['response'] = true;
+	    	$tmp = array();
+	    	while($res = $result->fetch_object()){
+				array_push($tmp,$res);
+			}
+	    	$r['data']=$tmp;
+	    }else{
+	    	$r['response'] = false;
+	    }
+	    
+	    //$result->free();
+	    $this->sendResponse($r);
+	}
+	
+	public function existSaison($jour){
+		
+		$r = array();
+	    
+	    $q = "select count(*) from oko_saisons where date_debut = '".$jour."'";
+	    $this->log->debug("Test Saison Exist | ".$q);
+	    
+	    $result = $this->db->query($q);
+	    
+	    $r['response'] = false;
+	    
+	    if($result){
+	    	$res = $result->fetch_row();
+	    	
+	    	if ($res[0] > 0) {
+	    		$r['response'] = true;
+	    	}
+	    }
+	    
+	    $this->sendResponse($r);
+	}
+	
+	public function setSaison($s){
+		$r = array();
+		
+		$date = DateTime::createFromFormat('Y-m-d', $s['startDate']);
+		
+		$startDate = $date->format('Y-m-d');
+		$saison = $date->format('Y');
+			
+		$date->add(new DateInterval("P1Y"));
+		$date->sub(new DateInterval("P1D"));
+		$endDate = $date->format('Y-m-d');
+		
+		$saison .= "-".$date->format('Y');
+		
+		//insertion d'une reference au demarrage des cycles de chauffe
+		$query = "INSERT INTO oko_saisons (saison, date_debut, date_fin) VALUES('".$saison."','".$startDate."','".$endDate."');" ;
+		$this->log->debug("Create Saison | ".$query);
+		
+		$r['response'] = $this->db->query($query);
+		
+		$this->sendResponse($r);
+	}
+	
+	public function deleteSaison($s){
+		$r = array();
+		$query = "DELETE FROM oko_saisons where id=".$s['idSaison'];
+		
+		$r['response'] = $this->db->query($query);
 		$this->sendResponse($r);
 	}
 

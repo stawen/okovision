@@ -52,6 +52,19 @@ if (is_ajax()) {
                         case "importcsv":
                         	$a->importcsv();
                         	break;
+                        case "getSaisons":
+                        	$a->getSaisons();
+                        case "existSaison":
+                        	if( isset( $_GET['date'] ) ){
+                        		$a->existSaison($_GET['date']);
+                        	}
+                        	break;
+                        case "setSaison":
+                        	$a->setSaison($_POST);
+                        	break;
+                        case "deleteSaison":
+                        	$a->deleteSaison($_POST);
+                        	break;
     				}
     				break; //
     		}		

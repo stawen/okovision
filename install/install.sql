@@ -16,9 +16,9 @@ CREATE DATABASE IF NOT EXISTS `okovision` /*!40100 DEFAULT CHARACTER SET utf8 */
 USE `okovision`;
 
 
--- Export de la structure de table okovision. oko_config
-DROP TABLE IF EXISTS `oko_config`;
-CREATE TABLE IF NOT EXISTS `oko_config` (
+-- Export de la structure de table okovision. oko_saisons
+DROP TABLE IF EXISTS `oko_saisons`;
+CREATE TABLE IF NOT EXISTS `oko_saisons` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `saison` tinytext NOT NULL,
   `date_debut` date NOT NULL,
@@ -26,12 +26,12 @@ CREATE TABLE IF NOT EXISTS `oko_config` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Export de données de la table okovision.oko_config: ~1 rows (environ)
-DELETE FROM `oko_config`;
-/*!40000 ALTER TABLE `oko_config` DISABLE KEYS */;
-INSERT INTO `oko_config` (`id`, `saison`, `date_debut`, `date_fin`) VALUES
+-- Export de données de la table okovision.oko_saisons: ~1 rows (environ)
+DELETE FROM `oko_saisons`;
+/*!40000 ALTER TABLE `oko_saisons` DISABLE KEYS */;
+INSERT INTO `oko_saisons` (`id`, `saison`, `date_debut`, `date_fin`) VALUES
 	(1, '2014-2015', '2014-09-01', '2015-08-30');
-/*!40000 ALTER TABLE `oko_config` ENABLE KEYS */;
+/*!40000 ALTER TABLE `oko_saisons` ENABLE KEYS */;
 
 
 -- Export de la structure de table okovision. oko_dateref

@@ -88,3 +88,13 @@
     height: 100%;
   }
 }
+
+div .vertical-align{
+	display: inline-block;
+    vertical-align: middle;
+    float: none;
+/*    border : 1px solid gray;*/
+    text-align:right;
+ 	padding:5px;
+ 
+}
