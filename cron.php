@@ -6,8 +6,7 @@
 ******************************************************/
 
 include_once('config.php');
-include('_include/okofen.php');
-include('_include/oko2ftp.php');
+
 
 $oko = new okofen();
 $oko2web = new oko2ftp();

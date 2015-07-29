@@ -5,11 +5,6 @@
 * Utilisation commerciale interdite sans mon accord
 ******************************************************/
 
-include_once 'config.php';
-include_once '_include/connectDb.class.php';
-include_once '_include/okofen.class.php'; 
-include_once '_include/UploadHandler.php'; 
-
 class administration extends connectDb{
 	
 	public function __construct() {

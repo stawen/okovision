@@ -4,8 +4,6 @@
 * Auteur : Stawen Dronek
 * Utilisation commerciale interdite sans mon accord
 ******************************************************/
-include_once 'config.php';
-include_once  '_include/logger.class.php';
 
 class oko2ftp {
 	

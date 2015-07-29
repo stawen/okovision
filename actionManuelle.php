@@ -8,7 +8,7 @@
 	include_once 'config.php';
 	include_once '_templates/header.php';
 	include_once '_templates/menu.php';
-	include_once 'ajax.php';
+
 ?>
 <div class="container theme-showcase" role="main">
 <br/>

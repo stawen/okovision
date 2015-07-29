@@ -1,6 +1,4 @@
 <?php
-include_once 'config.php';
-include_once '_include/exceptions.logger.class.php';
 
 /**
  * Logger class.

@@ -11,7 +11,6 @@ if (!file_exists("config.php")) {
 	include_once 'config.php';
 	include_once '_templates/header.php';
 	include_once '_templates/menu.php';
-	include_once 'ajax.php';
 }
 
 

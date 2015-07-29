@@ -5,15 +5,12 @@
 * Utilisation commerciale interdite sans mon accord
 ******************************************************/
 
-include_once 'config.php';
-include_once '_include/logger.class.php';
-
 class connectDb {
 	protected $db;
 	protected $log;
 	
 	public function __construct() {
-		$this->log = new Logger();
+		$this->log = new logger();
 		
 		$this->db = new mysqli(BDD_IP,BDD_USER,BDD_PASS,BDD_SCHEMA);
 			
