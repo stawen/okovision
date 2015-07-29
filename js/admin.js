@@ -197,38 +197,97 @@ $(document).ready(function() {
 	}
 	
 	function addSaison(){
-		var tab = {
-			startDate : $.datepicker.formatDate('yy-mm-dd',$.datepicker.parseDate('dd/mm/yy', $('#modal_saison').find('#startDateSaison').val() ) ), //;
-			};
-		//console.log(tab.position);
-		//test si la saison existe deja n'est pas déja utilisé
-		$.getJSON("ajax.php?type=admin&action=existSaison&date=" + tab.startDate, function(json) {
-			//console.log(json);
-			if (!json.response) {
-				//saison n'existe pas, on enregistre
-				$.ajax({
-					url: 'ajax.php?type=admin&action=setSaison',
-					type: 'POST',
-					data: $.param(tab),
-					async: false,
-					success: function(a) {
-
-						$('#modal_saison').modal('hide');
-						if (a.response === true) {
-							$.growlValidate("Enregistrement OK");
-							setTimeout(refreshSaison(),1000);
-						} else {
-							$.growlErreur("Probleme lors de l'enregistrement de la saison");
-						}
-
-					}
-				});
-
-
-			} else {
-				$.growlWarning("Attention, cette saison existe déjà !");
+		
+		if($.validateDate($('#modal_saison').find('#startDateSaison').val())){
+			try{
+				var date = $.datepicker.parseDate('dd/mm/yy', $('#modal_saison').find('#startDateSaison').val() );
+			}catch(error){
+        		$.growlWarning("Format de la date incorrect");
+        		return;
 			}
-		});
+			
+			var tab = {
+				startDate : $.datepicker.formatDate('yy-mm-dd', date ) //;
+				};
+			//console.log(tab.position);
+			//test si la saison existe deja n'est pas déja utilisé
+			$.getJSON("ajax.php?type=admin&action=existSaison&date=" + tab.startDate, function(json) {
+				//console.log(json);
+				if (!json.response) {
+					//saison n'existe pas, on enregistre
+					$.ajax({
+						url: 'ajax.php?type=admin&action=setSaison',
+						type: 'POST',
+						data: $.param(tab),
+						async: false,
+						success: function(a) {
+	
+							$('#modal_saison').modal('hide');
+							if (a.response === true) {
+								$.growlValidate("Enregistrement OK");
+								setTimeout(refreshSaison(),1000);
+							} else {
+								$.growlErreur("Probleme lors de l'enregistrement de la saison");
+							}
+	
+						}
+					});
+	
+	
+				} else {
+					$.growlWarning("Attention, cette saison existe déjà !");
+				}
+			});
+		}else{
+			$.growlWarning("Format de la date incorrect");
+		}
+		
+	}
+	
+	function updateSaison(){
+		if($.validateDate($('#modal_saison').find('#startDateSaison').val())){
+			try{
+				var date = $.datepicker.parseDate('dd/mm/yy', $('#modal_saison').find('#startDateSaison').val() );
+			}catch(error){
+        		//alert(error);
+        		$.growlWarning("Format de la date incorrect");
+        		return;
+			}	
+			var tab = {
+				startDate 	: $.datepicker.formatDate('yy-mm-dd', date ),
+				idSaison	: $('#modal_saison').find('#saisonId').val()
+				};
+			//test si la saison existe deja n'est pas déja utilisé
+			$.getJSON("ajax.php?type=admin&action=existSaison&date=" + tab.startDate, function(json) {
+				//console.log(json);
+				if (!json.response) {
+					//saison n'existe pas, on enregistre
+					$.ajax({
+						url: 'ajax.php?type=admin&action=updateSaison',
+						type: 'POST',
+						data: $.param(tab),
+						async: false,
+						success: function(a) {
+	
+							$('#modal_saison').modal('hide');
+							if (a.response === true) {
+								$.growlValidate("Mise à jour OK");
+								setTimeout(refreshSaison(),1000);
+							} else {
+								$.growlErreur("Probleme lors de la mise à jour");
+							}
+	
+						}
+					});
+	
+	
+				} else {
+					$.growlWarning("Attention, cette saison existe déjà !");
+				}
+			});
+		}else{
+			$.growlWarning("Format de la date incorrect");
+		}	
 	}
 	
 	function deleteSaison(){
@@ -260,12 +319,14 @@ $(document).ready(function() {
 	function initModalEditSaison(row){
 		var startDate 	= row.find("td:nth-child(2)").text();
 		var saison 		= row.find("td:nth-child(1)").text();
+		var id			= row.attr("id");
 		
 		$('#modal_saison').on('show.bs.modal', function() {
 			
 			$(this).find('#typeModal').val("edit");
 			$(this).find('#startDateSaison').val(startDate);
 			$(this).find('.modal-title').html("Modification saison : "+saison);
+			$(this).find('#saisonId').val(id);
 		});
 		//$.datepicker.formatDate('yy-mm-dd',$.datepicker.parseDate('dd/mm/yy', $( "#date_encours" ).val()));
 		
@@ -304,8 +365,7 @@ $(document).ready(function() {
 			    addSaison();
 			}
 			if( $("#modal_saison").find('#typeModal').val() == "edit"){
-			    //console.log('update');
-			    //updateSaison();
+			    updateSaison();
 			}
 		}
 		if ($(this).is('#deleteConfirm') ) {

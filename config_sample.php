@@ -9,6 +9,10 @@ if (!file_exists("config.json")) {
    header("Location: setup.php");
    exit;
 }
+
+require '_include/autoloader.class.php'; 
+Autoloader::register(); 
+
 $config = json_decode(file_get_contents("config.json"), true);
 
 /* You can Touch */

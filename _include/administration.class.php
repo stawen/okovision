@@ -297,28 +297,53 @@ class administration extends connectDb{
 	    $this->sendResponse($r);
 	}
 	
-	public function setSaison($s){
-		$r = array();
+	private function getDateSaison($startDate){
+		$date = DateTime::createFromFormat('Y-m-d', $startDate);
 		
-		$date = DateTime::createFromFormat('Y-m-d', $s['startDate']);
-		
-		$startDate = $date->format('Y-m-d');
+		$start 	= $date->format('Y-m-d');
 		$saison = $date->format('Y');
 			
 		$date->add(new DateInterval("P1Y"));
 		$date->sub(new DateInterval("P1D"));
-		$endDate = $date->format('Y-m-d');
+		$end = $date->format('Y-m-d');
 		
 		$saison .= "-".$date->format('Y');
 		
+		return array (
+			'start' 	=> $start,
+			'end'		=> $end,
+			'saison' 	=> $saison
+			);
+	}
+	
+	public function setSaison($s){
+		$r = array();
+		
+		$dates = $this->getDateSaison($s['startDate']);
 		//insertion d'une reference au demarrage des cycles de chauffe
-		$query = "INSERT INTO oko_saisons (saison, date_debut, date_fin) VALUES('".$saison."','".$startDate."','".$endDate."');" ;
+		//$query = "INSERT INTO oko_saisons (saison, date_debut, date_fin) VALUES('".$saison."','".$startDate."','".$endDate."');" ;
+		$query = "INSERT INTO oko_saisons (saison, date_debut, date_fin) VALUES('".$dates['saison']."','".$dates['start']."','".$dates['end']."');" ;
 		$this->log->debug("Create Saison | ".$query);
 		
 		$r['response'] = $this->db->query($query);
 		
 		$this->sendResponse($r);
 	}
+	
+	public function updateSaison($s){
+		$r = array();
+		
+		$dates = $this->getDateSaison($s['startDate']);
+		//insertion d'une reference au demarrage des cycles de chauffe
+		//$query = "INSERT INTO oko_saisons (saison, date_debut, date_fin) VALUES('".$saison."','".$startDate."','".$endDate."');" ;
+		$query = "UPDATE oko_saisons set saison='".$dates['saison']."', date_debut='".$dates['start']."', date_fin='".$dates['end']."' where id=".$s['idSaison']  ;
+		$this->log->debug("Update Saison | ".$query);
+		
+		$r['response'] = $this->db->query($query);
+		
+		$this->sendResponse($r);
+	}
+	
 	
 	public function deleteSaison($s){
 		$r = array();

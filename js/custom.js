@@ -77,5 +77,11 @@ $(document).ready(function() {
     	
     }
     
+    $.validateDate = function(dtValue){
+		var dtRegex = new RegExp(/\b\d{1,2}[\/]\d{1,2}[\/]\d{4}\b/);
+		return dtRegex.test(dtValue);
+	}
+
+    
 	
 });

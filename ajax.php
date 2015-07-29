@@ -4,10 +4,11 @@
 * Auteur : Stawen Dronek
 * Utilisation commerciale interdite sans mon accord
 ******************************************************/
-
-include_once '_include/data.php'; 
+/*
+include_once '_include/data.class.php'; 
 include_once '_include/administration.class.php'; 
 
+*/
 function is_ajax() {
   //return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
   return true;
@@ -64,6 +65,9 @@ if (is_ajax()) {
                         	break;
                         case "deleteSaison":
                         	$a->deleteSaison($_POST);
+                        	break;
+                        case "updateSaison":
+                        	$a->updateSaison($_POST);
                         	break;
     				}
     				break; //

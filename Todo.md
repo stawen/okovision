@@ -5,20 +5,20 @@
 		* choix des données a mettre dans le graphique
 
 2. Configuration
-	* Choisir la T°C de reference
-	* Choisir le poids de pellet pour 60 secondes de vis tremi
-	* definir saison de chauffage
-  	* (Chemin http de la chaudiere (Ip ou Nom))
-	* (Parametrage BDD)
-	* Association structure fichier CSV de l'installation Okofen avec le nom des colonnes
-	* Transfert csv sur serveur distant (Oui / non)+
+	* OK - Choisir la T°C de reference
+	* OK - Choisir le poids de pellet pour 60 secondes de vis tremi
+	* OK - definir saison de chauffage
+  	* OK - Chemin http de la chaudiere (Ip ou Nom)
+	* OK - Parametrage BDD
+	* OK - Association structure fichier CSV de l'installation Okofen avec le nom des colonnes
+	* OK - Transfert csv sur serveur distant (Oui / non)+
 	 
 	
 3. Actions Manuelles
 	* Recuperation csv depuis la chaudiere
-		* Liste les fichiers presents sur la chaudieres
+		* OK - Liste les fichiers presents sur la chaudieres
 		* Choisir le fichier a importer (si date fichier different de date du jour alors faire la synthese automatiquement)
-	* Import du CSV depuis upload via interface web
+	* OK - Import du CSV depuis upload via interface web
 	* Faire la synthese journaliere
 		* Afficher les jours n'ayant pas de synthese journaliere et proposer de la faire
 		* Choisir un jour precis pour mettre a jour la synthese
@@ -30,11 +30,12 @@
 * OK - Ecran de parametrage pour gerer les données du fichier json
 * OK - Prevoir un ecran d'install si json pas present, et creation du fichier config.php
 * OK - Revision de la structure des données
-* OK - Traduction des colonnes dans le CSV et identifiaction du patern de nommage du constructeur
+* OK - Traduction des colonnes dans le CSV et identification du patern de nommage du constructeur
 * OK - Ecran de matrice de correspondance csv pour import des données
 * OK - Import manuel du fichier csv distant
-* Creation page des saisons
+* OK - Creation page des saisons
 * Page de creation graphique + indicateur dedans
-* Declancher synthese journaliere pour les jours n'existant pas
-* Creation de procedures stockées pour accelerer le chargement du csv 
-*  Import d'un csv via interface web 
+* Ecran de Declenchement synthese journaliere pour les jours n'existant pas
+* Page de synthese
+* Creation de procedures stockées pour accelerer le chargement du csv (min et max sur une journée + nb_cycle) -> pas sur qu'une prostock soit un bonne idée
+* Import d'un csv via interface http chaudiere 
