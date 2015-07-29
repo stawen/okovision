@@ -136,7 +136,10 @@ $(document).ready(function() {
 			
 				if (json.response === true) {
 				    $('#inwork').hide();
-				    $('#complete').show();
+				    $('#selectFile').show();
+				    $.growlValidate("Importation réussie !")
+				    $('#bar').css('width','0%');
+				    
 				}else {
 					$.growlWarning("Echec de l'importation");
 				}
