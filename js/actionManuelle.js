@@ -85,7 +85,7 @@ $(document).ready(function() {
     
     
     $('a[aria-controls="majusb"]').on('shown.bs.tab', function (e) {
-       //console.log($.matriceComplet());
+       
        	$('#bar').css('width','0%');
        
        	$('#selectFile').show();

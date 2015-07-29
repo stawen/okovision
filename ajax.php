@@ -15,10 +15,12 @@ function is_ajax() {
 if (is_ajax()) {
 	
 		if (isset($_GET['type']) && isset($_GET['action']) ){
-			$a = new administration();
+			
 			
     		switch ($_GET['type']){
     			case "admin":
+    				$a = new administration();
+    				
     				switch ($_GET['action']){
     				    case "testIp":
     				        if( isset( $_GET['ip'] ) ){
@@ -67,6 +69,15 @@ if (is_ajax()) {
                         	break;
     				}
     				break; //
+    			case "graphique":
+    				$g = new gstGraphique();
+    				
+    				switch ($_GET['action']){
+    				    case "getGraphe":
+    				    	$g->getGraphe();
+    				    	break;
+    				}
+    				break;
     		}		
 	    }
 
