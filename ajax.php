@@ -73,6 +73,16 @@ if (is_ajax()) {
     				$g = new gstGraphique();
     				
     				switch ($_GET['action']){
+    					case "getLastGraphePosition":
+    						$g->getLastGraphePosition();
+    						break;
+    					case "grapheNameExist":
+    						if( isset( $_GET['name'] ) ){
+    							$g->grapheNameExist($_GET['name']);
+    						}
+    						break;
+    					case "addGraphe":
+    						$g->addGraphe($_POST);
     				    case "getGraphe":
     				    	$g->getGraphe();
     				    	break;
