@@ -23,6 +23,7 @@
         "name": "Contact Bruleur (On/Off)",
         "type": ""
     },
+    
     "HK1 VL Ist[°C]": {
         "name": "T°C Départ",
         "type": ""
@@ -44,6 +45,26 @@
         "type": ""
     },
     
+    "HK2 VL Ist[°C]": {
+        "name": "Circuit chauffage 2 - T°C Départ",
+        "type": ""
+    },
+    "HK2 VL Soll[°C]": {
+        "name": "Circuit chauffage 2 - T°C Départ Consigne",
+        "type": ""
+    },
+    "HK2 RT Ist[°C]": {
+        "name": "Circuit chauffage 2 - T°C Ambiante",
+        "type": ""
+    },
+    "HK2 RT Soll[°C]": {
+        "name": "Circuit chauffage 2 - T°C Ambiante Consigne",
+        "type": ""
+    },
+    "HK2 Pumpe": {
+        "name": "Circuit chauffage 2 - Circulateur Chauffage (On/Off)",
+        "type": ""
+    },
     
     
     "WW1 EinT Ist[°C]": {
@@ -63,12 +84,54 @@
         "type": ""
     },
     
+    "WW2 EinT Ist[°C]": {
+        "name": "ECS 2 - T°C ECS",
+        "type": ""
+    },
+    "WW2 AusT Ist[°C]": {
+        "name": "ECS 2 - T°C ECS (arret)",
+        "type": ""
+    },
+    "WW2 Soll[°C]": {
+        "name": "ECS 2 - T°C ECS Consigne",
+        "type": ""
+    },
+    "WW2 Pumpe": {
+        "name": "ECS 2 - Circulateur ECS",
+        "type": ""
+    },
+    
     
     "Zubrp1 Pumpe": {
         "name": "Pompe (indefini)",
         "type": ""
     },
     
+    
+    "PU1 TPO Ist[°C]": {
+        "name": "Ballon Tampon - T°C Haut",
+        "type": ""
+    },
+    
+    "PU1 TPO Soll[°C]": {
+        "name": "Ballon Tampon - T°C Haut Consigne",
+        "type": ""
+    },
+    
+    "PU1 TPM Ist[°C]": {
+        "name": "Ballon Tampon - T°C milieu",
+        "type": ""
+    },
+    
+    "PU1 TPM Soll[°C]": {
+        "name": "Ballon Tampon - T°C milieu Consigne",
+        "type": ""
+    },
+    
+    "PU1 Pumpe[%]": {
+        "name": "Balon Tampo - Pompe (%)",
+        "type": ""
+    },
     
     "SK1 Koll[°C]": {
         "name": "T°C panneau solaire",
@@ -82,6 +145,21 @@
         "name": "Pompe Solaire (On/Off)",
         "type": ""
     },
+    
+    "SK2 Koll[°C]": {
+        "name": "Solaire 2 - T°C panneau solaire",
+        "type": ""
+    },
+    "SK2 SPUnten[°C]": {
+        "name": "Solaire 2 - T°C Ballon Bas",
+        "type": ""
+    },
+    "SK2 Pumpe[%]": {
+        "name": "Solaire 2 - Pompe Solaire (On/Off)",
+        "type": ""
+    },
+    
+    
     
     "PE1 KT[°C]": {
         "name": "OKO 1 - T°C Chaudiere",
@@ -153,6 +231,81 @@
     },
     "PE1 Motor RM": {
         "name": "Moteur ramonage",
+        "type": ""
+    }
+    
+    
+    
+    "PE2 KT[°C]": {
+        "name": "OKO 2 - T°C Chaudiere",
+        "type": ""
+    },
+    "PE2 KT_SOLL[°C]": {
+        "name": "OKO 2 - T°C Chaudiere Consigne",
+        "type": ""
+    },
+    "PE2 FRT Ist[°C]": {
+        "name": "OKO 2 - T°C Flamme",
+        "type": ""
+    },
+    "PE2 FRT Soll[°C]": {
+        "name": "OKO 2 - T°C Flamme Consigne",
+        "type": ""
+    },
+    "PE2 Einschublaufzeit[zs]": {
+        "name": "OKO 2 - Vis Alimentation marche (ms)",
+        "type": "tps_vis"
+    },
+    "PE2 Pausenzeit[zs]": {
+        "name": "OKO 2 - Vis Alimentation pause (ms)",
+        "type": "tps_vis_pause"
+    },
+    "PE2 Luefterdrehzahl[%]": {
+        "name": "OKO 2 - Ventilation Bruleur (%)",
+        "type": ""
+    },
+    "PE2 Saugzugdrehzahl[%]": {
+        "name": "OKO 2 - Ventilation fumée (%)",
+        "type": ""
+    },
+    "PE2 Unterdruck Ist[Pa]": {
+        "name": "OKO 2 - Dépression (Pa)",
+        "type": ""
+    },
+    "PE2 Unterdruck Soll[Pa]": {
+        "name": "OKO 2 - Depression Consigne (Pa)",
+        "type": ""
+    },
+    "PE2 Status": {
+        "name": "OKO 2 - Statut Chaudiere",
+        "type": "status"
+    },
+    "PE2 Motor ES": {
+        "name": "OKO 2 - Moteur alimentation chaudiere (On/Off)",
+        "type": ""
+    },
+    "PE2 Motor RA": {
+        "name": "OKO 2 - Moteur extraxtion silo (On/Off)",
+        "type": ""
+    },
+    "PE2 Motor RES1": {
+        "name": "OKO 2 - Moteur tremie intermediaire",
+        "type": ""
+    },
+    "PE2 Motor TURBINE": {
+        "name": "OKO 2 - Moteur ASPIRATION",
+        "type": ""
+    },
+    "PE2 Motor ZUEND": {
+        "name": "OKO 2 - Moteur Allumage",
+        "type": ""
+    },
+    "PE2 Motor UW[%]": {
+        "name": "OKO 2 - Pompe du circuit primaire (%)",
+        "type": ""
+    },
+    "PE2 Motor RM": {
+        "name": "OKO 2 - Moteur ramonage",
         "type": ""
     }
     

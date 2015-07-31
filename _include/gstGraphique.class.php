@@ -38,6 +38,7 @@ class gstGraphique extends connectDb{
     
     public function getLastGraphePosition(){
     	$q = "select max(position) as lastPosition from oko_graphe";
+	    $this->log->debug("Class gestGraphique | getLastGraphePosition | ".$q ); //.$r['data']['lastPosition']
 	    
 	    $result = $this->db->query($q);
 	    
@@ -47,23 +48,23 @@ class gstGraphique extends connectDb{
 	    	$r['response'] = true;
 	    	$r['data'] = $result->fetch_object();
 	    	
-	    	$this->log->debug("gestGraphique | getLastGraphePosition | " ); //.$r['data']['lastPosition']
+	    
 	    }
 	    
 	    $this->sendResponse($r);
     }
     
     public function grapheNameExist($name){
-    	$q = "select count(*) from oko_graphe where name=".$name;
+    	$q = "select count(*) from oko_graphe where name='".$name."'";
 	    $result = $this->db->query($q);
 	    
-	    $r['response'] = false;
+	    
 	    $r['exist'] = false;
 	    if($result){
-	    	$r['response'] = true;
+	    	
 	    	$res = $result->fetch_row();
 	    //	$this->log->debug("Nb capteur | ".$res[0]);
-	    	if ($res[0] > 1) {
+	    	if ($res[0] > 0) {
 	    		$r['exist'] = true;
 	    	}
 	    }
@@ -73,7 +74,11 @@ class gstGraphique extends connectDb{
     }
     
     public function addGraphe($s){
-    	$q = "INSERT INTO oko_graphe (name, position) value ('".$s['name']."','".$s['position']."')";
+    	$name = $this->db->real_escape_string($s['name']);
+    	
+    	$q = "INSERT INTO oko_graphe (name, position) value ('".$name."','".$s['position']."')";
+    	$this->log->debug("Class gestGraphique | addGraphe | ".$q);
+    	$r = array();
     	
     	$r['response'] = false;
     	 
@@ -84,6 +89,52 @@ class gstGraphique extends connectDb{
     	$this->sendResponse($r);
     	
     }
+    
+    public function updateGraphe($s){
+    	$name = $this->db->real_escape_string($s['name']);
+    	$q = "UPDATE oko_graphe SET name='".$name."' where id=".$s['id'] ;
+    	
+    	$r['response'] = false;
+    	 
+    	if($this->db->query($q)){
+    	 	$r['response'] = true;	
+    	}
+    	
+    	$this->sendResponse($r);
+    }
+    
+    public function deleteGraphe($s){
+    	$q = "DELETE from oko_graphe where id=".$s['id'] ;
+    	
+    	$r['response'] = false;
+    	 
+    	if($this->db->query($q)){
+    	 	$r['response'] = true;	
+    	}
+    	
+    	$this->sendResponse($r);
+    }
+    /*
+    public function getGrapheAsso($grapheId){
+    	$q = "select oko from oko_asso_capteur_graphe where oko_graphe_id=".$grapheId;
+	    
+	    $result = $this->db->query($q);
+	    
+	    if($result){
+	    	$r['response'] = true;
+	    	
+	    	$tmp = array();
+	    	while($res = $result->fetch_object()){
+				array_push($tmp,$res);
+			}
+	    	$r['data']=$tmp;
+	    	
+	    }else{
+	    	$r['response'] = false;
+	    }
+	    
+	    $this->sendResponse($r);
+    }*/
     
     
     

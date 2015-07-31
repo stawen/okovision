@@ -1,10 +1,2 @@
-1 - Decompresser le zip, il y a 2 dossiers, WWW et SQL
-2 - importer dans la bdd le fichier sql (j'utilise comme bdd mariadb). la base doit s'appeler okovision, le script le fait mais au cas où
-3 - si nas synology, creer un repertoire okovision dans /volume1/web, sinon adapter
-
-5 - dans le fichier config.php, remplir les infos demandées.
-6 - dans le fichier cron.php, mettre en commentaire $oko2web->send2web(); si pas besoin d'exporter les données sur un site web externe.
-7 - Faire une tache plannifiée dans le nas ou serveur(tache cron) qui appel le fichier cron.php toutes les 2 heures. Le mieux est de le faire sur la 15eme minutes toutes les 2h. exemplle 12h12-14h15-16h15-etc...
-8 - enjoy
-9-
+read wiki page  : https://github.com/stawen/okovision/wiki
 	

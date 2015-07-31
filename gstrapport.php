@@ -74,7 +74,7 @@ include_once '_templates/menu.php';
 					<div class="modal-body">
 						<div class="hidden">
 							<input type="text" id="typeModal">
-							<input type="text" id="refName">
+							<input type="text" id="grapheId">
 							<input type="text" id="position">
 						</div>
 						<form>

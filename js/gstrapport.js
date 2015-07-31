@@ -23,19 +23,17 @@ $(document).ready(function() {
         $('#modal_graphique').on('show.bs.modal', function() {
 
             var name = row.find("td:nth-child(2)").text();
-            $(this).find('#refName').val(name);
             $(this).find('#name').val(name);
             $(this).find('#typeModal').val("edit");
-            $(this).find('#GraphiqueTitre').html("Modification de " + name);
+            $(this).find('#grapheId').val(row.attr("id"));
+            $(this).find('#graphiqueTitre').html("Modification de " + name);
         });
     }
 
     function initModalDeleteGraphe(row) {
-        var name = row.find("td:nth-child(2)").text();
-
         $('#confirm-delete').on('show.bs.modal', function() {
-            $(this).find('.modal-title').html("Confirmez-vous la suppresion de " + name + "?");
-            $(this).find('#deleteid').val(name);
+            $(this).find('.modal-title').html("Confirmez-vous la suppresion de " + row.find("td:nth-child(2)").text() + "?");
+            $(this).find('#deleteid').val(row.attr("id"));
             $(this).find('#typeModal').val('Grph');
         });
     }
@@ -139,7 +137,7 @@ $(document).ready(function() {
         };
         //console.log(tab.position);
         //test si le groupe adrress n'est pas déja utilisé
-        $.getJSON("ajax.php?type=graphique&action=grapheNameExist&name=" + $('#modal_graphique').find('#name').val(), function(json) {
+        $.getJSON("ajax.php?type=graphique&action=grapheNameExist&name=" + tab.name, function(json) {
             //console.log(json);
             if (!json.exist) {
                 //so le groupe n'existe pas, on enregistre
@@ -147,9 +145,9 @@ $(document).ready(function() {
                     url: 'ajax.php?type=graphique&action=addGraphe',
                     type: 'POST',
                     data: $.param(tab),
-                    async: false,
+                    async: true,
                     success: function(a) {
-
+                        //console.log(a);
                         $('#modal_graphique').modal('hide');
                         if (a.response) {
                             $.growlValidate("Enregistrement OK");
@@ -172,19 +170,19 @@ $(document).ready(function() {
 
     function updateGraphe() {
         var tab = {
-            refName: $('#modal_graphique').find('#refName').val(),
-            name: $('#modal_graphique').find('#name').val()
+            id  :   $('#modal_graphique').find('#grapheId').val(),
+            name:   $('#modal_graphique').find('#name').val()
         };
         //test si le groupe adrress n'est pas déja utilisé
-        $.getJSON("ajax.php?action=conf&data=testGrapheExist&name=" + tab.name, function(json) {
+        $.getJSON("ajax.php?type=graphique&action=grapheNameExist&name=" + tab.name, function(json) {
             //console.log(json);
-            if (json.exist === 0) {
+            if (!json.exist) {
                 //so le groupe n'existe pas, on enregistre
                 $.ajax({
                     url: 'ajax.php?type=graphique&action=updateGraphe',
                     type: 'POST',
                     data: $.param(tab),
-                    async: false,
+                    async: true,
                     success: function(a) {
 
                         $('#modal_graphique').modal('hide');
@@ -209,18 +207,18 @@ $(document).ready(function() {
 
     function deleteGraphe() {
         var tab = {
-            name: $('#confirm-delete').find('#deleteid').val()
+            id: $('#confirm-delete').find('#deleteid').val()
         };
         $.ajax({
             url: 'ajax.php?type=graphique&action=deleteGraphe',
             type: 'POST',
             data: $.param(tab),
-            async: false,
+            async: true,
             success: function(a) {
 
                 $('#confirm-delete').modal('hide');
                 if (a.response === true) {
-                    $.growlValidate("Suppression réussi de " + tab.name);
+                    $.growlValidate("Suppression réussie");
                     setTimeout(refreshTableGraphe(), 1000);
                 }
                 else {
@@ -336,12 +334,12 @@ $(document).ready(function() {
     function refreshTableGraphe() {
         $("#listeGraphique> tbody").html("");
         $('#select_graphique').find('option').remove();
-        // $('#select_groupe').find('option').remove();
+        
 
         $.getJSON("ajax.php?type=graphique&action=getGraphe", function(json) {
 
                 $.each(json.data, function(key, val) {
-                    console.log(val);
+                    //console.log(val);
                     $('#listeGraphique > tbody:last').append('<tr id="' + val.id + '">  <td> \
     																	<button type="button" class="btn btn-default btn-sm"> \
     																		<span class="glyphicon glyphicon-chevron-up upGrp" aria-hidden="true"></span> \
@@ -364,7 +362,7 @@ $(document).ready(function() {
 
 
                 });
-                refreshTableAsso();
+                //refreshTableAsso();
             })
             .error(function() {
                 $.growlErreur("Impossible de charger la liste des graphiques !!");
@@ -419,24 +417,20 @@ $(document).ready(function() {
         }
 
         if ($(this).is("#addGraphique")) {
-            //console.log($("#modal_action").find('#typeModal').val());
-            if ($("#modal_graphique").find('#typeModal').val() == "add") {
+           if ($("#modal_graphique").find('#typeModal').val() == "add") {
                 addGraphe();
             }
             if ($("#modal_graphique").find('#typeModal').val() == "edit") {
-                //console.log('update');
                 updateGraphe();
             }
         }
 
         if ($(this).is("#addAsso")) {
-            //console.log($("#modal_action").find('#typeModal').val());
             if ($("#modal_asso").find('#typeModal').val() == "add") {
                 addAsso();
             }
             if ($("#modal_asso").find('#typeModal').val() == "edit") {
-                //console.log('update');
-                updateAsso();
+               updateAsso();
             }
         }
 
@@ -457,7 +451,7 @@ $(document).ready(function() {
             initModalDeleteAsso($(this).closest("tr"));
         }
         if ($(this).is('#deleteConfirm')) {
-            console.log($('#confirm-delete').find('#typeModal').val());
+            //console.log($('#confirm-delete').find('#typeModal').val());
             if ($('#confirm-delete').find('#typeModal').val() == 'Grph') {
                 deleteGraphe();
             }
@@ -466,15 +460,15 @@ $(document).ready(function() {
             }
 
         }
-        /*
+        
 		if($(this).children().is('.upGrp')){
-		    row = $(this).parents("tr:first");
+		    var row = $(this).parents("tr:first");
 	    	row.insertBefore(row.prev());
 	    }
 	    if($(this).children().is('.downGrp')){
-	        row = $(this).parents("tr:first");
+	        var row = $(this).parents("tr:first");
 	    	row.insertAfter(row.next());
-	    }*/
+	    }
 
 
 

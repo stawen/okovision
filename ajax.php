@@ -83,9 +83,21 @@ if (is_ajax()) {
     						break;
     					case "addGraphe":
     						$g->addGraphe($_POST);
+    						break;
     				    case "getGraphe":
     				    	$g->getGraphe();
     				    	break;
+    				    case "updateGraphe":
+    				    	$g->updateGraphe($_POST);
+    				    	break;
+    				    case "deleteGraphe":
+    				    	$g->deleteGraphe($_POST);
+    				    	break;
+    				    	/*
+    				    case "getGrapheAsso":
+    				    	$g->getGrapheAsso();
+    				    	break;
+    				    	*/
     				}
     				break;
     		}		

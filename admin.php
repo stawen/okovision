@@ -185,7 +185,17 @@
             <div role="tabpanel" class="tab-pane" id="matrice">
             	<br/>
             	Votre installation Okofen est spécifique. Le format du fichier CSV quelle produit est unique. Vous devez alors "apprendre" à okovision comment lire ce fichier.
-            	<br/> Tout d'abord, importer le fichier via le bouton ci-dessous
+            	<p>
+            	<lu>
+            	   <li>HK(n) : Circuit Chauffage</li>
+            	   <li>KT : Température Chaudière</li>
+            	   <li>WW(n) : Circuit Eau Chaude sanitaire</li>
+            	   <li>SK(n) : Circuit Solaire ECS</li>
+            	   <li>PE(n) : Chaudiere N°n</li>
+            	   <li>PU(n) : Ballon Tampon N°n</li>
+            	</lu>
+            	</p>
+            	<p> Tout d'abord, importer le fichier via le bouton ci-dessous</p>
             	<br/><br/>
             	<div id="selectFile" style="display: none;">
 	            	<span class="btn btn-success fileinput-button">
