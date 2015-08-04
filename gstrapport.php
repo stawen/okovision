@@ -52,8 +52,8 @@ include_once '_templates/menu.php';
 			<thead>
 				<tr>
 					<th class="col-md-2">Position</th>
-					<th class="col-md-2">Groupe Address</th>
-					<th class="col-md-3">Nom</th>
+					<th class="col-md-5">Nom</th>
+					<th class="col-md-3">Coeff Correction</th>
 					<th class="col-md-2"></th>
 				</tr>
 			</thead>
@@ -115,13 +115,17 @@ include_once '_templates/menu.php';
 						<form>
 							<div class="form-group" id="divgroupe">
 								<label for="message-text" class="control-label">Graphique :</label>
-								<select class="form-control" id="select_graphe">
+									<select class="form-control" id="select_graphe">
 								</select>
 							</div>
-							<div class="form-group" id="diveqt">
-								<label for="message-text" class="control-label">Capteur :</label>
-								<select class="form-control" id="select_capteur">
+							<div class="form-group" id="divcapteur">
+								<label for="message-text" class="control-label">Capteurs :</label>
+									<select class="form-control" id="select_capteur">
 								</select>
+							</div>
+							<div class="form-group">
+								<label for="recipient-name" class="control-label">Coefficiant de correction :</label>
+								<input type="text" class="form-control" id="coeff" placeholder="ex : 0,25" value="1">
 							</div>
 						</form>
 					</div>

@@ -23,7 +23,6 @@
         "name": "Contact Bruleur (On/Off)",
         "type": ""
     },
-    
     "HK1 VL Ist[°C]": {
         "name": "T°C Départ",
         "type": ""
@@ -44,7 +43,6 @@
         "name": "Circulateur Chauffage (On/Off)",
         "type": ""
     },
-    
     "HK2 VL Ist[°C]": {
         "name": "Circuit chauffage 2 - T°C Départ",
         "type": ""
@@ -65,8 +63,6 @@
         "name": "Circuit chauffage 2 - Circulateur Chauffage (On/Off)",
         "type": ""
     },
-    
-    
     "WW1 EinT Ist[°C]": {
         "name": "T°C ECS",
         "type": ""
@@ -83,7 +79,6 @@
         "name": "Circulateur ECS",
         "type": ""
     },
-    
     "WW2 EinT Ist[°C]": {
         "name": "ECS 2 - T°C ECS",
         "type": ""
@@ -100,39 +95,30 @@
         "name": "ECS 2 - Circulateur ECS",
         "type": ""
     },
-    
-    
     "Zubrp1 Pumpe": {
         "name": "Pompe (indefini)",
         "type": ""
     },
-    
-    
     "PU1 TPO Ist[°C]": {
         "name": "Ballon Tampon - T°C Haut",
         "type": ""
     },
-    
     "PU1 TPO Soll[°C]": {
         "name": "Ballon Tampon - T°C Haut Consigne",
         "type": ""
     },
-    
     "PU1 TPM Ist[°C]": {
         "name": "Ballon Tampon - T°C milieu",
         "type": ""
     },
-    
     "PU1 TPM Soll[°C]": {
         "name": "Ballon Tampon - T°C milieu Consigne",
         "type": ""
     },
-    
     "PU1 Pumpe[%]": {
         "name": "Balon Tampo - Pompe (%)",
         "type": ""
     },
-    
     "SK1 Koll[°C]": {
         "name": "T°C panneau solaire",
         "type": ""
@@ -145,7 +131,6 @@
         "name": "Pompe Solaire (On/Off)",
         "type": ""
     },
-    
     "SK2 Koll[°C]": {
         "name": "Solaire 2 - T°C panneau solaire",
         "type": ""
@@ -158,9 +143,6 @@
         "name": "Solaire 2 - Pompe Solaire (On/Off)",
         "type": ""
     },
-    
-    
-    
     "PE1 KT[°C]": {
         "name": "OKO 1 - T°C Chaudiere",
         "type": ""
@@ -232,10 +214,7 @@
     "PE1 Motor RM": {
         "name": "Moteur ramonage",
         "type": ""
-    }
-    
-    
-    
+    },
     "PE2 KT[°C]": {
         "name": "OKO 2 - T°C Chaudiere",
         "type": ""
@@ -308,7 +287,4 @@
         "name": "OKO 2 - Moteur ramonage",
         "type": ""
     }
-    
 }
-
-    

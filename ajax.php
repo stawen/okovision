@@ -93,35 +93,44 @@ if (is_ajax()) {
     				    case "deleteGraphe":
     				    	$g->deleteGraphe($_POST);
     				    	break;
-    				    	/*
-    				    case "getGrapheAsso":
-    				    	$g->getGrapheAsso();
+    				    case "getCapteurs":	
+    				    	$g->getCapteurs();
     				    	break;
-    				    	*/
+    				    case "grapheAssoCapteurExist":
+    				    	$g->grapheAssoCapteurExist($_POST);
+    				    	break;
+    				    case "addGrapheAsso":
+    				    	$g->addGrapheAsso($_POST);
+    				    	break;
+    				    case "getGrapheAsso":
+    				    	$g->getGrapheAsso($_GET['graphe']);
+    				    	break;
+    				    case "updateGrapheAsso":
+    				    	$g->updateGrapheAsso($_POST);
+    				    	break;
+    				    case "deleteAssoGraphe":
+    				    	$g->deleteAssoGraphe($_POST);
+    				    	break;
+    				    	
+    				}
+    				break;
+    			case "rendu":
+    				switch ($_GET['action']){
+    					case "getGraphe":
+    						$g = new gstGraphique();
+    						$g->getGraphe();
+    						break;
+    					case "getGrapheData":
+    						$r = new rendu();
+    						$r->getGrapheData($_GET['id'],$_GET['jour']);
+    				
     				}
     				break;
     		}		
 	    }
 
 	
-	if (isset($_GET['type']) && isset($_GET['date']) ){
-		$d = new data();
 	
-		switch ($_GET['type']){
-			case "ecs":
-				$d->getEcs($_GET['date']);
-				break;
-			case "chauffage":
-				$d->getChauffage($_GET['date']);
-				break;
-			case "temperature":
-				$d->getTemperature($_GET['date']);
-				break;
-			case "indicateur":
-				$d->getIndicateur($_GET['date']);
-				break;	
-		}		
-	}
 	if (isset($_GET['type']) && ( (isset($_GET['month']) && isset($_GET['year']) ) || isset($_GET['saison']) ) ){
 		$d = new data();
 	

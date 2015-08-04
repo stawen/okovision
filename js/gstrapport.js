@@ -42,37 +42,9 @@ $(document).ready(function() {
         $('#modal_asso').on('show.bs.modal', function() {
 
             $(this).find('#typeModal').val("add");
-            $(this).find('#actionTitre').html("Ajout d'un equipement dans un graphe");
-
-            $.getJSON("ajax.php?type=graphique&action=getGraphe", function(json) {
-
-                    $('#select_graphe').find('option').remove();
-
-                    $.each(json, function(key, val) {
-                        //console.log(val);
-                        $('#select_graphe').append('<option value="' + val.id + '">' + val.name + '</option>');
-
-                    });
-                    $('#select_graphe option[value=' + $('#select_graphique').val() + ']').attr("selected", "selected");
-                })
-                .error(function() {
-                    $.growlErreur("Impossible de récupérer la liste des graphes");
-                });
-            /*
-			$.getJSON("ajax.php?action=conf&data=getEqtEtat", function(json) {
-
-                    $('#select_eqt').find('option').remove();
-					
-					$.each(json, function(key, val) {
-					    //console.log(val);
-						$('#select_eqt').append('<option value="' + val.id + '">' + val.group_addr +' - ' + val.name + '</option>');
-					});
-		    })
-			.error(function() {
-				$.growlErreur("Impossible de récupérer la liste des Equipements d'etats");
-			});*/
-
-
+            $('#select_graphe option[value=' + $('#select_graphique').val() + ']').attr("selected", "selected");
+            $('#select_capteur').prop("disabled", false);
+            
         });
     }
 
@@ -80,52 +52,22 @@ $(document).ready(function() {
         $('#modal_asso').on('show.bs.modal', function() {
 
             $(this).find('#typeModal').val("edit");
-            $(this).find('#actionTitre').html("Modification de l'association");
-
-            $.getJSON("ajax.php?type=graphique&data=getGraphe", function(json) {
-
-                    $('#select_graphe').find('option').remove();
-
-                    $.each(json, function(key, val) {
-                        //console.log(val);
-                        $('#select_graphe').append('<option value="' + val.id + '">' + val.name + '</option>');
-
-                    });
-                    $('#select_graphe option[value=' + $('#select_graphique').val() + ']').attr("selected", "selected");
-                })
-                .error(function() {
-                    $.growlErreur("Impossible de récupérer la liste des graphiques");
-                });
-            /*
-			$.getJSON("ajax.php?action=conf&data=getEqtEtat", function(json) {
-
-                    $('#select_eqt').find('option').remove();
-					
-					$.each(json, function(key, val) {
-					    if(val.group_addr ==  row.find("td:nth-child(2)").text()){
-					        $('#select_eqt').append('<option value="' + val.id + '" selected=selected>' + val.group_addr +' - ' + val.name + '</option>');
-					    }else{
-						    $('#select_eqt').append('<option value="' + val.id + '">' + val.group_addr +' - ' + val.name + '</option>');
-					    }
-					});
-					
-		    })
-		    .done(function (){
-						$('#select_eqt').attr('disabled', 'disabled');
-			})
-			.error(function() {
-				$.growlErreur("Impossible de récupérer la liste des equipements d'etat");
-			});*/
+            $(this).find('#assoTitre').html("Modification de l'association");
+            $('#select_graphe option[value=' + $('#select_graphique').val() + ']').attr("selected", "selected");
+            $('#select_capteur option[value=' + row.attr("id") + ']').attr("selected", "selected");
+            
+            $('#select_capteur').attr('disabled', 'disabled');
+            $('#coeff').val(row.find("td:nth-child(3)").text());
 
         });
     }
 
     function initModalDeleteAsso(row) {
-        var name = $('#select_graphique option:selected').text() + " - " + row.find("td:nth-child(3)").text();
+        var name = $('#select_graphique option:selected').text() + " - " + row.find("td:nth-child(2)").text();
 
         $('#confirm-delete').on('show.bs.modal', function() {
-            $(this).find('.modal-title').html("Confirmez-vous la suppresion de " + name + "?");
-            $(this).find('#deleteid').val(row.find("td:nth-child(2)").text());
+            $(this).find('.modal-title').html("Confirmez-vous la suppresion de l'asso " + name + "?");
+            $(this).find('#deleteid').val(row.attr("id")); //id du capteur
             $(this).find('#typeModal').val('Asso');
         });
     }
@@ -232,24 +174,26 @@ $(document).ready(function() {
     function addAsso() {
         var tab = {
             id_graphe: $('#modal_asso').find('#select_graphe').val(),
-            id_eqt: $('#modal_asso').find('#select_eqt').val(),
-            position: 1
+            id_capteur: $('#modal_asso').find('#select_capteur').val(),
+            position : 1,
+            coeff   : $('#modal_asso').find('#coeff').val()
+            
         };
         //console.log(tab.position);
         //test si le groupe adrress n'est pas déja utilisé
-        $.getJSON("ajax.php?type=graphique&action=testAssoGrapheExist&graphe=" + $('#modal_asso').find('#select_graphe').val() + "&eqt=" + $('#modal_asso').find('#select_eqt').val(), function(json) {
+        $.getJSON("ajax.php?type=graphique&action=grapheAssoCapteurExist&graphe=" + tab.id_graphe + "&capteur=" + tab.id_capteur, function(json) {
             //console.log(json);
-            if (json.exist === 0) {
+            if (!json.exist) {
                 //so l'asso n'existe pas, on enregistre
                 $.ajax({
                     url: 'ajax.php?type=graphique&action=addGrapheAsso',
                     type: 'POST',
                     data: $.param(tab),
-                    async: false,
+                    async: true,
                     success: function(a) {
 
                         $('#modal_asso').modal('hide');
-                        if (a.response === true) {
+                        if (a.response) {
                             $.growlValidate("Enregistrement OK");
                             setTimeout(refreshTableAsso(), 1000);
                         }
@@ -271,55 +215,48 @@ $(document).ready(function() {
     function updateAsso() {
         var tab = {
             id_graphe: $('#modal_asso').find('#select_graphe').val(),
-            id_eqt: $('#modal_asso').find('#select_eqt').val(),
-            position: 1
+            id_capteur: $('#modal_asso').find('#select_capteur').val(),
+            coeff   : $('#modal_asso').find('#coeff').val()
         };
-        //test si le groupe adrress n'est pas déja utilisé
-        $.getJSON("ajax.php?type=graphique&action=testAssoGrapheExist&graphe=" + tab.id_graphe + "&eqt=" + tab.id_eqt, function(json) {
-            //console.log(json);
-            if (json.exist === 0) {
-                //so l'asso n'existe pas, on enregistre
-                $.ajax({
-                    url: 'ajax.php?type=graphique&action=updateGrapheAsso',
-                    type: 'POST',
-                    data: $.param(tab),
-                    async: false,
-                    success: function(a) {
-
-                        $('#modal_asso').modal('hide');
-                        if (a.response === true) {
-                            $.growlValidate("Modification réussi");
-                            setTimeout(refreshTableAsso(), 1000);
-                        }
-                        else {
-                            $.growlErreur("Probleme lors de la mise à jour de l'association");
-                        }
-
-                    }
-                });
-
-
-            }
-            else {
-                $.growlWarning("Attention, le couple Graphique + Capteur existe déjà");
+        if(! $.isNumeric(tab.coeff)){
+            $.growlErreur("Le coefficient doit etre un nombre");
+            return;
+        }
+        
+        $.ajax({
+            url: 'ajax.php?type=graphique&action=updateGrapheAsso',
+            type: 'POST',
+            data: $.param(tab),
+            async: true,
+            success: function(a) {
+    
+                $('#modal_asso').modal('hide');
+                if (a.response) {
+                    $.growlValidate("Modification réussi");
+                    setTimeout(refreshTableAsso(), 1000);
+                }
+                else {
+                    $.growlErreur("Probleme lors de la mise à jour du capteur");
+                }
+    
             }
         });
     }
 
     function deleteAssoGraphe() {
         var tab = {
-            eqt: $('#confirm-delete').find('#deleteid').val(),
+            id_capteur: $('#confirm-delete').find('#deleteid').val(),
             id_graphe: $('#select_graphique').val()
         };
         $.ajax({
             url: 'ajax.php?type=graphique&action=deleteAssoGraphe',
             type: 'POST',
             data: $.param(tab),
-            async: false,
+            async: true,
             success: function(a) {
 
                 $('#confirm-delete').modal('hide');
-                if (a.response === true) {
+                if (a.response) {
                     $.growlValidate("Suppression réussi");
                     setTimeout(refreshTableAsso(), 1000);
                 }
@@ -333,8 +270,10 @@ $(document).ready(function() {
 
     function refreshTableGraphe() {
         $("#listeGraphique> tbody").html("");
+        //liste deroulante dans la page
         $('#select_graphique').find('option').remove();
-        
+        //listen deroulante fenetre modal add /edit
+        $('#select_graphe').find('option').remove();
 
         $.getJSON("ajax.php?type=graphique&action=getGraphe", function(json) {
 
@@ -359,10 +298,10 @@ $(document).ready(function() {
                                                                     </td></tr>');
                     //on rempli les listes box pour le tableau d'asso
                     $('#select_graphique').append('<option value="' + val.id + '">' + val.name + '</option>');
-
+                    $('#select_graphe').append('<option value="' + val.id + '">' + val.name + '</option>');
 
                 });
-                //refreshTableAsso();
+                refreshTableAsso();
             })
             .error(function() {
                 $.growlErreur("Impossible de charger la liste des graphiques !!");
@@ -374,9 +313,9 @@ $(document).ready(function() {
 
         $.getJSON("ajax.php?type=graphique&action=getGrapheAsso&graphe=" + $('#select_graphique').val(), function(json) {
 
-                $.each(json, function(key, val) {
+                $.each(json.data, function(key, val) {
                     //console.log(val.group_addr);
-                    $('#listeAsso > tbody:last').append('<tr>  <td> \
+                    $('#listeAsso > tbody:last').append('<tr id="'+ val.id +'">  <td> \
     																	<button type="button" class="btn btn-default btn-sm"> \
     																		<span class="glyphicon glyphicon-chevron-up upGrp" aria-hidden="true"></span> \
     																	</button> \
@@ -384,8 +323,8 @@ $(document).ready(function() {
                                                                         	<span class="glyphicon glyphicon-chevron-down downGrp" aria-hidden="true"></span> \
                                                                         </button> \
                                                                     </td> \
-                	                                                <td>' + val.group_addr + '</td>  \
                 	                                                <td>' + val.name + '</td>  \
+                	                                                <td>' + val.coeff + '</td>  \
                 	                                                <td>       \
                 	                                                    <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal_asso"> \
                                                                             <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> \
@@ -480,10 +419,29 @@ $(document).ready(function() {
     });
 
     refreshTableGraphe();
+    //refreshTableAsso();
 
     $('#select_graphique').change(function() {
         refreshTableAsso();
     });
+    
+    $.getJSON("ajax.php?type=graphique&action=getCapteurs", function(json) {
+                     
+                     if (json.response){
+                        $('#select_capteur').find('option').remove();
+    					
+    					$.each(json.data, function(key, val) {
+    					    //console.log(val);
+    						$('#select_capteur').append('<option value="' + val.id + '">' + val.name + '</option>');
+    						$('#select_graphe').attr('disabled', 'disabled');
+    					});
+                     }else{
+                         $.growlErreur("Impossible de récupérer la liste des capteurs"); 
+                     }
+    })
+	.error(function() {
+		$.growlErreur("Impossible de récupérer la liste des Capteurs");
+	});
 
 
 });

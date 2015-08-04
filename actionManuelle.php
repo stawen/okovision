@@ -41,7 +41,7 @@
             </div>
             <div role="tabpanel" class="tab-pane" id="majusb">
                 <br/>
-            	Via cet écran, vous pouvez importer dans okovision les fichiers de CSV produit par votre chaudiere sur un clef USB
+            	Via cet écran, vous pouvez importer dans okovision les fichiers de CSV produit par votre chaudiere.
             	<br/><br/>
             	<div id="selectFile">
 	            	<span class="btn btn-success fileinput-button">
