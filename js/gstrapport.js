@@ -116,9 +116,9 @@ $(document).ready(function() {
             name:   $('#modal_graphique').find('#name').val()
         };
         //test si le groupe adrress n'est pas déja utilisé
-        $.getJSON("ajax.php?type=graphique&action=grapheNameExist&name=" + tab.name, function(json) {
+        //$.getJSON("ajax.php?type=graphique&action=grapheNameExist&name=" + tab.name, function(json) {
             //console.log(json);
-            if (!json.exist) {
+            //if (!json.exist) {
                 //so le groupe n'existe pas, on enregistre
                 $.ajax({
                     url: 'ajax.php?type=graphique&action=updateGraphe',
@@ -140,11 +140,11 @@ $(document).ready(function() {
                 });
 
 
-            }
-            else {
-                $.growlWarning("Attention, le graphe existe déjà");
-            }
-        });
+           // }
+          //  else {
+           //     $.growlWarning("Attention, le graphe existe déjà");
+           // }
+        //});
     }
 
     function deleteGraphe() {
