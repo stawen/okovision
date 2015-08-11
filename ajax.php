@@ -115,14 +115,18 @@ if (is_ajax()) {
     				}
     				break;
     			case "rendu":
+    			    $r = new rendu();
     				switch ($_GET['action']){
-    					case "getGraphe":
+    				    case "getGraphe":
     						$g = new gstGraphique();
     						$g->getGraphe();
     						break;
     					case "getGrapheData":
-    						$r = new rendu();
     						$r->getGrapheData($_GET['id'],$_GET['jour']);
+    						break;
+    					case "getIndicByDay":
+    					    $r->getIndicByDay($_GET['jour']);
+    					    break;
     				
     				}
     				break;

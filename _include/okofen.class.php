@@ -72,16 +72,16 @@ class okofen extends connectDb{
 		    $link = $url;
 		}
 		
-		$this->log->info('getChaudiereData | Recuperation du fichier '.$link);
+		$this->log->info("Class ".get_called_class()." | getChaudiereData | Recuperation du fichier ".$link);
 		//on lance le dl
 		$result = $this->download($link,CSVFILE);
 
 		if (!$result){
 			 //throw new Exception('Download error...');
-			 $this->log->error('getChaudiereData | Données chaudiere non recupérées');
+			 $this->log->error("Class ".get_called_class()." | getChaudiereData | Données chaudiere non recupérées");
 			 return false;
 		}else{
-			$this->log->info('getChaudiereData | SUCCESS - données chaudiere récupérées');
+			$this->log->info("Class ".get_called_class()." | getChaudiereData | SUCCESS - données chaudiere récupérées");
 			return true;
 		}
 
@@ -162,7 +162,7 @@ class okofen extends connectDb{
 		}
 		fclose($file);
 		
-		$this->log->info("csv2bdd | SUCCESS - import du CSV dans la BDD - ".$ln." lignes en ".$t->getTime()." sec ");
+		$this->log->info("Class ".get_called_class()." | csv2bdd | SUCCESS - import du CSV dans la BDD - ".$ln." lignes en ".$t->getTime()." sec ");
 		
 		return true;
 
@@ -201,9 +201,9 @@ class okofen extends connectDb{
 			$n = $this->db->query($query);
 			
 			if (!$n){
-				$this->log->error("makeSynteseByDay | creation synthèse du ".$day." impossible");
+				$this->log->error("Class ".get_called_class()." | makeSynteseByDay | ERROR | creation synthèse du ".$day." impossible");
 			}else{
-				$this->log->info("makeSynteseByDay | SUCCESS | creation synthèse du ".$day);
+				$this->log->info("Class ".get_called_class()." | makeSynteseByDay | SUCCESS | creation synthèse du ".$day);
 			}
 		
 		}

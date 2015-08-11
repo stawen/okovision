@@ -41,6 +41,5 @@ include('_templates/footer.php');
 ?>
 <!--appel des scripts personnels de la page -->
 	<script src="js/index.js"></script>
-	<!-- script src="js/graphiques.js"></script -->
-    </body>
+	</body>
 </html>

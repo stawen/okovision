@@ -78,8 +78,6 @@ DEFINE('CSV_SEPARATEUR',';');
 DEFINE('BDD_DECIMAL','.');
 
 //Formule savante
-DEFINE('COEFF_CONSO', POIDS_PELLET_PAR_MINUTE/60/1000);
-DEFINE('FUNC_CONSO_PELLET','round(sum( ((60 / (vis_alimentation_tps + vis_alimentation_tps_pause)) * vis_alimentation_tps)) * '.COEFF_CONSO.',2)');
 DEFINE('FUNC_DJU','IF( '.TC_REF.' <= (MAX(Tc_exterieur) + MIN(Tc_exterieur))/2, 0, round( '.TC_REF.' - (MAX(Tc_exterieur) + MIN(Tc_exterieur))/2,2))');
 
 

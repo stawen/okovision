@@ -86,6 +86,10 @@ $(document).ready(function() {
 		$.growlWarning("Format de la date incorrect");
         return;
 	}
+	
+	$.DecSepa = function(s){
+		return s.replace(".",",");
+	}
 
     
 	

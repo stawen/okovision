@@ -2,7 +2,7 @@ $(document).ready(function() {
 
 	/**************************************
 	 **** Graphique ***********************
-	 * ***********************************/
+	 *************************************/
     function grapheWithTime(data, where, titre){
 	
 		var chart = new Highcharts.Chart({
@@ -80,34 +80,31 @@ $(document).ready(function() {
 	
 	}
 	
-	
-	
-/*
-	function createPageGraphe(){
-		//$(".se-pre-con").fadeIn();
-		
-    	
-	}
-*/	
 	/**************************************
 	 **** Peuplement des graphiques *******
 	 * ***********************************/
 	function refreshAllGraphe(){
 	    var jour = $.datepicker.formatDate('yy-mm-dd',$.datepicker.parseDate('dd/mm/yy', $( "#date_encours" ).val()));
 	    
+	    $.getJSON("ajax.php?type=rendu&action=getIndicByDay&jour=" + jour, function(json) {
+					$( "#tcmax" ).text($.DecSepa(json.tcExtMax + " °C"));
+					$( "#tcmin" ).text($.DecSepa(json.tcExtMin + " °C"));
+					$( "#consoPellet" ).text($.DecSepa( ((json.consoPellet===null)?0.0:json.consoPellet) + " Kg"));
+			})
+			.error(function() { 
+				$.growlErreur("Probleme lors de la recuperation des indicateurs");
+			});	
+	    
+	    
 	    $.each($(".graphique"), function (key, val){
 	        
 	        $.getJSON("ajax.php?type=rendu&action=getGrapheData&id="+ val.id +"&jour=" + jour, function(json) {
-				//console.log(json.grapheName);	
-				//grapheWithTime(json.data,val.id,json.grapheName);
 				grapheWithTime(json.grapheData,val.id,$("#"+val.id).data("graphename"));
 				
 			})
 			.error(function() { 
-				//console.log(val.data("graphename"));
-			    //console.log( );	
 				graphe_error(val.id,$("#"+val.id).data("graphename"));
-				$.growlErreur("Problem lors de la recuperation des données graphiques");
+				$.growlErreur("Probleme lors de la recuperation des données graphiques");
 				
 			});
 		
@@ -181,20 +178,14 @@ $(document).ready(function() {
             $(".se-pre-con").fadeOut();
     });	
 
-	/**************************************
-	 **** Execution au chargement de la page  
-	 * ***********************************/	
-	
-//	createPageGraphe();
-    /**************************************
+ 	/**************************************
 	 **** Creation de la structure de la page 
 	 ************************************/
 	 
     $.getJSON("ajax.php?type=rendu&action=getGraphe", function(json) {
     
     				$.each(json.data, function(key, val) {
-    					//console.log(val.id);
-        				$('.container-graphe').append('<div class="page-header"> \
+    					$('.container-graphe').append('<div class="page-header"> \
         				                       <div class="graphique" id="'+ val.id +'" data-graphename="'+ val.name+'" style="width:100%; height:400px;"></div> \
         				                        </div>');
     				});
@@ -204,7 +195,7 @@ $(document).ready(function() {
     			    refreshAllGraphe();
     			})
     			.error(function() {
-    				$.growlErreur("Impossible de charger la liste des groupes d'actions !!");
+    				$.growlErreur("Impossible de charger la liste des graphiques !!");
     			});
     
 });

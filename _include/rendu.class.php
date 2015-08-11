@@ -26,14 +26,10 @@ class rendu extends connectDb{
 	            "LEFT JOIN oko_capteur as capteur ON capteur.id = asso.oko_capteur_id  ".
 	            "WHERE asso.oko_graphe_id=".$id." ORDER BY asso.position";
 	            
-	    $this->log->debug("Class rendu | getGrapheData | ".$q);
+	    $this->log->debug("Class ".get_called_class()." | getGrapheData | ".$q);
 	   
 	    $result = $this->db->query($q);
-		/*
-	    $categorie = array();
-	    while($r = $result->fetch_row()){
-			$categorie[$r[0]] = $r[1];
-		}*/
+		
 		$capteurs = array();
     	while($r = $result->fetch_object()){
 			array_push($capteurs,$r);
@@ -81,7 +77,7 @@ class rendu extends connectDb{
 			        ."INNER JOIN oko_capteur ON oko_historique.oko_capteur_id = oko_capteur.id WHERE "
 			        ."jour ='".$jour."' and oko_historique.oko_capteur_id = ".$capteur->id;
 			        
-			$this->log->debug("Class rendu | getJson4graphe | ".$capteur->name." | ".$q);
+			$this->log->debug("Class ".get_called_class()." | getJson4graphe | ".$capteur->name." | ".$q);
 			
 			$resultat .= '{ "name": "'.$capteur->name.'",';
 			$resultat .= '"data": '.$this->getDataWithTime($q);
@@ -93,6 +89,65 @@ class rendu extends connectDb{
 		return '['.$resultat.']';
 	}
 	
+	public function getIndicByDay($jour){
+		
+		$c 		= $this->getConsoByday($jour);
+		$min 	= $this->getTcMinByDay($jour);
+		$max 	= $this->getTcMaxByDay($jour);
+		
+		$this->sendResponse(
+							json_encode(	["consoPellet" => $c->consoPellet, 
+											 "tcExtMax" => $max->tcExtMax, 
+											 "tcExtMin" => $min->tcExtMin 
+											]
+										, JSON_NUMERIC_CHECK
+									)
+							);
+		
+	}
+	
+	private function getConsoByday($jour){
+		$coeff = POIDS_PELLET_PAR_MINUTE/1000;
+		
+		$q = "select round (sum((1/(a.value + b.value)) * a.value)*(".$coeff."),2) as consoPellet from oko_historique as a "
+				."JOIN oko_historique as b on a.jour = b.jour and a.heure = b.heure "
+				."JOIN oko_capteur as ca ON ca.id = a.oko_capteur_id and ca.type = 'tps_vis' "
+				."JOIN oko_capteur as cb ON cb.id = b.oko_capteur_id and cb.type = 'tps_vis_pause' "
+				."WHERE a.jour = '".$jour."';";
+		
+		$this->log->debug("Class ".get_called_class()." | getConsoByday | ".$q); 
+		
+		$result = $this->db->query($q);
+		
+		return $result->fetch_object();
+		
+	}
+	
+	private function getTcMaxByDay($jour){
+		$q = "SELECT round(max(a.value),2) as tcExtMax FROM oko_historique as a "
+				."JOIN oko_capteur as ca ON ca.id = a.oko_capteur_id and ca.type = 'tc_ext' "
+				."WHERE a.jour = '".$jour."';";
+		
+		$this->log->debug("Class ".get_called_class()." | getTcMaxByDay | ".$q); 
+		
+		$result = $this->db->query($q);
+		
+		return $result->fetch_object();		
+				
+	}
+	
+	private function getTcMinByDay($jour){
+		$q = "SELECT round(min(a.value),2) as tcExtMin FROM oko_historique as a "
+				."JOIN oko_capteur as ca ON ca.id = a.oko_capteur_id and ca.type = 'tc_ext' "
+				."WHERE a.jour = '".$jour."';";
+		
+		$this->log->debug("Class ".get_called_class()." | getTcMinByDay | ".$q); 
+		
+		$result = $this->db->query($q);
+		
+		return $result->fetch_object();		
+				
+	}
 	
 }
 
