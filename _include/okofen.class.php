@@ -98,15 +98,13 @@ class okofen extends connectDb{
 		$capteurStatus 	= $ob_capteur->getByType('status');
 		$startCycle 	= $ob_capteur->getByType('startCycle');
 		
-		//print_r($capteurStatus);exit;
-		//$capteurStatus['position_column_csv'];
-		
 		
 		$file 			= fopen(CSVFILE, 'r');
 		$ln 			= 0;
 		$old_status  	= 0;
 		$start_cycle 	= 0;
-		$query 			= "";
+		
+		$insert = "INSERT IGNORE INTO oko_historique (jour,heure,oko_capteur_id,value) VALUES ";
 		
 		while (!feof($file))
 		{
@@ -123,39 +121,39 @@ class okofen extends connectDb{
 					
 					$jour 	= $colCsv[0];
 					$heure 	= $colCsv[1];
+					$query 	= 	"";
 					
-					$q 		= 	"";
-					$insert	= 	"INSERT IGNORE INTO oko_historique (jour,heure,oko_capteur_id,value) VALUES (".
-								"STR_TO_DATE('".$jour."','%d.%m.%Y'),".	// jour
-								"'".$heure."',";					// heure
-								
+					$beginValue = "( STR_TO_DATE('".$jour."','%d.%m.%Y'),".		// jour
+									"'".$heure."',";							// heure
+					
+					$query = $insert;			
 					//Detection demarrage d'un cycle //Statut 3 = allumage
 					if( $colCsv[$capteurStatus['position_column_csv']] == "3" && $colCsv[$capteurStatus['position_column_csv']] <> $old_status){
 						$st = 1;
 						//creation de la requette pour le comptage des cycle de la chaudiere
 						//Enregistrement de 1 si nous commençons un cycle d'allumage
-						$q 	= 	$insert.
-								$startCycle['id'].",". 	//capteur_id
-						    	$st.");";     		//valeur
-						
-						//on concatene dans la variable $query pour faire du multiquery
-						$this->log->debug($q);
-						$query .= $q;
+						$query .= 	$beginValue.
+									$startCycle['id'].",". 	//capteur_id
+						    		$st."),";     			//valeur
+						//on concatene dans la variable $query pour faire du multivalues
+						//$this->log->debug($q);
 					}
 					
 					//creation de la requette sql pour les capteurs
 					//on commence à la deuxieme colonne de la ligne du csv
 					for($i=2;$i<$nbColCsv;$i++){
-					     
-					   	$q 	= 	$insert.								// heure
-								$capteurs[$i]['id'].",". 				//capteur_id
-					    		$this->cvtDec( $colCsv[$i] ).");";     //valeur
-					
-						//on concatene dans la variable $query pour faire du multiquery
-						$this->log->debug($q);
-						$query .= $q;
+					    
+					    $query 	.= 	$beginValue.								// heure
+									$capteurs[$i]['id'].",". 				//capteur_id
+					    			$this->cvtDec( $colCsv[$i] )."),";      //valeur
+						
+						//on concatene dans la variable $query pour faire du multivalues
+						//$this->log->debug($q);
 					}
-					
+					//suprimme la derniere virgule et on met un ; 
+					$query = substr($query,0,strlen($query)-1).";";
+					//execution de la requette representant l'ensemble d'un ligne du csv
+					$this->db->query($query);
 					$old_status = $colCsv[$capteurStatus['position_column_csv']];	
 					
 				}
@@ -163,9 +161,6 @@ class okofen extends connectDb{
 			$ln++;
 		}
 		fclose($file);
-		
-		$result = $this->db->multi_query($query);
-		//$result->free();
 		
 		$this->log->info("csv2bdd | SUCCESS - import du CSV dans la BDD - ".$ln." lignes en ".$t->getTime()." sec ");
 		
