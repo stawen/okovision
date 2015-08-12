@@ -152,9 +152,9 @@ class gstGraphique extends connectDb{
 	    
     }
     
-    public function grapheAssoCapteurExist($s){
+    public function grapheAssoCapteurExist($graphe,$capteur){
     	
-    	$q = "select count(*) from oko_asso_capteur_graphe where oko_graphe_id=".$s['id_graphe']." and oko_capteur_id=".$s['id_capteur'];
+    	$q = "select count(*) from oko_asso_capteur_graphe where oko_graphe_id=".$graphe." and oko_capteur_id=".$capteur;
 	    $result = $this->db->query($q);
 	    
 	    

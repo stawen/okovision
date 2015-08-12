@@ -97,12 +97,13 @@ class administration extends connectDb{
 	public function importFileFromChaudiere($s){
 	    $r = array();
 	    $r['response'] = true;
+	    $import = false;
 	    
 	    $oko = new okofen();
 	    $status = $oko->getChaudiereData('onDemande',$s['url']);
 	    
 	    if($status){
-	        //$import = $oko->csv2bdd();
+	        $import = $oko->csv2bdd();
 	    }else{
 	        $r['response'] = false;
 	    }

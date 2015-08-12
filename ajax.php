@@ -103,7 +103,7 @@ if (is_ajax()) {
     				    	$g->getCapteurs();
     				    	break;
     				    case "grapheAssoCapteurExist":
-    				    	$g->grapheAssoCapteurExist($_POST);
+    				    	$g->grapheAssoCapteurExist($_GET['graphe'],$_GET['capteur']);
     				    	break;
     				    case "addGrapheAsso":
     				    	$g->addGrapheAsso($_POST);

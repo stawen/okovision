@@ -16,7 +16,15 @@ class autoloader{
      * @param $class string Le nom de la classe à charger
      */
     static function autoload($class){
-        require '_include/' . $class . '.class.php';
+		$logException = ["LogFileDoesNotExistExeception","LogFileOpenErrorException","LogFileNotOpenException",
+						"LogFileAlreadyExistsException","FileCreationErrorException","NotAStringException",
+						"NotAIntegerException","InvalidMessageTypeException"];
+						
+		if (in_array($class,$logException)){
+			require '_include/exceptions.logger.class.php';
+		}else{
+			require '_include/' . $class . '.class.php';
+		}
     }
 
 }
