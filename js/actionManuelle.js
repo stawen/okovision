@@ -145,13 +145,14 @@ $(document).ready(function() {
     }
     
     /*
-    * Gestion onglet Calcukl synthese
+    * Gestion onglet Calcul synthese
     */
     $('a[aria-controls="synthese"]').on('shown.bs.tab', function (e) {
        
        getDayWithoutSynthese();
        	
     });
+
     
     function getDayWithoutSynthese(){
     	$.getJSON("ajax.php?type=admin&action=getDayWithoutSynthese" , function(json) {
@@ -174,10 +175,14 @@ $(document).ready(function() {
     }
     
     $("body").on("click", ".day", function(b) {
+    	makeSynthese($(this));
+    });
+    
+    function makeSynthese(bt){
     	
-    	$(this).find('span').switchClass('glyphicon-repeat','glyphicon-refresh glyphicon-spin' ,0);
+    	bt.find('span').switchClass('glyphicon-repeat','glyphicon-refresh glyphicon-spin' ,0);
         
-        $.getJSON("ajax.php?type=admin&action=makeSyntheseByDay&date=" + $(this).data('day') , function(json) {
+        $.getJSON("ajax.php?type=admin&action=makeSyntheseByDay&date=" + bt.data('day') , function(json) {
 			if(json.response){
 				$.growlValidate("Synthese réussie");
 				getDayWithoutSynthese();
@@ -188,9 +193,21 @@ $(document).ready(function() {
         .error(function() { 
 				$.growlErreur('Error  - Probleme de communication !');
 		});
-		
+    }
+    
+    $("#makeAllSynthese").click(function(){
+    		//console.log("ivi");
+    		var day= [];
+    		$(".day").each(function(){
+    			day.push($(this));
+    		});
+    		
+    		day.each(function(){
+    			makeSynthese($(this));
+    		});
     });
     
+    getDayWithoutSynthese();
     
     
 });

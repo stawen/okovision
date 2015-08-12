@@ -42,7 +42,7 @@ $(document).ready(function() {
 		var titre_histo = 'Historique temperatures / Consommation Pellet';	
 		var div_histo_tempe = 'histo-temperature';	
 		
-	   $.getJSON("ajax.php?type=histo&month="+ $( "#mois" ).val() + "&year="+ $( "#annee" ).val(), function(json) {
+	   $.getJSON("ajax.php?type=rendu&action=histo&month="+ $( "#mois" ).val() + "&year="+ $( "#annee" ).val(), function(json) {
 				//Personnalisation des données
 				//T°C max
 				json[0].color = "red";
@@ -183,9 +183,10 @@ $(document).ready(function() {
 			})
 			.error(function() { 
 				graphe_error(div_histo_tempe,titre_histo);
+				$.growlErreur("Probleme lors de la recuperation de la synthese du mois");
 			});
 			
-		$.getJSON("ajax.php?type=indicmonth&month="+ $( "#mois" ).val() + "&year="+ $( "#annee" ).val(), function(json) {
+		$.getJSON("ajax.php?type=rendu&action=getIndicByMonth&month="+ $( "#mois" ).val() + "&year="+ $( "#annee" ).val(), function(json) {
 				//console.log('success');	
 				$.each(json,function(i,indic){
 					$( "#tcmax" ).text(DecSepa(indic.Tc_ext_max + " °C"));
@@ -198,7 +199,8 @@ $(document).ready(function() {
 				
 			})
 			.error(function() { 
-				console.log('error indicateur du mois');	
+				console.log('error indicateur du mois');
+				$.growlErreur("Probleme lors de la recuperation des indicateurs du mois");
 			});		
 			
 			
@@ -206,7 +208,7 @@ $(document).ready(function() {
 	
 	function generer_synthese_saison(){
 		
-		$.getJSON("ajax.php?type=totalsaison&saison="+ $( "#saison" ).val(), function(json) {
+		$.getJSON("ajax.php?type=rendu&action=getTotalSaison&saison="+ $( "#saison" ).val(), function(json) {
 				//console.log('success conso');	
 				$.each(json,function(i,indic){
 					$( "#tcmaxSaison" ).text(DecSepa(indic.Tc_ext_max + " °C"));
@@ -220,9 +222,10 @@ $(document).ready(function() {
 			})
 			.error(function() { 
 				console.log('error Total du mois');	
+				$.growlErreur("Probleme lors de la recuperation des indicateurs de la saison");
 			});	
 		
-		$.getJSON("ajax.php?type=synthese&saison=" + $( "#saison" ).val(), function(json) {
+		$.getJSON("ajax.php?type=rendu&action=getSyntheseSaison&saison=" + $( "#saison" ).val(), function(json) {
 					//console.log('Synthese success');	
 					//console.log(json);
 					
@@ -359,6 +362,7 @@ $(document).ready(function() {
 				.error(function() { 
 					console.log('error graphe synthèse saison');	
 					graphe_error("saison_graphic","Synthèse saison");
+					$.growlErreur("Probleme lors de la recuperation de la synthese de la saison");
 					
 				});
 	}

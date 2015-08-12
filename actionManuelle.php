@@ -41,7 +41,7 @@
             </div>
             <div role="tabpanel" class="tab-pane" id="majusb">
                 <br/>
-            	Via cet écran, vous pouvez importer dans okovision les fichiers de CSV produit par votre chaudiere.
+            	Via cet écran, vous pouvez importer dans okovision les fichiers CSV produits par votre chaudiere.
             	<br/><br/>
             	<div id="selectFile">
 	            	<span class="btn btn-success fileinput-button">
@@ -63,8 +63,13 @@
             </div>
             <div role="tabpanel" class="tab-pane" id="synthese">
                 <br/>
-            	Ci-dessous la liste des jours ayant des données mais pas de synthese.
+            	Ci-dessous la liste des jours ayant des données mais pas de synthese (Attention : la journée doit etre terminée pour que la synthese soit possible).
             	<br/><br/>
+    			<div class="col-md-12" align="right">
+        			<button type="button" id="makeAllSynthese" class="btn btn-xs btn-default">
+        				<span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Faire toutes les synthèses
+        			</button>
+        		</div>
                 <table id="listeDateWithoutSynthese" class="table table-hover">
                     <thead>
                         <tr>

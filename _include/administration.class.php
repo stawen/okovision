@@ -212,8 +212,6 @@ class administration extends connectDb{
 	    	$r['response'] = false;
 	    }
 	    
-	    //$result->free();
-	    
 	    $this->sendResponse($r);
 	}
 	
@@ -234,7 +232,6 @@ class administration extends connectDb{
 	    	}
 	    }
 	    
-	    //$result->free();
 	    $this->sendResponse($r);
 	    
 	}
@@ -246,9 +243,12 @@ class administration extends connectDb{
 	}
 	
 	public function getDayWithoutSynthese(){
+		//ne pas proposer la date du jour, car forcement incomplete.
+		$now = date('Y-m-d' ,mktime(0, 0, 0, date("m")  , date("d"), date("Y")) );
+		
 		$q = "SELECT a.jour as jour FROM oko_historique as a ".
 				"LEFT OUTER JOIN oko_resume_day as b ON a.jour = b.jour ".
-				"WHERE b.jour is NULL group by a.jour;";
+				"WHERE b.jour is NULL AND a.jour <> '".$now."'group by a.jour;";
 		
 		$result = $this->db->query($q);
 	    $r['data'] = [];

@@ -20,8 +20,8 @@
 		* Choisir le fichier a importer (si date fichier different de date du jour alors faire la synthese automatiquement)
 	* OK - Import du CSV depuis upload via interface web
 	* Faire la synthese journaliere
-		* Afficher les jours n'ayant pas de synthese journaliere et proposer de la faire
-		* Choisir un jour precis pour mettre a jour la synthese
+		* OK - Afficher les jours n'ayant pas de synthese journaliere
+		* OK - Choisir un jour precis pour mettre a jour la synthese
 		 
 
 # Ordre de priorité de dev (du haut vers le bas)#
@@ -36,6 +36,6 @@
 * OK - Creation page des saisons
 * OK - Page de creation graphique + indicateur dedans
 * OK - Ecran de Declenchement synthese journaliere pour les jours n'existant pas
-* Ecran de synthese , ne pas proposer la date du jour
+* OK - Ecran de synthese , ne pas proposer la date du jour
 * Page de synthese
 * Import d'un csv via interface http chaudiere 
