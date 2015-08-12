@@ -242,8 +242,34 @@ class administration extends connectDb{
 	public function importcsv(){
 		$oko = new okofen();
 		$r['response'] = $oko->csv2bdd();
-		//$r['response'] = true;
 		$this->sendResponse($r);
+	}
+	
+	public function getDayWithoutSynthese(){
+		$q = "SELECT a.jour as jour FROM oko_historique as a ".
+				"LEFT OUTER JOIN oko_resume_day as b ON a.jour = b.jour ".
+				"WHERE b.jour is NULL group by a.jour;";
+		
+		$result = $this->db->query($q);
+	    $r['data'] = [];
+	    
+	    if($result){
+	    	$tmp = array();
+	    	while($res = $result->fetch_object()){
+				array_push($tmp,$res);
+			}
+	    	$r['data']=$tmp;
+	    }
+	    
+	    $this->sendResponse($r);				
+				
+	}
+	
+	public function makeSyntheseByDay($jour){
+		$oko = new okofen();
+		$r['response'] = $oko->makeSyntheseByDay('onDemande', $jour);
+		$this->sendResponse($r);
+		
 	}
 
 	public function getSaisons(){

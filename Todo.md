@@ -1,8 +1,8 @@
 # Nouvelles fonctionnalitées  #
 
 1. Creation des graphiques (Front Page)
-	* choix du nom du graphique
-		* choix des données a mettre dans le graphique
+	* OK - choix du nom du graphique
+		* OK - choix des données a mettre dans le graphique
 
 2. Configuration
 	* OK - Choisir la T°C de reference
@@ -34,8 +34,8 @@
 * OK - Ecran de matrice de correspondance csv pour import des données
 * OK - Import manuel du fichier csv distant
 * OK - Creation page des saisons
-* Page de creation graphique + indicateur dedans
-* Ecran de Declenchement synthese journaliere pour les jours n'existant pas
+* OK - Page de creation graphique + indicateur dedans
+* OK - Ecran de Declenchement synthese journaliere pour les jours n'existant pas
+* Ecran de synthese , ne pas proposer la date du jour
 * Page de synthese
-* Creation de procedures stockées pour accelerer le chargement du csv (min et max sur une journée + nb_cycle) -> pas sur qu'une prostock soit un bonne idée
 * Import d'un csv via interface http chaudiere 

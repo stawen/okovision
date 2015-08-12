@@ -61,7 +61,23 @@
 				<div id="inwork" style="display: none;"><br/><br/><span class="glyphicon glyphicon-refresh glyphicon-spin"></span>  Traitement en cours......</div>
 				<div id="complete" style="display: none;"><br/><br/><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Importation terminée !</div>
             </div>
-            <div role="tabpanel" class="tab-pane" id="synthese">..synthese.</div>
+            <div role="tabpanel" class="tab-pane" id="synthese">
+                <br/>
+            	Ci-dessous la liste des jours ayant des données mais pas de synthese.
+            	<br/><br/>
+                <table id="listeDateWithoutSynthese" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="col-md-10">Jour sans synthese</th>
+                            <th class="col-md-2"></th>
+                        </tr>
+                    </thead>
+                
+                    <tbody>
+                    </tbody>
+            
+                </table>
+            </div>
         </div>
 
 <?php

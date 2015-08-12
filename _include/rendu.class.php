@@ -106,7 +106,7 @@ class rendu extends connectDb{
 		
 	}
 	
-	private function getConsoByday($jour){
+	public function getConsoByday($jour){
 		$coeff = POIDS_PELLET_PAR_MINUTE/1000;
 		
 		$q = "select round (sum((1/(a.value + b.value)) * a.value)*(".$coeff."),2) as consoPellet from oko_historique as a "
@@ -123,7 +123,7 @@ class rendu extends connectDb{
 		
 	}
 	
-	private function getTcMaxByDay($jour){
+	public function getTcMaxByDay($jour){
 		$q = "SELECT round(max(a.value),2) as tcExtMax FROM oko_historique as a "
 				."JOIN oko_capteur as ca ON ca.id = a.oko_capteur_id and ca.type = 'tc_ext' "
 				."WHERE a.jour = '".$jour."';";
@@ -136,7 +136,7 @@ class rendu extends connectDb{
 				
 	}
 	
-	private function getTcMinByDay($jour){
+	public function getTcMinByDay($jour){
 		$q = "SELECT round(min(a.value),2) as tcExtMin FROM oko_historique as a "
 				."JOIN oko_capteur as ca ON ca.id = a.oko_capteur_id and ca.type = 'tc_ext' "
 				."WHERE a.jour = '".$jour."';";
@@ -148,6 +148,32 @@ class rendu extends connectDb{
 		return $result->fetch_object();		
 				
 	}
+	
+	public function getDju($tcMax,$tcMin){
+		//DEFINE('FUNC_DJU','IF( '.TC_REF.' <= (MAX(Tc_exterieur) + MIN(Tc_exterieur))/2, 0, round( '.TC_REF.' - (MAX(Tc_exterieur) + MIN(Tc_exterieur))/2,2))');
+		$tcMoy = ($tcMax + $tcMin) / 2;
+		
+		if(TC_REF <=  $tcMoy ){
+			return 0;
+		}else{
+			return round( TC_REF - $tcMoy ,2);
+		}
+		
+	}
+	
+	public function getNbCycleByDay($jour){
+		$q = "SELECT sum(a.value) as nbCycle FROM oko_historique as a "
+				."JOIN oko_capteur as ca ON ca.id = a.oko_capteur_id and ca.type = 'startCycle' "
+				."WHERE a.jour = '".$jour."';";
+		
+		$this->log->debug("Class ".get_called_class()." | getNbCycleByDay | ".$q); 
+		
+		$result = $this->db->query($q);
+		
+		return $result->fetch_object();	
+	}
+	
+	
 	
 }
 

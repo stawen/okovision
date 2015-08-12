@@ -67,6 +67,12 @@ if (is_ajax()) {
                         case "updateSaison":
                         	$a->updateSaison($_POST);
                         	break;
+                        case "makeSyntheseByDay":
+                            $a->makeSyntheseByDay($_GET['date']);
+                            break;
+                        case "getDayWithoutSynthese":
+                            $a->getDayWithoutSynthese();
+                            break;
     				}
     				break; //
     			case "graphique":

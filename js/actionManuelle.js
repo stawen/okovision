@@ -92,7 +92,7 @@ $(document).ready(function() {
        	$('#inwork').hide();
 		$('#complete').hide();
     });
-    //getFileFromChaudiere();
+    
     
     $('#fileupload').fileupload({
     	
@@ -106,15 +106,10 @@ $(document).ready(function() {
     		//console.log('Uploads started');
 		},
         done: function (e, data) {
-        	//console.log("e:"+e);
-        	//console.log("data:"+ data);
-        
         	setTimeout(function() {
         		importcsv();
            	
         	}, 1000);
-        	
-        	
            	
         },
         progress: function (e, data) {
@@ -148,5 +143,54 @@ $(document).ready(function() {
 				$.growlErreur('Error  - Probleme de communication !');
 		});
     }
+    
+    /*
+    * Gestion onglet Calcukl synthese
+    */
+    $('a[aria-controls="synthese"]').on('shown.bs.tab', function (e) {
+       
+       getDayWithoutSynthese();
+       	
+    });
+    
+    function getDayWithoutSynthese(){
+    	$.getJSON("ajax.php?type=admin&action=getDayWithoutSynthese" , function(json) {
+			
+			$("#listeDateWithoutSynthese> tbody").html("");
+					$.each(json.data, function(key, val) {
+					
+					   var jour = $.datepicker.formatDate('dd/mm/yy',$.datepicker.parseDate('yy-mm-dd', val.jour));
+					   
+					   $('#listeDateWithoutSynthese > tbody:last').append('<tr> \
+					                                                            <td> '+ jour +'</a></td>\
+					                                                            <td>  <button type="button" class="btn btn-default day" data-day="'+val.jour+'" ><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button></td> \
+					                                                       </tr>');
+					});
+				
+        })
+        .error(function() { 
+				$.growlErreur('Error  - Probleme de communication !');
+		});
+    }
+    
+    $("body").on("click", ".day", function(b) {
+    	
+    	$(this).find('span').switchClass('glyphicon-repeat','glyphicon-refresh glyphicon-spin' ,0);
+        
+        $.getJSON("ajax.php?type=admin&action=makeSyntheseByDay&date=" + $(this).data('day') , function(json) {
+			if(json.response){
+				$.growlValidate("Synthese réussie");
+				getDayWithoutSynthese();
+			}else{
+				$.growlErreur('Error  - Synthese non traitée !');
+			}
+        })
+        .error(function() { 
+				$.growlErreur('Error  - Probleme de communication !');
+		});
+		
+    });
+    
+    
     
 });
