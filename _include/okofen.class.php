@@ -29,8 +29,6 @@ class okofen extends connectDb{
 			if (fwrite($wh, fread($rh, 4096)) === FALSE) {
 				return false;
 			}
-			//echo ' ';
-			flush();
 		}
 
 		fclose($rh);
@@ -75,7 +73,7 @@ class okofen extends connectDb{
 		$this->log->info("Class ".get_called_class()." | getChaudiereData | Recuperation du fichier ".$link);
 		//on lance le dl
 		$result = $this->download($link,CSVFILE);
-
+		//$result = true;
 		if (!$result){
 			 //throw new Exception('Download error...');
 			 $this->log->error("Class ".get_called_class()." | getChaudiereData | Données chaudiere non recupérées");

@@ -45,35 +45,37 @@ $(document).ready(function() {
     */
    
     
-    
+    /*
+    * import des fichiers csv distant
+    */
     
     $("body").on("click", "[id^='fichiercsv']:button", function() {
-        
-        $(this).find('span').switchClass('glyphicon-cloud-download','glyphicon-refresh glyphicon-spin' ,0);
+        var ligne = $(this);
+        ligne.find('span').switchClass('glyphicon-cloud-download','glyphicon-refresh glyphicon-spin' ,0);
         
         var tab = {
-					url : $(this).closest("tr").find("td:nth-child(1)").children('a').attr('href')
+					url : ligne.closest("tr").find("td:nth-child(1)").children('a').attr('href')
 				};
 				
 		$.ajax({
 			url: 'ajax.php?type=admin&action=importFileFromChaudiere',
 			type: 'POST',
+			//contentType: 'application/json; charset=utf-8',
+			//dataType: 'jsonp',
 			data: $.param(tab),
 			async: true,
 		    success: function(a) {
 			    //console.log("success :"+a);
-			    if (a.response === true) {
-				    $.growlValidate("Importation réussi de " + $(this).closest("tr").find("td:nth-child(1)").text() );
-				   
+			    if (a.response) {
+				    $.growlValidate("Importation réussi de " + ligne.closest("tr").find("td:nth-child(1)").text() );
+				    
 				} else {
 					$.growlWarning("Echec de l'importation");
 				}
+				ligne.find('span').switchClass('glyphicon-refresh glyphicon-spin', 'glyphicon-cloud-download',0);
 		    },
             error: function () {
                 $.growlErreur('Error  - Probleme de communication !');
-            },
-            always: function(){
-                $(this).find('span').switchClass('glyphicon-refresh glyphicon-spin', 'glyphicon-cloud-download',0);
             }
             
         });

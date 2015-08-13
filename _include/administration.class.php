@@ -103,7 +103,7 @@ class administration extends connectDb{
 	    
 	    $oko = new okofen();
 	    $status = $oko->getChaudiereData('onDemande',$s['url']);
-	    
+	    //$status =true;
 	    if($status){
 	        $import = $oko->csv2bdd();
 	    }else{
