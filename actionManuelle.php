@@ -25,6 +25,7 @@
             <div role="tabpanel" class="tab-pane" id="majip">
             </br>
             <p>Pour importer les données de la chaudiere directement dans okovision, cliquez sur le bouton correspondant au fichier voulu</p>
+            <div id="inwork-remotefile" ><br/><br/><span class="glyphicon glyphicon-refresh glyphicon-spin"></span>  Traitement en cours......</div>
                 <table id="listeFichierFromChaudiere" class="table table-hover">
                     <thead>
                         <tr>
@@ -65,6 +66,7 @@
                 <br/>
             	Ci-dessous la liste des jours ayant des données mais pas de synthese (Attention : la journée doit etre terminée pour que la synthese soit possible).
             	<br/><br/>
+            	<div id="inwork-synthese" ><br/><br/><span class="glyphicon glyphicon-refresh glyphicon-spin"></span>  Traitement en cours......</div>
     			<div class="col-md-12" align="right">
         			<button type="button" id="makeAllSynthese" class="btn btn-xs btn-default">
         				<span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Faire toutes les synthèses
@@ -73,7 +75,7 @@
                 <table id="listeDateWithoutSynthese" class="table table-hover">
                     <thead>
                         <tr>
-                            <th class="col-md-10">Jour sans synthese</th>
+                            <th class="col-md-10">Jours sans synthese</th>
                             <th class="col-md-2"></th>
                         </tr>
                     </thead>

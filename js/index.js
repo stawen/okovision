@@ -37,11 +37,6 @@ $(document).ready(function() {
 					},
 					min : 0 //,	max : 100
 				}],
-			credits: {
-				enabled : true,
-				text : 'OkoVision',
-				href: 'http://okovision.dronek.com'
-			},
 			plotOptions: {
 				spline: {
 					marker: {
@@ -70,11 +65,6 @@ $(document).ready(function() {
 			},
 			subtitle: {
 				text: 'Problème lors de la récupération des données !'
-			},
-			credits: {
-				enabled : true,
-				text : 'OkoVision',
-				href: 'http://okovision.dronek.com'
 			}
 		});
 	

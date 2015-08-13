@@ -90,6 +90,22 @@ $(document).ready(function() {
 	$.DecSepa = function(s){
 		return s.replace(".",",");
 	}
+	
+	Highcharts.setOptions({
+        lang: {
+            thousandsSep: ' ',
+            decimalPoint: ',',
+    		months: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',  'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+    		shortMonths: [ "Jan" , "Feb" , "Mar" , "Avr" , "Mai" , "Juin" , "Juil" , "Aout" , "Sep" , "Oct" , "Nov" , "Dec"],
+			weekdays: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
+        },
+		credits: {
+			enabled : true,
+			text : 'OkoVision',
+			href: 'http://okovision.dronek.com'
+		}
+    });
+		
 
     
 	

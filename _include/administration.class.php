@@ -16,20 +16,23 @@ class administration extends connectDb{
 	}
 	
 	private function sendResponse($t){
-        header("Content-type: text/json");
+        header("Content-type: text/json; charset=utf-8");
 		echo json_encode($t, JSON_NUMERIC_CHECK);
     }
 	
-	public function ping($ip){
+	public function ping($adress){
 		
 		$waitTimeoutInSeconds = 1; 
 		
 		$r = array();
+		$tmp = explode(':',$adress);
+		$ip = $tmp[0];
+		$port = isset( $tmp[1] )?$tmp[1]:80;
 		
-		if($fp = fsockopen($ip,80,$errCode,$errStr,$waitTimeoutInSeconds)){   
+		if($fp = fsockopen($ip,$port,$errCode,$errStr,$waitTimeoutInSeconds)){   
 		   // It worked 
 		   $r['response'] = true;
-		   $r['url'] = 'http://'.$ip.URL;
+		   $r['url'] = 'http://'.$adress.URL;
 		  
 		} else {
 		   $r['response'] = false;

@@ -61,7 +61,6 @@ DEFINE('SEND_TO_WEB', ($config['send_to_web']==1)?true:false); // default -> fal
 	DONT'T TOUCH 
 ****/
 //Parametres globaux
-//DEFINE('CONTEXT',dirname($_SERVER['SCRIPT_FILENAME'])); //json
 DEFINE('CONTEXT', '###_CONTEXT_###' );
 date_default_timezone_set('Europe/Paris');
 
@@ -76,10 +75,5 @@ DEFINE('LOGFILE',CONTEXT.'/_logs/okovision.log');
 DEFINE('CSV_DECIMAL',',');
 DEFINE('CSV_SEPARATEUR',';');
 DEFINE('BDD_DECIMAL','.');
-
-//Formule savante
-DEFINE('FUNC_DJU','IF( '.TC_REF.' <= (MAX(Tc_exterieur) + MIN(Tc_exterieur))/2, 0, round( '.TC_REF.' - (MAX(Tc_exterieur) + MIN(Tc_exterieur))/2,2))');
-
-
 
 ?>

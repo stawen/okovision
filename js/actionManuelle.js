@@ -15,6 +15,7 @@ $(document).ready(function() {
 				    //console.log(json);
 					//$.growlValidate("Communication établie");
 					//$('#url_csv').append('<a target="_blank" href="http://'+ ip +'/logfiles/pelletronic/"> Visualiser les fichiers sur la chaudiere </a>');
+					$("#inwork-remotefile").hide();
 					$("#listeFichierFromChaudiere> tbody").html("");
 					var i =0;
 					$.each(json.listefiles, function(key, val) {
@@ -37,10 +38,11 @@ $(document).ready(function() {
 			});	
     }
     
+    /*
     $('a[aria-controls="majip"]').on('shown.bs.tab', function (e) {
         getFileFromChaudiere();
     });
-    
+    */
    
     
     
@@ -156,7 +158,7 @@ $(document).ready(function() {
     
     function getDayWithoutSynthese(){
     	$.getJSON("ajax.php?type=admin&action=getDayWithoutSynthese" , function(json) {
-			
+			$("#inwork-synthese").hide();
 			$("#listeDateWithoutSynthese> tbody").html("");
 					$.each(json.data, function(key, val) {
 					
@@ -207,6 +209,7 @@ $(document).ready(function() {
     		});
     });
     
+    getFileFromChaudiere();
     getDayWithoutSynthese();
     
     

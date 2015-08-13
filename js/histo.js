@@ -6,13 +6,7 @@
 
 $(document).ready(function() {
 	
-	Highcharts.setOptions({
-        lang: {
-            thousandsSep: ' ',
-            decimalPoint: ','
-        }
-    });
-		
+
 	function graphe_error(where,titre){
 		var chart = new Highcharts.Chart({
 			chart: {
@@ -24,10 +18,6 @@ $(document).ready(function() {
 			},
 			subtitle: {
 				text: 'Problème lors de la récupération des données !'
-			},
-			credits: {
-				enabled : true,
-				text : 'OkoVision'
 			}
 		});
 	
@@ -150,10 +140,6 @@ $(document).ready(function() {
 															min : 0 ,	max : 50,
 															opposite: true
 														}],
-													credits: {
-														enabled : true,
-														text : 'OkoVision'
-													},
 													plotOptions: {
 														line: {
 															marker: {
@@ -221,10 +207,10 @@ $(document).ready(function() {
 				$.growlErreur("Probleme lors de la recuperation des indicateurs de la saison");
 			});	
 		
-		$.getJSON("ajax.php?type=rendu&action=getSyntheseSaison&saison=" + $( "#saison" ).val(), function(json) {
+		$.getJSON("ajax.php?type=rendu&action=getSyntheseSaison&saison=" + $( "#saison" ).val(), function(saison) {
 					//console.log('Synthese success');	
 					//console.log(json);
-					
+					var json = saison.grapheData;
 					
 					//Personnalisation des données
 					//T°C max
@@ -293,12 +279,13 @@ $(document).ready(function() {
 														layout: 'vertical'
 													},
 													xAxis: {
-														categories: ['Septembre', 'Octobre', 'Novembre','Decembre','Janvier','Fevrier','Mars','Avril','Mai','Juin',
-																	 'Juillet', 'Aout'],
-															max : 11,		
-															title: {
-																text: 'Mois',
-															}	
+														type: 'datetime',
+										                dateTimeLabelFormats: { 
+										                    month: '%B'
+										                },
+										                title: {
+															text: 'Mois',
+														}	
 													},
 													yAxis: [{
 															title: {
@@ -356,7 +343,7 @@ $(document).ready(function() {
 										        });
 				})
 				.error(function() { 
-					console.log('error graphe synthèse saison');	
+					//console.log('error graphe synthèse saison');	
 					graphe_error("saison_graphic","Synthèse saison");
 					$.growlErreur("Probleme lors de la recuperation de la synthese de la saison");
 					
@@ -398,7 +385,7 @@ $(document).ready(function() {
 	});
 	
 	$( "#saison" ).change(function() {
-		//console.log('date change');
+		console.log('date change');
 		generer_synthese_saison();
 	});
 	

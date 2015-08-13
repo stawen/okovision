@@ -18,8 +18,8 @@ if(SEND_TO_WEB) $oko2web->send2web();
 //integre le csv dans la base
 $oko->csv2bdd();
 //on lance le traitement
-$oko->makeSynteseByDay();
+$oko->makeSyntheseByDay();
 
-
+echo "done";
 
 ?>

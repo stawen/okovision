@@ -139,7 +139,6 @@ class rendu extends connectDb{
 	}
 	
 	public function getDju($tcMax,$tcMin){
-		//DEFINE('FUNC_DJU','IF( '.TC_REF.' <= (MAX(Tc_exterieur) + MIN(Tc_exterieur))/2, 0, round( '.TC_REF.' - (MAX(Tc_exterieur) + MIN(Tc_exterieur))/2,2))');
 		$tcMoy = ($tcMax + $tcMin) / 2;
 		
 		if(TC_REF <=  $tcMoy ){
@@ -188,14 +187,6 @@ class rendu extends connectDb{
 	}
 	
 	public function getHistoByMonth($month,$year){
-		/*
-		$categorie = array( 'T°C Exterieur (Max)' => ['colonne' => 'tc_ext_max', 'alias' => 'tcExtMax'],
-							'T°C Exterieur (Min)' => ['colonne' => 'tc_ext_min', 'alias' => 'tcExtMin'],
-							'Consommation Pellet (Kg)' => ['colonne' => 'conso_kg', 'alias' => 'consoPellet'],
-							'DJU' => ['colonne' => 'dju', 'alias' => 'dju'],
-							'NB Cycle' => ['colonne' => 'nb_cycle', 'alias' => 'nbCycle']
-						);
-		*/
 		$categorie = array( 'T°C Exterieur (Max)' => 'tc_ext_max',
 							'T°C Exterieur (Min)' => 'tc_ext_min',
 							'Pellet (Kg)' => 'conso_kg',
@@ -212,7 +203,6 @@ class rendu extends connectDb{
 		$resultat = array();
 		
 		foreach ($categorie as $label => $colonneSql){
-			//$q = "SELECT ".$colonneSql['colonne']." as ".$colonneSql['alias']." ".$where;
 			$q = "SELECT ".$colonneSql." ".$where;
 			
 			$this->log->debug("Class ".get_called_class()." | getHistoByMonth | ".$q); 
@@ -269,36 +259,37 @@ class rendu extends connectDb{
 							'NB Cycle' => 'sum(nb_cycle)'
 						);
 		
-		$where = "FROM oko_saisons, oko_resume_day ".
+		$where = ", DATE_FORMAT(oko_dateref.jour,'%Y-%m-01 00:00:00') FROM oko_saisons, oko_resume_day ".
 					"RIGHT JOIN oko_dateref ON oko_dateref.jour = oko_resume_day.jour ".
-					"WHERE oko_saisons.id=1 AND oko_dateref.jour BETWEEN oko_saisons.date_debut AND oko_saisons.date_fin ".
+					"WHERE oko_saisons.id=".$idSaison." AND oko_dateref.jour BETWEEN oko_saisons.date_debut AND oko_saisons.date_fin ".
 					"GROUP BY MONTH(oko_dateref.jour) ".
 					"ORDER BY YEAR(oko_dateref.jour), MONTH(oko_dateref.jour) ASC;";
 				
-		$resultat = array();
+		$resultat = null;
 		
 		foreach ($categorie as $label => $colonneSql){
 			
 			$q = "SELECT ".$colonneSql." ".$where;
-			
 			$this->log->debug("Class ".get_called_class()." | getSyntheseSaison | ".$q); 
 			
 			$result = $this->db->query($q);
+			$data = null;
 			
-			$data = array();
 			while($r = $result->fetch_row() ) {
-				$data[] = $r[0];
+				$date = new DateTime($r[1], new DateTimeZone('Europe/Paris'));
+				$utc = ($date->getTimestamp() + $date->getOffset()) * 1000;	
+				$data .= "[".$utc.",".(($r[0]<>'')?$r[0]:'null')."],";
 			}
+			$data = substr($data,0,strlen($data)-1);
 			
-			array_push($resultat,array( 'name' => $label,
-										'data' => $data
-									)
-						);
-		}
+			$resultat .= '{ "name": "'.$label.'",';
+			$resultat .= '"data": ['.$data.']';
+			$resultat .= '},';
 		
-		$this->sendResponse( json_encode( $resultat ,JSON_NUMERIC_CHECK) );		
-				
-				
+		}
+		$resultat = substr($resultat,0,strlen($resultat)-1);
+		
+		$this->sendResponse( '{ "grapheData": ['.$resultat.']}' );		
 	}
 	
 	

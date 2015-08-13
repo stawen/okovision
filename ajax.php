@@ -8,16 +8,15 @@
 include_once 'config.php';
 
 function is_ajax() {
-  //return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
-  return true;
+  return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+  //return true;
 }
 
 if (is_ajax()) {
 	
 		if (isset($_GET['type']) && isset($_GET['action']) ){
 			
-			
-    		switch ($_GET['type']){
+			switch ($_GET['type']){
     			case "admin":
     				$a = new administration();
     				
@@ -74,7 +73,7 @@ if (is_ajax()) {
                             $a->getDayWithoutSynthese();
                             break;
     				}
-    				break; //
+    				break; 
     			case "graphique":
     				$g = new gstGraphique();
     				
@@ -142,33 +141,13 @@ if (is_ajax()) {
     					case "getTotalSaison":
     					    $r->getTotalSaison($_GET['saison']);
     					    break;
-    					 case "getSyntheseSaison":
+    					case "getSyntheseSaison":
     					    $r->getSyntheseSaison($_GET['saison']);
     					    break;
-    				
     				}
     				break;
     		}		
 	    }
-
-	
-	
-	if (isset($_GET['type']) && ( (isset($_GET['month']) && isset($_GET['year']) ) || isset($_GET['saison']) ) ){
-		$d = new data();
-	
-		switch ($_GET['type']){
-			case "histo":
-				$d->getHistoConsoByMonth();
-				break;	
-		    case "totalsaison":
-				$d->getTotalConsoSaison($_GET['saison']);
-				break;
-			case "synthese":
-				$d->getSyntheseSaison($_GET['saison']);
-				break;
-		}
-	}
-	
 
 }
 
