@@ -25,13 +25,13 @@ $(document).ready(function() {
 					success: function(a) {
 						console.log(a.response);
 						if (a.response) {
-							//$("#bt_testConnection").text("Succes");
+							
 							$.growlValidate("Connexion reussi !");
-							//console.log("ok");
+							
 						} else {
-							//$("#bt_testConnection").text("Error !");
+							
 							$.growlErreur("Echec de connexion à la base de données !!");
-							//console.log("nok");
+							
 						}
 		
 					}
@@ -80,7 +80,7 @@ $(document).ready(function() {
 					data: $.param(tab),
 					async: false,
 					success: function(a) {
-						console.log("succes");
+						//console.log("success");
 						window.location.replace("admin.php#matrice");
 					}
 				});

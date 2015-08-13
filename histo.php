@@ -58,6 +58,7 @@
 		</div>
 		
 		<div class="page-header" >
+			
 			<div class="col-md-9">
 				<span class="glyphicon glyphicon-hand-right"></span> Conso : <span id="consoPelletSaison" class="label label-primary">00,00 Kg</span> &nbsp;&nbsp;
 				<span class="glyphicon glyphicon-arrow-up"></span> T°C Max (ext) : <span id="tcmaxSaison" class="label label-success">00,0 °C</span> &nbsp;&nbsp;
@@ -68,9 +69,10 @@
 			</div>
 			<div class="col-md-3" align="right">
 				<select id="saison" name="saison">
-					<option value="1" selected="selected">2014-2015</option>
+					
 				</select>
 			</div>
+			
 		</div>
 		
 		<div id="saison_graphic" style="width:100%; height:400px;"></div>

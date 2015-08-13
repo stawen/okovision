@@ -30,12 +30,25 @@ class rendu extends connectDb{
 	   
 	    $result = $this->db->query($q);
 		
-		$capteurs = array();
-    	while($r = $result->fetch_object()){
-			array_push($capteurs,$r);
+		$resultat = "";
+		
+    	while($c = $result->fetch_object()){
+			
+		    $q = "SELECT jour, DATE_FORMAT(heure,'%H:%i:%s'), round((value * ".$c->coeff."),2) as value FROM oko_historique "
+			        ."INNER JOIN oko_capteur ON oko_historique.oko_capteur_id = oko_capteur.id WHERE "
+			        ."jour ='".$jour."' and oko_historique.oko_capteur_id = ".$c->id;
+			        
+			$this->log->debug("Class ".get_called_class()." | getGrapheData | ".$c->name." | ".$q);
+			
+			$resultat .= '{ "name": "'.$c->name.'",';
+			$resultat .= '"data": '.$this->getDataWithTime($q);
+			$resultat .= '},';
 		}
-	    
-	    $r =  '{ "grapheData": '.$this->getJson4graphe($capteurs,$jour)
+		
+		//on retire la derniere virgule qui ne sert à rien
+		$resultat = substr($resultat,0,strlen($resultat)-1);
+		
+		$r =  '{ "grapheData": ['.$resultat.']'
 	    	  .'}';
 	 	
 	 	$this->sendResponse($r);
@@ -64,31 +77,7 @@ class rendu extends connectDb{
 		return '['.$data.']';
 	}
 	
-	/*
-	Fonction de mise en forme Json
-	*/
-	private function getJson4graphe($c,$jour){
-		
-		$resultat = "";
-		
-		foreach ($c as $i => $capteur){
-			
-		    $q = "SELECT jour, DATE_FORMAT(heure,'%H:%i:%s'), round((value * ".$capteur->coeff."),2) as value FROM oko_historique "
-			        ."INNER JOIN oko_capteur ON oko_historique.oko_capteur_id = oko_capteur.id WHERE "
-			        ."jour ='".$jour."' and oko_historique.oko_capteur_id = ".$capteur->id;
-			        
-			$this->log->debug("Class ".get_called_class()." | getJson4graphe | ".$capteur->name." | ".$q);
-			
-			$resultat .= '{ "name": "'.$capteur->name.'",';
-			$resultat .= '"data": '.$this->getDataWithTime($q);
-			$resultat .= '},';
-		}
-		//on retire la derniere virgule qui ne sert à rien
-		$resultat = substr($resultat,0,strlen($resultat)-1);
-		
-		return '['.$resultat.']';
-	}
-	
+
 	public function getIndicByDay($jour){
 		
 		$c 		= $this->getConsoByday($jour);
@@ -171,6 +160,145 @@ class rendu extends connectDb{
 		$result = $this->db->query($q);
 		
 		return $result->fetch_object();	
+	}
+	
+	public function getIndicByMonth($month, $year){
+		
+		$q = "SELECT max(Tc_ext_max) as tcExtMax, min(Tc_ext_min) as tcExtMin, ".
+				"sum(conso_kg) as consoPellet, sum(dju) as dju, sum(nb_cycle) as nbCycle ".
+				"FROM oko_resume_day ".
+				"WHERE MONTH(oko_resume_day.jour) = ".$month." AND ".
+				"YEAR(oko_resume_day.jour) = ".$year;
+		
+		
+		$this->log->debug("Class ".get_called_class()." | getIndicByMonth | ".$q); 
+		
+		$result = $this->db->query($q);
+		$r = $result->fetch_object();
+		
+		$this->sendResponse( json_encode( 	[ 	"tcExtMax" => $r->tcExtMax,
+												"tcExtMin" => $r->tcExtMin,
+												"consoPellet" => $r->consoPellet,
+												"dju" => $r->dju,
+												"nbCycle" => $r->nbCycle
+											]
+											, JSON_NUMERIC_CHECK ) );
+		
+		
+	}
+	
+	public function getHistoByMonth($month,$year){
+		/*
+		$categorie = array( 'T°C Exterieur (Max)' => ['colonne' => 'tc_ext_max', 'alias' => 'tcExtMax'],
+							'T°C Exterieur (Min)' => ['colonne' => 'tc_ext_min', 'alias' => 'tcExtMin'],
+							'Consommation Pellet (Kg)' => ['colonne' => 'conso_kg', 'alias' => 'consoPellet'],
+							'DJU' => ['colonne' => 'dju', 'alias' => 'dju'],
+							'NB Cycle' => ['colonne' => 'nb_cycle', 'alias' => 'nbCycle']
+						);
+		*/
+		$categorie = array( 'T°C Exterieur (Max)' => 'tc_ext_max',
+							'T°C Exterieur (Min)' => 'tc_ext_min',
+							'Pellet (Kg)' => 'conso_kg',
+							'DJU' => 'dju',
+							'NB Cycle' => 'nb_cycle'
+						);
+						
+		$where ='FROM oko_resume_day '
+				.'RIGHT JOIN oko_dateref ON oko_resume_day.jour = oko_dateref.jour '
+				.'WHERE MONTH(oko_dateref.jour) = '.$month.' AND ' 
+				.'YEAR(oko_dateref.jour) = '.$year.' '
+				.'ORDER BY oko_dateref.jour ASC	';
+		
+		$resultat = array();
+		
+		foreach ($categorie as $label => $colonneSql){
+			//$q = "SELECT ".$colonneSql['colonne']." as ".$colonneSql['alias']." ".$where;
+			$q = "SELECT ".$colonneSql." ".$where;
+			
+			$this->log->debug("Class ".get_called_class()." | getHistoByMonth | ".$q); 
+			
+			$result = $this->db->query($q);
+			
+			$data = array();
+			while($r = $result->fetch_row() ) {
+				$data[] = $r[0];
+			}
+			
+			array_push($resultat,array( 'name' => $label,
+										'data' => $data
+									)
+						);
+		}
+		
+		$this->sendResponse( json_encode( $resultat ,JSON_NUMERIC_CHECK) );
+		
+		
+	}
+	
+	public function getTotalSaison($idSaison){
+		
+		$q = "SELECT max(Tc_ext_max) as tcExtMax, min(Tc_ext_min) as tcExtMin, ".
+				"sum(conso_kg) as consoPellet, sum(dju) as dju, sum(nb_cycle) as nbCycle ".
+				"FROM oko_resume_day, oko_saisons ".
+				"WHERE oko_saisons.id = ".$idSaison." ".
+				"AND oko_resume_day.jour BETWEEN oko_saisons.date_debut AND oko_saisons.date_fin ;";
+				
+		
+		
+		$this->log->debug("Class ".get_called_class()." | getTotalSaison | ".$q); 
+		
+		$result = $this->db->query($q);
+		$r = $result->fetch_object();
+		
+		$this->sendResponse( json_encode( 	[ 	"tcExtMax" => $r->tcExtMax,
+												"tcExtMin" => $r->tcExtMin,
+												"consoPellet" => $r->consoPellet,
+												"dju" => $r->dju,
+												"nbCycle" => $r->nbCycle
+											]
+											, JSON_NUMERIC_CHECK ) );
+											
+	}
+	
+	public function getSyntheseSaison($idSaison){
+		
+		$categorie = array( 'T°C Exterieur (Max)' => 'max(Tc_ext_max)',
+							'T°C Exterieur (Min)' => 'min(Tc_ext_min)',
+							'Consommation Pellet (Kg)' => 'sum(conso_kg)',
+							'DJU' => 'sum(dju)',
+							'NB Cycle' => 'sum(nb_cycle)'
+						);
+		
+		$where = "FROM oko_saisons, oko_resume_day ".
+					"RIGHT JOIN oko_dateref ON oko_dateref.jour = oko_resume_day.jour ".
+					"WHERE oko_saisons.id=1 AND oko_dateref.jour BETWEEN oko_saisons.date_debut AND oko_saisons.date_fin ".
+					"GROUP BY MONTH(oko_dateref.jour) ".
+					"ORDER BY YEAR(oko_dateref.jour), MONTH(oko_dateref.jour) ASC;";
+				
+		$resultat = array();
+		
+		foreach ($categorie as $label => $colonneSql){
+			
+			$q = "SELECT ".$colonneSql." ".$where;
+			
+			$this->log->debug("Class ".get_called_class()." | getSyntheseSaison | ".$q); 
+			
+			$result = $this->db->query($q);
+			
+			$data = array();
+			while($r = $result->fetch_row() ) {
+				$data[] = $r[0];
+			}
+			
+			array_push($resultat,array( 'name' => $label,
+										'data' => $data
+									)
+						);
+		}
+		
+		$this->sendResponse( json_encode( $resultat ,JSON_NUMERIC_CHECK) );		
+				
+				
 	}
 	
 	

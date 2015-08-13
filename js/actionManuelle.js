@@ -202,7 +202,7 @@ $(document).ready(function() {
     			day.push($(this));
     		});
     		
-    		day.each(function(){
+    		$.each(day,function(){
     			makeSynthese($(this));
     		});
     });

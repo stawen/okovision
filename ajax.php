@@ -133,6 +133,18 @@ if (is_ajax()) {
     					case "getIndicByDay":
     					    $r->getIndicByDay($_GET['jour']);
     					    break;
+    					case "getIndicByMonth":
+    					    $r->getIndicByMonth($_GET['month'],$_GET['year']); 
+    					    break;
+    					case "getHistoByMonth":
+    					    $r->getHistoByMonth($_GET['month'],$_GET['year']);
+    					    break;
+    					case "getTotalSaison":
+    					    $r->getTotalSaison($_GET['saison']);
+    					    break;
+    					 case "getSyntheseSaison":
+    					    $r->getSyntheseSaison($_GET['saison']);
+    					    break;
     				
     				}
     				break;
@@ -146,12 +158,9 @@ if (is_ajax()) {
 	
 		switch ($_GET['type']){
 			case "histo":
-				$d->getHistoConsoByMonth($_GET['month'],$_GET['year']);
+				$d->getHistoConsoByMonth();
 				break;	
-			case "indicmonth":
-				$d->getIndicateurByMonth($_GET['month'],$_GET['year']);
-				break;
-			case "totalsaison":
+		    case "totalsaison":
 				$d->getTotalConsoSaison($_GET['saison']);
 				break;
 			case "synthese":

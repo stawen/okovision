@@ -42,7 +42,7 @@ $(document).ready(function() {
 		var titre_histo = 'Historique temperatures / Consommation Pellet';	
 		var div_histo_tempe = 'histo-temperature';	
 		
-	   $.getJSON("ajax.php?type=rendu&action=histo&month="+ $( "#mois" ).val() + "&year="+ $( "#annee" ).val(), function(json) {
+	   $.getJSON("ajax.php?type=rendu&action=getHistoByMonth&month="+ $( "#mois" ).val() + "&year="+ $( "#annee" ).val(), function(json) {
 				//Personnalisation des données
 				//T°C max
 				json[0].color = "red";
@@ -185,21 +185,21 @@ $(document).ready(function() {
 				graphe_error(div_histo_tempe,titre_histo);
 				$.growlErreur("Probleme lors de la recuperation de la synthese du mois");
 			});
-			
+		
+		/*
+		* Gestion des indicateurs du mois 
+		*/
 		$.getJSON("ajax.php?type=rendu&action=getIndicByMonth&month="+ $( "#mois" ).val() + "&year="+ $( "#annee" ).val(), function(json) {
-				//console.log('success');	
-				$.each(json,function(i,indic){
-					$( "#tcmax" ).text(DecSepa(indic.Tc_ext_max + " °C"));
-					$( "#tcmin" ).text(DecSepa(indic.Tc_ext_min + " °C"));
-					$( "#tcmoy" ).text(DecSepa( Math.round((indic.Tc_ext_min+indic.Tc_ext_max)*100/2)/100 + " °C")  );
-					$( "#consoPellet" ).text(DecSepa( ((indic.conso===null)?0.0:indic.conso) + " Kg"));
-					$( "#dju" ).text(DecSepa(indic.dju+"" ));
-					$( "#cycle" ).text(DecSepa(indic.nbcycle+"" ));
-				});
+				$( "#tcmax" ).text(DecSepa(json.tcExtMax + " °C"));
+				$( "#tcmin" ).text(DecSepa(json.tcExtMin + " °C"));
+				$( "#tcmoy" ).text(DecSepa( Math.round((json.tcExtMin+json.tcExtMax)*100/2)/100 + " °C")  );
+				$( "#consoPellet" ).text(DecSepa( ((json.consoPellet===null)?0.0:json.consoPellet) + " Kg"));
+				$( "#dju" ).text(DecSepa(json.dju+"" ));
+				$( "#cycle" ).text(DecSepa(json.nbCycle+"" ));
+				
 				
 			})
 			.error(function() { 
-				console.log('error indicateur du mois');
 				$.growlErreur("Probleme lors de la recuperation des indicateurs du mois");
 			});		
 			
@@ -209,19 +209,15 @@ $(document).ready(function() {
 	function generer_synthese_saison(){
 		
 		$.getJSON("ajax.php?type=rendu&action=getTotalSaison&saison="+ $( "#saison" ).val(), function(json) {
-				//console.log('success conso');	
-				$.each(json,function(i,indic){
-					$( "#tcmaxSaison" ).text(DecSepa(indic.Tc_ext_max + " °C"));
-					$( "#tcminSaison" ).text(DecSepa(indic.Tc_ext_min + " °C"));
-					$( "#tcmoySaison" ).text(DecSepa( Math.round((indic.Tc_ext_min+indic.Tc_ext_max)*100/2)/100 + " °C")  );
-					$( "#consoPelletSaison" ).text(DecSepa( ((indic.conso===null)?0.0:indic.conso) + " Kg"));
-					$( "#djuSaison" ).text(DecSepa(indic.dju+"" ));
-					$( "#cycleSaison" ).text(DecSepa(indic.nbcycle+"" ));
-				});
+				$( "#tcmaxSaison" ).text(DecSepa(json.tcExtMax + " °C"));
+				$( "#tcminSaison" ).text(DecSepa(json.tcExtMin + " °C"));
+				$( "#tcmoySaison" ).text(DecSepa( Math.round((json.tcExtMin+json.tcExtMax)*100/2)/100 + " °C")  );
+				$( "#consoPelletSaison" ).text(DecSepa( ((json.consoPellet===null)?0.0:json.consoPellet) + " Kg"));
+				$( "#djuSaison" ).text(DecSepa(json.dju+"" ));
+				$( "#cycleSaison" ).text(DecSepa(json.nbCycle+"" ));
 				
 			})
 			.error(function() { 
-				console.log('error Total du mois');	
 				$.growlErreur("Probleme lors de la recuperation des indicateurs de la saison");
 			});	
 		
@@ -406,8 +402,20 @@ $(document).ready(function() {
 		generer_synthese_saison();
 	});
 	
+	
 	generer_graphic();
-	generer_synthese_saison();
+	
+	$.getJSON("ajax.php?type=admin&action=getSaisons", function(json) {
+		$.each(json.data, function(key, val) {
+    					$('#saison').append('<option value="' + val.id + '">' + val.saison + '</option>');
+    				});
+    	generer_synthese_saison();			
+	});
+	
+	
+	
+	
+	
 	
 	
 
