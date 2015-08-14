@@ -156,8 +156,8 @@ class AutoUpdate extends connectDb{
 		//$this->log->info('Class '.__CLASS__.' | '.__FUNCTION__);
 		//$this->_log->pushHandler(new NullHandler());
 		
-		$this->setTempDir('_tmp/');
-		$this->setInstallDir(CONTEXT .'/');
+		$this->setTempDir('_tmp');
+		$this->setInstallDir(CONTEXT);
 
 		$this->_latestVersion = new version('0.0.0');
 		$this->_currentVersion = new version('0.0.0');
@@ -513,11 +513,19 @@ class AutoUpdate extends connectDb{
 		$i = -1;
 		$files = [];
 		$simulateSuccess = true;
-
+		$gitFolder = '';
 		while ($file = zip_read($zip)) {
 			$i++;
-
-			$filename = zip_entry_name($file);
+			
+			if ($i == 0){
+				$gitFolder = zip_entry_name($file);
+				$this->log->debug($gitFolder);
+				continue;
+				//exit;
+			}
+			
+			$filename = str_replace($gitFolder,"",zip_entry_name($file));
+			//$filename = zip_entry_name($file);
 			$foldername = $this->_installDir . dirname($filename);
 			$absoluteFilename = $this->_installDir . $filename;
 
