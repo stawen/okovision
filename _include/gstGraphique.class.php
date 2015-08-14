@@ -38,7 +38,7 @@ class gstGraphique extends connectDb{
     
     public function getLastGraphePosition(){
     	$q = "select max(position) as lastPosition from oko_graphe";
-	    $this->log->debug("Class gestGraphique | getLastGraphePosition | ".$q ); //.$r['data']['lastPosition']
+	    $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q ); //.$r['data']['lastPosition']
 	    
 	    $result = $this->db->query($q);
 	    
@@ -112,7 +112,7 @@ class gstGraphique extends connectDb{
     	 	$r['response'] = true;
     	 	
     	 	$q = "DELETE from oko_asso_capteur_graphe where oko_graphe_id=".$s['id'] ;
-	    	$this->log->debug("Class gestGraphique | deleteGraphe | ".$q);
+	    	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
 	    	 
 	    	if($this->db->query($q)){
 	    	 	$r['response'] = true;	
@@ -131,7 +131,7 @@ class gstGraphique extends connectDb{
     
     public function getCapteurs(){
     	$q = "select id, name from oko_capteur order by id";
-	    $this->log->debug("Class gestGraphique | getCapteurs | ".$q);
+	    $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
 	    
 	    $result = $this->db->query($q);
 	    
@@ -177,7 +177,7 @@ class gstGraphique extends connectDb{
     	//$name = $this->db->real_escape_string($s['name']);
     	
     	$q = "INSERT INTO oko_asso_capteur_graphe (oko_graphe_id, oko_capteur_id, position, correction_effect) value (".$s['id_graphe'].",".$s['id_capteur'].",".$s['position'].",".$s['coeff'].")";
-    	$this->log->debug("Class gestGraphique | addGrapheAsso | ".$q);
+    	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
     	$r = array();
     	
     	$r['response'] = false;
@@ -196,7 +196,7 @@ class gstGraphique extends connectDb{
     		"LEFT JOIN oko_capteur as capteur ON asso.oko_capteur_id = capteur.id "
     		."WHERE asso.oko_graphe_id=".$grapheId;
     		
-	    $this->log->debug("Class gestGraphique | getGrapheAsso | ".$q);
+	    $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
 	    $result = $this->db->query($q);
 	    
 	    if($result){
@@ -219,7 +219,7 @@ class gstGraphique extends connectDb{
     	
     	$q = "UPDATE oko_asso_capteur_graphe SET correction_effect=".$s['coeff']." where oko_graphe_id=".$s['id_graphe']." AND "
     		."oko_capteur_id=".$s['id_capteur'];
-    	$this->log->debug("Class gestGraphique | updateGrapheAsso | ".$q);
+    	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
     	
     	$r['response'] = false;
     	 
@@ -234,7 +234,7 @@ class gstGraphique extends connectDb{
     	$q = "DELETE FROM oko_asso_capteur_graphe WHERE oko_graphe_id=".$s['id_graphe']." AND "
     		."oko_capteur_id=".$s['id_capteur'];
     		
-    	$this->log->debug("Class gestGraphique | deleteAssoGraphe | ".$q);
+    	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
     	
     	$r['response'] = false;
     	 

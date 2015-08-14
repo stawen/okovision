@@ -161,7 +161,7 @@ class administration extends connectDb{
 	    $line = mb_convert_encoding(fgets(fopen('_tmp/matrice.csv', 'r')),'UTF-8'); 
 		//on retire le dernier ; de la ligne
 		$line = substr($line,0,strlen($line)-2);
-		$this->log->debug("Class ".get_called_class()." | initMatriceFromFile | CSV First Line | ".$line);
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | CSV First Line | ".$line);
 		
 		$query = ""; 
 	
@@ -182,7 +182,7 @@ class administration extends connectDb{
 				
 				$q = "INSERT INTO oko_capteur(name,position_column_csv,original_name,type) VALUE ('".$name."',".$position.",'".$title."','".$type."');" ;
 				
-				$this->log->debug("Class ".get_called_class()." | initMatriceFromFile | Create oko_capteur | ".$q);
+				$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | Create oko_capteur | ".$q);
 				$query .= $q;
 			}
     	}
@@ -200,7 +200,7 @@ class administration extends connectDb{
 		$r = array();
 	    //$lock = array("Datum","Zeit","AT [°C]","PE1 Einschublaufzeit[zs]","PE1 Pausenzeit[zs]","PE1 Status");
 	    $q = "select id, name, original_name, type from oko_capteur order by id";
-	    $this->log->debug("Class ".get_called_class()." | getHeaderFromOkoCsv | ".$q);
+	    $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
 	    
 	    $result = $this->db->query($q);
 	    
@@ -228,7 +228,7 @@ class administration extends connectDb{
 	    
 	    if($result){
 	    	$res = $result->fetch_row();
-	    	$this->log->debug("Class ".get_called_class()." | statusMatrice | ".$res[0]);
+	    	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$res[0]);
 	    	
 	    	if ($res[0] > 1) {
 	    		$r['response'] = true;
@@ -281,7 +281,7 @@ class administration extends connectDb{
 	    //$lock = array("Datum","Zeit","AT [°C]","PE1 Einschublaufzeit[zs]","PE1 Pausenzeit[zs]","PE1 Status");
 	    $q = "select id, saison, DATE_FORMAT(date_debut,'%d/%m/%Y') as date_debut, date_debut as startDate, DATE_FORMAT(date_fin,'%d/%m/%Y') as date_fin, date_fin as endDate from oko_saisons order by date_debut";
 	   
-	    $this->log->debug("Class ".get_called_class()." | getSaisons | ".$q);
+	    $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
 	    
 	    $result = $this->db->query($q);
 	    
@@ -306,7 +306,7 @@ class administration extends connectDb{
 	    
 	    $q = "select count(*) from oko_saisons where date_debut = '".$jour."'";
 	    
-	    $this->log->debug("Class ".get_called_class()." | existSaison | ".$q);
+	    $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
 	    
 	    $result = $this->db->query($q);
 	    
@@ -348,7 +348,7 @@ class administration extends connectDb{
 		$dates = $this->getDateSaison($s['startDate']);
 		//insertion d'une reference au demarrage des cycles de chauffe
 		$query = "INSERT INTO oko_saisons (saison, date_debut, date_fin) VALUES('".$dates['saison']."','".$dates['start']."','".$dates['end']."');" ;
-		$this->log->debug("Class ".get_called_class()." | setSaison | ".$query);
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$query);
 		
 		$r['response'] = $this->db->query($query);
 		
@@ -362,7 +362,7 @@ class administration extends connectDb{
 		//insertion d'une reference au demarrage des cycles de chauffe
 		$query = "UPDATE oko_saisons set saison='".$dates['saison']."', date_debut='".$dates['start']."', date_fin='".$dates['end']."' where id=".$s['idSaison']  ;
 		
-		$this->log->debug("Class ".get_called_class()." | updateSaison | ".$query);
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$query);
 		
 		$r['response'] = $this->db->query($query);
 		

@@ -26,7 +26,7 @@ class rendu extends connectDb{
 	            "LEFT JOIN oko_capteur as capteur ON capteur.id = asso.oko_capteur_id  ".
 	            "WHERE asso.oko_graphe_id=".$id." ORDER BY asso.position";
 	            
-	    $this->log->debug("Class ".get_called_class()." | getGrapheData | ".$q);
+	    $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
 	   
 	    $result = $this->db->query($q);
 		
@@ -38,7 +38,7 @@ class rendu extends connectDb{
 			        ."INNER JOIN oko_capteur ON oko_historique.oko_capteur_id = oko_capteur.id WHERE "
 			        ."jour ='".$jour."' and oko_historique.oko_capteur_id = ".$c->id;
 			        
-			$this->log->debug("Class ".get_called_class()." | getGrapheData | ".$c->name." | ".$q);
+			$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$c->name." | ".$q);
 			
 			$resultat .= '{ "name": "'.$c->name.'",';
 			$resultat .= '"data": '.$this->getDataWithTime($q);
@@ -104,7 +104,7 @@ class rendu extends connectDb{
 				."JOIN oko_capteur as cb ON cb.id = b.oko_capteur_id and cb.type = 'tps_vis_pause' "
 				."WHERE a.jour = '".$jour."';";
 		
-		$this->log->debug("Class ".get_called_class()." | getConsoByday | ".$q); 
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
 		
 		$result = $this->db->query($q);
 		
@@ -117,7 +117,7 @@ class rendu extends connectDb{
 				."JOIN oko_capteur as ca ON ca.id = a.oko_capteur_id and ca.type = 'tc_ext' "
 				."WHERE a.jour = '".$jour."';";
 		
-		$this->log->debug("Class ".get_called_class()." | getTcMaxByDay | ".$q); 
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
 		
 		$result = $this->db->query($q);
 		
@@ -130,7 +130,7 @@ class rendu extends connectDb{
 				."JOIN oko_capteur as ca ON ca.id = a.oko_capteur_id and ca.type = 'tc_ext' "
 				."WHERE a.jour = '".$jour."';";
 		
-		$this->log->debug("Class ".get_called_class()." | getTcMinByDay | ".$q); 
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
 		
 		$result = $this->db->query($q);
 		
@@ -154,7 +154,7 @@ class rendu extends connectDb{
 				."JOIN oko_capteur as ca ON ca.id = a.oko_capteur_id and ca.type = 'startCycle' "
 				."WHERE a.jour = '".$jour."';";
 		
-		$this->log->debug("Class ".get_called_class()." | getNbCycleByDay | ".$q); 
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
 		
 		$result = $this->db->query($q);
 		
@@ -170,7 +170,7 @@ class rendu extends connectDb{
 				"YEAR(oko_resume_day.jour) = ".$year;
 		
 		
-		$this->log->debug("Class ".get_called_class()." | getIndicByMonth | ".$q); 
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
 		
 		$result = $this->db->query($q);
 		$r = $result->fetch_object();
@@ -205,7 +205,7 @@ class rendu extends connectDb{
 		foreach ($categorie as $label => $colonneSql){
 			$q = "SELECT ".$colonneSql." ".$where;
 			
-			$this->log->debug("Class ".get_called_class()." | getHistoByMonth | ".$q); 
+			$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
 			
 			$result = $this->db->query($q);
 			
@@ -235,7 +235,7 @@ class rendu extends connectDb{
 				
 		
 		
-		$this->log->debug("Class ".get_called_class()." | getTotalSaison | ".$q); 
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
 		
 		$result = $this->db->query($q);
 		$r = $result->fetch_object();

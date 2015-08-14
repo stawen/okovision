@@ -70,16 +70,16 @@ class okofen extends connectDb{
 		    $link = $url;
 		}
 		
-		$this->log->info("Class ".get_called_class()." | getChaudiereData | Recuperation du fichier ".$link);
+		$this->log->info("Class ".__CLASS__." | ".__FUNCTION__." |  Recuperation du fichier ".$link);
 		//on lance le dl
 		$result = $this->download($link,CSVFILE);
 		//$result = true;
 		if (!$result){
 			 //throw new Exception('Download error...');
-			 $this->log->error("Class ".get_called_class()." | getChaudiereData | Données chaudiere non recupérées");
+			 $this->log->error("Class ".__CLASS__." | ".__FUNCTION__." | Données chaudiere non recupérées");
 			 return false;
 		}else{
-			$this->log->info("Class ".get_called_class()." | getChaudiereData | SUCCESS - données chaudiere récupérées");
+			$this->log->info("Class ".__CLASS__." | ".__FUNCTION__." | SUCCESS - données chaudiere récupérées");
 			return true;
 		}
 
@@ -160,7 +160,7 @@ class okofen extends connectDb{
 		}
 		fclose($file);
 		
-		$this->log->info("Class ".get_called_class()." | csv2bdd | SUCCESS - import du CSV dans la BDD - ".$ln." lignes en ".$t->getTime()." sec ");
+		$this->log->info("Class ".__CLASS__." | ".__FUNCTION__." | SUCCESS - import du CSV dans la BDD - ".$ln." lignes en ".$t->getTime()." sec ");
 		
 		return true;
 
@@ -204,15 +204,15 @@ class okofen extends connectDb{
 			
 			$query .= "('".$day."', ".$max->tcExtMax.",".$min->tcExtMin.", ".$consoPellet.", ".$dju.", ".$nbCycle." );";
 					
-			$this->log->debug("Class ".get_called_class()." | makeSynteseByDay | ".$query);
+			$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$query);
 			
 			$n = $this->db->query($query);
 			
 			if (!$n){
-				$this->log->error("Class ".get_called_class()." | makeSynteseByDay | ERROR | creation synthèse du ".$day." impossible");
+				$this->log->error("Class ".__CLASS__." | ".__FUNCTION__." | ERROR | creation synthèse du ".$day." impossible");
 				return false;
 			}else{
-				$this->log->info("Class ".get_called_class()." | makeSynteseByDay | SUCCESS | creation synthèse du ".$day);
+				$this->log->info("Class ".__CLASS__." | ".__FUNCTION__." | SUCCESS | creation synthèse du ".$day);
 				return true;
 			}
 		
