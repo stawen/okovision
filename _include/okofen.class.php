@@ -88,7 +88,7 @@ class okofen extends connectDb{
 	* integration du fichier csv dans okovision
 	*/
 	public function csv2bdd(){
-		
+		ini_set('max_execution_time', 120);
 		$t = new timeExec();
 		
 		$ob_capteur 	= new capteur();
