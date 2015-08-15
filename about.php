@@ -19,8 +19,8 @@ if (!file_exists("config.php")) {
 
     <div class="container theme-showcase" role="main">
 		
-		<div class="page-header" align="center">
-			<h1>A propos d'Okovision</h1>
+		<div class="page-header" >
+			<h2>A propos d'Okovision</h2>
         </div>
         <div class="well">
             <img style='float:left;width:130px;height:130px; margin-right:20px;' src="https://avatars2.githubusercontent.com/u/13132210?v=3&s=460" alt="stawen" class="img-circle" >
@@ -31,7 +31,10 @@ if (!file_exists("config.php")) {
 			<p>Si vous constatez des bugs, merci de me les remonter via <a href="https://github.com/stawen/okovision/issues" target="_blank">GitHub</a> ou par mail</p>
 			<p>Contact : <a href="mailto:stawen@dronek.com">stawen@dronek.com</a></p>
         </div>
-       
+       <div class="page-header">
+			<h2>Mise à jour disponible</h2>
+			Mettre les changlog des maj dispo
+        </div>
 		
 		
 		
