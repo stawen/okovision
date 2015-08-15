@@ -632,10 +632,23 @@ class AutoUpdate extends connectDb{
 			$this->log->error(sprintf('Could not open zip file "%s", error: %d', $updateFile, $zip));
 			return false;
 		}
-
+		$gitFolder = '';
+		$i = -1;
+		
 		// Read every file from archive
 		while ($file = zip_read($zip)) {
-			$filename = zip_entry_name($file);
+			$i++;
+			
+			if ($i == 0){
+				$gitFolder = zip_entry_name($file);
+				$this->log->debug($gitFolder);
+				continue;
+				//exit;
+			}
+			
+			$filename = str_replace($gitFolder,"",zip_entry_name($file));
+			
+			//$filename = zip_entry_name($file);
 			$foldername = $this->_installDir . dirname($filename);
 			$absoluteFilename = $this->_installDir . $filename;
 
