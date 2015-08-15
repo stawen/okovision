@@ -45,20 +45,22 @@
                 </a>
                 <ul class="dropdown-menu" role="menu">
                     <li class="dropdown-header">Graphiques</li>
-                    <li><a href="gstrapport.php">Gestion rapports journaliers</a></li>
+                        <li><a href="gstrapport.php">Gestion rapports journaliers</a></li>
                     <li class="divider"></li>
                    
-                    <li class="dropdown-header">Actions Manuelles</li>    
-                    <?php if(GET_CHAUDIERE_DATA_BY_IP){ ?><li><a href="actionManuelle.php#majip">Mise à jour des données (depuis chaudiere)</a></li> <?php } ?>
-                    <li><a href="actionManuelle.php#majusb">Mise à jour des données (import)</a></li>
-                    <li><a href="actionManuelle.php#synthese">Calcul Synthèse journaliere</a></li>
+                        <li class="dropdown-header">Actions Manuelles</li>    
+                            <?php if(GET_CHAUDIERE_DATA_BY_IP){ ?><li><a href="actionManuelle.php#majip">Mise à jour des données (depuis chaudiere)</a></li> <?php } ?>
+                            <li><a href="actionManuelle.php#majusb">Mise à jour des données (import)</a></li>
+                            <li><a href="actionManuelle.php#synthese">Calcul Synthèse journaliere</a></li>
                     <li class="divider"></li>
                     
-                    <li class="dropdown-header">Administration</li>
-                    <li><a href="admin.php#infoge">Informations Generales</a></li> <!-- T°C de ref, Gr pellet pour 60 secondes // transfert sur serveur distant // mode debug ? -->
-                    <li><a href="admin.php#saisons">Saisons</a></li>
-                    <li><a href="admin.php#matrice">Matrice de lecture du CSV</a></li>
+                        <li class="dropdown-header">Administration</li>
+                            <li><a href="admin.php#infoge">Informations Generales</a></li>
+                            <li><a href="admin.php#saisons">Saisons</a></li>
+                            <li><a href="admin.php#matrice">Matrice de lecture du CSV</a></li>
+                    <li class="divider"></li>
                     
+                        <li><a href="about.php">A propos</a></li>
                    
                     
                 </ul>

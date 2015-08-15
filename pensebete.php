@@ -187,7 +187,7 @@ echo "d:".version::lt('1.2.3', '9.8.7'); //true
 
 $update = new AutoUpdate();
 $update->setCurrentVersion('0.0.1');
-$update->setUpdateUrl('https://raw.githubusercontent.com/stawen/okovision/master'); //Replace with your server update directory
+$update->setUpdateUrl('http://okovision.dronek.com/'); //Replace with your server update directory
 // Optional:
 //$update->addLogHandler(new Monolog\Handler\StreamHandler(__DIR__ . '/update.log'));
 //$update->setCache(new Desarrolla2\Cache\Adapter\File(__DIR__ . '/cache'), 3600);
