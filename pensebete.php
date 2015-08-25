@@ -187,7 +187,7 @@ echo "d:".version::lt('1.2.3', '9.8.7'); //true
 
 $update = new AutoUpdate();
 $update->setCurrentVersion('0.0.1');
-$update->setUpdateUrl('http://okovision.dronek.com/'); //Replace with your server update directory
+//$update->setUpdateUrl('http://okovision.dronek.com/'); //Replace with your server update directory
 // Optional:
 //$update->addLogHandler(new Monolog\Handler\StreamHandler(__DIR__ . '/update.log'));
 //$update->setCache(new Desarrolla2\Cache\Adapter\File(__DIR__ . '/cache'), 3600);
@@ -200,11 +200,14 @@ if ($update->newVersionAvailable()) {
 	echo 'New Version: ' . $update->getLatestVersion() . '<br>';
 	echo 'Installing Updates: <br>';
 	echo '<pre>';
+	/*
 	var_dump(array_map(function($version) {
 		return (string) $version;
 	}, $update->getVersionsToUpdate()));
+	*/
+	print_r($update->getVersionsInformationToUpdate() );
 	echo '</pre>';
-	
+	/*
 	$result = $update->update();
 	if ($result === true) {
 		echo 'Update successful<br>';
@@ -216,6 +219,7 @@ if ($update->newVersionAvailable()) {
 			echo '</pre>';
 		}
 	}
+	*/
 	
 } else {
 	echo 'Current Version is up to date<br>';

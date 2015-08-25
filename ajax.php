@@ -72,6 +72,8 @@ if (is_ajax()) {
                         case "getDayWithoutSynthese":
                             $a->getDayWithoutSynthese();
                             break;
+                        case "checkUpdate":
+                            $a->checkUpdate();
     				}
     				break; 
     			case "graphique":

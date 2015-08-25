@@ -11,18 +11,22 @@
   	* OK - Chemin http de la chaudiere (Ip ou Nom)
 	* OK - Parametrage BDD
 	* OK - Association structure fichier CSV de l'installation Okofen avec le nom des colonnes
-	* OK - Transfert csv sur serveur distant (Oui / non)+
+	* OK - Transfert csv sur serveur distant (Oui / Non)
 	 
 	
 3. Actions Manuelles
-	* Recuperation csv depuis la chaudiere
+	* OK - Recuperation csv depuis la chaudiere
 		* OK - Liste les fichiers presents sur la chaudieres
-		* Choisir le fichier a importer (si date fichier different de date du jour alors faire la synthese automatiquement)
+		* OK - Choisir le fichier a importer (si date fichier different de date du jour alors faire la synthese automatiquement)
 	* OK - Import du CSV depuis upload via interface web
 	* OK - Faire la synthese journaliere
 		* OK - Afficher les jours n'ayant pas de synthese journaliere
 		* OK - Choisir un jour precis pour mettre a jour la synthese
-		 
+
+4. A propos
+    * Mettre en place un mecanisme de maj automatique
+    * Afficher les fixto dans chaque version
+    * Afficher les fixto a venir dans la version courante
 
 # Ordre de priorité de dev (du haut vers le bas)#
 
@@ -39,4 +43,4 @@
 * OK - Ecran de synthese , ne pas proposer la date du jour
 * OK - Page de synthese
 * OK - Faire la synthse saison dynamque pour les mois
-* Import d'un csv via interface http chaudiere 
+* OK - Import d'un csv via interface http chaudiere 

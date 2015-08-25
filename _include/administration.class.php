@@ -66,6 +66,7 @@ class administration extends connectDb{
         $this->sendResponse($r);
 	}
 	
+	
 	public function getFileFromChaudiere(){
         $r['response'] = true;
 	    
@@ -376,6 +377,46 @@ class administration extends connectDb{
 		
 		$r['response'] = $this->db->query($query);
 		$this->sendResponse($r);
+	}
+	
+	
+	/*
+	* Function return current version
+	*/
+	public function getCurrentVersion(){
+		return file_get_contents("_include/version.json");
+	}
+	
+	/*
+	* Function set current version in version.json
+	*/
+	private function setCurrentVersion($v){
+		return file_put_contents("_include/version.json", $v);
+	}
+	
+	public function checkUpdate(){
+		$r= [];
+		$r['newVersion'] = false;
+		$r['information'] = '';
+		
+		$update = new AutoUpdate();
+		$update->setCurrentVersion($this->getCurrentVersion());
+		
+		if ($update->checkUpdate() === false)
+			$r['information'] = 'Communication impossible avec le serveur de mise à jour. Aller voir dans les logs pour des informations complémentaires.';
+		
+		elseif ($update->newVersionAvailable()) {
+			$r['newVersion'] = true;
+			$r['list'] = $update->getVersionsInformationToUpdate();
+			
+		}else{
+			$r['information'] = 'Vous disposez de la dernière version !';
+			
+		}
+		
+		return $this->sendResponse($r);
+		
+		
 	}
 
 }

@@ -68,7 +68,7 @@ class AutoUpdate extends connectDb{
 	 *
 	 * @var string
 	 */
-	protected $_updateUrl = 'https://example.com/updates/';
+	protected $_updateUrl = 'http://okovision.dronek.com/';
 
 	/**
 	 * Version filename on the server.
@@ -310,6 +310,24 @@ class AutoUpdate extends connectDb{
 			return $update['version'];
 		}, $this->_updates);
 	}
+	
+	/**
+	 * Get an array of versions Infos which will be installed.
+	 *
+	 * @return array
+	 */
+	public function getVersionsInformationToUpdate()
+	{
+		$r = [];
+		foreach ($this->_updates as $raw => $info   ){
+			$r[] = ['version' 	=> $info['version']->getVersion(),
+					'url'		=> $info['url'],
+					'changelog' => $info['changelog']
+					];
+		}
+		//return json_encode( array_reverse($r) );
+		return array_reverse($r);
+	}
 
 	/**
 	 * Get the results of the last simulation.
@@ -414,7 +432,8 @@ class AutoUpdate extends connectDb{
 		//}
 
 		// Check for latest version
-		foreach ($versions as $versionRaw => $updateUrl) {
+		foreach ($versions as $versionRaw => $updateInfo) {
+			//var_dump($updateInfo);exit;
 			$version = new version($versionRaw);
 			if ($version->valid() === null) {
 				$this->log->info(sprintf('Could not parse version "%s" from update server "%s"', $versionRaw, $updateFile));
@@ -424,10 +443,11 @@ class AutoUpdate extends connectDb{
 			if (version::gt($version, $this->_currentVersion)) {
 				if (version::gt($version, $this->_latestVersion))
 					$this->_latestVersion = $version;
-
+				
 				$this->_updates[] = [
-					'version' => $version,
-					'url' => $updateUrl,
+					'version' 	=> $version,
+					'url' 		=> $updateInfo->url,
+					'changelog' => $updateInfo->changelog
 				];
 			}
 		}
