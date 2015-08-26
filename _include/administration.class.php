@@ -418,6 +418,26 @@ class administration extends connectDb{
 		
 		
 	}
+	
+	public function makeUpdate(){
+		
+		$update = new AutoUpdate();
+		$update->setCurrentVersion($this->getCurrentVersion());
+		
+		$result = $update->update(); //fait une simulation d'abord, si ok ça install
+		if ($result === true) {
+			//echo 'Update successful<br>';
+			
+		} else { // si echec de la simulation d'install
+			echo 'Update failed: ' . $result . '!<br>';
+			if ($result = AutoUpdate::ERROR_SIMULATE) {
+				echo '<pre>';
+				var_dump($update->getSimulationResults());
+				echo '</pre>';
+			}
+		}
+		
+	}
 
 }
 

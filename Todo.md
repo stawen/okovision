@@ -24,8 +24,8 @@
 		* OK - Choisir un jour precis pour mettre a jour la synthese
 
 4. A propos
-    * Mettre en place un mecanisme de maj automatique
-    * Afficher les fixto dans chaque version
+    * OK - Mettre en place un mecanisme de maj automatique
+    * OK - Afficher les fixto dans chaque version
     * Afficher les fixto a venir dans la version courante
 
 # Ordre de priorité de dev (du haut vers le bas)#

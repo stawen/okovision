@@ -227,3 +227,29 @@ if ($update->newVersionAvailable()) {
 //echo 'Log:<br>';
 //echo nl2br(file_get_contents(__DIR__ . '/update.log'));
 ?>
+
+<ul>
+	<li>Création d'un mecanisme de mise à jour automatique</li>
+	<li>Correction logger methode</li>
+	<li>Correction anomalie de téléchargement des fichiers depuis la chaudiere</li>
+	<li>Correction Execution via CRON</li>
+</ul>
+
+<ul>
+	<li>Synthse saison dynamique pour les mois</li>
+	<li>Import d'un csv via interface http chaudiere</li>
+	<li>Page de synthese</li>
+	<li>Ecran de Declenchement synthese journaliere pour les jours n'existant pas</li>
+	<li>Page de creation graphique + indicateur dedans</li>
+</ul>
+
+<ul>
+	<li>Creation page des saisons</li>
+	<li>Import manuel du fichier csv distant</li>
+	<li>Ecran de matrice de correspondance csv pour import des données</li>
+	<li>Traduction des colonnes dans le CSV et identification du patern de nommage du constructeur</li>
+	<li>Revision de la structure des données</li>
+	<li>Ecran d'installation</li>
+	<li>Ecran de parametrage</li>
+	<li>Creation d'un fichier de configuration</li>
+</ul>

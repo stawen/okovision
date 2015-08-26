@@ -10,7 +10,7 @@ $(document).ready(function() {
         
         if (json.newVersion) {
             $.each(json.list, function(key, val) {
-                console.log(val);
+                //console.log(val);
                 $('#informations').append(
                     '<div class="panel panel-default"> \
 				        <div class="panel-heading">'+val.version+'</div> \
@@ -21,14 +21,15 @@ $(document).ready(function() {
                     );
                 $("#bt_update").show();
             });
-            /*
             
-			*/
         }else{
             $('#informations').append(json.information);
         }
     });
     
+    $("#bt_update").click(function(){
+        
+    });
     
     
 });
