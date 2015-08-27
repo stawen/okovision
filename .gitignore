@@ -39,10 +39,20 @@ Thumbs.db
 #######################
 *.csv
 config.php
+<<<<<<< HEAD
 config.json
+=======
+*@eaDir
+@eaDir/
+>>>>>>> master
 test.php
 
 *@eaDir
 @eaDir/
+<<<<<<< HEAD
+=======
+Thumbs.db
+import.csv
+>>>>>>> master
 
 
