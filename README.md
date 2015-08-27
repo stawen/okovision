@@ -1,16 +1,13 @@
 # OKOVISION
 Interface web de supervison d'une chaudiere Okofen
+http://okovision.dronek.com
 
-# Version_0.9.3
-Branch de dev
-
-# Quelle chaudiere ?
-Pour ma part, j'ai une chaudiere Pellomatic. Elle est reliée au reseau IP de mon installation via son port ethernet
-Ainsi je recupere le log généré toutes les 2 heures et je les integre dans ma bdd.
+# Version 1.0.0
+Premiere version stable, une mecanisme de mise a jour automatique est inclus dans le programme, vous pourrez ainsi disposer les corrections / améliorations en vous rendant
+dans la page "A propos" du programme.
 
 # Quelle techno ?
-Js + PHP + MariaDb, le tout sur un nas Synology.
-Mais vous pouvez le faire tourner sur une RPI où n'importe quelle distrib linux, meme sur un UwAmp.
+Js + PHP + MariaDb.
 
 # Mais pourquoi ?
 Parce que...
