@@ -30,10 +30,10 @@ $(document).ready(function() {
     $("#bt_update").click(function(){
         //console.log('ici');
         $('#informations').html("");
-        $("#inwork-checkupdate").show();
+        $("#inwork-makeupdate").show();
         
         $.getJSON("ajax.php?type=admin&action=makeUpdate" , function(json) {
-            $("#inwork-checkupdate").hide();
+            $("#inwork-makeupdate").hide();
             
             if (json.install) {
                 $('#informations').append("Mise à jour réalisée avec succès !");
