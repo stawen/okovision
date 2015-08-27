@@ -37,7 +37,7 @@ if (!file_exists("config.php")) {
 					<span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Installer la mise à jour
 				</button>
 			<div id="inwork-checkupdate" ><br/><br/><span class="glyphicon glyphicon-refresh glyphicon-spin"></span>  Verification en cours......</div>
-			<div id="inwork-makeupdate" style="display: none;"><br/><br/><span class="glyphicon glyphicon-refresh glyphicon-spin"></span>  Verification en cours......</div>
+			<div id="inwork-makeupdate" style="display: none;"><br/><br/><span class="glyphicon glyphicon-refresh glyphicon-spin"></span>  Installation en cours......</div>
 			<p>
 				<div id ="informations"></div>
 			</p>
