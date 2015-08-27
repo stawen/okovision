@@ -437,6 +437,8 @@ class administration extends connectDb{
 			}
 		}
 		
+		return $this->sendResponse($r);
+		
 	}
 
 }
