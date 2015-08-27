@@ -420,20 +420,20 @@ class administration extends connectDb{
 	}
 	
 	public function makeUpdate(){
-		
+		$r = [];
+		$r['install'] = false;
 		$update = new AutoUpdate();
 		$update->setCurrentVersion($this->getCurrentVersion());
 		
 		$result = $update->update(); //fait une simulation d'abord, si ok ça install
 		if ($result === true) {
 			//echo 'Update successful<br>';
+			$r['install'] = true;
 			
 		} else { // si echec de la simulation d'install
-			echo 'Update failed: ' . $result . '!<br>';
+			//echo 'Update failed: ' . $result . '!<br>';
 			if ($result = AutoUpdate::ERROR_SIMULATE) {
-				echo '<pre>';
-				var_dump($update->getSimulationResults());
-				echo '</pre>';
+				$r['information'] = '<pre>'.var_dump($update->getSimulationResults()).'</pre>';
 			}
 		}
 		

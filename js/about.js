@@ -28,7 +28,15 @@ $(document).ready(function() {
     });
     
     $("#bt_update").click(function(){
-        
+        console.log('ici');
+        $.getJSON("ajax.php?type=admin&action=makeUpdate" , function(json) {
+            $('#informations').html("");
+            if (json.install) {
+                $('#informations').append("Mise à jour réalisée avec succès !");
+            }else{
+                $('#informations').append(json.information);
+            }
+        });
     });
     
     

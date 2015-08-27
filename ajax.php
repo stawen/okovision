@@ -74,6 +74,10 @@ if (is_ajax()) {
                             break;
                         case "checkUpdate":
                             $a->checkUpdate();
+                            break;
+                        case "makeUpdate":
+                            $a->makeUpdate();
+                            break;
     				}
     				break; 
     			case "graphique":
