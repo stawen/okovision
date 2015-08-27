@@ -4,28 +4,30 @@
 * Utilisation commerciale interdite sans mon accord
 ******************************************************/
 $(document).ready(function() {
-
-    $.getJSON("ajax.php?type=admin&action=checkUpdate" , function(json) {
-        $("#inwork-checkupdate").hide();
-        
-        if (json.newVersion) {
-            $.each(json.list, function(key, val) {
-                //console.log(val);
-                $('#informations').append(
-                    '<div class="panel panel-default"> \
-				        <div class="panel-heading">'+val.version+'</div> \
-				        <div class="panel-body"> \
-				            '+val.changelog+' \
-				        </div> \
-				    </div>'
-                    );
-                $("#bt_update").show();
-            });
+    
+    function checkUpdate() {
+        $.getJSON("ajax.php?type=admin&action=checkUpdate" , function(json) {
+            $("#inwork-checkupdate").hide();
             
-        }else{
-            $('#informations').append(json.information);
-        }
-    });
+            if (json.newVersion) {
+                $.each(json.list, function(key, val) {
+                    //console.log(val);
+                    $('#informations').append(
+                        '<div class="panel panel-default"> \
+    				        <div class="panel-heading">'+val.version+'</div> \
+    				        <div class="panel-body"> \
+    				            '+val.changelog+' \
+    				        </div> \
+    				    </div>'
+                        );
+                    $("#bt_update").show();
+                });
+                
+            }else{
+                $('#informations').append(json.information);
+            }
+        });
+    }
     
     $("#bt_update").click(function(){
         //console.log('ici');
@@ -36,12 +38,16 @@ $(document).ready(function() {
             $("#inwork-makeupdate").hide();
             
             if (json.install) {
-                $('#informations').append("Mise à jour réalisée avec succès !");
+                $.growlValidate("Mise à jour réalisée avec succès !");
+                
             }else{
                 $('#informations').append(json.information);
+                $.growlErreur("Echec de la mise à jour.");
             }
+            checkUpdate();
         });
     });
     
+    checkUpdate();
     
 });
