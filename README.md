@@ -1,11 +1,6 @@
 # OKOVISION
 Interface web de supervison d'une chaudiere Okofen
-<<<<<<< HEAD
 http://okovision.dronek.com
-=======
-# Version-V0.1
-version pré-beta, objectif validation du concept. Version très spécialisé sur mon installation okofen, ne peut pas etre utilisé ailleurs. La version de dev en cours permettant une portabilité est la v0.9.3 (unstable)
->>>>>>> master
 
 # Version 1.0.0
 Premiere version stable, une mecanisme de mise a jour automatique est inclus dans le programme, vous pourrez ainsi disposer les corrections / améliorations en vous rendant
@@ -20,12 +15,10 @@ pour mieux suivre le fonctionnement de la chaudiere, afin d'affiner le reglage, 
 mettre en graphique toutes les informations fournies par la chaudiere.
 J'ai donc mis au point cette application web. Elle me permet d'analyser et de suivre ma consommation de pellet.
 
-<<<<<<< HEAD
 # Peut-on l'utiliser ?
 Oui, a titre personnel vous pouvez, n'hesitez pas a me remonter des bugs ou questions pour que je complete la FAQ
 
 #Puis-je aider ?
 Oui bien sur, si tu es developpeur et que tu as envie, il y a surement des ameliorations à faire
 et si tu n'es pas dans l'informatique, il y a toujours d'autres moyen comme etant "Testeur" des nouvelles versions.
-=======
->>>>>>> master
+
