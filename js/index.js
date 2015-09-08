@@ -1,3 +1,4 @@
+/* global lang, Highcharts */
 $(document).ready(function() {
 
 	/**************************************
@@ -28,7 +29,7 @@ $(document).ready(function() {
 					rotation : -45,
 				},
 				title: {
-					text: 'Heures',
+					text: lang.graphic.hour,
 				}
 			},
 			yAxis: [{
@@ -64,7 +65,7 @@ $(document).ready(function() {
 				text: titre
 			},
 			subtitle: {
-				text: 'Problème lors de la récupération des données !'
+				text: lang.error.communication
 			}
 		});
 	
@@ -82,7 +83,7 @@ $(document).ready(function() {
 					$( "#consoPellet" ).text($.DecSepa( ((json.consoPellet===null)?0.0:json.consoPellet) + " Kg"));
 			})
 			.error(function() { 
-				$.growlErreur("Probleme lors de la recuperation des indicateurs");
+				$.growlErreur(lang.error.communication);
 			});	
 	    
 	    
@@ -94,7 +95,7 @@ $(document).ready(function() {
 			})
 			.error(function() { 
 				graphe_error(val.id,$("#"+val.id).data("graphename"));
-				$.growlErreur("Probleme lors de la recuperation des données graphiques");
+				$.growlErreur(lang.error.communication);
 				
 			});
 		
@@ -185,7 +186,7 @@ $(document).ready(function() {
     			    refreshAllGraphe();
     			})
     			.error(function() {
-    				$.growlErreur("Impossible de charger la liste des graphiques !!");
+    				$.growlErreur(lang.error.getGraphe);
     			});
     
 });

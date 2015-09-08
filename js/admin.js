@@ -267,10 +267,10 @@ $(document).ready(function() {
 	
 							$('#modal_saison').modal('hide');
 							if (a.response === true) {
-								$.growlValidate(lang.valid.updateSeason);
+								$.growlValidate(lang.valid.update);
 								setTimeout(refreshSaison(),1000);
 							} else {
-								$.growlErreur(lang.error.updateSeason);
+								$.growlErreur(lang.error.update);
 							}
 	
 						}

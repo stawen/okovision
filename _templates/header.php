@@ -19,7 +19,7 @@
     <![endif]-->
 	<?php //include_once("analyticstracking.php"); ?>
 	
-</style>
+
   </head>
 
   <body role="document">

@@ -3,6 +3,7 @@
 * Auteur : Stawen Dronek
 * Utilisation commerciale interdite sans mon accord
 ******************************************************/
+/* global lang */
 $(document).ready(function() {
 	
 	$("#bt_testConnection").click(function() {
@@ -26,12 +27,10 @@ $(document).ready(function() {
 						console.log(a.response);
 						if (a.response) {
 							
-							$.growlValidate("Connexion reussi !");
+							$.growlValidate(lang.valid.communication);
 							
 						} else {
-							
-							$.growlErreur("Echec de connexion à la base de données !!");
-							
+							$.growlErreur(lang.error.bddFail);
 						}
 		
 					}

@@ -1,10 +1,16 @@
+/*****************************************************
+* Projet : Okovision - Supervision chaudiere OeKofen
+* Auteur : Stawen Dronek
+* Utilisation commerciale interdite sans mon accord
+******************************************************/
+/* global lang */
 $(document).ready(function() {
 
     function initModalAddGraphe() {
         $('#modal_graphique').on('show.bs.modal', function() {
             $(this).find('#name').val("");
             $(this).find('#typeModal').val("add");
-            $(this).find('#graphiqueTitre').html("Création d'un nouveau graphique");
+            $(this).find('#graphiqueTitre').html(lang.text.addGraphe);
 
             $.getJSON("ajax.php?type=graphique&action=getLastGraphePosition", function(json) {
 
@@ -13,7 +19,7 @@ $(document).ready(function() {
 
                 })
                 .error(function() {
-                    $.growlErreur("Impossible de récupérer la derniere position");
+                    $.growlErreur(lang.error.position);
                 });
 
         });
@@ -26,13 +32,13 @@ $(document).ready(function() {
             $(this).find('#name').val(name);
             $(this).find('#typeModal').val("edit");
             $(this).find('#grapheId').val(row.attr("id"));
-            $(this).find('#graphiqueTitre').html("Modification de " + name);
+            $(this).find('#graphiqueTitre').html(lang.text.updateGraphe + " " + name);
         });
     }
 
     function initModalDeleteGraphe(row) {
         $('#confirm-delete').on('show.bs.modal', function() {
-            $(this).find('.modal-title').html("Confirmez-vous la suppresion de " + row.find("td:nth-child(2)").text() + "?");
+            $(this).find('.modal-title').html(lang.text.deleteGraphe + " " + row.find("td:nth-child(2)").text() + "?");
             $(this).find('#deleteid').val(row.attr("id"));
             $(this).find('#typeModal').val('Grph');
         });
@@ -52,7 +58,7 @@ $(document).ready(function() {
         $('#modal_asso').on('show.bs.modal', function() {
 
             $(this).find('#typeModal').val("edit");
-            $(this).find('#assoTitre').html("Modification de l'association");
+            $(this).find('#assoTitre').html(lang.text.updateAsso);
             $('#select_graphe option[value=' + $('#select_graphique').val() + ']').attr("selected", "selected");
             $('#select_capteur option[value=' + row.attr("id") + ']').attr("selected", "selected");
             
@@ -66,7 +72,7 @@ $(document).ready(function() {
         var name = $('#select_graphique option:selected').text() + " - " + row.find("td:nth-child(2)").text();
 
         $('#confirm-delete').on('show.bs.modal', function() {
-            $(this).find('.modal-title').html("Confirmez-vous la suppresion de l'asso " + name + "?");
+            $(this).find('.modal-title').html(lang.text.deleteAsso + " " + name + "?");
             $(this).find('#deleteid').val(row.attr("id")); //id du capteur
             $(this).find('#typeModal').val('Asso');
         });
@@ -92,11 +98,11 @@ $(document).ready(function() {
                         //console.log(a);
                         $('#modal_graphique').modal('hide');
                         if (a.response) {
-                            $.growlValidate("Enregistrement OK");
+                            $.growlValidate(lang.valid.save);
                             setTimeout(refreshTableGraphe(), 1000);
                         }
                         else {
-                            $.growlErreur("Probleme lors de l'enregistrement du graphe");
+                            $.growlErreur(lang.error.save);
                         }
 
                     }
@@ -105,7 +111,7 @@ $(document).ready(function() {
 
             }
             else {
-                $.growlWarning("Attention, le graphe existe déjà");
+                $.growlWarning(lang.error.grapehAlreadyExist);
             }
         });
     }
@@ -129,11 +135,11 @@ $(document).ready(function() {
 
                         $('#modal_graphique').modal('hide');
                         if (a.response === true) {
-                            $.growlValidate("Modification réussi de " + tab.name);
+                            $.growlValidate(lang.valid.update);
                             setTimeout(refreshTableGraphe(), 1000);
                         }
                         else {
-                            $.growlErreur("Probleme lors de l'enregistrement du graphe");
+                            $.growlErreur(lang.error.save);
                         }
 
                     }
@@ -160,11 +166,11 @@ $(document).ready(function() {
 
                 $('#confirm-delete').modal('hide');
                 if (a.response === true) {
-                    $.growlValidate("Suppression réussie");
+                    $.growlValidate(lang.valid.delete);
                     setTimeout(refreshTableGraphe(), 1000);
                 }
                 else {
-                    $.growlErreur("Problême lors de la suppresion du graphe " + tab.name);
+                    $.growlErreur(lang.error.deleteGraphe + " " + tab.name);
                 }
 
             }
@@ -194,11 +200,11 @@ $(document).ready(function() {
 
                         $('#modal_asso').modal('hide');
                         if (a.response) {
-                            $.growlValidate("Enregistrement OK");
+                            $.growlValidate(lang.valid.save);
                             setTimeout(refreshTableAsso(), 1000);
                         }
                         else {
-                            $.growlErreur("Probleme lors de l'enregistrement de l'association");
+                            $.growlErreur(lang.error.save);
                         }
 
                     }
@@ -207,7 +213,7 @@ $(document).ready(function() {
 
             }
             else {
-                $.growlWarning("Attention, le couple Graphique + Capteur existe déjà");
+                $.growlWarning(lang.error.assoAlreadyExist);
             }
         });
     }
@@ -219,7 +225,7 @@ $(document).ready(function() {
             coeff   : $('#modal_asso').find('#coeff').val()
         };
         if(! $.isNumeric(tab.coeff)){
-            $.growlErreur("Le coefficient doit etre un nombre");
+            $.growlErreur(lang.error.coeffMustBeNumber);
             return;
         }
         
@@ -232,11 +238,11 @@ $(document).ready(function() {
     
                 $('#modal_asso').modal('hide');
                 if (a.response) {
-                    $.growlValidate("Modification réussi");
+                    $.growlValidate(lang.valid.update);
                     setTimeout(refreshTableAsso(), 1000);
                 }
                 else {
-                    $.growlErreur("Probleme lors de la mise à jour du capteur");
+                    $.growlErreur(lang.error.update);
                 }
     
             }
@@ -257,11 +263,11 @@ $(document).ready(function() {
 
                 $('#confirm-delete').modal('hide');
                 if (a.response) {
-                    $.growlValidate("Suppression réussi");
+                    $.growlValidate(lang.valid.delete);
                     setTimeout(refreshTableAsso(), 1000);
                 }
                 else {
-                    $.growlErreur("Problême lors de la suppresion de l'association");
+                    $.growlErreur(lang.error.deleteAsso);
                 }
 
             }
@@ -304,7 +310,7 @@ $(document).ready(function() {
                 refreshTableAsso();
             })
             .error(function() {
-                $.growlErreur("Impossible de charger la liste des graphiques !!");
+                $.growlErreur(lang.error.getGraphe);
             });
     }
 
@@ -337,7 +343,7 @@ $(document).ready(function() {
                 });
             })
             .error(function() {
-                $.growlErreur("Impossible de charger la liste des associations !!");
+                $.growlErreur(lang.error.getAsso);
             });
     }
 
@@ -436,11 +442,11 @@ $(document).ready(function() {
     						$('#select_graphe').attr('disabled', 'disabled');
     					});
                      }else{
-                         $.growlErreur("Impossible de récupérer la liste des capteurs"); 
+                         $.growlErreur(lang.error.getSensor); 
                      }
     })
 	.error(function() {
-		$.growlErreur("Impossible de récupérer la liste des Capteurs");
+		$.growlErreur(lang.error.communication);
 	});
 
 

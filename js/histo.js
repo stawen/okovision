@@ -3,7 +3,7 @@
 * Auteur : Stawen Dronek
 * Utilisation commerciale interdite sans mon accord
 ******************************************************/
-
+/* global lang, Highcharts */
 $(document).ready(function() {
 	
 
@@ -17,7 +17,7 @@ $(document).ready(function() {
 				text: titre
 			},
 			subtitle: {
-				text: 'Problème lors de la récupération des données !'
+				text: lang.error.communication
 			}
 		});
 	
@@ -29,7 +29,7 @@ $(document).ready(function() {
 	
 	function generer_graphic()	{
 	
-		var titre_histo = 'Historique temperatures / Consommation Pellet';	
+		var titre_histo = lang.text.titreHisto;	
 		var div_histo_tempe = 'histo-temperature';	
 		
 	   $.getJSON("ajax.php?type=rendu&action=getHistoByMonth&month="+ $( "#mois" ).val() + "&year="+ $( "#annee" ).val(), function(json) {
@@ -111,18 +111,18 @@ $(document).ready(function() {
 																	'31'],
 															max : 30,		
 															title: {
-																text: 'jour',
+																text: lang.graphic.day,
 															}	
 													},
 													yAxis: [{
 															title: {
-																text: 'T°C'
+																text: lang.graphic.tc
 															},
 															min : -5 ,	max : 40 
 														},{
 															gridLineWidth: 0,
 															title: {
-																	text: 'Kg et DJU',
+																	text: lang.graphic.kgAndDju,
 																	style: {
 																		color: Highcharts.getOptions().colors[4]
 																	}
@@ -132,7 +132,7 @@ $(document).ready(function() {
 														},{
 															gridLineWidth: 0, 
 															title: {
-																	text: 'Nb Cycle',
+																	text: lang.graphic.nbCycle,
 																	style: {
 																		color: "#ECB962"
 																	}
@@ -169,7 +169,7 @@ $(document).ready(function() {
 			})
 			.error(function() { 
 				graphe_error(div_histo_tempe,titre_histo);
-				$.growlErreur("Probleme lors de la recuperation de la synthese du mois");
+				//$.growlErreur("Probleme lors de la recuperation de la synthese du mois");
 			});
 		
 		/*
@@ -186,7 +186,7 @@ $(document).ready(function() {
 				
 			})
 			.error(function() { 
-				$.growlErreur("Probleme lors de la recuperation des indicateurs du mois");
+				$.growlErreur(lang.error.getIndicByMonth);
 			});		
 			
 			
@@ -204,7 +204,7 @@ $(document).ready(function() {
 				
 			})
 			.error(function() { 
-				$.growlErreur("Probleme lors de la recuperation des indicateurs de la saison");
+				$.growlErreur(lang.error.getTotalSaison);
 			});	
 		
 		$.getJSON("ajax.php?type=rendu&action=getSyntheseSaison&saison=" + $( "#saison" ).val(), function(saison) {
@@ -271,7 +271,7 @@ $(document).ready(function() {
 														//panKey: 'shift'
 													},
 													title: {
-														text: "Synthèse Saison " + $('#saison option:selected').text()
+														text: lang.graphic.seasonSummary + " " + $('#saison option:selected').text()
 													},
 													legend:{
 														align: 'right',
@@ -284,18 +284,18 @@ $(document).ready(function() {
 										                    month: '%B'
 										                },
 										                title: {
-															text: 'Mois',
+															text: lang.graphic.month,
 														}	
 													},
 													yAxis: [{
 															title: {
-																text: 'T°C'
+																text: lang.graphic.tc
 															},
 														//	min : -5 ,	max : 40 
 														},{
 															gridLineWidth: 0,
 															title: {
-																	text: 'Kg et DJU',
+																	text: lang.graphic.kgAndDju,
 																	style: {
 																		color: Highcharts.getOptions().colors[4]
 																	}
@@ -305,7 +305,7 @@ $(document).ready(function() {
 														},{
 															gridLineWidth: 0, 
 															title: {
-																	text: 'Nb Cycle',
+																	text: lang.graphic.nbCycle,
 																	style: {
 																		color: "#ECB962"
 																	}
@@ -313,10 +313,6 @@ $(document).ready(function() {
 														//	min : 0 ,	max : 50,
 															opposite: true
 														}],
-													credits: {
-														enabled : true,
-														text : 'OkoVision'
-													},
 													plotOptions: {
 														line: {
 															marker: {
@@ -344,8 +340,8 @@ $(document).ready(function() {
 				})
 				.error(function() { 
 					//console.log('error graphe synthèse saison');	
-					graphe_error("saison_graphic","Synthèse saison");
-					$.growlErreur("Probleme lors de la recuperation de la synthese de la saison");
+					graphe_error("saison_graphic",lang.graphic.seasonSummary);
+					$.growlErreur(lang.error.getSyntheseSaison);
 					
 				});
 	}
@@ -385,7 +381,7 @@ $(document).ready(function() {
 	});
 	
 	$( "#saison" ).change(function() {
-		console.log('date change');
+		//console.log('date change');
 		generer_synthese_saison();
 	});
 	
@@ -398,15 +394,6 @@ $(document).ready(function() {
     				});
     	generer_synthese_saison();			
 	});
-	
-	
-	
-	
-	
-	
-	
-
-	
 	
 
 });
