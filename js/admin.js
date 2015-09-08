@@ -3,6 +3,8 @@
 * Auteur : Stawen Dronek
 * Utilisation commerciale interdite sans mon accord
 ******************************************************/
+/* global lang */
+
 $(document).ready(function() {
     
     /*
@@ -29,14 +31,14 @@ $(document).ready(function() {
 			
 				if (json.response === true) {
 				    $('#url_csv').html("");
-					$.growlValidate("Communication établie");
-					$('#url_csv').append('<a target="_blank" href="' + json.url +'"> Visualiser les fichiers sur la chaudiere </a>');
+					$.growlValidate(lang.valid.communication);
+					$('#url_csv').append('<a target="_blank" href="' + json.url +'">'+ lang.text.seeFileOnboiler +'</a>');
 				} else {
-					$.growlWarning("L'adresse Ip ne repond pas");
+					$.growlWarning(lang.error.ipNotPing);
 				}
 			})
 			.error(function() { 
-				$.growlErreur('Error  - Probleme de communication !');
+				$.growlErreur(lang.error.communication);
 			});	
             
         /*    
@@ -65,13 +67,13 @@ $(document).ready(function() {
 					success: function(a) {
 					    console.log(a);
 					    if (a.response === true) {
-        				    $.growlValidate("Configuration sauvegardée");
+        				    $.growlValidate(lang.valid.configSave);
         				} else {
-        					$.growlWarning("Configuration non sauvegardée");
+        					$.growlWarning(lang.error.configNotSave);
         				}
 					},
                     error: function () {
-                        $.growlErreur('Error  - Probleme lors de la sauvegarde !');
+                        $.growlErreur(lang.error.communication);
                       }
 				});
         
@@ -132,24 +134,17 @@ $(document).ready(function() {
 					$("#concordance").show();
 					
 				} else {
-					$.growlWarning("Le fichier CSV de reference n'est pas trouvé.");
+					$.growlWarning(lang.error.csvNotFound);
 				}
 			})
 			.error(function() { 
-				$.growlErreur('Error  - Probleme de communication !');
+				$.growlErreur(lang.error.communication);
 			});	
     	
     }
     
 
-	
-	
-	//console.log("matriceComplet::"+$.matriceComplet());
-	
-	
-	
-	
-	
+
 	/*
     * Espace saison
     */
@@ -180,11 +175,11 @@ $(document).ready(function() {
 				
 					
 				} else {
-					$.growlWarning("Probleme lors de la recuperation des saisons");
+					$.growlWarning(lang.error.getSeasons);
 				}
 			})
 			.error(function() { 
-				$.growlErreur('Error  - Probleme de communication !');
+				$.growlErreur(lang.error.communication);
 			});	
 	}
 	
@@ -192,7 +187,7 @@ $(document).ready(function() {
 		$('#modal_saison').on('show.bs.modal', function() {
 
 			$(this).find('#typeModal').val("add");
-			$(this).find('.modal-title').html("Ajout d'une saison ");
+			$(this).find('.modal-title').html(lang.text.addSeason);
 			$(this).find('#startDateSaison').val("");
 		});
 	}
@@ -203,7 +198,7 @@ $(document).ready(function() {
 			try{
 				var date = $.datepicker.parseDate('dd/mm/yy', $('#modal_saison').find('#startDateSaison').val() );
 			}catch(error){
-        		$.growlWarning("Format de la date incorrect");
+        		$.growlWarning(lang.error.date);
         		return;
 			}
 			
@@ -225,10 +220,10 @@ $(document).ready(function() {
 	
 							$('#modal_saison').modal('hide');
 							if (a.response === true) {
-								$.growlValidate("Enregistrement OK");
+								$.growlValidate(lang.valid.save);
 								setTimeout(refreshSaison(),1000);
 							} else {
-								$.growlErreur("Probleme lors de l'enregistrement de la saison");
+								$.growlErreur(lang.error.saveSeason);
 							}
 	
 						}
@@ -236,11 +231,11 @@ $(document).ready(function() {
 	
 	
 				} else {
-					$.growlWarning("Attention, cette saison existe déjà !");
+					$.growlWarning(lang.error.seasonAlreadyExist);
 				}
 			});
 		}else{
-			$.growlWarning("Format de la date incorrect");
+			$.growlWarning(lang.error.date);
 		}
 		
 	}
@@ -251,7 +246,7 @@ $(document).ready(function() {
 				var date = $.datepicker.parseDate('dd/mm/yy', $('#modal_saison').find('#startDateSaison').val() );
 			}catch(error){
         		//alert(error);
-        		$.growlWarning("Format de la date incorrect");
+        		$.growlWarning(lang.error.date);
         		return;
 			}	
 			var tab = {
@@ -272,10 +267,10 @@ $(document).ready(function() {
 	
 							$('#modal_saison').modal('hide');
 							if (a.response === true) {
-								$.growlValidate("Mise à jour OK");
+								$.growlValidate(lang.valid.updateSeason);
 								setTimeout(refreshSaison(),1000);
 							} else {
-								$.growlErreur("Probleme lors de la mise à jour");
+								$.growlErreur(lang.error.updateSeason);
 							}
 	
 						}
@@ -283,11 +278,11 @@ $(document).ready(function() {
 	
 	
 				} else {
-					$.growlWarning("Attention, cette saison existe déjà !");
+					$.growlWarning(lang.error.seasonAlreadyExist);
 				}
 			});
 		}else{
-			$.growlWarning("Format de la date incorrect");
+			$.growlWarning(lang.error.date);
 		}	
 	}
 	
@@ -305,10 +300,10 @@ $(document).ready(function() {
 
 				$('#confirm-delete').modal('hide');
 				if (a.response) {
-					$.growlValidate("Suppression réussie");
+					$.growlValidate(lang.valid.deleteSeason);
 					setTimeout(refreshSaison(), 1000);
 				} else {
-					$.growlErreur("Probleme lors de la suppresion de la saison");
+					$.growlErreur(lang.error.deleteSeason);
 				}
 
 			}
@@ -326,7 +321,7 @@ $(document).ready(function() {
 			
 			$(this).find('#typeModal').val("edit");
 			$(this).find('#startDateSaison').val(startDate);
-			$(this).find('.modal-title').html("Modification saison : "+saison);
+			$(this).find('.modal-title').html(lang.text.updateSeason +" : "+saison);
 			$(this).find('#saisonId').val(id);
 		});
 		//$.datepicker.formatDate('yy-mm-dd',$.datepicker.parseDate('dd/mm/yy', $( "#date_encours" ).val()));
@@ -338,7 +333,7 @@ $(document).ready(function() {
 		var id		= row.attr("id");
 		
 		$('#confirm-delete').on('show.bs.modal', function() {
-			$(this).find('.modal-title').html("Confirmez-vous la suppression de la saison : "+saison);
+			$(this).find('.modal-title').html(lang.text.deleteSeason+" : "+saison);
 			$(this).find('#saisonId').val(id);
 		});
 		

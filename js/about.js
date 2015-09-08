@@ -3,6 +3,7 @@
 * Auteur : Stawen Dronek
 * Utilisation commerciale interdite sans mon accord
 ******************************************************/
+/* global lang */
 $(document).ready(function() {
     
     function checkUpdate() {
@@ -38,11 +39,11 @@ $(document).ready(function() {
             $("#inwork-makeupdate").hide();
             
             if (json.install) {
-                $.growlValidate("Mise à jour réalisée avec succès !");
+                $.growlValidate(lang.valid.maj);
                 
             }else{
                 $('#informations').append(json.information);
-                $.growlErreur("Echec de la mise à jour.");
+                $.growlErreur(lang.error.maj);
             }
             checkUpdate();
         });

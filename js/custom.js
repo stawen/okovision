@@ -3,6 +3,7 @@
 * Auteur : Stawen Dronek
 * Utilisation commerciale interdite sans mon accord
 ******************************************************/
+/* global lang, Highcharts */
 $(document).ready(function() {
 
 	$.growlValidate = function(text) {
@@ -69,7 +70,7 @@ $(document).ready(function() {
 				r =  json.response;
 			},
             error: function () {
-                $.growlErreur('Error  - Probleme lors de la sauvegarde !');
+                $.growlErreur(lang.error.save);
               }
 		});
     	return r;
@@ -83,7 +84,7 @@ $(document).ready(function() {
 	}
 	
 	$.errorDate = function (){
-		$.growlWarning("Format de la date incorrect");
+		$.growlWarning(lang.error.date);
         return;
 	}
 	
@@ -93,11 +94,11 @@ $(document).ready(function() {
 	
 	Highcharts.setOptions({
         lang: {
-            thousandsSep: ' ',
-            decimalPoint: ',',
-    		months: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',  'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-    		shortMonths: [ "Jan" , "Feb" , "Mar" , "Avr" , "Mai" , "Juin" , "Juil" , "Aout" , "Sep" , "Oct" , "Nov" , "Dec"],
-			weekdays: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
+            thousandsSep: lang.graphic.thousandsSep,
+            decimalPoint: lang.graphic.decimalPoint,
+    		months: lang.graphic.months,
+    		shortMonths: lang.graphic.shortMonths,
+			weekdays: lang.graphic.weekdays
         },
 		credits: {
 			enabled : true,

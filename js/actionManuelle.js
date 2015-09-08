@@ -3,6 +3,7 @@
 * Auteur : Stawen Dronek
 * Utilisation commerciale interdite sans mon accord
 ******************************************************/
+/* global lang */
 $(document).ready(function() {
     
     /*
@@ -30,11 +31,11 @@ $(document).ready(function() {
 					
 					
 				} else {
-					$.growlWarning("Impossible de recuperer les fichiers présents sur la chaudiere");
+					$.growlWarning(lang.error.getFileFromBoiler);
 				}
 			})
 			.error(function() { 
-				$.growlErreur('Error  - Probleme de communication !');
+				$.growlErreur(lang.error.communication);
 			});	
     }
     
@@ -67,15 +68,15 @@ $(document).ready(function() {
 		    success: function(a) {
 			    //console.log("success :"+a);
 			    if (a.response) {
-				    $.growlValidate("Importation réussi de " + ligne.closest("tr").find("td:nth-child(1)").text() );
+				    $.growlValidate(lang.valid.csvImport + " - " + ligne.closest("tr").find("td:nth-child(1)").text() );
 				    
 				} else {
-					$.growlWarning("Echec de l'importation");
+					$.growlWarning(lang.error.csvImport);
 				}
 				ligne.find('span').switchClass('glyphicon-refresh glyphicon-spin', 'glyphicon-cloud-download',0);
 		    },
             error: function () {
-                $.growlErreur('Error  - Probleme de communication !');
+                $.growlErreur(lang.error.communication);
             }
             
         });
@@ -136,15 +137,15 @@ $(document).ready(function() {
 				if (json.response === true) {
 				    $('#inwork').hide();
 				    $('#selectFile').show();
-				    $.growlValidate("Importation réussie !")
+				    $.growlValidate(lang.valid.csvImport)
 				    $('#bar').css('width','0%');
 				    
 				}else {
-					$.growlWarning("Echec de l'importation");
+					$.growlWarning(lang.error.csvImport);
 				}
         })
         .error(function() { 
-				$.growlErreur('Error  - Probleme de communication !');
+				$.growlErreur(lang.error.communication);
 		});
     }
     
@@ -174,7 +175,7 @@ $(document).ready(function() {
 				
         })
         .error(function() { 
-				$.growlErreur('Error  - Probleme de communication !');
+				$.growlErreur(lang.error.communication);
 		});
     }
     
@@ -188,14 +189,14 @@ $(document).ready(function() {
         
         $.getJSON("ajax.php?type=admin&action=makeSyntheseByDay&date=" + bt.data('day') , function(json) {
 			if(json.response){
-				$.growlValidate("Synthese réussie");
+				$.growlValidate(lang.valid.summary);
 				getDayWithoutSynthese();
 			}else{
-				$.growlErreur('Error  - Synthese non traitée !');
+				$.growlErreur(lang.error.summary);
 			}
         })
         .error(function() { 
-				$.growlErreur('Error  - Probleme de communication !');
+				$.growlErreur(lang.error.communication);
 		});
     }
     
