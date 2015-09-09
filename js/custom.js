@@ -84,6 +84,7 @@ $(document).ready(function() {
     $.matriceComplet = function(){
     
     	var r = false;
+    	/*
     	$.ajax({
 			url: 'ajax.php?type=admin&action=statusMatrice',
 			type: 'GET',
@@ -95,6 +96,12 @@ $(document).ready(function() {
             error: function () {
                 $.growlErreur(lang.error.save);
               }
+		});
+		*/
+		$.api('GET','admin.statusMatrice',{}, false).done(function(json){
+			r =  json.response;
+		}).error(function(){
+			$.growlErreur(lang.error.save);
 		});
     	return r;
     	

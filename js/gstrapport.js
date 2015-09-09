@@ -12,13 +12,13 @@ $(document).ready(function() {
             $(this).find('#typeModal').val("add");
             $(this).find('#graphiqueTitre').html(lang.text.addGraphe);
 
-            $.getJSON("ajax.php?type=graphique&action=getLastGraphePosition", function(json) {
+            //$.getJSON("ajax.php?type=graphique&action=getLastGraphePosition", function(json) {
+            $.api('GET','graphique.getLastGraphePosition').done(function(json){
 
                     var newPosition = (json.data.lastPosition === null) ? 1 : parseInt(json.data.lastPosition) + 1;
                     $('#modal_graphique').find('#position').val(newPosition);
 
-                })
-                .error(function() {
+                }).error(function() {
                     $.growlErreur(lang.error.position);
                 });
 
@@ -85,32 +85,32 @@ $(document).ready(function() {
         };
         //console.log(tab.position);
         //test si le groupe adrress n'est pas déja utilisé
-        $.getJSON("ajax.php?type=graphique&action=grapheNameExist&name=" + tab.name, function(json) {
+        //$.getJSON("ajax.php?type=graphique&action=grapheNameExist&name=" + tab.name, function(json) {
+        $.api('GET','graphique.grapheNameExist', {name: tab.name}).done(function(json){    
+            
             //console.log(json);
             if (!json.exist) {
                 //so le groupe n'existe pas, on enregistre
+                /*
                 $.ajax({
                     url: 'ajax.php?type=graphique&action=addGraphe',
                     type: 'POST',
                     data: $.param(tab),
                     async: true,
                     success: function(a) {
+                        */
+                $.api('POST','graphique.addGraphe', tab).done(function(json){          
                         //console.log(a);
-                        $('#modal_graphique').modal('hide');
-                        if (a.response) {
-                            $.growlValidate(lang.valid.save);
-                            setTimeout(refreshTableGraphe(), 1000);
-                        }
-                        else {
-                            $.growlErreur(lang.error.save);
-                        }
-
+                    $('#modal_graphique').modal('hide');
+                    if (json.response) {
+                        $.growlValidate(lang.valid.save);
+                        setTimeout(refreshTableGraphe(), 1000);
+                    }else {
+                        $.growlErreur(lang.error.save);
                     }
                 });
 
-
-            }
-            else {
+            }else {
                 $.growlWarning(lang.error.grapehAlreadyExist);
             }
         });
@@ -126,22 +126,23 @@ $(document).ready(function() {
             //console.log(json);
             //if (!json.exist) {
                 //so le groupe n'existe pas, on enregistre
+                /*
                 $.ajax({
                     url: 'ajax.php?type=graphique&action=updateGraphe',
                     type: 'POST',
                     data: $.param(tab),
                     async: true,
                     success: function(a) {
-
-                        $('#modal_graphique').modal('hide');
-                        if (a.response === true) {
-                            $.growlValidate(lang.valid.update);
-                            setTimeout(refreshTableGraphe(), 1000);
-                        }
-                        else {
-                            $.growlErreur(lang.error.save);
-                        }
-
+                        */
+                $.api('POST','graphique.updateGraphe', tab).done(function(json){   
+                    
+                    $('#modal_graphique').modal('hide');
+                    if (json.response) {
+                        $.growlValidate(lang.valid.update);
+                        setTimeout(refreshTableGraphe(), 1000);
+                    }
+                    else {
+                        $.growlErreur(lang.error.save);
                     }
                 });
 
@@ -157,22 +158,22 @@ $(document).ready(function() {
         var tab = {
             id: $('#confirm-delete').find('#deleteid').val()
         };
+        /*
         $.ajax({
             url: 'ajax.php?type=graphique&action=deleteGraphe',
             type: 'POST',
             data: $.param(tab),
             async: true,
             success: function(a) {
-
-                $('#confirm-delete').modal('hide');
-                if (a.response === true) {
-                    $.growlValidate(lang.valid.delete);
-                    setTimeout(refreshTableGraphe(), 1000);
-                }
-                else {
-                    $.growlErreur(lang.error.deleteGraphe + " " + tab.name);
-                }
-
+            */
+        $.api('POST','graphique.deleteGraphe', tab).done(function(json){ 
+            
+            $('#confirm-delete').modal('hide');
+            if (json.response === true) {
+                $.growlValidate(lang.valid.delete);
+                setTimeout(refreshTableGraphe(), 1000);
+            }else {
+                $.growlErreur(lang.error.deleteGraphe + " " + tab.name);
             }
         });
     }
@@ -187,32 +188,32 @@ $(document).ready(function() {
         };
         //console.log(tab.position);
         //test si le groupe adrress n'est pas déja utilisé
-        $.getJSON("ajax.php?type=graphique&action=grapheAssoCapteurExist&graphe=" + tab.id_graphe + "&capteur=" + tab.id_capteur, function(json) {
+        //$.getJSON("ajax.php?type=graphique&action=grapheAssoCapteurExist&graphe=" + tab.id_graphe + "&capteur=" + tab.id_capteur, function(json) {
+        $.api('GET','graphique.grapheAssoCapteurExist', {graphe: tab.id_graphe, capteur: tab.id_capteur}).done(function(json){     
             //console.log(json);
             if (!json.exist) {
                 //so l'asso n'existe pas, on enregistre
+                /*
                 $.ajax({
                     url: 'ajax.php?type=graphique&action=addGrapheAsso',
                     type: 'POST',
                     data: $.param(tab),
                     async: true,
                     success: function(a) {
-
-                        $('#modal_asso').modal('hide');
-                        if (a.response) {
-                            $.growlValidate(lang.valid.save);
-                            setTimeout(refreshTableAsso(), 1000);
-                        }
-                        else {
-                            $.growlErreur(lang.error.save);
-                        }
-
+                        */
+                $.api('POST','graphique.addGrapheAsso',tab).done(function(json){  
+                    
+                    $('#modal_asso').modal('hide');
+                    if (json.response) {
+                        $.growlValidate(lang.valid.save);
+                        setTimeout(refreshTableAsso(), 1000);
+                    }else {
+                        $.growlErreur(lang.error.save);
                     }
                 });
-
-
-            }
-            else {
+            
+                
+            }else {
                 $.growlWarning(lang.error.assoAlreadyExist);
             }
         });
@@ -228,24 +229,25 @@ $(document).ready(function() {
             $.growlErreur(lang.error.coeffMustBeNumber);
             return;
         }
-        
+        /*
         $.ajax({
             url: 'ajax.php?type=graphique&action=updateGrapheAsso',
             type: 'POST',
             data: $.param(tab),
             async: true,
             success: function(a) {
-    
-                $('#modal_asso').modal('hide');
-                if (a.response) {
-                    $.growlValidate(lang.valid.update);
-                    setTimeout(refreshTableAsso(), 1000);
-                }
-                else {
-                    $.growlErreur(lang.error.update);
-                }
-    
+                */
+        $.api('POST','graphique.updateGrapheAsso',tab).done(function(json){ 
+            
+            $('#modal_asso').modal('hide');
+            if (json.response) {
+                $.growlValidate(lang.valid.update);
+                setTimeout(refreshTableAsso(), 1000);
             }
+            else {
+                $.growlErreur(lang.error.update);
+            }
+    
         });
     }
 
@@ -254,23 +256,24 @@ $(document).ready(function() {
             id_capteur: $('#confirm-delete').find('#deleteid').val(),
             id_graphe: $('#select_graphique').val()
         };
+        /*
         $.ajax({
             url: 'ajax.php?type=graphique&action=deleteAssoGraphe',
             type: 'POST',
             data: $.param(tab),
             async: true,
             success: function(a) {
-
-                $('#confirm-delete').modal('hide');
-                if (a.response) {
-                    $.growlValidate(lang.valid.delete);
-                    setTimeout(refreshTableAsso(), 1000);
-                }
-                else {
-                    $.growlErreur(lang.error.deleteAsso);
-                }
-
+                */
+        $.api('POST','graphique.deleteAssoGraphe',tab).done(function(json){ 
+            
+            $('#confirm-delete').modal('hide');
+            if (json.response) {
+                $.growlValidate(lang.valid.delete);
+                setTimeout(refreshTableAsso(), 1000);
+            }else{
+                $.growlErreur(lang.error.deleteAsso);
             }
+
         });
     }
 
@@ -281,8 +284,9 @@ $(document).ready(function() {
         //listen deroulante fenetre modal add /edit
         $('#select_graphe').find('option').remove();
 
-        $.getJSON("ajax.php?type=graphique&action=getGraphe", function(json) {
-
+        //$.getJSON("ajax.php?type=graphique&action=getGraphe", function(json) {
+        $.api('GET','graphique.getGraphe').done(function(json){ 
+            
                 $.each(json.data, function(key, val) {
                     //console.log(val);
                     $('#listeGraphique > tbody:last').append('<tr id="' + val.id + '">  <td> \
@@ -308,17 +312,18 @@ $(document).ready(function() {
 
                 });
                 refreshTableAsso();
-            })
-            .error(function() {
-                $.growlErreur(lang.error.getGraphe);
-            });
+        })
+        .error(function() {
+            $.growlErreur(lang.error.getGraphe);
+        });
     }
 
     function refreshTableAsso() {
         $("#listeAsso > tbody").html("");
 
-        $.getJSON("ajax.php?type=graphique&action=getGrapheAsso&graphe=" + $('#select_graphique').val(), function(json) {
-
+        //$.getJSON("ajax.php?type=graphique&action=getGrapheAsso&graphe=" + $('#select_graphique').val(), function(json) {
+        $.api('GET','graphique.getGrapheAsso', {graphe: $('#select_graphique').val()}).done(function(json){ 
+            
                 $.each(json.data, function(key, val) {
                     //console.log(val.group_addr);
                     $('#listeAsso > tbody:last').append('<tr id="'+ val.id +'">  <td> \
@@ -341,10 +346,10 @@ $(document).ready(function() {
                                                                     </td></tr>');
 
                 });
-            })
-            .error(function() {
-                $.growlErreur(lang.error.getAsso);
-            });
+        })
+        .error(function() {
+            $.growlErreur(lang.error.getAsso);
+        });
     }
 
 
@@ -431,23 +436,21 @@ $(document).ready(function() {
         refreshTableAsso();
     });
     
-    $.getJSON("ajax.php?type=graphique&action=getCapteurs", function(json) {
-                     
-                     if (json.response){
-                        $('#select_capteur').find('option').remove();
-    					
-    					$.each(json.data, function(key, val) {
-    					    //console.log(val);
-    						$('#select_capteur').append('<option value="' + val.id + '">' + val.name + '</option>');
-    						$('#select_graphe').attr('disabled', 'disabled');
-    					});
-                     }else{
-                         $.growlErreur(lang.error.getSensor); 
-                     }
-    })
-	.error(function() {
-		$.growlErreur(lang.error.communication);
-	});
+    //$.getJSON("ajax.php?type=graphique&action=getCapteurs", function(json) {
+    $.api('GET','graphique.getCapteurs').done(function(json){
+        
+        if (json.response){
+            $('#select_capteur').find('option').remove();
+			
+			$.each(json.data, function(key, val) {
+			    //console.log(val);
+				$('#select_capteur').append('<option value="' + val.id + '">' + val.name + '</option>');
+				$('#select_graphe').attr('disabled', 'disabled');
+			});
+         }else{
+             $.growlErreur(lang.error.getSensor); 
+         }
+    });
 
 
 });

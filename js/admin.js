@@ -27,18 +27,16 @@ $(document).ready(function() {
             
             var ip = $('#oko_ip').val();
             
-            $.getJSON("ajax.php?type=admin&action=testIp&ip=" + ip , function(json) {
-			
-				if (json.response === true) {
+            //$.getJSON("ajax.php?type=admin&action=testIp&ip=" + ip , function(json) {
+			$.api('GET','admin.testIp',{ip: ip} ).done(function(json){ 
+				
+				if (json.response) {
 				    $('#url_csv').html("");
 					$.growlValidate(lang.valid.communication);
 					$('#url_csv').append('<a target="_blank" href="' + json.url +'">'+ lang.text.seeFileOnboiler +'</a>');
 				} else {
 					$.growlWarning(lang.error.ipNotPing);
 				}
-			})
-			.error(function() { 
-				$.growlErreur(lang.error.communication);
 			});	
             
         /*    
@@ -58,24 +56,22 @@ $(document).ready(function() {
 					oko_typeconnect : $('#oko_typeconnect').val(),
 					send_to_web: 0
 				};
-				
+				/*
 				$.ajax({
 					url: 'ajax.php?type=admin&action=saveInfoGe',
 					type: 'POST',
 					data: $.param(tab),
 					async: false,
 					success: function(a) {
-					    console.log(a);
-					    if (a.response === true) {
-        				    $.growlValidate(lang.valid.configSave);
-        				} else {
-        					$.growlWarning(lang.error.configNotSave);
-        				}
-					},
-                    error: function () {
-                        $.growlErreur(lang.error.communication);
-                      }
-				});
+						*/
+		$.api('POST','admin.saveInfoGe',tab, false ).done(function(json){ 		
+		    //console.log(a);
+		    if (json.response) {
+			    $.growlValidate(lang.valid.configSave);
+			} else {
+				$.growlWarning(lang.error.configNotSave);
+			}
+		});
         
     });
     
@@ -115,31 +111,28 @@ $(document).ready(function() {
     
     function makeMatrice(){
     	
-    	$.getJSON("ajax.php?type=admin&action=getHeaderFromOkoCsv" , function(json) {
+    	//$.getJSON("ajax.php?type=admin&action=getHeaderFromOkoCsv" , function(json) {
+		$.api('GET','admin.getHeaderFromOkoCsv').done(function(json){ 
 			
-				if (json.response === true) {
-				    $("#headerCsv > tbody").html("");
-					
-					$.each(json.data, function(key, val) {
-					    //console.log(val);
-					    //$('#select_graphe').append('<option value="' + val.id + '">' + val.name + '</option>');
-					   $('#headerCsv > tbody:last').append('<tr> \
-					                                        	<td>'+ val.original_name +'</td>\
-					                                        	<td>'+ val.name +'</td>\
-					                                        	<td>'+ ((val.type!="")?'<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>':'') +'</td>\
-					                                        </tr>');
-					});
+			if (json.response) {
+			    $("#headerCsv > tbody").html("");
 				
-					
-					$("#concordance").show();
-					
-				} else {
-					$.growlWarning(lang.error.csvNotFound);
-				}
-			})
-			.error(function() { 
-				$.growlErreur(lang.error.communication);
-			});	
+				$.each(json.data, function(key, val) {
+				    //console.log(val);
+				    //$('#select_graphe').append('<option value="' + val.id + '">' + val.name + '</option>');
+				   $('#headerCsv > tbody:last').append('<tr> \
+				                                        	<td>'+ val.original_name +'</td>\
+				                                        	<td>'+ val.name +'</td>\
+				                                        	<td>'+ ((val.type!="")?'<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>':'') +'</td>\
+				                                        </tr>');
+				});
+			
+				$("#concordance").show();
+				
+			} else {
+				$.growlWarning(lang.error.csvNotFound);
+			}
+		});	
     	
     }
     
@@ -150,37 +143,36 @@ $(document).ready(function() {
     */
 
 	function refreshSaison(){
-		$.getJSON("ajax.php?type=admin&action=getSaisons" , function(json) {
+		//$.getJSON("ajax.php?type=admin&action=getSaisons" , function(json) {
+		$.api('GET','admin.getSaisons').done(function(json){
 			
-				if (json.response === true) {
-				    $("#saisons > tbody").html("");
-					
-					$.each(json.data, function(key, val) {
-					    //console.log(val);
-					    //$('#select_graphe').append('<option value="' + val.id + '">' + val.name + '</option>');
-					   $('#saisons > tbody:last').append('<tr id='+ val.id +'> \
-					   											<td>'+ val.saison +'</td>\
-					                                        	<td>'+ val.date_debut +'</td>\
-					                                        	<td>'+ val.date_fin +'</td>\
-					                                        	<td> \
-					                                        		<button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal_saison"> \
-                                                                    	<span class="glyphicon glyphicon-edit" aria-hidden="true"></span> \
-                                                                    </button> \
-                                                                    <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#confirm-delete"> \
-                                                                    	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span> \
-                                                                    </button> \
-					                                        	</td>\
-					                                        </tr>');
-					});
+			
+			if (json.response) {
+			    $("#saisons > tbody").html("");
 				
-					
-				} else {
-					$.growlWarning(lang.error.getSeasons);
-				}
-			})
-			.error(function() { 
-				$.growlErreur(lang.error.communication);
-			});	
+				$.each(json.data, function(key, val) {
+				    //console.log(val);
+				    //$('#select_graphe').append('<option value="' + val.id + '">' + val.name + '</option>');
+				   $('#saisons > tbody:last').append('<tr id='+ val.id +'> \
+				   											<td>'+ val.saison +'</td>\
+				                                        	<td>'+ val.date_debut +'</td>\
+				                                        	<td>'+ val.date_fin +'</td>\
+				                                        	<td> \
+				                                        		<button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal_saison"> \
+                                                                	<span class="glyphicon glyphicon-edit" aria-hidden="true"></span> \
+                                                                </button> \
+                                                                <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#confirm-delete"> \
+                                                                	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span> \
+                                                                </button> \
+				                                        	</td>\
+				                                        </tr>');
+				});
+			
+				
+			} else {
+				$.growlWarning(lang.error.getSeasons);
+			}
+		});	
 	}
 	
 	function initModalAddSaison(){
@@ -207,25 +199,28 @@ $(document).ready(function() {
 				};
 			//console.log(tab.position);
 			//test si la saison existe deja n'est pas déja utilisé
-			$.getJSON("ajax.php?type=admin&action=existSaison&date=" + tab.startDate, function(json) {
+			//$.getJSON("ajax.php?type=admin&action=existSaison&date=" + tab.startDate, function(json) {
+			$.api('GET','admin.existSaison',{date: tab.startDate}).done(function(json){
+				
 				//console.log(json);
 				if (!json.response) {
 					//saison n'existe pas, on enregistre
+					/*
 					$.ajax({
 						url: 'ajax.php?type=admin&action=setSaison',
 						type: 'POST',
 						data: $.param(tab),
 						async: false,
 						success: function(a) {
-	
-							$('#modal_saison').modal('hide');
-							if (a.response === true) {
-								$.growlValidate(lang.valid.save);
-								setTimeout(refreshSaison(),1000);
-							} else {
-								$.growlErreur(lang.error.saveSeason);
-							}
-	
+							*/
+					$.api('POST','admin.setSaison',tab, false).done(function(json){
+						
+						$('#modal_saison').modal('hide');
+						if (json.response) {
+							$.growlValidate(lang.valid.save);
+							setTimeout(refreshSaison(),1000);
+						} else {
+							$.growlErreur(lang.error.saveSeason);
 						}
 					});
 	
@@ -254,26 +249,32 @@ $(document).ready(function() {
 				idSaison	: $('#modal_saison').find('#saisonId').val()
 				};
 			//test si la saison existe deja n'est pas déja utilisé
-			$.getJSON("ajax.php?type=admin&action=existSaison&date=" + tab.startDate, function(json) {
+			//$.getJSON("ajax.php?type=admin&action=existSaison&date=" + tab.startDate, function(json) {
+			$.api('GET','admin.existSaison',{date: tab.startDate}).done(function(json){
+				
 				//console.log(json);
 				if (!json.response) {
 					//saison n'existe pas, on enregistre
+					/*
 					$.ajax({
 						url: 'ajax.php?type=admin&action=updateSaison',
 						type: 'POST',
 						data: $.param(tab),
 						async: false,
 						success: function(a) {
-	
-							$('#modal_saison').modal('hide');
-							if (a.response === true) {
-								$.growlValidate(lang.valid.update);
-								setTimeout(refreshSaison(),1000);
-							} else {
-								$.growlErreur(lang.error.update);
-							}
-	
+							*/
+					$.api('POST','admin.updateSaison',tab, false).done(function(json){
+						
+						$('#modal_saison').modal('hide');
+						
+						if (json.response) {
+							$.growlValidate(lang.valid.update);
+							setTimeout(refreshSaison(),1000);
+						} else {
+							$.growlErreur(lang.error.update);
 						}
+	
+						
 					});
 	
 	
@@ -291,25 +292,24 @@ $(document).ready(function() {
 		var tab = {
 			idSaison: $('#confirm-delete').find('#saisonId').val()
 		};
+		/*
 		$.ajax({
 			url: 'ajax.php?type=admin&action=deleteSaison',
 			type: 'POST',
 			data: $.param(tab),
 			async: false,
 			success: function(a) {
-
-				$('#confirm-delete').modal('hide');
-				if (a.response) {
-					$.growlValidate(lang.valid.deleteSeason);
-					setTimeout(refreshSaison(), 1000);
-				} else {
-					$.growlErreur(lang.error.deleteSeason);
-				}
-
+		*/
+		$.api('POST','admin.deleteSaison',tab, false).done(function(json){
+				
+			$('#confirm-delete').modal('hide');
+			if (json.response) {
+				$.growlValidate(lang.valid.delete);
+				setTimeout(refreshSaison(), 1000);
+			} else {
+				$.growlErreur(lang.error.deleteSeason);
 			}
 		});
-		
-		
 	}
 	
 	function initModalEditSaison(row){

@@ -14,10 +14,8 @@ $(document).ready(function() {
 		$.api('GET','admin.getFileFromChaudiere').done(function(json){  
 			
 				if (json.response === true) {
-				    //console.log(json);
-					//$.growlValidate("Communication établie");
-					//$('#url_csv').append('<a target="_blank" href="http://'+ ip +'/logfiles/pelletronic/"> Visualiser les fichiers sur la chaudiere </a>');
-					$("#inwork-remotefile").hide();
+				    
+				    $("#inwork-remotefile").hide();
 					$("#listeFichierFromChaudiere> tbody").html("");
 					var i =0;
 					$.each(json.listefiles, function(key, val) {
