@@ -7,7 +7,9 @@
 $(document).ready(function() {
     
     function checkUpdate() {
-        $.getJSON("ajax.php?type=admin&action=checkUpdate" , function(json) {
+        //$.getJSON("ajax.php?type=admin&action=checkUpdate" , function(json) {
+        $.api('GET','admin.checkUpdate').done(function(json){    
+            
             $("#inwork-checkupdate").hide();
             
             if (json.newVersion) {
@@ -35,7 +37,9 @@ $(document).ready(function() {
         $('#informations').html("");
         $("#inwork-makeupdate").show();
         
-        $.getJSON("ajax.php?type=admin&action=makeUpdate" , function(json) {
+        //$.getJSON("ajax.php?type=admin&action=makeUpdate" , function(json) {
+        $.api('GET','admin.makeUpdate').done(function(json){  
+            
             $("#inwork-makeupdate").hide();
             
             if (json.install) {

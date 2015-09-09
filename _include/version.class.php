@@ -1,9 +1,5 @@
 <?php
 
-//namespace vierbergenlars\SemVer;
-
-//use \UnexpectedValueException;
-
 class version extends expression{
 
     private $version = '0.0.0';

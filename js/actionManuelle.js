@@ -10,7 +10,8 @@ $(document).ready(function() {
     * Gestion import par http
     */ 
     function getFileFromChaudiere(){
-         $.getJSON("ajax.php?type=admin&action=getFileFromChaudiere" , function(json) {
+         //$.getJSON("ajax.php?type=admin&action=getFileFromChaudiere" , function(json) {
+		$.api('GET','admin.getFileFromChaudiere').done(function(json){  
 			
 				if (json.response === true) {
 				    //console.log(json);
@@ -33,9 +34,6 @@ $(document).ready(function() {
 				} else {
 					$.growlWarning(lang.error.getFileFromBoiler);
 				}
-			})
-			.error(function() { 
-				$.growlErreur(lang.error.communication);
 			});	
     }
     
@@ -57,7 +55,7 @@ $(document).ready(function() {
         var tab = {
 					url : ligne.closest("tr").find("td:nth-child(1)").children('a').attr('href')
 				};
-				
+		/*		
 		$.ajax({
 			url: 'ajax.php?type=admin&action=importFileFromChaudiere',
 			type: 'POST',
@@ -67,19 +65,19 @@ $(document).ready(function() {
 			async: true,
 		    success: function(a) {
 			    //console.log("success :"+a);
-			    if (a.response) {
-				    $.growlValidate(lang.valid.csvImport + " - " + ligne.closest("tr").find("td:nth-child(1)").text() );
-				    
-				} else {
-					$.growlWarning(lang.error.csvImport);
-				}
-				ligne.find('span').switchClass('glyphicon-refresh glyphicon-spin', 'glyphicon-cloud-download',0);
-		    },
-            error: function () {
-                $.growlErreur(lang.error.communication);
-            }
-            
-        });
+		*/	    
+		$.api('POST','admin.importFileFromChaudiere',tab,true).done(function(json){	
+			
+		    if (json.response) {
+			    $.growlValidate(lang.valid.csvImport + " - " + ligne.closest("tr").find("td:nth-child(1)").text() );
+			    
+			} else {
+				$.growlWarning(lang.error.csvImport);
+			}
+			ligne.find('span').switchClass('glyphicon-refresh glyphicon-spin', 'glyphicon-cloud-download',0);
+		
+			
+		});
         
 		
     });
@@ -132,7 +130,8 @@ $(document).ready(function() {
         $('#selectFile').hide();
         $('#inwork').show();
         
-        $.getJSON("ajax.php?type=admin&action=importcsv" , function(json) {
+        //$.getJSON("ajax.php?type=admin&action=importcsv" , function(json) {
+		$.api('GET','admin.importcsv').done(function(json){ 
 			
 				if (json.response === true) {
 				    $('#inwork').hide();
@@ -143,10 +142,7 @@ $(document).ready(function() {
 				}else {
 					$.growlWarning(lang.error.csvImport);
 				}
-        })
-        .error(function() { 
-				$.growlErreur(lang.error.communication);
-		});
+        });
     }
     
     /*
@@ -160,7 +156,9 @@ $(document).ready(function() {
 
     
     function getDayWithoutSynthese(){
-    	$.getJSON("ajax.php?type=admin&action=getDayWithoutSynthese" , function(json) {
+    	//$.getJSON("ajax.php?type=admin&action=getDayWithoutSynthese" , function(json) {
+    	$.api('GET','admin.getDayWithoutSynthese').done(function(json){ 
+    		
 			$("#inwork-synthese").hide();
 			$("#listeDateWithoutSynthese> tbody").html("");
 					$.each(json.data, function(key, val) {
@@ -173,10 +171,7 @@ $(document).ready(function() {
 					                                                       </tr>');
 					});
 				
-        })
-        .error(function() { 
-				$.growlErreur(lang.error.communication);
-		});
+        });
     }
     
     $("body").on("click", ".day", function(b) {
@@ -187,17 +182,16 @@ $(document).ready(function() {
     	
     	bt.find('span').switchClass('glyphicon-repeat','glyphicon-refresh glyphicon-spin' ,0);
         
-        $.getJSON("ajax.php?type=admin&action=makeSyntheseByDay&date=" + bt.data('day') , function(json) {
+        //$.getJSON("ajax.php?type=admin&action=makeSyntheseByDay&date=" + bt.data('day') , function(json) {
+        $.api('GET','admin.makeSyntheseByDay').done(function(json){	
+        	
 			if(json.response){
 				$.growlValidate(lang.valid.summary);
 				getDayWithoutSynthese();
 			}else{
 				$.growlErreur(lang.error.summary);
 			}
-        })
-        .error(function() { 
-				$.growlErreur(lang.error.communication);
-		});
+        });
     }
     
     $("#makeAllSynthese").click(function(){
