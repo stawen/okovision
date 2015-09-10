@@ -24,7 +24,7 @@ $(document).ready(function() {
 					data: $.param(tab),
 					async: false,
 					success: function(a) {
-						console.log(a.response);
+						//console.log(a.response);
 						if (a.response) {
 							
 							$.growlValidate(lang.valid.communication);

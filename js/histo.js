@@ -32,7 +32,8 @@ $(document).ready(function() {
 		var titre_histo = lang.text.titreHisto;	
 		var div_histo_tempe = 'histo-temperature';	
 		
-	   $.getJSON("ajax.php?type=rendu&action=getHistoByMonth&month="+ $( "#mois" ).val() + "&year="+ $( "#annee" ).val(), function(json) {
+	   //$.getJSON("ajax.php?type=rendu&action=getHistoByMonth&month="+ $( "#mois" ).val() + "&year="+ $( "#annee" ).val(), function(json) {
+	   $.api('GET','rendu.getHistoByMonth',{month: $( "#mois" ).val(),year: $( "#annee" ).val()} ).done(function(json){ 
 				//Personnalisation des données
 				//T°C max
 				json[0].color = "red";
@@ -83,11 +84,6 @@ $(document).ready(function() {
 											}
 										}	
 										
-				//json[4].zIndex= 5;
-			
-				
-				//graphe(json,div_histo_tempe,titre_histo);
-				
 				var chart = new Highcharts.Chart({
 													chart: {
 														renderTo: div_histo_tempe,
@@ -166,16 +162,18 @@ $(document).ready(function() {
 										        });
 				
 				
-			})
-			.error(function() { 
-				graphe_error(div_histo_tempe,titre_histo);
-				//$.growlErreur("Probleme lors de la recuperation de la synthese du mois");
-			});
+		})
+		.error(function() { 
+			graphe_error(div_histo_tempe,titre_histo);
+			//$.growlErreur("Probleme lors de la recuperation de la synthese du mois");
+		});
 		
 		/*
 		* Gestion des indicateurs du mois 
 		*/
-		$.getJSON("ajax.php?type=rendu&action=getIndicByMonth&month="+ $( "#mois" ).val() + "&year="+ $( "#annee" ).val(), function(json) {
+		//$.getJSON("ajax.php?type=rendu&action=getIndicByMonth&month="+ $( "#mois" ).val() + "&year="+ $( "#annee" ).val(), function(json) {
+		$.api('GET','rendu.getIndicByMonth',{month: $( "#mois" ).val(),year: $( "#annee" ).val()} ).done(function(json){	
+			
 				$( "#tcmax" ).text(DecSepa(json.tcExtMax + " °C"));
 				$( "#tcmin" ).text(DecSepa(json.tcExtMin + " °C"));
 				$( "#tcmoy" ).text(DecSepa( Math.round((json.tcExtMin+json.tcExtMax)*100/2)/100 + " °C")  );
@@ -184,17 +182,19 @@ $(document).ready(function() {
 				$( "#cycle" ).text(DecSepa(json.nbCycle+"" ));
 				
 				
-			})
-			.error(function() { 
-				$.growlErreur(lang.error.getIndicByMonth);
-			});		
+		})
+		.error(function() { 
+			$.growlErreur(lang.error.getIndicByMonth);
+		});		
 			
 			
 	}
 	
 	function generer_synthese_saison(){
 		
-		$.getJSON("ajax.php?type=rendu&action=getTotalSaison&saison="+ $( "#saison" ).val(), function(json) {
+		//$.getJSON("ajax.php?type=rendu&action=getTotalSaison&saison="+ $( "#saison" ).val(), function(json) {
+		$.api('GET','rendu.getTotalSaison',{saison: $( "#saison" ).val() } ).done(function(json){	
+			
 				$( "#tcmaxSaison" ).text(DecSepa(json.tcExtMax + " °C"));
 				$( "#tcminSaison" ).text(DecSepa(json.tcExtMin + " °C"));
 				$( "#tcmoySaison" ).text(DecSepa( Math.round((json.tcExtMin+json.tcExtMax)*100/2)/100 + " °C")  );
@@ -202,12 +202,14 @@ $(document).ready(function() {
 				$( "#djuSaison" ).text(DecSepa(json.dju+"" ));
 				$( "#cycleSaison" ).text(DecSepa(json.nbCycle+"" ));
 				
-			})
-			.error(function() { 
-				$.growlErreur(lang.error.getTotalSaison);
-			});	
+		})
+		.error(function() { 
+			$.growlErreur(lang.error.getTotalSaison);
+		});	
 		
-		$.getJSON("ajax.php?type=rendu&action=getSyntheseSaison&saison=" + $( "#saison" ).val(), function(saison) {
+		//$.getJSON("ajax.php?type=rendu&action=getSyntheseSaison&saison=" + $( "#saison" ).val(), function(saison) {
+		$.api('GET','rendu.getSyntheseSaison',{saison: $( "#saison" ).val() } ).done(function(saison){
+			
 					//console.log('Synthese success');	
 					//console.log(json);
 					var json = saison.grapheData;
@@ -337,13 +339,12 @@ $(document).ready(function() {
 										            });
 										        
 										        });
-				})
-				.error(function() { 
-					//console.log('error graphe synthèse saison');	
-					graphe_error("saison_graphic",lang.graphic.seasonSummary);
-					$.growlErreur(lang.error.getSyntheseSaison);
-					
-				});
+		})
+		.error(function() { 
+			//console.log('error graphe synthèse saison');	
+			graphe_error("saison_graphic",lang.graphic.seasonSummary);
+			$.growlErreur(lang.error.getSyntheseSaison);
+		});
 	}
 	
 	
@@ -388,7 +389,9 @@ $(document).ready(function() {
 	
 	generer_graphic();
 	
-	$.getJSON("ajax.php?type=admin&action=getSaisons", function(json) {
+	//$.getJSON("ajax.php?type=admin&action=getSaisons", function(json) {
+	$.api('GET','admin.getSaisons').done(function(json){
+		
 		$.each(json.data, function(key, val) {
     					$('#saison').append('<option value="' + val.id + '">' + val.saison + '</option>');
     				});

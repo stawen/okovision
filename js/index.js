@@ -77,26 +77,23 @@ $(document).ready(function() {
 	function refreshAllGraphe(){
 	    var jour = $.datepicker.formatDate('yy-mm-dd',$.datepicker.parseDate('dd/mm/yy', $( "#date_encours" ).val()));
 	    
-	    $.getJSON("ajax.php?type=rendu&action=getIndicByDay&jour=" + jour, function(json) {
+	    //$.getJSON("ajax.php?type=rendu&action=getIndicByDay&jour=" + jour, function(json) {
+	    $.api('GET','rendu.getIndicByDay', {jour: jour}).done(function(json){
+	    	
 					$( "#tcmax" ).text($.DecSepa(json.tcExtMax + " °C"));
 					$( "#tcmin" ).text($.DecSepa(json.tcExtMin + " °C"));
 					$( "#consoPellet" ).text($.DecSepa( ((json.consoPellet===null)?0.0:json.consoPellet) + " Kg"));
-			})
-			.error(function() { 
-				$.growlErreur(lang.error.communication);
-			});	
+		});	
 	    
 	    
 	    $.each($(".graphique"), function (key, val){
 	        
-	        $.getJSON("ajax.php?type=rendu&action=getGrapheData&id="+ val.id +"&jour=" + jour, function(json) {
+	        //$.getJSON("ajax.php?type=rendu&action=getGrapheData&id="+ val.id +"&jour=" + jour, function(json) {
+	        $.api('GET','rendu.getGrapheData', {id: val.id, jour: jour}).done(function(json){
 				grapheWithTime(json.grapheData,val.id,$("#"+val.id).data("graphename"));
-				
 			})
 			.error(function() { 
 				graphe_error(val.id,$("#"+val.id).data("graphename"));
-				$.growlErreur(lang.error.communication);
-				
 			});
 		
 	    });
@@ -173,20 +170,19 @@ $(document).ready(function() {
 	 **** Creation de la structure de la page 
 	 ************************************/
 	 
-    $.getJSON("ajax.php?type=rendu&action=getGraphe", function(json) {
-    
-    				$.each(json.data, function(key, val) {
-    					$('.container-graphe').append('<div class="page-header"> \
-        				                       <div class="graphique" id="'+ val.id +'" data-graphename="'+ val.name+'" style="width:100%; height:400px;"></div> \
-        				                        </div>');
-    				});
-    			    
-    			})
-    			.done(function() {
-    			    refreshAllGraphe();
-    			})
-    			.error(function() {
-    				$.growlErreur(lang.error.getGraphe);
-    			});
+    //$.getJSON("ajax.php?type=rendu&action=getGraphe", function(json) {
+    $.api('GET','rendu.getGraphe').done(function(json){
+    	
+		$.each(json.data, function(key, val) {
+			$('.container-graphe').append('<div class="page-header"> \
+			                       			<div class="graphique" id="'+ val.id +'" data-graphename="'+ val.name+'" style="width:100%; height:400px;"></div> \
+			                        	</div>');
+		});
+		
+		refreshAllGraphe();
+    })
+	.error(function() {
+		$.growlErreur(lang.error.getGraphe);
+	});
     
 });

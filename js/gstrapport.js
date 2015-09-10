@@ -322,7 +322,7 @@ $(document).ready(function() {
         $("#listeAsso > tbody").html("");
 
         //$.getJSON("ajax.php?type=graphique&action=getGrapheAsso&graphe=" + $('#select_graphique').val(), function(json) {
-        $.api('GET','graphique.getGrapheAsso', {graphe: $('#select_graphique').val()}).done(function(json){ 
+        $.api('GET','graphique.getGrapheAsso', {graphe: $('#select_graphique').val()} ).done(function(json){ 
             
                 $.each(json.data, function(key, val) {
                     //console.log(val.group_addr);
@@ -419,11 +419,6 @@ $(document).ready(function() {
 	        var row = $(this).parents("tr:first");
 	    	row.insertAfter(row.next());
 	    }
-
-
-
-
-
 
 
 
