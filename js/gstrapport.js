@@ -50,7 +50,9 @@ $(document).ready(function() {
             $(this).find('#typeModal').val("add");
             $('#select_graphe option[value=' + $('#select_graphique').val() + ']').attr("selected", "selected");
             $('#select_capteur').prop("disabled", false);
+            $('#select_capteur').find('option').removeAttr("selected");
             
+            $('#coeff').val("1");
         });
     }
 
