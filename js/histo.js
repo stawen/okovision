@@ -391,9 +391,12 @@ $(document).ready(function() {
 	
 	//$.getJSON("ajax.php?type=admin&action=getSaisons", function(json) {
 	$.api('GET','admin.getSaisons').done(function(json){
-		
+		var today = new Date();
 		$.each(json.data, function(key, val) {
-    					$('#saison').append('<option value="' + val.id + '">' + val.saison + '</option>');
+						var startDate = $.datepicker.parseDate('dd/mm/yy', val.date_debut);
+						var endDate = $.datepicker.parseDate('dd/mm/yy', val.date_fin);
+						
+    					$('#saison').append('<option value="' + val.id +  '"'+ ((today >= startDate && today <= endDate)?'selected=selected':'') +'>' + val.saison + '</option>');
     				});
     	generer_synthese_saison();			
 	});
