@@ -27,6 +27,7 @@ $(document).ready(function() {
                 });
                 
             }else{
+                $("#bt_update").hide();
                 $('#informations').append(json.information);
             }
         });
