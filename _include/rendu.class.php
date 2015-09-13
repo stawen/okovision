@@ -254,7 +254,7 @@ class rendu extends connectDb{
 		
 		$categorie = array( 'T°C Exterieur (Max)' => 'max(Tc_ext_max)',
 							'T°C Exterieur (Min)' => 'min(Tc_ext_min)',
-							'Consommation Pellet (Kg)' => 'sum(conso_kg)',
+							'Pellet (Kg)' => 'sum(conso_kg)',
 							'DJU' => 'sum(dju)',
 							'NB Cycle' => 'sum(nb_cycle)'
 						);

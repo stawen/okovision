@@ -12,7 +12,6 @@ $(document).ready(function() {
             $(this).find('#typeModal').val("add");
             $(this).find('#graphiqueTitre').html(lang.text.addGraphe);
 
-            //$.getJSON("ajax.php?type=graphique&action=getLastGraphePosition", function(json) {
             $.api('GET','graphique.getLastGraphePosition').done(function(json){
 
                     var newPosition = (json.data.lastPosition === null) ? 1 : parseInt(json.data.lastPosition) + 1;
@@ -85,24 +84,12 @@ $(document).ready(function() {
             name: $('#modal_graphique').find('#name').val(),
             position: $('#modal_graphique').find('#position').val()
         };
-        //console.log(tab.position);
-        //test si le groupe adrress n'est pas déja utilisé
-        //$.getJSON("ajax.php?type=graphique&action=grapheNameExist&name=" + tab.name, function(json) {
         $.api('GET','graphique.grapheNameExist', {name: tab.name}).done(function(json){    
             
-            //console.log(json);
             if (!json.exist) {
                 //so le groupe n'existe pas, on enregistre
-                /*
-                $.ajax({
-                    url: 'ajax.php?type=graphique&action=addGraphe',
-                    type: 'POST',
-                    data: $.param(tab),
-                    async: true,
-                    success: function(a) {
-                        */
                 $.api('POST','graphique.addGraphe', tab).done(function(json){          
-                        //console.log(a);
+        
                     $('#modal_graphique').modal('hide');
                     if (json.response) {
                         $.growlValidate(lang.valid.save);
@@ -124,18 +111,6 @@ $(document).ready(function() {
             name:   $('#modal_graphique').find('#name').val()
         };
         //test si le groupe adrress n'est pas déja utilisé
-        //$.getJSON("ajax.php?type=graphique&action=grapheNameExist&name=" + tab.name, function(json) {
-            //console.log(json);
-            //if (!json.exist) {
-                //so le groupe n'existe pas, on enregistre
-                /*
-                $.ajax({
-                    url: 'ajax.php?type=graphique&action=updateGraphe',
-                    type: 'POST',
-                    data: $.param(tab),
-                    async: true,
-                    success: function(a) {
-                        */
                 $.api('POST','graphique.updateGraphe', tab).done(function(json){   
                     
                     $('#modal_graphique').modal('hide');
@@ -148,26 +123,13 @@ $(document).ready(function() {
                     }
                 });
 
-
-           // }
-          //  else {
-           //     $.growlWarning("Attention, le graphe existe déjà");
-           // }
-        //});
     }
 
     function deleteGraphe() {
         var tab = {
             id: $('#confirm-delete').find('#deleteid').val()
         };
-        /*
-        $.ajax({
-            url: 'ajax.php?type=graphique&action=deleteGraphe',
-            type: 'POST',
-            data: $.param(tab),
-            async: true,
-            success: function(a) {
-            */
+        
         $.api('POST','graphique.deleteGraphe', tab).done(function(json){ 
             
             $('#confirm-delete').modal('hide');
@@ -188,21 +150,11 @@ $(document).ready(function() {
             coeff   : $('#modal_asso').find('#coeff').val()
             
         };
-        //console.log(tab.position);
         //test si le groupe adrress n'est pas déja utilisé
-        //$.getJSON("ajax.php?type=graphique&action=grapheAssoCapteurExist&graphe=" + tab.id_graphe + "&capteur=" + tab.id_capteur, function(json) {
         $.api('GET','graphique.grapheAssoCapteurExist', {graphe: tab.id_graphe, capteur: tab.id_capteur}).done(function(json){     
-            //console.log(json);
+        
             if (!json.exist) {
                 //so l'asso n'existe pas, on enregistre
-                /*
-                $.ajax({
-                    url: 'ajax.php?type=graphique&action=addGrapheAsso',
-                    type: 'POST',
-                    data: $.param(tab),
-                    async: true,
-                    success: function(a) {
-                        */
                 $.api('POST','graphique.addGrapheAsso',tab).done(function(json){  
                     
                     $('#modal_asso').modal('hide');
@@ -213,8 +165,6 @@ $(document).ready(function() {
                         $.growlErreur(lang.error.save);
                     }
                 });
-            
-                
             }else {
                 $.growlWarning(lang.error.assoAlreadyExist);
             }
@@ -231,14 +181,7 @@ $(document).ready(function() {
             $.growlErreur(lang.error.coeffMustBeNumber);
             return;
         }
-        /*
-        $.ajax({
-            url: 'ajax.php?type=graphique&action=updateGrapheAsso',
-            type: 'POST',
-            data: $.param(tab),
-            async: true,
-            success: function(a) {
-                */
+        
         $.api('POST','graphique.updateGrapheAsso',tab).done(function(json){ 
             
             $('#modal_asso').modal('hide');
@@ -258,14 +201,6 @@ $(document).ready(function() {
             id_capteur: $('#confirm-delete').find('#deleteid').val(),
             id_graphe: $('#select_graphique').val()
         };
-        /*
-        $.ajax({
-            url: 'ajax.php?type=graphique&action=deleteAssoGraphe',
-            type: 'POST',
-            data: $.param(tab),
-            async: true,
-            success: function(a) {
-                */
         $.api('POST','graphique.deleteAssoGraphe',tab).done(function(json){ 
             
             $('#confirm-delete').modal('hide');
@@ -286,11 +221,10 @@ $(document).ready(function() {
         //listen deroulante fenetre modal add /edit
         $('#select_graphe').find('option').remove();
 
-        //$.getJSON("ajax.php?type=graphique&action=getGraphe", function(json) {
         $.api('GET','graphique.getGraphe').done(function(json){ 
             
                 $.each(json.data, function(key, val) {
-                    //console.log(val);
+                    
                     $('#listeGraphique > tbody:last').append('<tr id="' + val.id + '">  <td> \
     																	<button type="button" class="btn btn-default btn-sm"> \
     																		<span class="glyphicon glyphicon-chevron-up upGrp" aria-hidden="true"></span> \
@@ -323,7 +257,6 @@ $(document).ready(function() {
     function refreshTableAsso() {
         $("#listeAsso > tbody").html("");
 
-        //$.getJSON("ajax.php?type=graphique&action=getGrapheAsso&graphe=" + $('#select_graphique').val(), function(json) {
         $.api('GET','graphique.getGrapheAsso', {graphe: $('#select_graphique').val()} ).done(function(json){ 
             
                 $.each(json.data, function(key, val) {
@@ -387,23 +320,18 @@ $(document).ready(function() {
         }
 
         if ($(this).children().is(".glyphicon-edit") && $(this).closest('table').is("#listeGraphique")) { //;
-            //console.log('edit');
             initModalUpdateGraphe($(this).closest("tr"));
         }
         if ($(this).children().is(".glyphicon-trash") && $(this).closest('table').is("#listeGraphique")) {
-            //console.log('delete');
             initModalDeleteGraphe($(this).closest("tr"));
         }
         if ($(this).children().is(".glyphicon-edit") && $(this).closest('table').is("#listeAsso")) { //;
-            //console.log('edit');
             initModalUpdateAsso($(this).closest("tr"));
         }
         if ($(this).children().is(".glyphicon-trash") && $(this).closest('table').is("#listeAsso")) {
-            //console.log('delete');
             initModalDeleteAsso($(this).closest("tr"));
         }
         if ($(this).is('#deleteConfirm')) {
-            //console.log($('#confirm-delete').find('#typeModal').val());
             if ($('#confirm-delete').find('#typeModal').val() == 'Grph') {
                 deleteGraphe();
             }
@@ -416,6 +344,7 @@ $(document).ready(function() {
 		if($(this).children().is('.upGrp')){
 		    var row = $(this).parents("tr:first");
 	    	row.insertBefore(row.prev());
+	    	
 	    }
 	    if($(this).children().is('.downGrp')){
 	        var row = $(this).parents("tr:first");
@@ -427,20 +356,19 @@ $(document).ready(function() {
     });
 
     refreshTableGraphe();
-    //refreshTableAsso();
+   
 
     $('#select_graphique').change(function() {
         refreshTableAsso();
     });
     
-    //$.getJSON("ajax.php?type=graphique&action=getCapteurs", function(json) {
     $.api('GET','graphique.getCapteurs').done(function(json){
         
         if (json.response){
             $('#select_capteur').find('option').remove();
 			
 			$.each(json.data, function(key, val) {
-			    //console.log(val);
+			    
 				$('#select_capteur').append('<option value="' + val.id + '">' + val.name + '</option>');
 				$('#select_graphe').attr('disabled', 'disabled');
 			});

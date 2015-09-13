@@ -1,4 +1,4 @@
-var fr = {
+var lang = {
     error:{
         communication: 'Problême de communication',
         getFileFromBoiler: 'Impossible de récuperer les fichiers présents sur la chaudière',
@@ -55,7 +55,7 @@ var fr = {
         thousandsSep: ' ',
         decimalPoint: ',',
         months: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',  'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-        shortMonths: [ "Jan" , "Feb" , "Mar" , "Avr" , "Mai" , "Juin" , "Juil" , "Aout" , "Sep" , "Oct" , "Nov" , "Dec"],
+        shortMonths: [ "Jan" , "Fev" , "Mar" , "Avr" , "Mai" , "Juin" , "Juil" , "Aout" , "Sep" , "Oct" , "Nov" , "Dec"],
         weekdays: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
         day: 'jour',
         month: 'mois',
@@ -67,4 +67,3 @@ var fr = {
     }
 };
     
-var lang = fr;

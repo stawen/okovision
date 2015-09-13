@@ -12,7 +12,12 @@ function is_ajax() {
   //return true;
 }
 
-if (is_ajax()) {
+function is_valid(){
+    
+   return ( strcmp(session::getVar('sid'),$_GET['sid']) == 0 )?true:false;
+}
+
+if (is_ajax() && is_valid()) {
 	
 		if (isset($_GET['type']) && isset($_GET['action']) ){
 			
@@ -155,6 +160,13 @@ if (is_ajax()) {
     		}		
 	    }
 
+}else{
+    if(!is_ajax()){
+        echo '<pre>xmlhttprequest needed ! </pre>';
+    }
+    if(!is_valid()){
+        echo '<pre>sessionToken invalid ! </pre>';
+    }
 }
 
 ?>

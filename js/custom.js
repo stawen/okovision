@@ -3,7 +3,7 @@
 * Auteur : Stawen Dronek
 * Utilisation commerciale interdite sans mon accord
 ******************************************************/
-/* global lang, Highcharts */
+/* global lang, Highcharts, sessionToken */
 $(document).ready(function() {
 
 	$.api = function (mode, cmd, tab, typeSync){
@@ -14,7 +14,7 @@ $(document).ready(function() {
         tab      = typeof tab      !== 'undefined' ? tab : {};
         typeSync = typeof typeSync !== 'undefined' ? typeSync : true;
         
-        var urlFinal = 'ajax.php?' + urlFinal;
+        var urlFinal = 'ajax.php?sid='+ sessionToken + '&' + urlFinal;
         
         return $.ajax({
             url: urlFinal,

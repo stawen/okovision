@@ -28,6 +28,8 @@ class connectDb {
 		$this->db->close();
 	}
 	
+	
+	
 }
 
 ?>

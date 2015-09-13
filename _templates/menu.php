@@ -10,8 +10,8 @@
  function getMenu(){
 	global $page;
 	
-	$menu = Array(  'index.php' => 'Accueil',
-					'histo.php' => 'Historique'
+	$menu = Array(  'index.php' => session::getLabel('lang.text.menu.index'),
+					'histo.php' => session::getLabel('lang.text.menu.historic')
 			);	
 	
 	foreach ($menu as $url => $title){
@@ -44,23 +44,23 @@
                     <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                 </a>
                 <ul class="dropdown-menu" role="menu">
-                    <li class="dropdown-header">Graphiques</li>
-                        <li><a href="gstrapport.php">Gestion rapports journaliers</a></li>
+                    <li class="dropdown-header"><?php echo session::getLabel('lang.text.menu.graphic') ?></li>
+                        <li><a href="gstrapport.php"><?php echo session::getLabel('lang.text.menu.graphic.report') ?></a></li>
                     <li class="divider"></li>
                    
-                        <li class="dropdown-header">Actions Manuelles</li>    
-                            <?php if(GET_CHAUDIERE_DATA_BY_IP){ ?><li><a href="actionManuelle.php#majip">Mise à jour des données (depuis chaudiere)</a></li> <?php } ?>
-                            <li><a href="actionManuelle.php#majusb">Mise à jour des données (import)</a></li>
-                            <li><a href="actionManuelle.php#synthese">Calcul Synthèse journaliere</a></li>
+                        <li class="dropdown-header"><?php echo session::getLabel('lang.text.menu.manual') ?></li>    
+                            <?php if(GET_CHAUDIERE_DATA_BY_IP){ ?><li><a href="actionManuelle.php#majip"><?php echo session::getLabel('lang.text.menu.manual.import.ip') ?></a></li> <?php } ?>
+                            <li><a href="actionManuelle.php#majusb"><?php echo session::getLabel('lang.text.menu.manual.import.usb') ?></a></li>
+                            <li><a href="actionManuelle.php#synthese"><?php echo session::getLabel('lang.text.menu.manual.synthese') ?></a></li>
                     <li class="divider"></li>
                     
-                        <li class="dropdown-header">Administration</li>
-                            <li><a href="admin.php#infoge">Informations Generales</a></li>
-                            <li><a href="admin.php#saisons">Saisons</a></li>
-                            <li><a href="admin.php#matrice">Matrice de lecture du CSV</a></li>
+                        <li class="dropdown-header"><?php echo session::getLabel('lang.text.menu.admin') ?></li>
+                            <li><a href="admin.php#infoge"><?php echo session::getLabel('lang.text.menu.admin.information') ?></a></li>
+                            <li><a href="admin.php#saisons"><?php echo session::getLabel('lang.text.menu.admin.season') ?></a></li>
+                            <li><a href="admin.php#matrice"><?php echo session::getLabel('lang.text.menu.admin.matrix') ?></a></li>
                     <li class="divider"></li>
                     
-                        <li><a href="about.php">A propos</a></li>
+                        <li><a href="about.php"><?php echo session::getLabel('lang.text.menu.about') ?></a></li>
                    
                     
                 </ul>

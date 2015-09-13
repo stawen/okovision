@@ -403,14 +403,14 @@ class administration extends connectDb{
 		$update->setCurrentVersion($this->getCurrentVersion());
 		
 		if ($update->checkUpdate() === false)
-			$r['information'] = 'Communication impossible avec le serveur de mise à jour. Aller voir dans les logs pour des informations complémentaires.';
+			$r['information'] = session::getLabel('lang.error.maj.information');
 		
 		elseif ($update->newVersionAvailable()) {
 			$r['newVersion'] = true;
 			$r['list'] = $update->getVersionsInformationToUpdate();
 			
 		}else{
-			$r['information'] = 'Vous disposez de la dernière version !';
+			$r['information'] = session::getLabel('lang.valid.maj.information');
 			
 		}
 		
