@@ -1,8 +1,8 @@
 /*****************************************************
-* Projet : Okovision - Supervision chaudiere OeKofen
-* Auteur : Stawen Dronek
-* Utilisation commerciale interdite sans mon accord
-******************************************************/
+ * Projet : Okovision - Supervision chaudiere OeKofen
+ * Auteur : Stawen Dronek
+ * Utilisation commerciale interdite sans mon accord
+ ******************************************************/
 /* global lang */
 $(document).ready(function() {
 
@@ -12,14 +12,14 @@ $(document).ready(function() {
             $(this).find('#typeModal').val("add");
             $(this).find('#graphiqueTitre').html(lang.text.addGraphe);
 
-            $.api('GET','graphique.getLastGraphePosition').done(function(json){
+            $.api('GET', 'graphique.getLastGraphePosition').done(function(json) {
 
-                    var newPosition = (json.data.lastPosition === null) ? 1 : parseInt(json.data.lastPosition) + 1;
-                    $('#modal_graphique').find('#position').val(newPosition);
+                var newPosition = (json.data.lastPosition === null) ? 1 : parseInt(json.data.lastPosition) + 1;
+                $('#modal_graphique').find('#position').val(newPosition);
 
-                }).error(function() {
-                    $.growlErreur(lang.error.position);
-                });
+            }).error(function() {
+                $.growlErreur(lang.error.position);
+            });
 
         });
     }
@@ -50,7 +50,7 @@ $(document).ready(function() {
             $('#select_graphe option[value=' + $('#select_graphique').val() + ']').attr("selected", "selected");
             $('#select_capteur').prop("disabled", false);
             $('#select_capteur').find('option').removeAttr("selected");
-            
+
             $('#coeff').val("1");
         });
     }
@@ -62,7 +62,7 @@ $(document).ready(function() {
             $(this).find('#assoTitre').html(lang.text.updateAsso);
             $('#select_graphe option[value=' + $('#select_graphique').val() + ']').attr("selected", "selected");
             $('#select_capteur option[value=' + row.attr("id") + ']').attr("selected", "selected");
-            
+
             $('#select_capteur').attr('disabled', 'disabled');
             $('#coeff').val(row.find("td:nth-child(3)").text());
 
@@ -84,38 +84,17 @@ $(document).ready(function() {
             name: $('#modal_graphique').find('#name').val(),
             position: $('#modal_graphique').find('#position').val()
         };
-        $.api('GET','graphique.grapheNameExist', {name: tab.name}).done(function(json){    
-            
+        $.api('GET', 'graphique.grapheNameExist', {
+            name: tab.name
+        }).done(function(json) {
+
             if (!json.exist) {
                 //so le groupe n'existe pas, on enregistre
-                $.api('POST','graphique.addGraphe', tab).done(function(json){          
-        
+                $.api('POST', 'graphique.addGraphe', tab).done(function(json) {
+
                     $('#modal_graphique').modal('hide');
                     if (json.response) {
                         $.growlValidate(lang.valid.save);
-                        setTimeout(refreshTableGraphe(), 1000);
-                    }else {
-                        $.growlErreur(lang.error.save);
-                    }
-                });
-
-            }else {
-                $.growlWarning(lang.error.grapehAlreadyExist);
-            }
-        });
-    }
-
-    function updateGraphe() {
-        var tab = {
-            id  :   $('#modal_graphique').find('#grapheId').val(),
-            name:   $('#modal_graphique').find('#name').val()
-        };
-        //test si le groupe adrress n'est pas déja utilisé
-                $.api('POST','graphique.updateGraphe', tab).done(function(json){   
-                    
-                    $('#modal_graphique').modal('hide');
-                    if (json.response) {
-                        $.growlValidate(lang.valid.update);
                         setTimeout(refreshTableGraphe(), 1000);
                     }
                     else {
@@ -123,20 +102,46 @@ $(document).ready(function() {
                     }
                 });
 
+            }
+            else {
+                $.growlWarning(lang.error.grapehAlreadyExist);
+            }
+        });
+    }
+
+    function updateGraphe() {
+        var tab = {
+            id: $('#modal_graphique').find('#grapheId').val(),
+            name: $('#modal_graphique').find('#name').val()
+        };
+        //test si le groupe adrress n'est pas déja utilisé
+        $.api('POST', 'graphique.updateGraphe', tab).done(function(json) {
+
+            $('#modal_graphique').modal('hide');
+            if (json.response) {
+                $.growlValidate(lang.valid.update);
+                setTimeout(refreshTableGraphe(), 1000);
+            }
+            else {
+                $.growlErreur(lang.error.save);
+            }
+        });
+
     }
 
     function deleteGraphe() {
         var tab = {
             id: $('#confirm-delete').find('#deleteid').val()
         };
-        
-        $.api('POST','graphique.deleteGraphe', tab).done(function(json){ 
-            
+
+        $.api('POST', 'graphique.deleteGraphe', tab).done(function(json) {
+
             $('#confirm-delete').modal('hide');
             if (json.response === true) {
                 $.growlValidate(lang.valid.delete);
                 setTimeout(refreshTableGraphe(), 1000);
-            }else {
+            }
+            else {
                 $.growlErreur(lang.error.deleteGraphe + " " + tab.name);
             }
         });
@@ -146,26 +151,31 @@ $(document).ready(function() {
         var tab = {
             id_graphe: $('#modal_asso').find('#select_graphe').val(),
             id_capteur: $('#modal_asso').find('#select_capteur').val(),
-            position : 1,
-            coeff   : $('#modal_asso').find('#coeff').val()
-            
+            position: 1,
+            coeff: $('#modal_asso').find('#coeff').val()
+
         };
         //test si le groupe adrress n'est pas déja utilisé
-        $.api('GET','graphique.grapheAssoCapteurExist', {graphe: tab.id_graphe, capteur: tab.id_capteur}).done(function(json){     
-        
+        $.api('GET', 'graphique.grapheAssoCapteurExist', {
+            graphe: tab.id_graphe,
+            capteur: tab.id_capteur
+        }).done(function(json) {
+
             if (!json.exist) {
                 //so l'asso n'existe pas, on enregistre
-                $.api('POST','graphique.addGrapheAsso',tab).done(function(json){  
-                    
+                $.api('POST', 'graphique.addGrapheAsso', tab).done(function(json) {
+
                     $('#modal_asso').modal('hide');
                     if (json.response) {
                         $.growlValidate(lang.valid.save);
                         setTimeout(refreshTableAsso(), 1000);
-                    }else {
+                    }
+                    else {
                         $.growlErreur(lang.error.save);
                     }
                 });
-            }else {
+            }
+            else {
                 $.growlWarning(lang.error.assoAlreadyExist);
             }
         });
@@ -175,15 +185,15 @@ $(document).ready(function() {
         var tab = {
             id_graphe: $('#modal_asso').find('#select_graphe').val(),
             id_capteur: $('#modal_asso').find('#select_capteur').val(),
-            coeff   : $('#modal_asso').find('#coeff').val()
+            coeff: $('#modal_asso').find('#coeff').val()
         };
-        if(! $.isNumeric(tab.coeff)){
+        if (!$.isNumeric(tab.coeff)) {
             $.growlErreur(lang.error.coeffMustBeNumber);
             return;
         }
-        
-        $.api('POST','graphique.updateGrapheAsso',tab).done(function(json){ 
-            
+
+        $.api('POST', 'graphique.updateGrapheAsso', tab).done(function(json) {
+
             $('#modal_asso').modal('hide');
             if (json.response) {
                 $.growlValidate(lang.valid.update);
@@ -192,7 +202,7 @@ $(document).ready(function() {
             else {
                 $.growlErreur(lang.error.update);
             }
-    
+
         });
     }
 
@@ -201,13 +211,14 @@ $(document).ready(function() {
             id_capteur: $('#confirm-delete').find('#deleteid').val(),
             id_graphe: $('#select_graphique').val()
         };
-        $.api('POST','graphique.deleteAssoGraphe',tab).done(function(json){ 
-            
+        $.api('POST', 'graphique.deleteAssoGraphe', tab).done(function(json) {
+
             $('#confirm-delete').modal('hide');
             if (json.response) {
                 $.growlValidate(lang.valid.delete);
                 setTimeout(refreshTableAsso(), 1000);
-            }else{
+            }
+            else {
                 $.growlErreur(lang.error.deleteAsso);
             }
 
@@ -221,10 +232,10 @@ $(document).ready(function() {
         //listen deroulante fenetre modal add /edit
         $('#select_graphe').find('option').remove();
 
-        $.api('GET','graphique.getGraphe').done(function(json){ 
-            
+        $.api('GET', 'graphique.getGraphe').done(function(json) {
+
                 $.each(json.data, function(key, val) {
-                    
+
                     $('#listeGraphique > tbody:last').append('<tr id="' + val.id + '">  <td> \
     																	<button type="button" class="btn btn-default btn-sm"> \
     																		<span class="glyphicon glyphicon-chevron-up upGrp" aria-hidden="true"></span> \
@@ -248,20 +259,22 @@ $(document).ready(function() {
 
                 });
                 refreshTableAsso();
-        })
-        .error(function() {
-            $.growlErreur(lang.error.getGraphe);
-        });
+            })
+            .error(function() {
+                $.growlErreur(lang.error.getGraphe);
+            });
     }
 
     function refreshTableAsso() {
         $("#listeAsso > tbody").html("");
 
-        $.api('GET','graphique.getGrapheAsso', {graphe: $('#select_graphique').val()} ).done(function(json){ 
-            
+        $.api('GET', 'graphique.getGrapheAsso', {
+                graphe: $('#select_graphique').val()
+            }).done(function(json) {
+
                 $.each(json.data, function(key, val) {
                     //console.log(val.group_addr);
-                    $('#listeAsso > tbody:last').append('<tr id="'+ val.id +'">  <td> \
+                    $('#listeAsso > tbody:last').append('<tr id="' + val.id + '">  <td> \
     																	<button type="button" class="btn btn-default btn-sm"> \
     																		<span class="glyphicon glyphicon-chevron-up upGrp" aria-hidden="true"></span> \
     																	</button> \
@@ -281,10 +294,10 @@ $(document).ready(function() {
                                                                     </td></tr>');
 
                 });
-        })
-        .error(function() {
-            $.growlErreur(lang.error.getAsso);
-        });
+            })
+            .error(function() {
+                $.growlErreur(lang.error.getAsso);
+            });
     }
 
 
@@ -302,7 +315,7 @@ $(document).ready(function() {
         }
 
         if ($(this).is("#addGraphique")) {
-           if ($("#modal_graphique").find('#typeModal').val() == "add") {
+            if ($("#modal_graphique").find('#typeModal').val() == "add") {
                 addGraphe();
             }
             if ($("#modal_graphique").find('#typeModal').val() == "edit") {
@@ -315,7 +328,7 @@ $(document).ready(function() {
                 addAsso();
             }
             if ($("#modal_asso").find('#typeModal').val() == "edit") {
-               updateAsso();
+                updateAsso();
             }
         }
 
@@ -340,41 +353,42 @@ $(document).ready(function() {
             }
 
         }
-        
-		if($(this).children().is('.upGrp')){
-		    var row = $(this).parents("tr:first");
-	    	row.insertBefore(row.prev());
-	    	
-	    }
-	    if($(this).children().is('.downGrp')){
-	        var row = $(this).parents("tr:first");
-	    	row.insertAfter(row.next());
-	    }
+
+        if ($(this).children().is('.upGrp')) {
+            var row = $(this).parents("tr:first");
+            row.insertBefore(row.prev());
+
+        }
+        if ($(this).children().is('.downGrp')) {
+            var row = $(this).parents("tr:first");
+            row.insertAfter(row.next());
+        }
 
 
 
     });
 
     refreshTableGraphe();
-   
+
 
     $('#select_graphique').change(function() {
         refreshTableAsso();
     });
-    
-    $.api('GET','graphique.getCapteurs').done(function(json){
-        
-        if (json.response){
+
+    $.api('GET', 'graphique.getCapteurs').done(function(json) {
+
+        if (json.response) {
             $('#select_capteur').find('option').remove();
-			
-			$.each(json.data, function(key, val) {
-			    
-				$('#select_capteur').append('<option value="' + val.id + '">' + val.name + '</option>');
-				$('#select_graphe').attr('disabled', 'disabled');
-			});
-         }else{
-             $.growlErreur(lang.error.getSensor); 
-         }
+
+            $.each(json.data, function(key, val) {
+
+                $('#select_capteur').append('<option value="' + val.id + '">' + val.name + '</option>');
+                $('#select_graphe').attr('disabled', 'disabled');
+            });
+        }
+        else {
+            $.growlErreur(lang.error.getSensor);
+        }
     });
 
 
