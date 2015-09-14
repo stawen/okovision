@@ -165,7 +165,8 @@ if (is_ajax() && is_valid()) {
         echo '<pre>xmlhttprequest needed ! </pre>';
     }
     if(!is_valid()){
-        echo '<pre>sessionToken invalid ! </pre>';
+        header("Content-type: text/json; charset=utf-8");
+		echo '{"response": false,"sessionToken": "invalid"}';
     }
 }
 

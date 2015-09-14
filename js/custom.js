@@ -6,27 +6,7 @@
 /* global lang, Highcharts, sessionToken */
 $(document).ready(function() {
 
-	$.api = function(mode, cmd, tab, typeSync) {
-
-		var tmp = cmd.split('.');
-		var urlFinal = 'type=' + tmp[0] + '&action=' + tmp[1];
-		//gestion si pas d'arguments supplementaires
-		tab = typeof tab !== 'undefined' ? tab : {};
-		typeSync = typeof typeSync !== 'undefined' ? typeSync : true;
-
-		var urlFinal = 'ajax.php?sid=' + sessionToken + '&' + urlFinal;
-
-		return $.ajax({
-			url: urlFinal,
-			type: mode,
-			data: $.param(tab),
-			async: typeSync
-		}).error(function() {
-			var msg = lang.error.communication + ' : ' + cmd
-				//console.log(msg);
-			$.growlErreur(msg);
-		});
-	}
+	
 
 
 	$.growlValidate = function(text) {
@@ -57,6 +37,41 @@ $(document).ready(function() {
 			z_index: 9999,
 			type: 'warning'
 		});
+	}
+	
+	$.api = function(mode, cmd, tab, typeSync) {
+
+		var tmp = cmd.split('.');
+		var urlFinal = 'type=' + tmp[0] + '&action=' + tmp[1];
+		//gestion si pas d'arguments supplementaires
+		tab = typeof tab !== 'undefined' ? tab : {};
+		typeSync = typeof typeSync !== 'undefined' ? typeSync : true;
+
+		var urlFinal = 'ajax.php?sid=' + sessionToken + '&' + urlFinal;
+
+		var jxhr =  $.ajax({
+			url: urlFinal,
+			type: mode,
+			data: $.param(tab),
+			async: typeSync
+		}).error(function() {
+			var msg = lang.error.communication + ' : ' + cmd
+				//console.log(msg);
+			$.growlErreur(msg);
+		});
+		//console.log(jxhr);
+		jxhr.done(function(json){
+			//console.log(json);
+			if (!json.response){
+				if(json.sessionToken === 'invalid') {
+					//$.growlErreur('Session expirée');
+					//setTimeout(function(){},2500);
+					window.location.replace("index.php");
+				}
+			}
+		});
+		
+		return jxhr;
 	}
 
 
