@@ -5,18 +5,21 @@ class session {
     protected static $lang;
     
     public function __construct() {
-        session_start();
-        self::$lang = 'fr';
         
+        //session_start();
+        self::$lang = 'fr';
+        /*
         if(!self::exist('LANG')){
             self::setVar('LANG',self::getDictionnary(self::$lang));
         }
+        */
         //print_r( self::exist('sid')); exit;
-        
+        /*
         if(!self::exist('sid')){
             $t = substr(md5(uniqid($_COOKIE['PHPSESSID'], true)), 0,8);
             self::setVar('sid', $t);
         }
+        */
         
     }
     
@@ -34,7 +37,8 @@ class session {
 	}
 	
 	public function getLabel($label){
-	    return $_SESSION['LANG'][$label];
+	    //return $_SESSION['LANG'][$label];
+	    return self::getDictionnary(self::$lang)[$label];
 	}
 	
 	public function getLang(){

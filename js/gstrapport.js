@@ -50,7 +50,8 @@ $(document).ready(function() {
             $('#select_graphe option[value=' + $('#select_graphique').val() + ']').attr("selected", "selected");
             $('#select_capteur').prop("disabled", false);
             $('#select_capteur').find('option').removeAttr("selected");
-
+            //console.log($('#listeAsso tbody > tr').length);
+            $('#modal_asso').find('#position').val($('#listeAsso tbody > tr').length + 1)
             $('#coeff').val("1");
         });
     }
@@ -151,7 +152,7 @@ $(document).ready(function() {
         var tab = {
             id_graphe: $('#modal_asso').find('#select_graphe').val(),
             id_capteur: $('#modal_asso').find('#select_capteur').val(),
-            position: 1,
+            position: $('#modal_asso').find('#position').val(),
             coeff: $('#modal_asso').find('#coeff').val()
 
         };
@@ -237,13 +238,8 @@ $(document).ready(function() {
                 $.each(json.data, function(key, val) {
 
                     $('#listeGraphique > tbody:last').append('<tr id="' + val.id + '">  <td> \
-    																	<button type="button" class="btn btn-default btn-sm"> \
-    																		<span class="glyphicon glyphicon-chevron-up upGrp" aria-hidden="true"></span> \
-    																	</button> \
-                                                                        <button type="button" class="btn btn-default btn-sm"> \
-                                                                        	<span class="glyphicon glyphicon-chevron-down downGrp" aria-hidden="true"></span> \
-                                                                        </button> \
-                                                                    </td> \
+                                                            <span class="glyphicon glyphicon-resize-vertical" aria-hidden="true"></span> \
+    																</td> \
                 	                                                <td>' + val.name + '</td>  \
                 	                                                <td>       \
                 	                                                    <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal_graphique"> \
@@ -275,12 +271,7 @@ $(document).ready(function() {
                 $.each(json.data, function(key, val) {
                     //console.log(val.group_addr);
                     $('#listeAsso > tbody:last').append('<tr id="' + val.id + '">  <td> \
-    																	<button type="button" class="btn btn-default btn-sm"> \
-    																		<span class="glyphicon glyphicon-chevron-up upGrp" aria-hidden="true"></span> \
-    																	</button> \
-                                                                        <button type="button" class="btn btn-default btn-sm"> \
-                                                                        	<span class="glyphicon glyphicon-chevron-down downGrp" aria-hidden="true"></span> \
-                                                                        </button> \
+    																	 <span class="glyphicon glyphicon-resize-vertical" aria-hidden="true"></span> \
                                                                     </td> \
                 	                                                <td>' + val.name + '</td>  \
                 	                                                <td>' + val.coeff + '</td>  \
@@ -354,15 +345,6 @@ $(document).ready(function() {
 
         }
 
-        if ($(this).children().is('.upGrp')) {
-            var row = $(this).parents("tr:first");
-            row.insertBefore(row.prev());
-
-        }
-        if ($(this).children().is('.downGrp')) {
-            var row = $(this).parents("tr:first");
-            row.insertAfter(row.next());
-        }
 
 
 
@@ -391,5 +373,52 @@ $(document).ready(function() {
         }
     });
 
+    var currentPosition;
+    $('table tbody').sortable({
+        opacity: 0.75,
+        helper: fixWidthHelper,
+        start: function( event, ui ) {
+            //console.log(ui.item.context.rowIndex);
+            currentPosition = ui.item.context.rowIndex;
+        },
+        update: function( event, ui ) {
+            
+            if ($(this).closest('table').is("#listeGraphique") ){
+                
+                $.api('POST', 'graphique.updateGraphePosition', {id_graphe: ui.item.context.id, current: currentPosition, position: ui.item.context.rowIndex}).done(function(json) {
+
+                    if (json.response) {
+                        $.growlValidate(lang.valid.update);
+                    }
+                    else {
+                        $.growlErreur(lang.error.update);
+                    }
+                });
+                
+                //console.log(ui.item.context.rowIndex);
+                
+            }
+            if ($(this).closest('table').is("#listeAsso") ){
+                //console.log('listeAsso::'+row);
+                $.api('POST', 'graphique.updateGrapheAssoPosition', {id_graphe: $('#select_graphique').val(), id_capteur: ui.item.context.id, current: currentPosition, position: ui.item.context.rowIndex}).done(function(json) {
+
+                    if (json.response) {
+                        $.growlValidate(lang.valid.update);
+                    }
+                    else {
+                        $.growlErreur(lang.error.update);
+                    }
+                });
+            }
+            
+        }
+    }).disableSelection();
+        
+    function fixWidthHelper(e, ui) {
+        ui.children().each(function() {
+            $(this).width($(this).width());
+        });
+        return ui;
+    }
 
 });

@@ -13,8 +13,8 @@ function is_ajax() {
 }
 
 function is_valid(){
-    
-   return ( strcmp(session::getVar('sid'),$_GET['sid']) == 0 )?true:false;
+    return true;
+   //return ( strcmp(session::getVar('sid'),$_GET['sid']) == 0 )?true:false;
 }
 
 if (is_ajax() && is_valid()) {
@@ -106,6 +106,9 @@ if (is_ajax() && is_valid()) {
     				    case "updateGraphe":
     				    	$g->updateGraphe($_POST);
     				    	break;
+    				    case "updateGraphePosition":
+    				        $g->updateGraphePosition($_POST);
+    				        break;
     				    case "deleteGraphe":
     				    	$g->deleteGraphe($_POST);
     				    	break;
@@ -124,9 +127,13 @@ if (is_ajax() && is_valid()) {
     				    case "updateGrapheAsso":
     				    	$g->updateGrapheAsso($_POST);
     				    	break;
+    				    case "updateGrapheAssoPosition":
+    				        $g->updateGrapheAssoPosition($_POST);
+    				        break;
     				    case "deleteAssoGraphe":
     				    	$g->deleteAssoGraphe($_POST);
     				    	break;
+    				    	
     				    	
     				}
     				break;

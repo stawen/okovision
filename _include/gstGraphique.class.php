@@ -103,28 +103,56 @@ class gstGraphique extends connectDb{
     	$this->sendResponse($r);
     }
     
-    public function deleteGraphe($s){
-    	$q = "DELETE from oko_graphe where id=".$s['id'] ;
-    	$this->log->debug("Class gestGraphique | deleteGraphe | ".$q);
+    public function updateGraphePosition($s){
+    	$r['response'] = false;
+    	//si position des autres est = ou sup alors on fait + 1, si position est inf on fait -1
+    	//on met a jour la position du grpahe selectionné
     	
-    	 
+    	
+    	$q = "UPDATE oko_graphe SET position=".$s['position']." WHERE id = ".$s['id_graphe'];
+    	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
+     
     	if($this->db->query($q)){
-    	 	$r['response'] = true;
-    	 	
-    	 	$q = "DELETE from oko_asso_capteur_graphe where oko_graphe_id=".$s['id'] ;
-	    	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
-	    	 
-	    	if($this->db->query($q)){
-	    	 	$r['response'] = true;	
-	    	}else{
-	    		$r['response'] = false;
-	    	}
-    	}else{
-    		$r['response'] = false;
+    		if($s['position']>$s['current'] ){
+    			$q = "UPDATE oko_graphe SET position=(position - 1) WHERE position <= ".$s['position']." AND position > ".$s['current']." AND id <> ".$s['id_graphe'];
+    		}else{
+    			$q = "UPDATE oko_graphe SET position=(position + 1) WHERE position >= ".$s['position']." AND position < (".$s['current']." + 1) AND id <> ".$s['id_graphe'];
+    		}
+    		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
+    		
+    		if($this->db->query($q)){
+    				$r['response'] = true;
+    		}
     	}
     	
+    	$this->sendResponse($r);
+    }
+    
+    public function deleteGraphe($s){
+    	$r['response'] = false;
     	
+    	$q = "SELECT position from oko_graphe where id=".$s['id'];
+    	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
     	
+    	$result = $this->db->query($q);
+    	
+    	if ($result){
+    		
+    		$res = $result->fetch_object();
+    		$position = $res->position;
+    		
+    		$q = "DELETE from oko_graphe where id=".$s['id'] ;
+    		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
+    		
+    		if($this->db->query($q)){
+    			$q = "UPDATE oko_graphe SET position=(position - 1) WHERE position > ".$position;
+    			$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
+    			
+    			if($this->db->query($q)){
+	    	 		$r['response'] = true;	
+	    		}
+    		}
+    	}
     	
     	$this->sendResponse($r);
     }
@@ -194,7 +222,7 @@ class gstGraphique extends connectDb{
     public function getGrapheAsso($grapheId){
     	$q ="SELECT capteur.id, capteur.name, asso.correction_effect as coeff from oko_asso_capteur_graphe as asso ".
     		"LEFT JOIN oko_capteur as capteur ON asso.oko_capteur_id = capteur.id "
-    		."WHERE asso.oko_graphe_id=".$grapheId;
+    		."WHERE asso.oko_graphe_id=".$grapheId." ORDER BY asso.position";
     		
 	    $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
 	    $result = $this->db->query($q);
@@ -230,16 +258,58 @@ class gstGraphique extends connectDb{
     	$this->sendResponse($r);
     }
     
+    public function updateGrapheAssoPosition($s){
+    	$r['response'] = false;
+    	//si position des autres est = ou sup alors on fait + 1, si position est inf on fait -1
+    	//on met a jour la position du grpahe selectionné
+    	$q = "UPDATE oko_asso_capteur_graphe SET position=".$s['position']." WHERE oko_graphe_id = ".$s['id_graphe']." AND oko_capteur_id = ".$s['id_capteur'];;
+    	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
+     
+    	if($this->db->query($q)){
+    		if($s['position']>$s['current'] ){
+    			//$q = "UPDATE oko_graphe SET position=(position - 1) WHERE position <= ".$s['position']." AND position > ".$s['current']." AND id <> ".$s['id_graphe'];
+				$q = "UPDATE oko_asso_capteur_graphe SET position=(position - 1) WHERE position <= ".$s['position']." AND position > ".$s['current']." AND oko_graphe_id = ".$s['id_graphe']." AND oko_capteur_id <> ".$s['id_capteur'];
+    	   	}else{
+    			//$q = "UPDATE oko_graphe SET position=(position + 1) WHERE position >= ".$s['position']." AND position < (".$s['current']." + 1) AND id <> ".$s['id_graphe'];
+    			$q = "UPDATE oko_asso_capteur_graphe SET position=(position + 1) WHERE position >= ".$s['position']." AND position < (".$s['current']." + 1) AND oko_graphe_id = ".$s['id_graphe']." AND oko_capteur_id <> ".$s['id_capteur'];
+    		}
+    		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
+    		
+    		if($this->db->query($q)){
+    				$r['response'] = true;
+    		}
+    	}
+    	
+    	$this->sendResponse($r);
+    }
+    
     public function deleteAssoGraphe($s){
-    	$q = "DELETE FROM oko_asso_capteur_graphe WHERE oko_graphe_id=".$s['id_graphe']." AND "
+    	$r['response'] = false;
+    	//on recupere la position du capteur dans le graphe
+    	$q = "SELECT position from oko_asso_capteur_graphe WHERE oko_graphe_id=".$s['id_graphe']." AND "
     		."oko_capteur_id=".$s['id_capteur'];
     		
     	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
     	
-    	$r['response'] = false;
-    	 
-    	if($this->db->query($q)){
-    	 	$r['response'] = true;	
+    	$result = $this->db->query($q);
+    
+    	if($result){ 
+    		$res = $result->fetch_object();
+    		$position = $res->position;
+    		
+    		$q = "DELETE FROM oko_asso_capteur_graphe WHERE oko_graphe_id=".$s['id_graphe']." AND "
+	    		."oko_capteur_id=".$s['id_capteur'];
+	    	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
+	    	
+	    	if($this->db->query($q)){
+	    		
+	    		$q = "UPDATE oko_asso_capteur_graphe SET position=(position - 1) WHERE position > ".$position." AND oko_graphe_id = ".$s['id_graphe'];
+    	   		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
+	    	 	
+	    	 	if($this->db->query($q)){
+	    	 		$r['response'] = true;
+	    		}
+	    	}
     	}
     	
     	$this->sendResponse($r);
