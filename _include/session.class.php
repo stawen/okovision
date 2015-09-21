@@ -42,7 +42,6 @@ class session {
 	}
 	
 	public function getLang(){
-	    //return $this->lang;
 	    return self::$lang;
 	}
 	

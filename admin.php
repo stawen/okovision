@@ -8,16 +8,17 @@
 	include_once 'config.php';
 	include_once '_templates/header.php';
 	include_once '_templates/menu.php';
-	//include_once 'ajax.php';
 ?>
+<?php echo session::getLabel('xxx') ?>
+
 
 <div class="container theme-showcase" role="main">
 <br/>
     <div class="page-header" >
         <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation"><a href="#infoge" aria-controls="infoge" role="tab" data-toggle="tab">Informations Generales</a></li>
-          <li role="presentation"><a href="#saisons" aria-controls="saisons" role="tab" data-toggle="tab">Saisons</a></li>
-          <li role="presentation"><a href="#matrice" aria-controls="matrice" role="tab" data-toggle="tab">Matrice de lecture du CSV</a></li>
+          <li role="presentation"><a href="#infoge" aria-controls="infoge" role="tab" data-toggle="tab"><?php echo session::getLabel('lang.text.menu.admin.information') ?></a></li>
+          <li role="presentation"><a href="#saisons" aria-controls="saisons" role="tab" data-toggle="tab"><?php echo session::getLabel('lang.text.menu.admin.season') ?></a></li>
+          <li role="presentation"><a href="#matrice" aria-controls="matrice" role="tab" data-toggle="tab"><?php echo session::getLabel('lang.text.menu.admin.matrix') ?></a></li>
         </ul>
 
         <!-- Tab panes -->
@@ -28,11 +29,11 @@
     				<fieldset>
     				
     				<!-- Form Name -->
-    					<legend>Communication avec votre chaudiere</legend>
+    					<legend><?php echo session::getLabel('lang.text.page.admin.boilercomm') ?></legend>
     					
     					<!-- Select Basic -->
     					<div class="form-group">
-    					  <label class="col-md-4 control-label" for="oko_typeconnect">Mode de récupération du fichier CSV :</label>
+    					  <label class="col-md-4 control-label" for="oko_typeconnect"><?php echo session::getLabel('lang.text.page.admin.boilergetfile') ?></label>
     					  <div class="col-md-3">
     					    <select id="oko_typeconnect" name="oko_typeconnect" class="form-control">
     					        <option value="0">USB</option>
@@ -44,14 +45,14 @@
     					
                         <!-- Text input-->
                         <div class="form-group" id="form-ip" <?php if(!GET_CHAUDIERE_DATA_BY_IP){ echo 'style="display: none;"';} ?>>
-                            <label class="col-md-4 control-label" for="oko_ip">Adresse IP de votre chaudière :</label>  
+                            <label class="col-md-4 control-label" for="oko_ip"><?php echo session::getLabel('lang.text.page.admin.boilerip') ?></label>  
                             <div class="col-md-3">
                                 <input id="oko_ip" name="oko_ip" type="text" class="form-control input-md" placeholder="ex : 192.168.0.20" value="<?php echo CHAUDIERE;?>">
                                 <span class="help-block" id="url_csv"></span> 
                             </div>
                             <div class="col-md-3">
                                 <button type="button" class="btn btn-xs btn-default" id="test_oko_ip">
-                                    <span class="glyphicon glyphicon-share" aria-hidden="true"></span> Tester
+                                    <span class="glyphicon glyphicon-share" aria-hidden="true"></span><?php echo session::getLabel('lang.text.page.admin.test') ?>
                                 </button>
                             </div>
     					</div>
@@ -59,32 +60,32 @@
     				</fieldset>
     				
     				<fieldset>
-    				    <legend>Parametrage de l'application</legend>
+    				    <legend><?php echo session::getLabel('lang.text.page.admin.param') ?></legend>
 					
     					<!-- Text input-->
     					<div class="form-group">
-    					  <label class="col-md-4 control-label" for="param_tcref">T°C de reference :</label>  
+    					  <label class="col-md-4 control-label" for="param_tcref"><?php echo session::getLabel('lang.text.page.admin.param.tcref') ?></label>  
     					  <div class="col-md-3">
     					  <input id="param_tcref" name="param_tcref" type="text" placeholder="ex : 20" class="form-control input-md" required="" value="<?php echo TC_REF;?>">
-    					  <span class="help-block">Si vous avez 2 consignes, réduit à 19 et confort à 21, vous faites la moyenne -&gt; 20. Ceci est pour le calcul du DJU</span>  
+    					  <span class="help-block"><?php echo session::getLabel('lang.text.page.admin.param.tcref.desc') ?></span>  
     					  </div>
     					</div>
     					
     					<!-- Text input-->
     					<div class="form-group">
-    					  <label class="col-md-4 control-label" for="param_poids_pellet">Poids pellet pour 60 secondes de vis : </label>  
+    					  <label class="col-md-4 control-label" for="param_poids_pellet"><?php echo session::getLabel('lang.text.page.admin.param.pellet') ?></label>  
     					  <div class="col-md-3">
     					  <input id="param_poids_pellet" name="param_poids_pellet" type="text" placeholder="ex : 150" class="form-control input-md" required=""  value="<?php echo POIDS_PELLET_PAR_MINUTE;?>">
-    					  <span class="help-block">Poids de pellet mesuré par un fonctionnement de la vis d'alimentation du foyer pendant 60 secondes</span>  
+    					  <span class="help-block"><?php echo session::getLabel('lang.text.page.admin.param.pellet.desc') ?></span>  
     					  </div>
     					</div>
     					
     					<!-- Text input-->
     					<div class="form-group">
-    					  <label class="col-md-4 control-label" for="parap_poids_pellet">Surface de la maison : </label>  
+    					  <label class="col-md-4 control-label" for="parap_poids_pellet"><?php echo session::getLabel('lang.text.page.admin.param.surface') ?></label>  
     					  <div class="col-md-3">
     					  <input id="surface_maison" name="param_surface" type="text" placeholder="ex : 180" class="form-control input-md" required=""  value="<?php echo SURFACE_HOUSE;?>">
-    					  <span class="help-block">en m²</span>  
+    					  <span class="help-block"><?php echo session::getLabel('lang.text.page.admin.param.surface.desc') ?></span>  
     					  </div>
     					</div>
 				
@@ -92,26 +93,25 @@
     			
     			</form>
                 <div  align="center">
-					    <button id="bt_save_infoge" name="bt_save_infoge" class="btn btn-primary" type="button">Sauvegarder</button>
+					    <button id="bt_save_infoge" name="bt_save_infoge" class="btn btn-primary" type="button"><?php echo session::getLabel('lang.text.page.admin.save') ?></button>
 				</div>
             </div>
             
             
             <div role="tabpanel" class="tab-pane" id="saisons">
                 <br/>
-            	Pour avoir des graphiques de synthese, vous devez definir les saisons. Une saison est une periode d'un an. Vous devez preciser le premier jour du debut de votre année.
-            	Elle peut commencer à 01 Septembre, et se terminera automatiquement au 31 Aout de l'année suivante
+            	<?php echo session::getLabel('lang.text.page.season') ?>
             	
             	<br/><br/>
             	<button type="button" class="btn btn-xs btn-default" id="openModalAddSaison" data-toggle="modal" data-target="#modal_saison">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter une saison
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <?php echo session::getLabel('lang.text.page.season.add') ?>
                 </button>
                 <table id="saisons" class="table table-hover">
                     <thead>
                         <tr >
-                            <th class="col-md-3">Saison</th>
-                            <th class="col-md-3">Date début</th>
-                            <th class="col-md-3">Date fin</th>
+                            <th class="col-md-3"><?php echo session::getLabel('lang.text.page.season.title') ?></th>
+                            <th class="col-md-3"><?php echo session::getLabel('lang.text.page.season.start') ?></th>
+                            <th class="col-md-3"><?php echo session::getLabel('lang.text.page.season.end') ?></th>
                             <th class="col-md-3"></th>
                             
                         </tr>
@@ -139,7 +139,7 @@
                                 <form>
             
                                     <div class="form-group">
-                                        <label for="recipient-name" class="control-label">Date de début :</label>
+                                        <label for="recipient-name" class="control-label"><?php echo session::getLabel('lang.text.page.season.modal.end') ?></label>
                                         <input type="text" class="form-control" id="startDateSaison" placeholder="ex : 01/09/2014">
                                     </div>
                                     
@@ -170,8 +170,8 @@
                                 <input type="text" id="saisonId">
                            </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                                <button type="button" class="btn btn-danger btn-ok" id="deleteConfirm">Confirmer</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo session::getLabel('lang.text.modal.cancel') ?></button>
+                                <button type="button" class="btn btn-danger btn-ok" id="deleteConfirm"><?php echo session::getLabel('lang.text.modal.confirm') ?></button>
                             </div>
                         </div>
                     </div>
@@ -184,23 +184,12 @@
             </div>
             <div role="tabpanel" class="tab-pane" id="matrice">
             	<br/>
-            	Votre installation Okofen est spécifique. Le format du fichier CSV quelle produit est unique. Vous devez alors "apprendre" à okovision comment lire ce fichier.
-            	<p>
-            	<lu>
-            	   <li>HK(n) : Circuit Chauffage</li>
-            	   <li>KT : Température Chaudière</li>
-            	   <li>WW(n) : Circuit Eau Chaude sanitaire</li>
-            	   <li>SK(n) : Circuit Solaire ECS</li>
-            	   <li>PE(n) : Chaudiere N°n</li>
-            	   <li>PU(n) : Ballon Tampon N°n</li>
-            	</lu>
-            	</p>
-            	<p> Tout d'abord, importer le fichier via le bouton ci-dessous</p>
+            	<?php echo session::getLabel('lang.text.page.matrix') ?>
             	<br/><br/>
             	<div id="selectFile" style="display: none;">
 	            	<span class="btn btn-success fileinput-button">
 				        <i class="glyphicon glyphicon-plus"></i>
-				        <span>Fichier CSV produit par la chaudiere</span>
+				        <span><?php echo session::getLabel('lang.text.page.matrix.upload') ?></span>
 				        <!-- The file input field used as target for the file upload widget -->
 				        <input id="fileupload" type="file" name="files[]">
 				    </span>
@@ -216,8 +205,8 @@
 				    <table id="headerCsv" class="table table-hover">
                     <thead>
                         <tr>
-                            <th class="col-md-3">Nom Original</th>
-                            <th class="col-md-3">Nom Okovision</th>
+                            <th class="col-md-3"><?php echo session::getLabel('lang.text.page.matrix.original') ?></th>
+                            <th class="col-md-3"><?php echo session::getLabel('lang.text.page.matrix.name') ?></th>
                             <th class="col-md-6"></th>
                             
                         </tr>
@@ -237,10 +226,7 @@
 <?php
 include('_templates/footer.php');
 ?>
-<!--appel des scripts personnels de la page -->
-	<!-- script src="js/jquery.ui.widget.js"></script -->
-  	<!--script src="js/jquery.iframe-transport.js"></script-->
-  	<script src="js/jquery.fileupload.js"></script>
+    <script src="js/jquery.fileupload.js"></script>
 	<script src="js/admin.js"></script>
     </body>
 </html>

@@ -109,6 +109,7 @@ $(document).ready(function() {
 		},
 		start: function(e) {
 			//console.log('Uploads started');
+			
 		},
 		done: function(e, data) {
 			setTimeout(function() {
