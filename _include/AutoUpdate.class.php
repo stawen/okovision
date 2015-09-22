@@ -733,7 +733,8 @@ class AutoUpdate extends connectDb{
 				require($absoluteFilename);
 
 				$this->log->info(sprintf('Update script "%s" included!', $absoluteFilename));
-				If (!DEBUG){
+				
+				if (!DEBUG){
 					if (!unlink($absoluteFilename)) {
 						$this->log->warn(sprintf('Could not delete update script "%s"!', $absoluteFilename));
 					}
