@@ -1,7 +1,7 @@
 ## V1.1.0
-* #14 et #11 - EVOL - Externalisation des textes dans unefichier commun (pour gain de perf et internationnalisation si besoin)
+* #14 et #11 - EVOL - Externalisation des textes dans un fichier commun (pour gain de perf et internationnalisation si besoin)
 * #11 - EVOL -  Factorisation des appels Asynchrones - Uniformisation / performance / évolutions futur facilitée
-* #2 - EVOL - Gestion de la position des graphes et de capteurs dans les graphes
+* #2 et #18 - EVOL - Gestion de la position des graphes et de capteurs dans les graphes
 * #12 - FIX - Page "A propos" - bouton encore visible après l'installation de la mise à jour
 * #6 - FIX - Liste deroulante des saisons preselectionnées sur la periode en cours
 * #3 - FIX - Raz du coefficiant de correction dans la boite modale d'association capteur / graphe
