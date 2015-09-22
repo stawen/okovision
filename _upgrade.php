@@ -7,7 +7,7 @@ $this->log->debug("UPGRADE | ".$q);
 $result =$this->db->query($q);
 
 if($result){
-
+	$this->log->debug("UPGRADE | requette ok");
     $tmp = array();
 	while($res = $result->fetch_object()){
 		array_push($tmp,$res);
