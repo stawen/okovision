@@ -6,40 +6,8 @@
 ******************************************************/
 
 include_once 'config.php';
+
 /*
-function init_calendar(){
-			
-			// specify connection info
-			
-			$connect = mysql_connect(BDD_IP,BDD_USER,BDD_PASS);
-			if (!$connect){
-				echo 'makeSynteseByDay | Connection MySQL impossible : ' . mysql_error();
-			}
-			
-			$cid = mysql_select_db(BDD_SCHEMA,$connect);
-			
-			$start_day = mktime(0, 0, 0, 9  , 1, 2014); //1er septembre 2014
-			$stop_day = mktime(0, 0, 0, 9  , 1, 2037); //justqu'au 1er septembre 2037, on verra en 2037 si j'utilise encore l'app.
-			
-			echo date('Y-m-d',$start_day );
-			echo '<br/>';
-			echo date('Y-m-d',$stop_day );
-			echo '<br/>';
-			$nb_day = ($stop_day - $start_day)/86400;
-			
-			echo 'Nb jour a creer : '.$nb_day.'<br/>';
-			
-			for ($i = 0; $i<= $nb_day; $i++){
-				$day = date('Y-m-d' ,mktime(0, 0, 0, date("m",$start_day)  , date("d",$start_day)+$i, date("Y",$start_day)) );
-				$query = "INSERT INTO oko_dateref (jour) VALUES ('".$day."');";
-				// echo $query.'<br/>';
-				//$this->log->debug("makeSynteseByDay | ".$query);
-				
-				$n=mysql_query($query, $connect );
-			}
-			mysql_close($connect); // closing connection
-			echo 'Init fini !';
-}
 
 function histo_statut(){
 		$connect = mysql_connect(BDD_IP,BDD_USER,BDD_PASS);
@@ -75,19 +43,7 @@ function histo_statut(){
 
 
 			
-/* Requette pense bete
-mettre a jour que le dju
-
-UPDATE oko_resume_day 
-INNER JOIN (
-SELECT 
-	jour, 
-	IF( 20 <= (MAX(Tc_exterieur) + MIN(Tc_exterieur))/2, 0, round(20 - (MAX(Tc_exterieur) + MIN(Tc_exterieur))/2,2)) as dju
-FROM oko_histo_full  group by jour
-) as tmp
-ON oko_resume_day.jour = tmp.jour
-set oko_resume_day.dju = tmp.dju
-
+/*
 
 // pour faire un resume day pour un jour precis 
 insert ignore into oko_resume_day
@@ -153,77 +109,11 @@ $query .= "INSERT IGNORE INTO oko_histo_full VALUES (".
 							//Statut 3 = allumage
 							$start_cycle.
 							");\n";
-	*/
-
-
-
-/*
-use vierbergenlars\SemVer\version;
-use vierbergenlars\SemVer\expression;
-use vierbergenlars\SemVer\SemVerException;
-*/
-
-/*
-// Check if a version is valid
-$semver = new version('1.2.3');
-//$semver = new version('a.b.c'); //SemVerException thrown
-
-//Get a clean version string
-$semver = new version('=v1.2.3');
-echo $semver->getVersion(); //'1.2.3'
-
-//Check if a version satisfies a range
-$semver = new version('1.2.3');
-echo "a:". $semver->satisfies(new expression('1.x || >=2.5.0 || 5.0.0 - 7.2.3')); //true
-# OR
-$range = new expression('1.x || >=2.5.0 || 5.0.0 - 7.2.3');
-echo "b:".$range->satisfiedBy(new version('1.2.3')); //true
-
-//Compare two versions
-var_dump( "c:".version::gt('1.2.3', '9.8.7') ); //false
-echo "d:".version::lt('1.2.3', '9.8.7'); //true
 */
 
 
-$update = new AutoUpdate();
-$update->setCurrentVersion('0.0.1');
-//$update->setUpdateUrl('http://okovision.dronek.com/'); //Replace with your server update directory
-// Optional:
-//$update->addLogHandler(new Monolog\Handler\StreamHandler(__DIR__ . '/update.log'));
-//$update->setCache(new Desarrolla2\Cache\Adapter\File(__DIR__ . '/cache'), 3600);
+require('_upgrade.php');
 
-//Check for a new update
-if ($update->checkUpdate() === false)
-	die('Could not check for updates! See log file for details.');
-if ($update->newVersionAvailable()) {
-	//Install new update
-	echo 'New Version: ' . $update->getLatestVersion() . '<br>';
-	echo 'Installing Updates: <br>';
-	echo '<pre>';
-	/*
-	var_dump(array_map(function($version) {
-		return (string) $version;
-	}, $update->getVersionsToUpdate()));
-	*/
-	print_r($update->getVersionsInformationToUpdate() );
-	echo '</pre>';
-	/*
-	$result = $update->update();
-	if ($result === true) {
-		echo 'Update successful<br>';
-	} else {
-		echo 'Update failed: ' . $result . '!<br>';
-		if ($result = AutoUpdate::ERROR_SIMULATE) {
-			echo '<pre>';
-			var_dump($update->getSimulationResults());
-			echo '</pre>';
-		}
-	}
-	*/
-	
-} else {
-	echo 'Current Version is up to date<br>';
-}
-//echo 'Log:<br>';
-//echo nl2br(file_get_contents(__DIR__ . '/update.log'));
+
+
 ?>
