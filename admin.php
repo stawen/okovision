@@ -9,7 +9,7 @@
 	include_once '_templates/header.php';
 	include_once '_templates/menu.php';
 ?>
-<?php echo session::getLabel('xxx') ?>
+
 
 
 <div class="container theme-showcase" role="main">

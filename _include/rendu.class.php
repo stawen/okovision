@@ -187,11 +187,11 @@ class rendu extends connectDb{
 	}
 	
 	public function getHistoByMonth($month,$year){
-		$categorie = array( 'T°C Exterieur (Max)' => 'tc_ext_max',
-							'T°C Exterieur (Min)' => 'tc_ext_min',
-							'Pellet (Kg)' => 'conso_kg',
-							'DJU' => 'dju',
-							'NB Cycle' => 'nb_cycle'
+		$categorie = array( session::getLabel('lang.text.graphe.label.tcmax') => 'tc_ext_max',
+							session::getLabel('lang.text.graphe.label.tcmin') => 'tc_ext_min',
+							session::getLabel('lang.text.graphe.label.conso') => 'conso_kg',
+							session::getLabel('lang.text.graphe.label.dju') => 'dju',
+							session::getLabel('lang.text.graphe.label.nbcycle') => 'nb_cycle'
 						);
 						
 		$where ='FROM oko_resume_day '
@@ -252,11 +252,11 @@ class rendu extends connectDb{
 	
 	public function getSyntheseSaison($idSaison){
 		
-		$categorie = array( 'T°C Exterieur (Max)' => 'max(Tc_ext_max)',
-							'T°C Exterieur (Min)' => 'min(Tc_ext_min)',
-							'Pellet (Kg)' => 'sum(conso_kg)',
-							'DJU' => 'sum(dju)',
-							'NB Cycle' => 'sum(nb_cycle)'
+		$categorie = array( session::getLabel('lang.text.graphe.label.tcmax') => 'max(Tc_ext_max)',
+							session::getLabel('lang.text.graphe.label.tcmin') => 'min(Tc_ext_min)',
+							session::getLabel('lang.text.graphe.label.conso') => 'sum(conso_kg)',
+							session::getLabel('lang.text.graphe.label.dju') => 'sum(dju)',
+							session::getLabel('lang.text.graphe.label.nbcycle') => 'sum(nb_cycle)'
 						);
 		
 		$where = ", DATE_FORMAT(oko_dateref.jour,'%Y-%m-01 00:00:00') FROM oko_saisons, oko_resume_day ".

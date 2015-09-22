@@ -13,29 +13,20 @@ if (!file_exists("config.php")) {
 	include_once '_templates/menu.php';
 }
 
-
-
 ?>   
+
 <div class="se-pre-con"></div>
 
     <div class="container theme-showcase" role="main">
 		
 		<div class="page-header" align="center">
-			<span class="glyphicon glyphicon-hand-right"></span> Consommation de pellet : <span id="consoPellet" class="label label-primary">00,00 Kg</span> &nbsp;&nbsp;
-			<span class="glyphicon glyphicon-arrow-up"></span> T°C Max (ext) : <span id="tcmax" class="label label-success">00,0 °C</span> &nbsp;&nbsp;
-			<span class="glyphicon glyphicon-arrow-down"></span> T°C Min (ext) : <span id="tcmin" class="label label-warning">00,0 °C</span>
+			<span class="glyphicon glyphicon-hand-right"></span> <?php echo session::getLabel('lang.text.page.label.conso') ?><span id="consoPellet" class="label label-primary">00,00 Kg</span> &nbsp;&nbsp;
+			<span class="glyphicon glyphicon-arrow-up"></span> <?php echo session::getLabel('lang.text.page.label.tcmax') ?> <span id="tcmax" class="label label-success">00,0 °C</span> &nbsp;&nbsp;
+			<span class="glyphicon glyphicon-arrow-down"></span> <?php echo session::getLabel('lang.text.page.label.tcmin') ?> <span id="tcmin" class="label label-warning">00,0 °C</span>
 		</div>
 		<div class="container-graphe">
 		</div>
-		
-		
-		
-			
-		
-		
 
-
-	
 <?php
 include('_templates/footer.php');
 ?>
