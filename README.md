@@ -2,10 +2,6 @@
 Interface web de supervison d'une chaudiere Okofen
 http://okovision.dronek.com
 
-# Version 1.0.0
-Premiere version stable, une mecanisme de mise a jour automatique est inclus dans le programme, vous pourrez ainsi disposer les corrections / améliorations en vous rendant
-dans la page "A propos" du programme.
-
 # Quelle techno ?
 Js + PHP + MariaDb.
 
