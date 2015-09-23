@@ -47,8 +47,8 @@ $(document).ready(function() {
 		tab = typeof tab !== 'undefined' ? tab : {};
 		typeSync = typeof typeSync !== 'undefined' ? typeSync : true;
 
-		var urlFinal = 'ajax.php?sid=' + sessionToken + '&' + urlFinal;
-
+		//var urlFinal = 'ajax.php?sid=' + sessionToken + '&' + urlFinal;
+		var urlFinal = 'ajax.php?' + urlFinal;
 		var jxhr =  $.ajax({
 			url: urlFinal,
 			type: mode,

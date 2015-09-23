@@ -31,7 +31,7 @@ DEFINE('CHAUDIERE',$config['chaudiere']); // <ip>:<port> //json
 DEFINE('BDD_IP','###_BDD_IP_###'); //default -> localhost
 DEFINE('BDD_USER','###_BDD_USER_###');
 DEFINE('BDD_PASS','###_BDD_PASS_###');
-DEFINE('BDD_SCHEMA','okovision'); //default -> okovision
+DEFINE('BDD_SCHEMA','###_BDD_SCHEMA_###'); //default -> okovision
 
 
 

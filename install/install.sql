@@ -11,9 +11,9 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 -- Export de la structure de la base pour okovision
-DROP DATABASE IF EXISTS `okovision`;
-CREATE DATABASE IF NOT EXISTS `okovision` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `okovision`;
+-- DROP DATABASE IF EXISTS `okovision`;
+-- CREATE DATABASE IF NOT EXISTS `okovision` /*!40100 DEFAULT CHARACTER SET utf8 */;
+-- USE `okovision`;
 
 
 -- Export de la structure de table okovision. oko_saisons
@@ -38,7 +38,7 @@ INSERT INTO `oko_saisons` (`id`, `saison`, `date_debut`, `date_fin`) VALUES
 DROP TABLE IF EXISTS `oko_dateref`;
 CREATE TABLE IF NOT EXISTS `oko_dateref` (
   `jour` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='table de reference des date, sur 30ans a partir du 1er Septembre 2014';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='table de reference des dates, sur 30ans a partir du 1er Septembre 2014';
 /*!40000 ALTER TABLE `oko_dateref` ENABLE KEYS */;
 
 

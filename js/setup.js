@@ -67,6 +67,7 @@ $(document).ready(function() {
 			db_adress: $('#db_adress').val(),
 			db_user: $('#db_user').val(),
 			db_password: $('#db_password').val(),
+			db_schema: $('#db_schema').val(),
 			oko_ip: $('#oko_ip').val(),
 			param_tcref: $('#param_tcref').val(),
 			param_poids_pellet: $('#param_poids_pellet').val(),
@@ -81,7 +82,7 @@ $(document).ready(function() {
 			data: $.param(tab),
 			async: false,
 			success: function(a) {
-				//console.log("success");
+				//console.log(a);
 				window.location.replace("admin.php#matrice");
 			}
 		});

@@ -2,7 +2,7 @@
 
 class session {
     
-    protected static $lang;
+    protected static $lang = 'fr';
     
     public function __construct() {
         

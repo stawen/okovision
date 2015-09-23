@@ -38,7 +38,16 @@
             exit();
         }
         
+        $q = "CREATE DATABASE IF NOT EXISTS `".$s['db_schema']."` /*!40100 DEFAULT CHARACTER SET utf8 */;";
+        //echo "Création BDD ::".$q;
+        //exit;
+        if(!$mysqli->query($q)) {
+        	echo "Création BDD impossible";
+        	exit;
+        }
+        $mysqli->close();
         
+        $mysqli = new mysqli($s['db_adress'], $s['db_user'], $s['db_password'], $s['db_schema']);
         
         /* execute multi query */
         $mysqli->multi_query(file_get_contents('install/install.sql'));
@@ -69,6 +78,8 @@
         $configFile = str_replace("###_BDD_IP_###",$s['db_adress'],$configFile);
         $configFile = str_replace("###_BDD_USER_###",$s['db_user'],$configFile);
         $configFile = str_replace("###_BDD_PASS_###",$s['db_password'],$configFile);
+        $configFile = str_replace("###_BDD_SCHEMA_###",$s['db_schema'],$configFile);
+        
         /*
         $configFile = str_replace("###_FTP_SERVEUR_###",$s['ftp_adress'],$configFile);
         $configFile = str_replace("###_FTP_USER_###",$s['ftp_user'],$configFile);
@@ -138,6 +149,15 @@
 					  <label class="col-md-4 control-label" for="db_adress">Adresse de la base (*) :</label>  
 					  <div class="col-md-3">
 					  <input id="db_adress" name="db_adress" type="text" placeholder="ex : localhost, 192.168.xxx.xxx" class="form-control input-md" required="">
+					  <span class="help-block"></span>  
+					  </div>
+					</div>
+					
+					<!-- Text input-->
+					<div class="form-group">
+					  <label class="col-md-4 control-label" for="db_adress">Nom de la base (*) :</label>  
+					  <div class="col-md-3">
+					  <input id="db_schema" name="db_schema" type="text" placeholder="ex : okovision" class="form-control input-md" required="">
 					  <span class="help-block"></span>  
 					  </div>
 					</div>
@@ -237,9 +257,19 @@
 					    <button id="bt_install" name="bt_install" class="btn btn-primary" type="button">Installer</button>
 					  </div>
 
-<?php
-include('_templates/footer.php');
-?>
+	 </div> <!-- /container -->
+	
+	 <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery.min.js"></script>
+	<script src="js/jquery-ui.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/bootstrap-notify.min.js"></script>
+	<script src="js/highcharts.min.js"></script>
+	
+	<script src="_langs/fr.text.js"></script>
+	<script src="js/custom.js"></script>
 <!--appel des scripts personnels de la page -->
 	<script src="js/setup.js"></script>
     </body>
