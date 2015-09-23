@@ -16,7 +16,7 @@
 		$r = true;
 		
 		try{
-			$db = new mysqli($s['db_adress'], $s['db_user'], $s['db_password'], 'mysql');
+			$db = new mysqli($s['db_adress'], $s['db_user'], $s['db_password']);
 		} catch (Exception $e ) {
 			$r=false;
      		
@@ -29,24 +29,27 @@
 	}
 	
 	function makeInstallation($s){
-	    /* create BDD */
-	    $mysqli = new mysqli($s['db_adress'], $s['db_user'], $s['db_password'], 'mysql');
+	    
+	    if($s['createDb']){
+	    	/* create BDD */
+	    	$mysqli = new mysqli($s['db_adress'], $s['db_user'], $s['db_password']);
 
-        /* check connection */
-        if ($mysqli->connect_errno) {
-            printf("Connect failed: %s\n", $mysqli->connect_error);
-            exit();
-        }
+	        /* check connection */
+    	    if ($mysqli->connect_errno) {
+        	    printf("Connect failed: %s\n", $mysqli->connect_error);
+            	exit();
+        	}
         
-        $q = "CREATE DATABASE IF NOT EXISTS `".$s['db_schema']."` /*!40100 DEFAULT CHARACTER SET utf8 */;";
-        //echo "Création BDD ::".$q;
-        //exit;
-        if(!$mysqli->query($q)) {
-        	echo "Création BDD impossible";
-        	exit;
-        }
-        $mysqli->close();
-        
+	        $q = "CREATE DATABASE IF NOT EXISTS `".$s['db_schema']."` /*!40100 DEFAULT CHARACTER SET utf8 */;";
+        	//echo "Création BDD ::".$q;
+        	//exit;
+        	if(!$mysqli->query($q)) {
+	        	echo "Création BDD impossible";
+        		exit;
+        	}
+        	$mysqli->close();
+	    }
+	    
         $mysqli = new mysqli($s['db_adress'], $s['db_user'], $s['db_password'], $s['db_schema']);
         
         /* execute multi query */
@@ -159,6 +162,15 @@
 					  <div class="col-md-3">
 					  <input id="db_schema" name="db_schema" type="text" placeholder="ex : okovision" class="form-control input-md" required="">
 					  <span class="help-block"></span>  
+					  </div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label" for="createDb">Créer la base :</label>  
+					  	<div class="col-md-3 checkbox">
+					    <label>
+					      <input id="createDb" type="checkbox"> Ne pas cocher si elle existe déjà
+					    </label>
+					
 					  </div>
 					</div>
 					
