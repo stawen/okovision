@@ -84,8 +84,8 @@ $(document).ready(function() {
 			data: $.param(tab),
 			async: false,
 			success: function(a) {
-				console.log(a);
-				//window.location.replace("admin.php#matrice");
+				//console.log(a);
+				window.location.replace("admin.php#matrice");
 			}
 		});
 
