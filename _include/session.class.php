@@ -28,7 +28,7 @@ class session {
         //if (DEBUG) session_unset();
     }
     
-    private function getDictionnary($lg){
+    private static function getDictionnary($lg){
 		$file = '_langs/' . $lg . '.text.ini';
 	    if(file_exists($file)){
 	        return parse_ini_file($file);
@@ -36,24 +36,24 @@ class session {
 	    
 	}
 	
-	public function getLabel($label){
+	public static function getLabel($label){
 	    //return $_SESSION['LANG'][$label];
 	    return self::getDictionnary(self::$lang)[$label];
 	}
 	
-	public function getLang(){
+	public static function getLang(){
 	    return self::$lang;
 	}
 	
-	public function setVar($index, $value){
+	public static function setVar($index, $value){
 	    $_SESSION[$index] = $value;
 	}
 	
-	public function exist($index){
+	public static function exist($index){
 	    return isset($_SESSION[$index]);
 	}
 	
-	public function getVar($index){
+	public static function getVar($index){
 	    return $_SESSION[$index];
 	}
 }
