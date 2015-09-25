@@ -43,7 +43,7 @@ $(document).ready(function() {
     		listFile();
             $("#inwork-makeupdate").hide();
             $("#bt_import").show();
-            $.growlValidate("terminée")
+            $.growlValidate(lang.valid.csvImport)
         },1500);
    });
    

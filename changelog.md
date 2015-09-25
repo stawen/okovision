@@ -1,3 +1,10 @@
+# V1.1.2
+* #21 - import de masse
+* 
+
+## V1.1.1
+* #23 - synthse journalière ne fonctionnait plus
+
 ## V1.1.0
 * #14 et #11 - EVOL - Externalisation des textes dans un fichier commun (pour gain de perf et internationnalisation si besoin)
 * #11 - EVOL -  Factorisation des appels Asynchrones - Uniformisation / performance / évolutions futur facilitée
