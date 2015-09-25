@@ -83,6 +83,12 @@ if (is_ajax() && is_valid()) {
                         case "makeUpdate":
                             $a->makeUpdate();
                             break;
+                        case "getFileFromTmp":
+                            $a->getFileFromTmp();
+                            break;
+                        case "importFileFromTmp":
+                            $a->importFileFromTmp($_GET['file']);
+                            break;
     				}
     				break; 
     			case "graphique":

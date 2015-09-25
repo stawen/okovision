@@ -442,6 +442,29 @@ class administration extends connectDb{
 		return $this->sendResponse($r);
 		
 	}
+	
+	public function getFileFromTmp(){
+		$files = scandir('_tmp');
+		$r = array();
+		foreach($files as $f){
+			if ($f <> '.' && $f <> '..' && $f <> 'matrice.csv' && $f <> 'import.csv' && $f <> 'readme.md'){
+				$r[] = $f;
+			}
+		}
+		
+		return $this->sendResponse($r);
+	}
+	
+	public function importFileFromTmp($file){
+		if(file_exists ( '_tmp/import.csv' )){
+			unlink('_tmp/import.csv');
+		}
+	
+		rename('_tmp/'.$file, '_tmp/import.csv');
+		
+		$this->importcsv();
+		
+	}
 
 }
 

@@ -51,6 +51,7 @@
                         <li class="dropdown-header"><?php echo session::getLabel('lang.text.menu.manual') ?></li>    
                             <?php if(GET_CHAUDIERE_DATA_BY_IP){ ?><li><a href="actionManuelle.php#majip"><?php echo session::getLabel('lang.text.menu.manual.import.ip') ?></a></li> <?php } ?>
                             <li><a href="actionManuelle.php#majusb"><?php echo session::getLabel('lang.text.menu.manual.import.usb') ?></a></li>
+                            <li><a href="importmass.php"><?php echo session::getLabel('lang.text.menu.manual.import.mass') ?></a></li>
                             <li><a href="actionManuelle.php#synthese"><?php echo session::getLabel('lang.text.menu.manual.synthese') ?></a></li>
                     <li class="divider"></li>
                     
