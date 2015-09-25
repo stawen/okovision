@@ -11,9 +11,10 @@
 
 ?>   
 
-    <div class="container theme-showcase" role="main">
+    <div class="container" role="main">
 		
-		<div class="page-header"> 
+		<div class="page-header row">
+		 
 			<div class="col-md-9" >
 				<span class="glyphicon glyphicon-hand-right"></span> <?php echo session::getLabel('lang.text.page.label.conso') ?> <span id="consoPellet" class="label label-primary">00,00 Kg</span> &nbsp;&nbsp;
 				<span class="glyphicon glyphicon-arrow-up"></span> <?php echo session::getLabel('lang.text.page.label.tcmax') ?> <span id="tcmax" class="label label-success">00,0 °C</span> &nbsp;&nbsp;
@@ -56,8 +57,8 @@
 			<div class="col-md-12" id="histo-temperature" style="width:100%; height:500px;"></div>
 			<div class="col-md-12"></div>
 		</div>
-		
-		<div class="page-header" >
+		<br/><br/>
+		<div class="page-header row">
 			
 			<div class="col-md-9">
 				<span class="glyphicon glyphicon-hand-right"></span> <?php echo session::getLabel('lang.text.page.label.conso') ?> <span id="consoPelletSaison" class="label label-primary">00,00 Kg</span> &nbsp;&nbsp;
