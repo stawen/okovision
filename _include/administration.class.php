@@ -29,7 +29,7 @@ class administration extends connectDb{
 		$ip = $tmp[0];
 		$port = isset( $tmp[1] )?$tmp[1]:80;
 		
-		if($fp = fsockopen($ip,$port,$errCode,$errStr,$waitTimeoutInSeconds)){   
+		if($fp = @fsockopen($ip,$port,$errCode,$errStr,$waitTimeoutInSeconds)){   
 		   // It worked 
 		   $r['response'] = true;
 		   $r['url'] = 'http://'.$adress.URL;
@@ -37,7 +37,7 @@ class administration extends connectDb{
 		} else {
 		   $r['response'] = false;
 		} 
-		fclose($fp);
+		@fclose($fp);
 		
 		$this->sendResponse($r);
 		
