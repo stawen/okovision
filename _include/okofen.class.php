@@ -112,7 +112,8 @@ class okofen extends connectDb{
 			
 			if($ln != 0){ //pour ne pas lire la premiere ligne d'entete du fichier csv
 				$colCsv = explode(CSV_SEPARATEUR, $ligne);
-				
+			
+					
 				if(isset($colCsv[1])){ //test si ligne non vide
 					
 					$nbColCsv = count($colCsv);
@@ -134,7 +135,7 @@ class okofen extends connectDb{
 									$startCycle['id'].",". 	//capteur_id
 						    		$st."),";     			//valeur
 						//on concatene dans la variable $query pour faire du multivalues
-						//$this->log->debug($q);
+						
 					}
 					
 					//creation de la requette sql pour les capteurs

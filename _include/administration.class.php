@@ -254,6 +254,8 @@ class administration extends connectDb{
 				"LEFT OUTER JOIN oko_resume_day as b ON a.jour = b.jour ".
 				"WHERE b.jour is NULL AND a.jour <> '".$now."'group by a.jour;";
 		
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
+		
 		$result = $this->db->query($q);
 	    $r['data'] = [];
 	    

@@ -187,7 +187,7 @@ $(document).ready(function() {
 		bt.find('span').switchClass('glyphicon-repeat', 'glyphicon-refresh glyphicon-spin', 0);
 
 		//$.getJSON("ajax.php?type=admin&action=makeSyntheseByDay&date=" + bt.data('day') , function(json) {
-		$.api('GET', 'admin.makeSyntheseByDay').done(function(json) {
+		$.api('GET', 'admin.makeSyntheseByDay',{date: bt.data('day')}).done(function(json) {
 
 			if (json.response) {
 				$.growlValidate(lang.valid.summary);
