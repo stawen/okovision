@@ -1,6 +1,8 @@
-# V1.2.0
-* #21 - import de masse
+## V1.2.1
+* #25 - voir la version courante
 
+## V1.2.0
+* #21 - import de masse
 
 ## V1.1.1
 * #23 - synthse journalière ne fonctionnait plus
