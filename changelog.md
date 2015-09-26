@@ -1,5 +1,6 @@
 ## V1.2.1
 * #25 - voir la version courante
+* #19 - anomalie html sur la page des historiques
 
 ## V1.2.0
 * #21 - import de masse

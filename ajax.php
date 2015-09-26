@@ -87,8 +87,12 @@ if (is_ajax() && is_valid()) {
                             $a->getFileFromTmp();
                             break;
                         case "importFileFromTmp":
-                            $a->importFileFromTmp($_GET['file']);
+                            if( isset( $_GET['file'] ) ){
+                                $a->importFileFromTmp($_GET['file']);
+                            }
                             break;
+                            
+                            
     				}
     				break; 
     			case "graphique":

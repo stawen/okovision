@@ -32,19 +32,24 @@ $(document).ready(function() {
         
  
         setTimeout(function(){
-            $.each(file, function() {
-          		$.api('GET', 'admin.importFileFromTmp',{file: $(this).find("td:nth-child(1)").text()}, false).done(function(json) {
-                });
+            $.each(file, function(key, f) {
+                //console.log(f.find("td:nth-child(1)").text());
+                setTimeout(function(){
+              		$.api('GET', 'admin.importFileFromTmp',{file: $(this).find("td:nth-child(1)").text()}, false).done(function() {
+              		});
+              		console.log(f);
+                    f.remove();  
+                },1000);
             			    
         	});
         
 		
-    		$("#listeFichierImport> tbody").html("");
-    		listFile();
+    		//$("#listeFichierImport> tbody").html("");
+    		//listFile();
             $("#inwork-makeupdate").hide();
             $("#bt_import").show();
             $.growlValidate(lang.valid.csvImport)
-        },1500);
+        },500);
    });
    
     
