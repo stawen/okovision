@@ -169,16 +169,16 @@ $(document).ready(function() {
 
 				var jour = $.datepicker.formatDate('dd/mm/yy', $.datepicker.parseDate('yy-mm-dd', val.jour));
 
-				$('#listeDateWithoutSynthese > tbody:last').append('<tr> \
+				$('#listeDateWithoutSynthese > tbody:last').append('<tr class="day"> \
 					                                                            <td> ' + jour + '</a></td>\
-					                                                            <td>  <button type="button" class="btn btn-default day" data-day="' + val.jour + '" ><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button></td> \
+					                                                            <td>  <button type="button" class="btn btn-default btday" data-day="' + val.jour + '" ><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button></td> \
 					                                                       </tr>');
 			});
 
 		});
 	}
 
-	$("body").on("click", ".day", function(b) {
+	$("body").on("click", ".btday", function(b) {
 		makeSynthese($(this));
 	});
 
@@ -200,16 +200,31 @@ $(document).ready(function() {
 	}
 
 	$("#makeAllSynthese").click(function() {
-		//console.log("ivi");
-		var day = [];
-		$(".day").each(function() {
-			day.push($(this));
-		});
-
-		$.each(day, function() {
-			makeSynthese($(this));
-		});
+		CalculAll();
 	});
+	
+	function CalculAll(){
+		var row = $('.day').first()
+        //console.log(row);
+        var file = row.find("td:nth-child(1)").text()
+        //console.log(file);
+        
+        if (file !== '' ){
+        	row.find('span').switchClass('glyphicon-repeat', 'glyphicon-refresh glyphicon-spin', 0);
+        	
+            setTimeout(function(){
+            	//console.log(row.find(".btday").data('day'));
+            	$.api('GET', 'admin.makeSyntheseByDay',{date: row.find(".btday").data('day')},false).done();
+                row.remove(); 
+                CalculAll();
+            },500);
+            
+        }else{
+            $.growlValidate(lang.valid.summary);
+			getDayWithoutSynthese();
+        }
+        
+	}
 
 	getFileFromChaudiere();
 	getDayWithoutSynthese();
