@@ -114,6 +114,6 @@ $query .= "INSERT IGNORE INTO oko_histo_full VALUES (".
 
 require('_upgrade.php');
 
-
+// 72 capteurs dans fr/matrice.json => faire 99 colonnes par defaut + 2 = 101
 
 ?>
