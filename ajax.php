@@ -91,6 +91,14 @@ if (is_ajax() && is_valid()) {
                                 $a->importFileFromTmp($_GET['file']);
                             }
                             break;
+                        case "getDateForMigrate":
+                            $a->getDateForMigrate();
+                            break;
+                        case "migrateDataForDate":
+                            if( isset( $_GET['jour'] ) ){
+                                $a->migrateDataForDate($_GET['jour']);
+                            }
+                            break;
                             
                             
     				}
