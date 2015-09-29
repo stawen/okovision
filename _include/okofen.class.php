@@ -174,7 +174,7 @@ class okofen extends connectDb{
 	
 	// Fonction lancant les requettes de synthèse du jour, elle ne s'active que si nous sommes dans le traitement de minuit. Elle fera la synthese
 	// des jours precedents.
-	//V1.3.0 - A revoir
+	
 	public function makeSyntheseByDay($trigger = 'cron',$dayChossen = null) {
 		
 		if ($this->newDay() && $trigger == 'cron'){

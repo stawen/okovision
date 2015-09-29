@@ -19,7 +19,7 @@ class rendu extends connectDb{
         header("Content-type: text/json; charset=utf-8");
 		echo $t;
     }
-	//V1.3.0 - A tester
+	
 	public function getGrapheData($id,$jour){
 		
 		$q = "select capteur.name as name, capteur.id as id, asso.correction_effect as coeff from oko_asso_capteur_graphe as asso ".
@@ -119,7 +119,7 @@ class rendu extends connectDb{
 		//return 1;
 		
 	}
-	//V1.3.0 - ok
+	
 	public function getTcMaxByDay($jour){
 		$c = new capteur();
 		$capteur = $c->getByType('tc_ext');
@@ -135,7 +135,7 @@ class rendu extends connectDb{
 		return $result->fetch_object();		
 				
 	}
-	//V1.3.0 - ok
+	
 	public function getTcMinByDay($jour){
 		$c = new capteur();
 		$capteur = $c->getByType('tc_ext');
@@ -162,7 +162,7 @@ class rendu extends connectDb{
 		}
 		
 	}
-	//V1.3.0 - ok
+	
 	public function getNbCycleByDay($jour){
 		$c = new capteur();
 		$capteur = $c->getByType('startCycle');
