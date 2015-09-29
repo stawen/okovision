@@ -181,18 +181,18 @@ class administration extends connectDb{
 					$type = "";
 				}
 				
-				$q = "INSERT INTO oko_capteur(name,position_column_csv,original_name,type) VALUE ('".$name."',".$position.",'".$title."','".$type."');" ;
+				$q = "INSERT INTO oko_capteur(name,position_column_csv,column_oko, original_name,type) VALUE ('".$name."',".$position.",".$position.",'".$title."','".$type."');" ;
 				
 				$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | Create oko_capteur | ".$q);
 				$query .= $q;
 			}
     	}
 		//insertion d'une reference au demarrage des cycles de chauffe
-		$query .= "INSERT INTO oko_capteur(name,position_column_csv,original_name,type) VALUES ('Start Cycle',99,'Start Cycle','startCycle');" ;
+		$query .= "INSERT INTO oko_capteur(name,position_column_csv,column_oko,original_name,type) VALUES ('Start Cycle',99,99,'Start Cycle','startCycle');" ;
 		
 		
 		$result = $this->db->multi_query($query);
-		//$this->db->free();
+		
 		
 	}
 	
@@ -250,7 +250,7 @@ class administration extends connectDb{
 		//ne pas proposer la date du jour, car forcement incomplete.
 		$now = date('Y-m-d' ,mktime(0, 0, 0, date("m")  , date("d"), date("Y")) );
 		
-		$q = "SELECT a.jour as jour FROM oko_historique as a ".
+		$q = "SELECT a.jour as jour FROM oko_historique_full as a ".
 				"LEFT OUTER JOIN oko_resume_day as b ON a.jour = b.jour ".
 				"WHERE b.jour is NULL AND a.jour <> '".$now."'group by a.jour;";
 		
@@ -478,9 +478,6 @@ class administration extends connectDb{
 		$this->db->query($newTableHistorique);
 		
 		$q = "select distinct(jour) from oko_historique group by jour";
-		//$q = "select a.jour as jour FROM oko_historique as a LEFT OUTER JOIN oko_historique_full as b ON a.jour = b.jour WHERE b.jour is NULL group by a.jour";
-		
-		//$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
 		
 		$result = $this->db->query($q);
 	    $r = array();

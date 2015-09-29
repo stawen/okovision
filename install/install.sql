@@ -184,6 +184,7 @@ CREATE TABLE IF NOT EXISTS `oko_capteur` (
   `id` int(3) NOT NULL AUTO_INCREMENT,
   `name` mediumtext NOT NULL,
   `position_column_csv` int(2) NOT NULL,
+  `column_oko` int(2) NOT NULL,
   `original_name` mediumtext NOT NULL,
   `type` mediumtext DEFAULT NULL, /* tc_ext, tps_vis, tps_vis_pause, start_cycle */
   PRIMARY KEY (`id`)

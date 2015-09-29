@@ -87,6 +87,7 @@ class okofen extends connectDb{
 	/*
 	* integration du fichier csv dans okovision
 	*/
+	//V1.3.0 - A revoir
 	public function csv2bdd(){
 		ini_set('max_execution_time', 120);
 		$t = new timeExec();
@@ -173,7 +174,7 @@ class okofen extends connectDb{
 	
 	// Fonction lancant les requettes de synthèse du jour, elle ne s'active que si nous sommes dans le traitement de minuit. Elle fera la synthese
 	// des jours precedents.
-	
+	//V1.3.0 - A revoir
 	public function makeSyntheseByDay($trigger = 'cron',$dayChossen = null) {
 		
 		if ($this->newDay() && $trigger == 'cron'){
