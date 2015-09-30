@@ -10,7 +10,6 @@ $(document).ready(function() {
 	 * Gestion import par http
 	 */
 	function getFileFromChaudiere() {
-		//$.getJSON("ajax.php?type=admin&action=getFileFromChaudiere" , function(json) {
 		$.api('GET', 'admin.getFileFromChaudiere').done(function(json) {
 
 			if (json.response === true) {
@@ -54,17 +53,6 @@ $(document).ready(function() {
 		var tab = {
 			url: ligne.closest("tr").find("td:nth-child(1)").children('a').attr('href')
 		};
-		/*		
-		$.ajax({
-			url: 'ajax.php?type=admin&action=importFileFromChaudiere',
-			type: 'POST',
-			//contentType: 'application/json; charset=utf-8',
-			//dataType: 'jsonp',
-			data: $.param(tab),
-			async: true,
-		    success: function(a) {
-			    //console.log("success :"+a);
-		*/
 		$.api('POST', 'admin.importFileFromChaudiere', tab, true).done(function(json) {
 
 			if (json.response) {
@@ -133,7 +121,6 @@ $(document).ready(function() {
 		$('#selectFile').hide();
 		$('#inwork').show();
 
-		//$.getJSON("ajax.php?type=admin&action=importcsv" , function(json) {
 		$.api('GET', 'admin.importcsv').done(function(json) {
 
 			if (json.response === true) {
@@ -160,7 +147,6 @@ $(document).ready(function() {
 
 
 	function getDayWithoutSynthese() {
-		//$.getJSON("ajax.php?type=admin&action=getDayWithoutSynthese" , function(json) {
 		$.api('GET', 'admin.getDayWithoutSynthese').done(function(json) {
 
 			$("#inwork-synthese").hide();
@@ -186,7 +172,6 @@ $(document).ready(function() {
 
 		bt.find('span').switchClass('glyphicon-repeat', 'glyphicon-refresh glyphicon-spin', 0);
 
-		//$.getJSON("ajax.php?type=admin&action=makeSyntheseByDay&date=" + bt.data('day') , function(json) {
 		$.api('GET', 'admin.makeSyntheseByDay',{date: bt.data('day')}).done(function(json) {
 
 			if (json.response) {

@@ -32,7 +32,6 @@ $(document).ready(function() {
 		var titre_histo = lang.text.titreHisto;
 		var div_histo_tempe = 'histo-temperature';
 
-		//$.getJSON("ajax.php?type=rendu&action=getHistoByMonth&month="+ $( "#mois" ).val() + "&year="+ $( "#annee" ).val(), function(json) {
 		$.api('GET', 'rendu.getHistoByMonth', {
 				month: $("#mois").val(),
 				year: $("#annee").val()
@@ -180,7 +179,6 @@ $(document).ready(function() {
 		/*
 		 * Gestion des indicateurs du mois 
 		 */
-		//$.getJSON("ajax.php?type=rendu&action=getIndicByMonth&month="+ $( "#mois" ).val() + "&year="+ $( "#annee" ).val(), function(json) {
 		$.api('GET', 'rendu.getIndicByMonth', {
 				month: $("#mois").val(),
 				year: $("#annee").val()
@@ -204,7 +202,6 @@ $(document).ready(function() {
 
 	function generer_synthese_saison() {
 
-		//$.getJSON("ajax.php?type=rendu&action=getTotalSaison&saison="+ $( "#saison" ).val(), function(json) {
 		$.api('GET', 'rendu.getTotalSaison', {
 				saison: $("#saison").val()
 			}).done(function(json) {
@@ -221,7 +218,6 @@ $(document).ready(function() {
 				$.growlErreur(lang.error.getTotalSaison);
 			});
 
-		//$.getJSON("ajax.php?type=rendu&action=getSyntheseSaison&saison=" + $( "#saison" ).val(), function(saison) {
 		$.api('GET', 'rendu.getSyntheseSaison', {
 				saison: $("#saison").val()
 			}).done(function(saison) {
@@ -409,7 +405,6 @@ $(document).ready(function() {
 
 	generer_graphic();
 
-	//$.getJSON("ajax.php?type=admin&action=getSaisons", function(json) {
 	$.api('GET', 'admin.getSaisons').done(function(json) {
 		var today = new Date();
 		$.each(json.data, function(key, val) {

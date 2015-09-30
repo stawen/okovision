@@ -77,7 +77,6 @@ $(document).ready(function() {
 	function refreshAllGraphe() {
 		var jour = $.datepicker.formatDate('yy-mm-dd', $.datepicker.parseDate('dd/mm/yy', $("#date_encours").val()));
 
-		//$.getJSON("ajax.php?type=rendu&action=getIndicByDay&jour=" + jour, function(json) {
 		$.api('GET', 'rendu.getIndicByDay', {
 			jour: jour
 		}).done(function(json) {
@@ -90,7 +89,6 @@ $(document).ready(function() {
 
 		$.each($(".graphique"), function(key, val) {
 
-			//$.getJSON("ajax.php?type=rendu&action=getGrapheData&id="+ val.id +"&jour=" + jour, function(json) {
 			$.api('GET', 'rendu.getGrapheData', {
 					id: val.id,
 					jour: jour
@@ -180,7 +178,6 @@ $(document).ready(function() {
 	 **** Creation de la structure de la page 
 	 ************************************/
 
-	//$.getJSON("ajax.php?type=rendu&action=getGraphe", function(json) {
 	$.api('GET', 'rendu.getGraphe').done(function(json) {
 
 			$.each(json.data, function(key, val) {

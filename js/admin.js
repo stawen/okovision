@@ -28,7 +28,6 @@ $(document).ready(function() {
 
 		var ip = $('#oko_ip').val();
 
-		//$.getJSON("ajax.php?type=admin&action=testIp&ip=" + ip , function(json) {
 		$.api('GET', 'admin.testIp', {
 			ip: ip
 		}).done(function(json) {
@@ -60,14 +59,7 @@ $(document).ready(function() {
 			oko_typeconnect: $('#oko_typeconnect').val(),
 			send_to_web: 0
 		};
-		/*
-		$.ajax({
-			url: 'ajax.php?type=admin&action=saveInfoGe',
-			type: 'POST',
-			data: $.param(tab),
-			async: false,
-			success: function(a) {
-				*/
+		
 		$.api('POST', 'admin.saveInfoGe', tab, false).done(function(json) {
 			//console.log(a);
 			if (json.response) {
@@ -118,7 +110,6 @@ $(document).ready(function() {
 
 	function makeMatrice() {
 
-		//$.getJSON("ajax.php?type=admin&action=getHeaderFromOkoCsv" , function(json) {
 		$.api('GET', 'admin.getHeaderFromOkoCsv').done(function(json) {
 
 			if (json.response) {
@@ -126,7 +117,6 @@ $(document).ready(function() {
 
 				$.each(json.data, function(key, val) {
 					//console.log(val);
-					//$('#select_graphe').append('<option value="' + val.id + '">' + val.name + '</option>');
 					$('#headerCsv > tbody:last').append('<tr> \
 				                                        	<td>' + val.original_name + '</td>\
 				                                        	<td>' + val.name + '</td>\
@@ -151,7 +141,6 @@ $(document).ready(function() {
 	 */
 
 	function refreshSaison() {
-		//$.getJSON("ajax.php?type=admin&action=getSaisons" , function(json) {
 		$.api('GET', 'admin.getSaisons').done(function(json) {
 
 
@@ -209,7 +198,6 @@ $(document).ready(function() {
 			};
 			//console.log(tab.position);
 			//test si la saison existe deja n'est pas déja utilisé
-			//$.getJSON("ajax.php?type=admin&action=existSaison&date=" + tab.startDate, function(json) {
 			$.api('GET', 'admin.existSaison', {
 				date: tab.startDate
 			}).done(function(json) {
@@ -217,14 +205,7 @@ $(document).ready(function() {
 				//console.log(json);
 				if (!json.response) {
 					//saison n'existe pas, on enregistre
-					/*
-					$.ajax({
-						url: 'ajax.php?type=admin&action=setSaison',
-						type: 'POST',
-						data: $.param(tab),
-						async: false,
-						success: function(a) {
-							*/
+					
 					$.api('POST', 'admin.setSaison', tab, false).done(function(json) {
 
 						$('#modal_saison').modal('hide');
@@ -265,7 +246,6 @@ $(document).ready(function() {
 				idSaison: $('#modal_saison').find('#saisonId').val()
 			};
 			//test si la saison existe deja n'est pas déja utilisé
-			//$.getJSON("ajax.php?type=admin&action=existSaison&date=" + tab.startDate, function(json) {
 			$.api('GET', 'admin.existSaison', {
 				date: tab.startDate
 			}).done(function(json) {
@@ -273,14 +253,7 @@ $(document).ready(function() {
 				//console.log(json);
 				if (!json.response) {
 					//saison n'existe pas, on enregistre
-					/*
-					$.ajax({
-						url: 'ajax.php?type=admin&action=updateSaison',
-						type: 'POST',
-						data: $.param(tab),
-						async: false,
-						success: function(a) {
-							*/
+				
 					$.api('POST', 'admin.updateSaison', tab, false).done(function(json) {
 
 						$('#modal_saison').modal('hide');
@@ -313,14 +286,7 @@ $(document).ready(function() {
 		var tab = {
 			idSaison: $('#confirm-delete').find('#saisonId').val()
 		};
-		/*
-		$.ajax({
-			url: 'ajax.php?type=admin&action=deleteSaison',
-			type: 'POST',
-			data: $.param(tab),
-			async: false,
-			success: function(a) {
-		*/
+		
 		$.api('POST', 'admin.deleteSaison', tab, false).done(function(json) {
 
 			$('#confirm-delete').modal('hide');
