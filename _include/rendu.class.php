@@ -38,9 +38,7 @@ class rendu extends connectDb{
 			$capteur = $cap->get($c->id);
 			
 		    $q = "SELECT jour, DATE_FORMAT(heure,'%H:%i:%s'), round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
-			        //."INNER JOIN oko_capteur ON oko_historique.oko_capteur_id = oko_capteur.id WHERE "
-			        //."jour ='".$jour."' and oko_historique.oko_capteur_id = ".$c->id;
-			        ."WHERE jour ='".$jour."'";
+			     ."WHERE jour ='".$jour."'";
 			        
 			$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$c->name." | ".$q);
 			
@@ -98,7 +96,7 @@ class rendu extends connectDb{
 							);
 		
 	}
-	//V1.3.0 - A tester
+	
 	public function getConsoByday($jour){
 		$coeff = POIDS_PELLET_PAR_MINUTE/1000;
 		$c = new capteur();
@@ -106,9 +104,6 @@ class rendu extends connectDb{
 		$capteur_vis_pause = $c->getByType('tps_vis_pause');
 		
 		$q = "select round (sum((1/(a.col_".$capteur_vis['column_oko']." + a.col_".$capteur_vis_pause['column_oko'].")) * a.col_".$capteur_vis['column_oko'].")*(".$coeff."),2) as consoPellet from oko_historique_full as a "
-				//."JOIN oko_historique as b on a.jour = b.jour and a.heure = b.heure "
-				//."JOIN oko_capteur as ca ON ca.id = a.oko_capteur_id and ca.type = 'tps_vis' "
-				//."JOIN oko_capteur as cb ON cb.id = b.oko_capteur_id and cb.type = 'tps_vis_pause' "
 				."WHERE a.jour = '".$jour."';";
 		
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
@@ -116,8 +111,6 @@ class rendu extends connectDb{
 		$result = $this->db->query($q);
 		
 		return $result->fetch_object();
-		//return 1;
-		
 	}
 	
 	public function getTcMaxByDay($jour){
@@ -125,7 +118,6 @@ class rendu extends connectDb{
 		$capteur = $c->getByType('tc_ext');
 		
 		$q = "SELECT round(max(a.col_".$capteur['column_oko']."),2) as tcExtMax FROM oko_historique_full as a "
-				//."JOIN oko_capteur as ca ON ca.id = a.oko_capteur_id and ca.type = 'tc_ext' "
 				."WHERE a.jour = '".$jour."';";
 		
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
@@ -141,7 +133,6 @@ class rendu extends connectDb{
 		$capteur = $c->getByType('tc_ext');
 		
 		$q = "SELECT round(min(a.col_".$capteur['column_oko']."),2) as tcExtMin FROM oko_historique_full as a "
-				//."JOIN oko_capteur as ca ON ca.id = a.oko_capteur_id and ca.type = 'tc_ext' "
 				."WHERE a.jour = '".$jour."';";
 		
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
@@ -168,7 +159,6 @@ class rendu extends connectDb{
 		$capteur = $c->getByType('startCycle');
 		
 		$q = "SELECT sum(a.col_".$capteur['column_oko'].") as nbCycle FROM oko_historique_full as a "
-				//."JOIN oko_capteur as ca ON ca.id = a.oko_capteur_id and ca.type = 'startCycle' "
 				."WHERE a.jour = '".$jour."';";
 		
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
