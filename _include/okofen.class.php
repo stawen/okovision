@@ -87,8 +87,7 @@ class okofen extends connectDb{
 	/*
 	* integration du fichier csv dans okovision
 	*/
-	// inferieur a V1.3.0
-	/*
+	//V1.3.0
 	public function csv2bdd(){
 		ini_set('max_execution_time', 120);
 		$t = new timeExec();
@@ -104,8 +103,8 @@ class okofen extends connectDb{
 		$old_status  	= 0;
 		$start_cycle 	= 0;
 		
-		$insert = "INSERT IGNORE INTO oko_historique (jour,heure,oko_capteur_id,value) VALUES ";
-		
+		//$insert = "INSERT IGNORE INTO oko_historique (jour,heure,oko_capteur_id,value) VALUES ";
+		$insert = "INSERT IGNORE INTO oko_historique_full SET ";
 		while (!feof($file))
 		{
 			$ligne = fgets($file);
@@ -124,116 +123,28 @@ class okofen extends connectDb{
 					$heure 	= $colCsv[1];
 					$query 	= 	"";
 					
-					$beginValue = "( STR_TO_DATE('".$jour."','%d.%m.%Y'),".		// jour
-									"'".$heure."',";							// heure
+					$beginValue = 	"jour = STR_TO_DATE('".$jour."','%d.%m.%Y'),".		// jour
+									"heure='".$heure."'";							// heure
 					
-					$query = $insert;			
+					$query = $insert.$beginValue;			
 					//Detection demarrage d'un cycle //Statut 3 = allumage
 					if( $colCsv[$capteurStatus['position_column_csv']] == "3" && $colCsv[$capteurStatus['position_column_csv']] <> $old_status){
 						$st = 1;
 						//creation de la requette pour le comptage des cycle de la chaudiere
 						//Enregistrement de 1 si nous commençons un cycle d'allumage
-						$query .= 	$beginValue.
-									$startCycle['id'].",". 	//capteur_id
-						    		$st."),";     			//valeur
-						//on concatene dans la variable $query pour faire du multivalues
-						
+						$query .= ", col_".$startCycle['column_oko']."=".$st;
 					}
 					
 					//creation de la requette sql pour les capteurs
 					//on commence à la deuxieme colonne de la ligne du csv
 					for($i=2;$i<$nbColCsv;$i++){
-					    
-					    $query 	.= 	$beginValue.								// heure
-									$capteurs[$i]['id'].",". 				//capteur_id
-					    			$this->cvtDec( $colCsv[$i] )."),";      //valeur
-						
-						//on concatene dans la variable $query pour faire du multivalues
-						//$this->log->debug($q);
+					    $query 	.= 	", col_".$capteurs[$i]['column_oko']."=".$this->cvtDec( $colCsv[$i] );
 					}
-					//suprimme la derniere virgule et on met un ; 
-					$query = substr($query,0,strlen($query)-1).";";
+					
+					$query .= ";";
 					//execution de la requette representant l'ensemble d'un ligne du csv
-					$this->db->query($query);
-					$old_status = $colCsv[$capteurStatus['position_column_csv']];	
+					$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." |".$query);
 					
-				}
-			}
-			$ln++;
-		}
-		fclose($file);
-		
-		$this->log->info("Class ".__CLASS__." | ".__FUNCTION__." | SUCCESS - import du CSV dans la BDD - ".$ln." lignes en ".$t->getTime()." sec ");
-		
-		return true;
-
-	}*/
-	//V1.3.0 - A revoir
-	public function csv2bdd(){
-		ini_set('max_execution_time', 120);
-		$t = new timeExec();
-		
-		$ob_capteur 	= new capteur();
-		$capteurs 		= $ob_capteur->getForImportCsv(); //l'index du tableau correspond a la colonne du capteur dans le fichier csv
-		$capteurStatus 	= $ob_capteur->getByType('status');
-		$startCycle 	= $ob_capteur->getByType('startCycle');
-		
-		
-		$file 			= fopen(CSVFILE, 'r');
-		$ln 			= 0;
-		$old_status  	= 0;
-		$start_cycle 	= 0;
-		
-		$insert = "INSERT IGNORE INTO oko_historique (jour,heure,oko_capteur_id,value) VALUES ";
-		
-		while (!feof($file))
-		{
-			$ligne = fgets($file);
-			//ne pas prendre en compte la derniere colonne vide
-			$ligne = substr($ligne,0,strlen($ligne)-2);
-			
-			if($ln != 0){ //pour ne pas lire la premiere ligne d'entete du fichier csv
-				$colCsv = explode(CSV_SEPARATEUR, $ligne);
-			
-					
-				if(isset($colCsv[1])){ //test si ligne non vide
-					
-					$nbColCsv = count($colCsv);
-					
-					$jour 	= $colCsv[0];
-					$heure 	= $colCsv[1];
-					$query 	= 	"";
-					
-					$beginValue = "( STR_TO_DATE('".$jour."','%d.%m.%Y'),".		// jour
-									"'".$heure."',";							// heure
-					
-					$query = $insert;			
-					//Detection demarrage d'un cycle //Statut 3 = allumage
-					if( $colCsv[$capteurStatus['position_column_csv']] == "3" && $colCsv[$capteurStatus['position_column_csv']] <> $old_status){
-						$st = 1;
-						//creation de la requette pour le comptage des cycle de la chaudiere
-						//Enregistrement de 1 si nous commençons un cycle d'allumage
-						$query .= 	$beginValue.
-									$startCycle['id'].",". 	//capteur_id
-						    		$st."),";     			//valeur
-						//on concatene dans la variable $query pour faire du multivalues
-						
-					}
-					
-					//creation de la requette sql pour les capteurs
-					//on commence à la deuxieme colonne de la ligne du csv
-					for($i=2;$i<$nbColCsv;$i++){
-					    
-					    $query 	.= 	$beginValue.								// heure
-									$capteurs[$i]['id'].",". 				//capteur_id
-					    			$this->cvtDec( $colCsv[$i] )."),";      //valeur
-						
-						//on concatene dans la variable $query pour faire du multivalues
-						//$this->log->debug($q);
-					}
-					//suprimme la derniere virgule et on met un ; 
-					$query = substr($query,0,strlen($query)-1).";";
-					//execution de la requette representant l'ensemble d'un ligne du csv
 					$this->db->query($query);
 					$old_status = $colCsv[$capteurStatus['position_column_csv']];	
 					
