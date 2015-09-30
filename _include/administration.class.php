@@ -516,11 +516,12 @@ class administration extends connectDb{
                 //$this->log->debug("_UPGRADE | ".$qCapteur);
                 $resCapteur = $this->db->query($qCapteur);
                 $rCapteur = $resCapteur->fetch_object();
-
-                $value = $rCapteur->value;  
-                if ($rCapteur->value == null){
+                
+				if ($rCapteur == null){
                     $value   = 'null';
-                }
+                }else{
+					$value = $rCapteur->value; 
+				}
                 $set .= ", col_".$positionCsv."=".$value ; 
                 
             }
