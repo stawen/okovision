@@ -28,7 +28,7 @@ class rendu extends connectDb{
 	            
 	    $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
 	   
-	    $result = $this->db->query($q);
+	    $result = $this->query($q);
 		
 		$resultat = "";
 		$cap = new capteur();
@@ -63,7 +63,7 @@ class rendu extends connectDb{
 	***/
 	private function getDataWithTime($q){	
 		
-		$result = $this->db->query($q);
+		$result = $this->query($q);
 		$data = null;
 	
 		while($r = $result->fetch_row() ) {
@@ -108,7 +108,7 @@ class rendu extends connectDb{
 		
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
 		
-		$result = $this->db->query($q);
+		$result = $this->query($q);
 		
 		return $result->fetch_object();
 	}
@@ -122,7 +122,7 @@ class rendu extends connectDb{
 		
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
 		
-		$result = $this->db->query($q);
+		$result = $this->query($q);
 		
 		return $result->fetch_object();		
 				
@@ -137,7 +137,7 @@ class rendu extends connectDb{
 		
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
 		
-		$result = $this->db->query($q);
+		$result = $this->query($q);
 		
 		return $result->fetch_object();		
 				
@@ -163,7 +163,7 @@ class rendu extends connectDb{
 		
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
 		
-		$result = $this->db->query($q);
+		$result = $this->query($q);
 		
 		return $result->fetch_object();	
 	}
@@ -179,7 +179,7 @@ class rendu extends connectDb{
 		
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
 		
-		$result = $this->db->query($q);
+		$result = $this->query($q);
 		$r = $result->fetch_object();
 		
 		$this->sendResponse( json_encode( 	[ 	"tcExtMax" => $r->tcExtMax,
@@ -214,7 +214,7 @@ class rendu extends connectDb{
 			
 			$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
 			
-			$result = $this->db->query($q);
+			$result = $this->query($q);
 			
 			$data = array();
 			while($r = $result->fetch_row() ) {
@@ -244,7 +244,7 @@ class rendu extends connectDb{
 		
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
 		
-		$result = $this->db->query($q);
+		$result = $this->query($q);
 		$r = $result->fetch_object();
 		
 		$this->sendResponse( json_encode( 	[ 	"tcExtMax" => $r->tcExtMax,
@@ -279,7 +279,7 @@ class rendu extends connectDb{
 			$q = "SELECT ".$colonneSql." ".$where;
 			$this->log->debug("Class ".get_called_class()." | getSyntheseSaison | ".$q); 
 			
-			$result = $this->db->query($q);
+			$result = $this->query($q);
 			$data = null;
 			
 			while($r = $result->fetch_row() ) {

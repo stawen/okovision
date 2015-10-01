@@ -68,7 +68,7 @@ class AutoUpdate extends connectDb{
 	 *
 	 * @var string
 	 */
-	protected $_updateUrl = 'http://okovision.dronek.com/';
+	protected $_updateUrl = 'http://okovision.dronek.com';
 
 	/**
 	 * Version filename on the server.

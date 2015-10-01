@@ -96,7 +96,7 @@ class okofen extends connectDb{
 		$capteurs 		= $ob_capteur->getForImportCsv(); //l'index du tableau correspond a la colonne du capteur dans le fichier csv
 		$capteurStatus 	= $ob_capteur->getByType('status');
 		$startCycle 	= $ob_capteur->getByType('startCycle');
-		
+		unset($ob_capteur);
 		
 		$file 			= fopen(CSVFILE, 'r');
 		$ln 			= 0;
@@ -145,7 +145,7 @@ class okofen extends connectDb{
 					//execution de la requette representant l'ensemble d'un ligne du csv
 					$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." |".$query);
 					
-					$this->db->query($query);
+					$this->query($query);
 					$old_status = $colCsv[$capteurStatus['position_column_csv']];	
 					
 				}
@@ -203,7 +203,7 @@ class okofen extends connectDb{
 					
 			$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$query);
 			
-			$n = $this->db->query($query);
+			$n = $this->query($query);
 			
 			if (!$n){
 				$this->log->error("Class ".__CLASS__." | ".__FUNCTION__." | creation synthèse du ".$day." impossible");

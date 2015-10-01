@@ -16,7 +16,7 @@ class capteur extends connectDb{
 	}
 	
 	public function getAll(){
-	    $result = $this->db->query("select id, name, position_column_csv, column_oko, original_name, type from oko_capteur;");
+	    $result = $this->query("select id, name, position_column_csv, column_oko, original_name, type from oko_capteur;");
 	    while($row = $result->fetch_assoc()){
             $rows[] = $row;
         }
@@ -28,7 +28,7 @@ class capteur extends connectDb{
 	public function get($id){
 	    $capteur = array();
 	    if ($id <> null){
-	        $result = $this->db->query("select id, name, position_column_csv, column_oko, original_name, type from oko_capteur where id= ".$id);
+	        $result = $this->query("select id, name, position_column_csv, column_oko, original_name, type from oko_capteur where id= ".$id);
 	        $capteur = $result->fetch_assoc();
         }
         
@@ -37,7 +37,7 @@ class capteur extends connectDb{
 	}
 	
 	public function getForImportCsv(){
-		$result = $this->db->query("select id, name, position_column_csv, column_oko, original_name, type from oko_capteur;");
+		$result = $this->query("select id, name, position_column_csv, column_oko, original_name, type from oko_capteur;");
 	    while($row = $result->fetch_assoc()){
             $r[$row['position_column_csv']] = $row;
         }
@@ -47,7 +47,7 @@ class capteur extends connectDb{
 	
 	public function getByType($type = ''){
 		if ($type <> '' ){
-			$result = $this->db->query("select id, name, position_column_csv, column_oko, original_name, type from oko_capteur where type = '".$type."';");
+			$result = $this->query("select id, name, position_column_csv, column_oko, original_name, type from oko_capteur where type = '".$type."';");
 			$capteur =  $result->fetch_assoc();
 			
 			return $capteur;

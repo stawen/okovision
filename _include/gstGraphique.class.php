@@ -18,7 +18,7 @@ class gstGraphique extends connectDb{
     public function getGraphe(){
         $q = "select id, name, position from oko_graphe order by position";
 	    
-	    $result = $this->db->query($q);
+	    $result = $this->query($q);
 	    
 	    if($result){
 	    	$r['response'] = true;
@@ -40,7 +40,7 @@ class gstGraphique extends connectDb{
     	$q = "select max(position) as lastPosition from oko_graphe";
 	    $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q ); //.$r['data']['lastPosition']
 	    
-	    $result = $this->db->query($q);
+	    $result = $this->query($q);
 	    
 	    $r['response'] = false;
 	    
@@ -56,7 +56,7 @@ class gstGraphique extends connectDb{
     
     public function grapheNameExist($name){
     	$q = "select count(*) from oko_graphe where name='".$name."'";
-	    $result = $this->db->query($q);
+	    $result = $this->query($q);
 	    
 	    
 	    $r['exist'] = false;
@@ -82,7 +82,7 @@ class gstGraphique extends connectDb{
     	
     	$r['response'] = false;
     	 
-    	if($this->db->query($q)){
+    	if($this->query($q)){
     	 	$r['response'] = true;	
     	}
     	
@@ -96,7 +96,7 @@ class gstGraphique extends connectDb{
     	
     	$r['response'] = false;
     	 
-    	if($this->db->query($q)){
+    	if($this->query($q)){
     	 	$r['response'] = true;	
     	}
     	
@@ -112,7 +112,7 @@ class gstGraphique extends connectDb{
     	$q = "UPDATE oko_graphe SET position=".$s['position']." WHERE id = ".$s['id_graphe'];
     	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
      
-    	if($this->db->query($q)){
+    	if($this->query($q)){
     		if($s['position']>$s['current'] ){
     			$q = "UPDATE oko_graphe SET position=(position - 1) WHERE position <= ".$s['position']." AND position > ".$s['current']." AND id <> ".$s['id_graphe'];
     		}else{
@@ -120,7 +120,7 @@ class gstGraphique extends connectDb{
     		}
     		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
     		
-    		if($this->db->query($q)){
+    		if($this->query($q)){
     				$r['response'] = true;
     		}
     	}
@@ -134,7 +134,7 @@ class gstGraphique extends connectDb{
     	$q = "SELECT position from oko_graphe where id=".$s['id'];
     	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
     	
-    	$result = $this->db->query($q);
+    	$result = $this->query($q);
     	
     	if ($result){
     		
@@ -144,11 +144,11 @@ class gstGraphique extends connectDb{
     		$q = "DELETE from oko_graphe where id=".$s['id'] ;
     		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
     		
-    		if($this->db->query($q)){
+    		if($this->query($q)){
     			$q = "UPDATE oko_graphe SET position=(position - 1) WHERE position > ".$position;
     			$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
     			
-    			if($this->db->query($q)){
+    			if($this->query($q)){
 	    	 		$r['response'] = true;	
 	    		}
     		}
@@ -161,7 +161,7 @@ class gstGraphique extends connectDb{
     	$q = "select id, name from oko_capteur order by id";
 	    $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
 	    
-	    $result = $this->db->query($q);
+	    $result = $this->query($q);
 	    
 	    if($result){
 	    	$r['response'] = true;
@@ -183,7 +183,7 @@ class gstGraphique extends connectDb{
     public function grapheAssoCapteurExist($graphe,$capteur){
     	
     	$q = "select count(*) from oko_asso_capteur_graphe where oko_graphe_id=".$graphe." and oko_capteur_id=".$capteur;
-	    $result = $this->db->query($q);
+	    $result = $this->query($q);
 	    
 	    
 	    $r['exist'] = false;
@@ -210,7 +210,7 @@ class gstGraphique extends connectDb{
     	
     	$r['response'] = false;
     	 
-    	if($this->db->query($q)){
+    	if($this->query($q)){
     	 	$r['response'] = true;	
     	}
     	
@@ -225,7 +225,7 @@ class gstGraphique extends connectDb{
     		."WHERE asso.oko_graphe_id=".$grapheId." ORDER BY asso.position";
     		
 	    $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
-	    $result = $this->db->query($q);
+	    $result = $this->query($q);
 	    
 	    if($result){
 	    	$r['response'] = true;
@@ -251,7 +251,7 @@ class gstGraphique extends connectDb{
     	
     	$r['response'] = false;
     	 
-    	if($this->db->query($q)){
+    	if($this->query($q)){
     	 	$r['response'] = true;	
     	}
     	
@@ -265,7 +265,7 @@ class gstGraphique extends connectDb{
     	$q = "UPDATE oko_asso_capteur_graphe SET position=".$s['position']." WHERE oko_graphe_id = ".$s['id_graphe']." AND oko_capteur_id = ".$s['id_capteur'];;
     	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
      
-    	if($this->db->query($q)){
+    	if($this->query($q)){
     		if($s['position']>$s['current'] ){
     			//$q = "UPDATE oko_graphe SET position=(position - 1) WHERE position <= ".$s['position']." AND position > ".$s['current']." AND id <> ".$s['id_graphe'];
 				$q = "UPDATE oko_asso_capteur_graphe SET position=(position - 1) WHERE position <= ".$s['position']." AND position > ".$s['current']." AND oko_graphe_id = ".$s['id_graphe']." AND oko_capteur_id <> ".$s['id_capteur'];
@@ -275,7 +275,7 @@ class gstGraphique extends connectDb{
     		}
     		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
     		
-    		if($this->db->query($q)){
+    		if($this->query($q)){
     				$r['response'] = true;
     		}
     	}
@@ -291,7 +291,7 @@ class gstGraphique extends connectDb{
     		
     	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
     	
-    	$result = $this->db->query($q);
+    	$result = $this->query($q);
     
     	if($result){ 
     		$res = $result->fetch_object();
@@ -301,12 +301,12 @@ class gstGraphique extends connectDb{
 	    		."oko_capteur_id=".$s['id_capteur'];
 	    	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
 	    	
-	    	if($this->db->query($q)){
+	    	if($this->query($q)){
 	    		
 	    		$q = "UPDATE oko_asso_capteur_graphe SET position=(position - 1) WHERE position > ".$position." AND oko_graphe_id = ".$s['id_graphe'];
     	   		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
 	    	 	
-	    	 	if($this->db->query($q)){
+	    	 	if($this->query($q)){
 	    	 		$r['response'] = true;
 	    		}
 	    	}
