@@ -30,10 +30,10 @@ unlink('importmass.php');
 $this->log->info("_UPGRADE | Suppression importmass.php");
 
 unlink('js/admin.js');
-$this->log->info("_UPGRADE | Suppression admin.php");
+$this->log->info("_UPGRADE | Suppression admin.js");
 unlink('js/actionManuelle.js');
-$this->log->info("_UPGRADE | Suppression actionManuelle.php");
+$this->log->info("_UPGRADE | Suppression actionManuelle.js");
 unlink('js/importmass.js');
-$this->log->info("_UPGRADE | Suppression importmass.php");
+$this->log->info("_UPGRADE | Suppression importmass.js");
 
 ?>
