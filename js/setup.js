@@ -85,7 +85,7 @@ $(document).ready(function() {
 			async: false,
 			success: function(a) {
 				//console.log(a);
-				window.location.replace("admin.php#matrice");
+				window.location.replace("adminMatrix.php");
 			}
 		});
 

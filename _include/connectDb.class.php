@@ -9,7 +9,7 @@ class connectDb {
 	//protected $db;
 	private $db;
 	protected $log;
-	//private $conn;
+	
 	
 	public function __construct() {
 		$this->log = new logger();

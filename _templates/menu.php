@@ -49,16 +49,16 @@
                     <li class="divider"></li>
                    
                         <li class="dropdown-header"><?php echo session::getLabel('lang.text.menu.manual') ?></li>    
-                            <?php if(GET_CHAUDIERE_DATA_BY_IP){ ?><li><a href="actionManuelle.php#majip"><?php echo session::getLabel('lang.text.menu.manual.import.ip') ?></a></li> <?php } ?>
-                            <li><a href="actionManuelle.php#majusb"><?php echo session::getLabel('lang.text.menu.manual.import.usb') ?></a></li>
-                            <li><a href="importmass.php"><?php echo session::getLabel('lang.text.menu.manual.import.mass') ?></a></li>
-                            <li><a href="actionManuelle.php#synthese"><?php echo session::getLabel('lang.text.menu.manual.synthese') ?></a></li>
+                            <?php if(GET_CHAUDIERE_DATA_BY_IP){ ?><li><a href="amImpBoiler.php"><?php echo session::getLabel('lang.text.menu.manual.import.ip') ?></a></li> <?php } ?>
+                            <li><a href="amImpUsb.php"><?php echo session::getLabel('lang.text.menu.manual.import.usb') ?></a></li>
+                            <li><a href="amImportMass.php"><?php echo session::getLabel('lang.text.menu.manual.import.mass') ?></a></li>
+                            <li><a href="amSynthese.php"><?php echo session::getLabel('lang.text.menu.manual.synthese') ?></a></li>
                     <li class="divider"></li>
                     
                         <li class="dropdown-header"><?php echo session::getLabel('lang.text.menu.admin') ?></li>
-                            <li><a href="admin.php#infoge"><?php echo session::getLabel('lang.text.menu.admin.information') ?></a></li>
-                            <li><a href="admin.php#saisons"><?php echo session::getLabel('lang.text.menu.admin.season') ?></a></li>
-                            <li><a href="admin.php#matrice"><?php echo session::getLabel('lang.text.menu.admin.matrix') ?></a></li>
+                            <li><a href="adminParam.php"><?php echo session::getLabel('lang.text.menu.admin.information') ?></a></li>
+                            <li><a href="adminSeason.php"><?php echo session::getLabel('lang.text.menu.admin.season') ?></a></li>
+                            <li><a href="adminMatrix.php"><?php echo session::getLabel('lang.text.menu.admin.matrix') ?></a></li>
                     <li class="divider"></li>
                     
                         <li><a href="about.php"><?php echo session::getLabel('lang.text.menu.about') ?></a></li>
