@@ -19,8 +19,21 @@ if($this->db->query($q)){
     $this->log->info("_UPGRADE | ERROR | Ajout colonne column_oko dans oko_capteur");
 }
 
+/*
+* Suppression des fichier devenus inutiles
+*/
+unlink('admin.php');
+$this->log->info("_UPGRADE | Suppression admin.php");
+unlink('actionManuelle.php');
+$this->log->info("_UPGRADE | Suppression actionManuelle.php");
+unlink('importmass.php');
+$this->log->info("_UPGRADE | Suppression importmass.php");
 
-
-
+unlink('js/admin.js');
+$this->log->info("_UPGRADE | Suppression admin.php");
+unlink('js/actionManuelle.js');
+$this->log->info("_UPGRADE | Suppression actionManuelle.php");
+unlink('js/importmass.js');
+$this->log->info("_UPGRADE | Suppression importmass.php");
 
 ?>
