@@ -6,10 +6,15 @@
 ******************************************************/
 
 class connectDb {
-	//protected $db;
+	
 	private $db;
 	protected $log;
+	private $_ip 	= BDD_IP;
+	private $_user	= BDD_USER;
+	private $_pass	= BDD_PASS;
+	private	$_schema= BDD_SCHEMA;
 	
+	private static $_instance; //The single instance
 	
 	public function __construct() {
 		$this->log = new logger();
@@ -20,12 +25,26 @@ class connectDb {
 	 * Destructor
 	 */
 	public function __destruct() {
-		//$this->db->close();
-		$this->disconnect();
+		//$this->disconnect();
+	}
+	
+	// Magic method clone is empty to prevent duplication of connection
+	private function __clone() { }
+	
+	private static function getInstance() {
+		if(!self::$_instance) { // If no instance then make one
+			self::$_instance = new self();
+		}
+		return self::$_instance;
+	}
+	
+	// Get mysqli connection
+	private function getConnection() {
+		return $this->db;
 	}
 	
 	private function connect(){
-		$this->db = new mysqli(BDD_IP,BDD_USER,BDD_PASS,BDD_SCHEMA);
+		$this->db = new mysqli($this->_ip, $this->_user, $this->_pass, $this->_schema);
 			
 		if ($this->db->connect_errno) {
 			    $this->log->info('GLOBAL | Connection MySQL impossible : ' . $this->db->connect_error );
@@ -39,11 +58,10 @@ class connectDb {
 	}
 	
 	protected function query($q){
-		//$this->connect();
-		return $this->db->query($q);
-		//$this->disconnect();
 		
-		//return $res;	
+		$con = self::getInstance()->getConnection();
+    	//return $this->db->query($q);
+		return $con->query($q);
 	}
 	
 	protected function multi_query(){
