@@ -7,7 +7,7 @@
 
 class connectDb {
 	
-	private $db;
+	private $db = null;
 	protected $log;
 	private $_ip 	= BDD_IP;
 	private $_user	= BDD_USER;
@@ -18,7 +18,6 @@ class connectDb {
 	
 	public function __construct() {
 		$this->log = new logger();
-		$this->connect();
 	}
 	/*
 	 * *
@@ -40,6 +39,9 @@ class connectDb {
 	
 	// Get mysqli connection
 	private function getConnection() {
+		if($this->db == null){
+			$this->connect();
+		}
 		return $this->db;
 	}
 	
@@ -58,10 +60,9 @@ class connectDb {
 	}
 	
 	protected function query($q){
-		
 		$con = self::getInstance()->getConnection();
-    	//return $this->db->query($q);
-		return $con->query($q);
+    	return $con->query($q);
+		
 	}
 	
 	protected function multi_query(){
