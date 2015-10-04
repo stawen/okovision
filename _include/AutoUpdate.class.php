@@ -320,10 +320,10 @@ class AutoUpdate extends connectDb{
 	{
 		$r = array();
 		foreach ($this->_updates as $raw => $info   ){
-			$r[] = ['version' 	=> $info['version']->getVersion(),
+			$r[] = array('version' 	=> $info['version']->getVersion(),
 					'url'		=> $info['url'],
 					'changelog' => $info['changelog']
-					];
+					);
 		}
 		//return json_encode( array_reverse($r) );
 		return array_reverse($r);
@@ -444,11 +444,11 @@ class AutoUpdate extends connectDb{
 				if (version::gt($version, $this->_latestVersion))
 					$this->_latestVersion = $version;
 				
-				$this->_updates[] = [
+				$this->_updates[] = array(
 					'version' 	=> $version,
 					'url' 		=> $updateInfo->url,
 					'changelog' => $updateInfo->changelog
-				];
+				);
 			}
 		}
 

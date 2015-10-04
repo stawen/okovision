@@ -58,7 +58,8 @@ class administration extends connectDb{
         $r = array();
         $r['response'] = true;
         
-        $ok = file_put_contents(CONTEXT.'/config.json',json_encode($param, JSON_UNESCAPED_SLASHES));
+        //$ok = file_put_contents(CONTEXT.'/config.json',json_encode($param, JSON_UNESCAPED_SLASHES));
+        $ok = file_put_contents(CONTEXT.'/config.json',json_encode($param));
         
         if(!$ok)  $r['response'] = false;
         

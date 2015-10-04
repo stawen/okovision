@@ -103,7 +103,7 @@
                         "send_to_web"               => "0"
                     );
         
-        file_put_contents('config.json',json_encode($param, JSON_UNESCAPED_SLASHES));
+        file_put_contents('config.json',json_encode($param));
         
         
 	}
