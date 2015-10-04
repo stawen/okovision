@@ -87,10 +87,10 @@ class rendu extends connectDb{
 		$max 	= $this->getTcMaxByDay($jour);
 		
 		$this->sendResponse(
-							json_encode(	["consoPellet" => $c->consoPellet, 
+							json_encode(	array("consoPellet" => $c->consoPellet, 
 											 "tcExtMax" => $max->tcExtMax, 
 											 "tcExtMin" => $min->tcExtMin 
-											]
+											)
 										, JSON_NUMERIC_CHECK
 									)
 							);
@@ -182,12 +182,12 @@ class rendu extends connectDb{
 		$result = $this->query($q);
 		$r = $result->fetch_object();
 		
-		$this->sendResponse( json_encode( 	[ 	"tcExtMax" => $r->tcExtMax,
+		$this->sendResponse( json_encode( 	array( 	"tcExtMax" => $r->tcExtMax,
 												"tcExtMin" => $r->tcExtMin,
 												"consoPellet" => $r->consoPellet,
 												"dju" => $r->dju,
 												"nbCycle" => $r->nbCycle
-											]
+											)
 											, JSON_NUMERIC_CHECK ) );
 		
 		
@@ -247,12 +247,12 @@ class rendu extends connectDb{
 		$result = $this->query($q);
 		$r = $result->fetch_object();
 		
-		$this->sendResponse( json_encode( 	[ 	"tcExtMax" => $r->tcExtMax,
+		$this->sendResponse( json_encode( 	array("tcExtMax" => $r->tcExtMax,
 												"tcExtMin" => $r->tcExtMin,
 												"consoPellet" => $r->consoPellet,
 												"dju" => $r->dju,
 												"nbCycle" => $r->nbCycle
-											]
+											)
 											, JSON_NUMERIC_CHECK ) );
 											
 	}
