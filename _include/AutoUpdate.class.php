@@ -318,7 +318,7 @@ class AutoUpdate extends connectDb{
 	 */
 	public function getVersionsInformationToUpdate()
 	{
-		$r = [];
+		$r = array();
 		foreach ($this->_updates as $raw => $info   ){
 			$r[] = ['version' 	=> $info['version']->getVersion(),
 					'url'		=> $info['url'],
@@ -378,7 +378,7 @@ class AutoUpdate extends connectDb{
 
 		// Reset previous updates
 		$this->_latestVersion = new version('0.0.0');
-		$this->_updates = [];
+		$this->_updates = array();
 
 		//$versions = $this->_cache->get('update-versions');
 
@@ -531,7 +531,7 @@ class AutoUpdate extends connectDb{
 		}
 
 		$i = -1;
-		$files = [];
+		$files = array();
 		$simulateSuccess = true;
 		$gitFolder = '';
 		while ($file = zip_read($zip)) {

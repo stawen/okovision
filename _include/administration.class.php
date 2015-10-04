@@ -259,7 +259,7 @@ class administration extends connectDb{
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
 		
 		$result = $this->query($q);
-	    $r['data'] = [];
+	    $r['data'] = array();
 	    
 	    if($result){
 	    	$tmp = array();
@@ -399,7 +399,7 @@ class administration extends connectDb{
 	}
 	
 	public function checkUpdate(){
-		$r= [];
+		$r= array();
 		$r['newVersion'] = false;
 		$r['information'] = '';
 		
@@ -424,7 +424,7 @@ class administration extends connectDb{
 	}
 	
 	public function makeUpdate(){
-		$r = [];
+		$r = array();
 		$r['install'] = false;
 		$update = new AutoUpdate();
 		$update->setCurrentVersion($this->getCurrentVersion());
