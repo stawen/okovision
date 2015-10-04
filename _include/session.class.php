@@ -38,7 +38,8 @@ class session {
 	
 	public static function getLabel($label){
 	    //return $_SESSION['LANG'][$label];
-	    return self::getDictionnary(self::$lang)[$label];
+	    $dico = self::getDictionnary(self::$lang);
+	    return $dico[$label];
 	}
 	
 	public static function getLang(){
