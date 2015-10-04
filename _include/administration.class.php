@@ -123,7 +123,8 @@ class administration extends connectDb{
 			
 			if($s['actionFile'] == 'matrice'){
 				$matrice = 'matrice.csv';
-				$rep = $upload_handler->getOption()['upload_dir'];
+				$opt = $upload_handler->getOption();
+				$rep = $opt['upload_dir'];
 				
 				if(file_exists ( $rep.$matrice )){
 					unlink($rep.$matrice);
@@ -138,7 +139,8 @@ class administration extends connectDb{
 			
 			if($s['actionFile'] == 'majusb'){
 				$matrice = 'import.csv';
-				$rep = $upload_handler->getOption()['upload_dir'];
+				$opt = $upload_handler->getOption();
+				$rep = $opt['upload_dir'];
 				
 				if(file_exists ( $rep.$matrice )){
 					unlink($rep.$matrice);
@@ -191,7 +193,7 @@ class administration extends connectDb{
 		$query .= "INSERT INTO oko_capteur(name,position_column_csv,column_oko,original_name,type) VALUES ('Start Cycle',99,99,'Start Cycle','startCycle');" ;
 		
 		
-		$result = $this->db->multi_query($query);
+		$result = $this->multi_query($query);
 		
 		
 	}

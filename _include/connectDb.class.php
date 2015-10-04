@@ -71,7 +71,8 @@ class connectDb {
 	}
 	
 	protected function multi_query(){
-		
+		$con = self::getInstance()->getConnection();
+    	return $con->multi_query($q);
 	}
 	
 	
