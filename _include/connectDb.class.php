@@ -38,7 +38,7 @@ class connectDb {
 	}
 	
 	// Get mysqli connection
-	private function getConnection() {
+	protected function getConnection() {
 		if($this->db == null){
 			$this->connect();
 		}
@@ -57,6 +57,11 @@ class connectDb {
 	
 	private function disconnect(){
 		$this->db->close();
+	}
+	
+	protected function realEscapeString($s){
+		$con = self::getInstance()->getConnection();
+		return $con->real_escape_string($s);
 	}
 	
 	protected function query($q){

@@ -74,7 +74,7 @@ class gstGraphique extends connectDb{
     }
     
     public function addGraphe($s){
-    	$name = $this->db->real_escape_string($s['name']);
+    	$name = $this->realEscapeString($s['name']);
     	
     	$q = "INSERT INTO oko_graphe (name, position) value ('".$name."','".$s['position']."')";
     	$this->log->debug("Class gestGraphique | addGraphe | ".$q);
@@ -91,7 +91,7 @@ class gstGraphique extends connectDb{
     }
     
     public function updateGraphe($s){
-    	$name = $this->db->real_escape_string($s['name']);
+    	$name = $this->realEscapeString($s['name']);
     	$q = "UPDATE oko_graphe SET name='".$name."' where id=".$s['id'] ;
     	
     	$r['response'] = false;
