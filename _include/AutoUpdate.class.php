@@ -549,11 +549,11 @@ class AutoUpdate extends connectDb{
 			$foldername = $this->_installDir . dirname($filename);
 			$absoluteFilename = $this->_installDir . $filename;
 
-			$files[$i] = [
+			$files[$i] = array(
 				'filename' => $filename,
 				'foldername' => $foldername,
 				'absolute_filename' => $absoluteFilename,
-			];
+			);
 
 			$this->log->debug(sprintf('[SIMULATE] Updating file "%s"', $filename));
 
