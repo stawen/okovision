@@ -623,6 +623,7 @@ class AutoUpdate extends connectDb{
 		}
 
 		$this->_simulationResults = $files;
+		zip_close($zip);
 		return $simulateSuccess;
 	}
 
@@ -640,7 +641,7 @@ class AutoUpdate extends connectDb{
 		// Check if install should be simulated
 		if ($simulateInstall && !$this->_simulateInstall($updateFile)) {
 			$this->log->fatal('Simulation of update process failed!');
-			zip_close($zip);
+			//zip_close($zip);
 			return self::ERROR_SIMULATE;
 		}
 
