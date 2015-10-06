@@ -312,7 +312,7 @@ class rendu extends connectDb{
 					"GROUP BY MONTH(oko_dateref.jour) ".
 					"ORDER BY YEAR(oko_dateref.jour), MONTH(oko_dateref.jour) ASC;";
 					
-		$this->log->info("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
 		
 		$result = $this->query($q);
 		
