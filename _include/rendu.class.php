@@ -299,6 +299,31 @@ class rendu extends connectDb{
 		$this->sendResponse( '{ "grapheData": ['.$resultat.']}' );		
 	}
 	
+	public function getSyntheseSaisonTable($idSaison){
+		
+		$q = "select DATE_FORMAT(oko_dateref.jour,'%m-%Y') as mois, ".
+					"IFNULL(sum(oko_resume_day.nb_cycle),'-') as nbCycle, ".
+					"IFNULL(sum(oko_resume_day.conso_kg),'-') as conso, ".
+					"IFNULL(sum(oko_resume_day.dju),'-') as dju, ".
+					"IFNULL(round( ((sum(oko_resume_day.conso_kg) * 1000) / sum(oko_resume_day.dju) / ".SURFACE_HOUSE."),2),'-') as g_dju_m ".
+					"FROM oko_saisons, oko_resume_day ".
+					"RIGHT JOIN oko_dateref ON oko_dateref.jour = oko_resume_day.jour ".
+					"WHERE oko_saisons.id=".$idSaison." AND oko_dateref.jour BETWEEN oko_saisons.date_debut AND oko_saisons.date_fin ".
+					"GROUP BY MONTH(oko_dateref.jour) ".
+					"ORDER BY YEAR(oko_dateref.jour), MONTH(oko_dateref.jour) ASC;";
+					
+		$this->log->info("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
+		
+		$result = $this->query($q);
+		
+		$data = array();
+		while($r = $result->fetch_object() ) {
+			$data[] = $r;
+		}
+		$this->sendResponse( json_encode($data, JSON_NUMERIC_CHECK) );
+		
+	}
+	
 	
 	
 }

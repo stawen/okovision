@@ -180,6 +180,10 @@ if (is_ajax() && is_valid()) {
     					case "getSyntheseSaison":
     					    $r->getSyntheseSaison($_GET['saison']);
     					    break;
+    					case "getSyntheseSaisonTable":
+    					    $r->getSyntheseSaisonTable($_GET['saison']);
+    					    break;
+    					   
     				}
     				break;
     		}		
