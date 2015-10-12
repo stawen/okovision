@@ -14,5 +14,5 @@ class simu_upgrade extends connectDb{
 }
 
 new simu_upgrade();
-    
+echo "Done";    
 ?>
