@@ -21,7 +21,7 @@ if ($res->num_rows > 0){
         $q = "DROP TABLE `oko_historique`";
         if($this->query($q)){
           unlink('migration.php');
-          $this->log->info("_UPGRADE | Suppression migration.php");  
+          $this->log->info("UPGRADE | Suppression migration.php");  
           $this->log->info("UPGRADE | Delete oko_historique Success");
         } 
     }else{
@@ -30,7 +30,11 @@ if ($res->num_rows > 0){
 }
 
 $t = new timeExec();
-$this->log->info("UPGRADE | Update statut | start");
+$this->log->info("UPGRADE | Update status | start");
+$this->log->info("UPGRADE | Delete All synthese by day");
+$q = "TRUNCATE oko_resume_day";
+$this->query($q);
+
 // recuperation de la position du statut chaudiere
 $q = "select oko_capteur.column_oko as num from oko_capteur where oko_capteur.`type` = 'status'";
 $res    = $this->query($q);
@@ -39,8 +43,9 @@ $column = 'col_'.$r->num;
 
 
 //on deroule chaque jour
-$q = "select distinct(jour) as jour from oko_historique_full group by jour";
+$q = "select distinct(jour) as jour from oko_historique_full group by jour order by jour asc";
 $res    = $this->query($q);
+$oko = new okofen();
 
 while ($r = $res->fetch_object()){
     $q = "Update oko_historique_full set col_99 = 0 where jour = '".$r->jour."'";
@@ -57,11 +62,18 @@ while ($r = $res->fetch_object()){
             }
             $status_previous = $resp->status;
         }
-        
+        //on fait la nouvelle synthese du jour
+        $oko->makeSyntheseByDay('onDemande',$r->jour);
     }
     
 }
-$this->log->info("UPGRADE | Update statut | Finished in ".$t->getTime());
+$this->log->info("UPGRADE | Update status | Finished in ".$t->getTime());
+//unset($t);
+/*
+$t = new timeExec();
+$this->log->info("UPGRADE | Update synthese by day | start");
+$this->log->info("UPGRADE | Update synthese by day | Finished in ".$t->getTime());
+*/
 $this->log->info("UPGRADE | finished");
 
 
