@@ -10,7 +10,7 @@ $q = "SHOW TABLES LIKE 'oko_historique'";
 $res = $this->query($q);
 if ($res->num_rows > 0){
 
-    $this->log->info("UPGRADE | delete oko_historique");
+    $this->log->info("UPGRADE | Delete oko_historique");
 
     $q = "select count(*) as nb from oko_historique";
     //echo "OK - ".$t->getTime();
@@ -19,7 +19,11 @@ if ($res->num_rows > 0){
     
     if($r->nb == 0){
         $q = "DROP TABLE `oko_historique`";
-        if($this->query($q)) $this->log->info("UPGRADE | Delete oko_historique Success");
+        if($this->query($q)){
+          unlink('migration.php');
+          $this->log->info("_UPGRADE | Suppression migration.php");  
+          $this->log->info("UPGRADE | Delete oko_historique Success");
+        } 
     }else{
         $this->log->info("UPGRADE | Delete oko_historique Failed : Not Empty table, Please migrate !!");
     }

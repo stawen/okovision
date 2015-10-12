@@ -3,6 +3,7 @@
 
 1.4.0
 * Tableau gr/dju/m2
-* Synchronize zoom grpahe
+* Synchronize zoom graphe
 * Optimisation rendu graphe journalier
+* utilisation du status 4 et maj de la bdd
 * 

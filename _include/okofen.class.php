@@ -143,7 +143,7 @@ class okofen extends connectDb{
 					
 					$query .= ";";
 					//execution de la requette representant l'ensemble d'un ligne du csv
-					$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." |".$query);
+					$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$query);
 					
 					$this->query($query);
 					$old_status = $colCsv[$capteurStatus['position_column_csv']];	
