@@ -43,21 +43,17 @@ $(document).ready(function() {
      * Synchronize zooming through the setExtremes event handler.
      */
     function syncExtremes(e) {
-        var thisChart = this.chart;
-		//console.log(this.chart);
-		Highcharts.each(Highcharts.charts, function (chart) {
-            console.log(chart);
-            if (chart !== thisChart && chart !== 'undefined') {
-            	
-                if (chart.xAxis[0].setExtremes) { // It is null while updating
-                    chart.xAxis[0].setExtremes(e.min, e.max);
+        Highcharts.each(Highcharts.charts, function (c) {
+            if (c !== e.currentTarget.chart && c) {
+                if (c.xAxis[0].setExtremes) { // It is null while updating
+                    c.xAxis[0].setExtremes(e.min, e.max);
                 }
             }
         });
         
         if(e.trigger !== 'undefined' && e.trigger == "zoom"){
-        	//console.log(e);
-			refreshIndicateur(e.min, e.max);
+        	//console.log('max: '+e.max+' min: '+e.min);
+        	refreshIndicateur(e.min, e.max);
 		}
     }
 	
@@ -66,7 +62,7 @@ $(document).ready(function() {
 	 *************************************/
 	function grapheWithTime(data, where, titre) {
 
-		var chart = new Highcharts.Chart({
+		new Highcharts.Chart({
 			chart: {
 				renderTo: where,
 				type: 'spline',
@@ -120,7 +116,8 @@ $(document).ready(function() {
 
 
 	function graphe_error(where, titre) {
-		var chart = new Highcharts.Chart({
+		
+		new Highcharts.Chart({
 			chart: {
 				renderTo: where,
 				type: 'line'
@@ -144,7 +141,12 @@ $(document).ready(function() {
 		timeStart 	= typeof timeStart 	!== 'undefined' ? timeStart : false;
 		timeEnd 	= typeof timeEnd 	!== 'undefined' ? timeEnd 	: false;
 		
-		var jour = $.datepicker.formatDate('yy-mm-dd', $.datepicker.parseDate('dd/mm/yy', $("#date_encours").val()));
+		try{
+			var jour = $.datepicker.formatDate('yy-mm-dd', $.datepicker.parseDate('dd/mm/yy', $("#date_encours").val()));
+		}catch (error) {
+			$.errorDate();
+			return;
+		}
 		var request;
 		
 		if(!timeStart || !timeEnd){
