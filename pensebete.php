@@ -183,4 +183,31 @@ CREATE TABLE IF NOT EXISTS `oko_historique_full` (
 
 SELECT table_schema AS NomBaseDeDonnees, ROUND(SUM( data_length + index_length ) / 1024 / 1024, 2) AS BaseDonneesMo FROM information_schema.TABLES GROUP BY TABLE_SCHEMA;
 */
+
+
+
+/*
+
+Create the branch on your local machine and switch in this branch :
+	$ git checkout -b [name_of_your_new_branch]
+
+Push the branch on github :
+	$ git push origin [name_of_your_new_branch]
+
+You can see all branches created by using :
+	$ git branch
+
+Delete a branch on your local filesystem :
+	$ git branch -d [name_of_your_new_branch]
+
+To force the deletion of local branch on your filesystem :
+	$ git branch -D [name_of_your_new_branch]
+
+Delete the branch on github :
+	$ git push origin :[name_of_your_new_branch]
+
+Merge
+	$ git merge unstable
+	
+*/
 ?>
