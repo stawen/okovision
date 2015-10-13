@@ -92,11 +92,11 @@ class rendu extends connectDb{
 	}
 	
 
-	public function getIndicByDay($jour){
+	public function getIndicByDay($jour, $timeStart = null, $timeEnd = null){
 		
-		$c 		= $this->getConsoByday($jour);
-		$min 	= $this->getTcMinByDay($jour);
-		$max 	= $this->getTcMaxByDay($jour);
+		$c 		= $this->getConsoByday($jour, $timeStart, $timeEnd);
+		$min 	= $this->getTcMinByDay($jour, $timeStart, $timeEnd);
+		$max 	= $this->getTcMaxByDay($jour, $timeStart, $timeEnd);
 		
 		$this->sendResponse(
 							json_encode(	array("consoPellet" => $c->consoPellet, 
@@ -109,14 +109,20 @@ class rendu extends connectDb{
 		
 	}
 	
-	public function getConsoByday($jour){
+	public function getConsoByday($jour, $timeStart = null, $timeEnd = null){
 		$coeff = POIDS_PELLET_PAR_MINUTE/1000;
 		$c = new capteur();
 		$capteur_vis = $c->getByType('tps_vis');
 		$capteur_vis_pause = $c->getByType('tps_vis_pause');
 		
+		//limiter le calcul une intervalle de temps ou la journéee entiere
+		$intervalle = "";
+		if($timeStart != null && $timeEnd != null){
+			$intervalle = "AND (heure BETWEEN TIME(FROM_UNIXTIME(".$timeStart.")) AND TIME(FROM_UNIXTIME(".$timeEnd.")) )";
+		}
+		
 		$q = "select round (sum((1/(a.col_".$capteur_vis['column_oko']." + a.col_".$capteur_vis_pause['column_oko'].")) * a.col_".$capteur_vis['column_oko'].")*(".$coeff."),2) as consoPellet from oko_historique_full as a "
-				."WHERE a.jour = '".$jour."';";
+				."WHERE a.jour = '".$jour."' ".$intervalle;
 		
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
 		
@@ -125,12 +131,18 @@ class rendu extends connectDb{
 		return $result->fetch_object();
 	}
 	
-	public function getTcMaxByDay($jour){
+	public function getTcMaxByDay($jour, $timeStart = null, $timeEnd = null){
 		$c = new capteur();
 		$capteur = $c->getByType('tc_ext');
 		
+		//limiter le calcul une intervalle de temps ou la journéee entiere
+		$intervalle = "";
+		if($timeStart != null && $timeEnd != null){
+			$intervalle = "AND (heure BETWEEN TIME(FROM_UNIXTIME(".$timeStart.")) AND TIME(FROM_UNIXTIME(".$timeEnd.")) )";
+		}
+		
 		$q = "SELECT round(max(a.col_".$capteur['column_oko']."),2) as tcExtMax FROM oko_historique_full as a "
-				."WHERE a.jour = '".$jour."';";
+				."WHERE a.jour = '".$jour."' ".$intervalle;
 		
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
 		
@@ -140,12 +152,18 @@ class rendu extends connectDb{
 				
 	}
 	
-	public function getTcMinByDay($jour){
+	public function getTcMinByDay($jour, $timeStart = null, $timeEnd = null){
 		$c = new capteur();
 		$capteur = $c->getByType('tc_ext');
 		
+		//limiter le calcul une intervalle de temps ou la journéee entiere
+		$intervalle = "";
+		if($timeStart != null && $timeEnd != null){
+			$intervalle = "AND (heure BETWEEN TIME(FROM_UNIXTIME(".$timeStart.")) AND TIME(FROM_UNIXTIME(".$timeEnd.")) )";
+		}
+		
 		$q = "SELECT round(min(a.col_".$capteur['column_oko']."),2) as tcExtMin FROM oko_historique_full as a "
-				."WHERE a.jour = '".$jour."';";
+				."WHERE a.jour = '".$jour."' ".$intervalle;
 		
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
 		

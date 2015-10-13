@@ -13,7 +13,7 @@ if ($res->num_rows > 0){
     $this->log->info("UPGRADE | Delete oko_historique");
 
     $q = "select count(*) as nb from oko_historique";
-    //echo "OK - ".$t->getTime();
+   
     $res    = $this->query($q);
     $r      = $res->fetch_object();
     
@@ -36,7 +36,7 @@ $q = "TRUNCATE oko_resume_day";
 $this->query($q);
 
 // recuperation de la position du statut chaudiere
-$q = "select oko_capteur.column_oko as num from oko_capteur where oko_capteur.`type` = 'status'";
+$q = "select oko_capteur.column_oko as num from oko_capteur where oko_capteur.type = 'status'";
 $res    = $this->query($q);
 $r      = $res->fetch_object();
 $column = 'col_'.$r->num;

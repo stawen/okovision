@@ -44,14 +44,21 @@ $(document).ready(function() {
      */
     function syncExtremes(e) {
         var thisChart = this.chart;
-	
-        Highcharts.each(Highcharts.charts, function (chart) {
-            if (chart !== thisChart) {
+		//console.log(this.chart);
+		Highcharts.each(Highcharts.charts, function (chart) {
+            console.log(chart);
+            if (chart !== thisChart && chart !== 'undefined') {
+            	
                 if (chart.xAxis[0].setExtremes) { // It is null while updating
                     chart.xAxis[0].setExtremes(e.min, e.max);
                 }
             }
         });
+        
+        if(e.trigger !== 'undefined' && e.trigger == "zoom"){
+        	//console.log(e);
+			refreshIndicateur(e.min, e.max);
+		}
     }
 	
 	/**************************************
@@ -128,21 +135,45 @@ $(document).ready(function() {
 
 	}
 
+
 	/**************************************
 	 **** Peuplement des graphiques *******
-	 * ***********************************/
-	function refreshAllGraphe() {
+	 *************************************/
+	function refreshIndicateur(timeStart, timeEnd){
+		
+		timeStart 	= typeof timeStart 	!== 'undefined' ? timeStart : false;
+		timeEnd 	= typeof timeEnd 	!== 'undefined' ? timeEnd 	: false;
+		
 		var jour = $.datepicker.formatDate('yy-mm-dd', $.datepicker.parseDate('dd/mm/yy', $("#date_encours").val()));
-
-		$.api('GET', 'rendu.getIndicByDay', {
-			jour: jour
-		}).done(function(json) {
+		var request;
+		
+		if(!timeStart || !timeEnd){
+			request = {jour: jour};
+		}else{
+			request = {
+				jour: jour,
+				timeStart: timeStart,
+				timeEnd: timeEnd
+			};
+		}
+		
+		$.api('GET', 'rendu.getIndicByDay', request ).done(function(json) {
 
 			$("#tcmax").text($.DecSepa(json.tcExtMax + " °C"));
 			$("#tcmin").text($.DecSepa(json.tcExtMin + " °C"));
 			$("#consoPellet").text($.DecSepa(((json.consoPellet === null) ? 0.0 : json.consoPellet) + " Kg"));
 		});
+	}
+	
+	
+	/**************************************
+	 **** Peuplement des graphiques *******
+	 * ***********************************/
+	function refreshAllGraphe() {
 
+		refreshIndicateur();
+
+		var jour = $.datepicker.formatDate('yy-mm-dd', $.datepicker.parseDate('dd/mm/yy', $("#date_encours").val()));
 
 		$.each($(".graphique"), function(key, val) {
 
