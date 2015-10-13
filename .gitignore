@@ -46,6 +46,7 @@ Thumbs.db
 import.csv
 matrice.csv
 test*
+_tmp/*.sql
 
 
 

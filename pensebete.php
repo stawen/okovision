@@ -5,44 +5,6 @@
 * Utilisation commerciale interdite sans mon accord
 ******************************************************/
 
-include_once 'config.php';
-
-/*
-
-function histo_statut(){
-		$connect = mysql_connect(BDD_IP,BDD_USER,BDD_PASS);
-		if (!$connect){
-			echo 'histo_statut | Connection MySQL impossible : ' . mysql_error();
-		}
-		
-		$cid = mysql_select_db(BDD_SCHEMA,$connect);
-		
-		$qinit = "select jour,heure, Statut_chaudiere from oko_histo_full where Statut_chaudiere <> 99";
-		
-		$result =  mysql_query($qinit,$connect);
-		$old_statut = "0";
-		
-		while($r = mysql_fetch_row($result)) {
-			//echo $r[2]."<br/>";
-			if ($r[2]=="3" && $r[2] <> $old_statut){
-				
-				$qupdate = "UPDATE oko_histo_full set Debut_cycle=1 where jour = '".$r[0]."' and heure = '".$r[1]."'";
-				//echo $qupdate."<br/>";
-				$n=mysql_query($qupdate, $connect );
-			}
-			$old_statut = $r[2];
-		}
-		
-		mysql_free_result($result);
-		
-		
-		mysql_close($connect); // closing connection
-		echo 'histo_statut fini !';
-}			
-*/	
-
-
-			
 /*
 
 // pour faire un resume day pour un jour precis 
@@ -66,7 +28,7 @@ Statut_chaudiere :
 5 = Fin de combustion, bruleur arrêté / on fini de ventiler
 7 = Alim trémie effectivement
 
-compter le nb de cycle : 3
+compter le nb de cycle : 4
 alimentation pellet dans tremi : 7
 */
 
@@ -112,7 +74,6 @@ $query .= "INSERT IGNORE INTO oko_histo_full VALUES (".
 */
 
 
-require('_upgrade.php');
 
 // 72 capteurs dans fr/matrice.json => faire 99 colonnes par defaut + 2 = 101
 /*
@@ -221,5 +182,32 @@ CREATE TABLE IF NOT EXISTS `oko_historique_full` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 SELECT table_schema AS NomBaseDeDonnees, ROUND(SUM( data_length + index_length ) / 1024 / 1024, 2) AS BaseDonneesMo FROM information_schema.TABLES GROUP BY TABLE_SCHEMA;
+*/
+
+
+
+/*
+
+Create the branch on your local machine and switch in this branch :
+	$ git checkout -b [name_of_your_new_branch]
+
+Push the branch on github :
+	$ git push origin [name_of_your_new_branch]
+
+You can see all branches created by using :
+	$ git branch
+
+Delete a branch on your local filesystem :
+	$ git branch -d [name_of_your_new_branch]
+
+To force the deletion of local branch on your filesystem :
+	$ git branch -D [name_of_your_new_branch]
+
+Delete the branch on github :
+	$ git push origin :[name_of_your_new_branch]
+
+Merge
+	$ git merge unstable
+	
 */
 ?>

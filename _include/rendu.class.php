@@ -36,14 +36,26 @@ class rendu extends connectDb{
     	while($c = $result->fetch_object()){
 			
 			$capteur = $cap->get($c->id);
-			
-		    $q = "SELECT jour, DATE_FORMAT(heure,'%H:%i:%s'), round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
+			//
+		    //$q = "SELECT jour, DATE_FORMAT(heure,'%H:%i:%s'), round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
+		    $q = "SELECT UNIX_TIMESTAMP(CONCAT_WS(' ',jour,heure))*1000 as timestamp, round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
 			     ."WHERE jour ='".$jour."'";
 			        
 			$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$c->name." | ".$q);
 			
+			$res = $this->query($q);
+			
+			$data = null;
+	
+			while($r = $res->fetch_object() ) {
+				$data .= "[".$r->timestamp.",".$r->value."],";
+			}
+		
+			$data = substr($data,0,strlen($data)-1);
+
 			$resultat .= '{ "name": "'.$c->name.'",';
-			$resultat .= '"data": '.$this->getDataWithTime($q);
+			//$resultat .= '"data": '.$this->getDataWithTime($q);
+			$resultat .= '"data": ['.$data.']';
 			$resultat .= '},';
 		}
 		
@@ -80,11 +92,11 @@ class rendu extends connectDb{
 	}
 	
 
-	public function getIndicByDay($jour){
+	public function getIndicByDay($jour, $timeStart = null, $timeEnd = null){
 		
-		$c 		= $this->getConsoByday($jour);
-		$min 	= $this->getTcMinByDay($jour);
-		$max 	= $this->getTcMaxByDay($jour);
+		$c 		= $this->getConsoByday($jour, $timeStart, $timeEnd);
+		$min 	= $this->getTcMinByDay($jour, $timeStart, $timeEnd);
+		$max 	= $this->getTcMaxByDay($jour, $timeStart, $timeEnd);
 		
 		$this->sendResponse(
 							json_encode(	array("consoPellet" => $c->consoPellet, 
@@ -97,14 +109,20 @@ class rendu extends connectDb{
 		
 	}
 	
-	public function getConsoByday($jour){
+	public function getConsoByday($jour, $timeStart = null, $timeEnd = null){
 		$coeff = POIDS_PELLET_PAR_MINUTE/1000;
 		$c = new capteur();
 		$capteur_vis = $c->getByType('tps_vis');
 		$capteur_vis_pause = $c->getByType('tps_vis_pause');
 		
+		//limiter le calcul une intervalle de temps ou la journéee entiere
+		$intervalle = "";
+		if($timeStart != null && $timeEnd != null){
+			$intervalle = "AND (heure BETWEEN TIME(FROM_UNIXTIME(".$timeStart.")) AND TIME(FROM_UNIXTIME(".$timeEnd.")) )";
+		}
+		
 		$q = "select round (sum((1/(a.col_".$capteur_vis['column_oko']." + a.col_".$capteur_vis_pause['column_oko'].")) * a.col_".$capteur_vis['column_oko'].")*(".$coeff."),2) as consoPellet from oko_historique_full as a "
-				."WHERE a.jour = '".$jour."';";
+				."WHERE a.jour = '".$jour."' ".$intervalle;
 		
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
 		
@@ -113,12 +131,18 @@ class rendu extends connectDb{
 		return $result->fetch_object();
 	}
 	
-	public function getTcMaxByDay($jour){
+	public function getTcMaxByDay($jour, $timeStart = null, $timeEnd = null){
 		$c = new capteur();
 		$capteur = $c->getByType('tc_ext');
 		
+		//limiter le calcul une intervalle de temps ou la journéee entiere
+		$intervalle = "";
+		if($timeStart != null && $timeEnd != null){
+			$intervalle = "AND (heure BETWEEN TIME(FROM_UNIXTIME(".$timeStart.")) AND TIME(FROM_UNIXTIME(".$timeEnd.")) )";
+		}
+		
 		$q = "SELECT round(max(a.col_".$capteur['column_oko']."),2) as tcExtMax FROM oko_historique_full as a "
-				."WHERE a.jour = '".$jour."';";
+				."WHERE a.jour = '".$jour."' ".$intervalle;
 		
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
 		
@@ -128,12 +152,18 @@ class rendu extends connectDb{
 				
 	}
 	
-	public function getTcMinByDay($jour){
+	public function getTcMinByDay($jour, $timeStart = null, $timeEnd = null){
 		$c = new capteur();
 		$capteur = $c->getByType('tc_ext');
 		
+		//limiter le calcul une intervalle de temps ou la journéee entiere
+		$intervalle = "";
+		if($timeStart != null && $timeEnd != null){
+			$intervalle = "AND (heure BETWEEN TIME(FROM_UNIXTIME(".$timeStart.")) AND TIME(FROM_UNIXTIME(".$timeEnd.")) )";
+		}
+		
 		$q = "SELECT round(min(a.col_".$capteur['column_oko']."),2) as tcExtMin FROM oko_historique_full as a "
-				."WHERE a.jour = '".$jour."';";
+				."WHERE a.jour = '".$jour."' ".$intervalle;
 		
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
 		
@@ -297,6 +327,31 @@ class rendu extends connectDb{
 		$resultat = substr($resultat,0,strlen($resultat)-1);
 		
 		$this->sendResponse( '{ "grapheData": ['.$resultat.']}' );		
+	}
+	
+	public function getSyntheseSaisonTable($idSaison){
+		
+		$q = "select DATE_FORMAT(oko_dateref.jour,'%m-%Y') as mois, ".
+					"IFNULL(sum(oko_resume_day.nb_cycle),'-') as nbCycle, ".
+					"IFNULL(sum(oko_resume_day.conso_kg),'-') as conso, ".
+					"IFNULL(sum(oko_resume_day.dju),'-') as dju, ".
+					"IFNULL(round( ((sum(oko_resume_day.conso_kg) * 1000) / sum(oko_resume_day.dju) / ".SURFACE_HOUSE."),2),'-') as g_dju_m ".
+					"FROM oko_saisons, oko_resume_day ".
+					"RIGHT JOIN oko_dateref ON oko_dateref.jour = oko_resume_day.jour ".
+					"WHERE oko_saisons.id=".$idSaison." AND oko_dateref.jour BETWEEN oko_saisons.date_debut AND oko_saisons.date_fin ".
+					"GROUP BY MONTH(oko_dateref.jour) ".
+					"ORDER BY YEAR(oko_dateref.jour), MONTH(oko_dateref.jour) ASC;";
+					
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
+		
+		$result = $this->query($q);
+		
+		$data = array();
+		while($r = $result->fetch_object() ) {
+			$data[] = $r;
+		}
+		$this->sendResponse( json_encode($data, JSON_NUMERIC_CHECK) );
+		
 	}
 	
 	

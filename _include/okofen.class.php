@@ -127,8 +127,8 @@ class okofen extends connectDb{
 									"heure='".$heure."'";							// heure
 					
 					$query = $insert.$beginValue;			
-					//Detection demarrage d'un cycle //Statut 3 = allumage
-					if( $colCsv[$capteurStatus['position_column_csv']] == "3" && $colCsv[$capteurStatus['position_column_csv']] <> $old_status){
+					//Detection demarrage d'un cycle //Statut 4 = Debut d'un cycle sur le front montant du statut
+					if( $colCsv[$capteurStatus['position_column_csv']] == "4" && $colCsv[$capteurStatus['position_column_csv']] <> $old_status){
 						$st = 1;
 						//creation de la requette pour le comptage des cycle de la chaudiere
 						//Enregistrement de 1 si nous commençons un cycle d'allumage
@@ -143,7 +143,7 @@ class okofen extends connectDb{
 					
 					$query .= ";";
 					//execution de la requette representant l'ensemble d'un ligne du csv
-					$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." |".$query);
+					$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$query);
 					
 					$this->query($query);
 					$old_status = $colCsv[$capteurStatus['position_column_csv']];	

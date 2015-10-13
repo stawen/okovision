@@ -1,4 +1,16 @@
+##1.4.0
+* Tableau gr/dju/m2
+* Sync zoom graphe + maj indicateur haut de page sur la zone séléctionnée
+* Optimisation rendu graphe journalier
+* Utilisation du status 4 et maj de la bdd
+
 ## V1.3.0
+* #26 - Refonte du modele de la base pour réduire son volume
+* #26 - Creation d'un script de migration des données (lien disponible dans la page 'A propos')
+* #27,#28,#29 - Réécriture du code impacté par le changement du modele de données
+* #30 - correction anomalie sur calcul synthese lancé via Cron
+* Optimisation des performances + gestion pool de connexion bdd
+* Redécoupage des pages d'administration
 
 ## V1.2.1
 * #25 - voir la version courante

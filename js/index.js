@@ -1,12 +1,68 @@
 /* global lang, Highcharts */
 $(document).ready(function() {
 
+	/**
+     * In order to synchronize tooltips and crosshairs, override the 
+     * built-in events with handlers defined on the parent element.
+     */
+     /*
+     function getMousePosition(){
+     	
+	    $('.container-graphe').bind('mousemove touchmove', function (e) {
+	    	
+	    	var chart, point,i ;
+			
+	        for (i = 0; i < Highcharts.charts.length; i = i + 1) {
+	        	
+	            chart = Highcharts.charts[i];
+	            e = chart.pointer.normalize(e); // Find coordinates within the chart
+	            point = chart.series[0].searchPoint(e, true); // Get the hovered point
+	
+	            if (point) {
+	                point.onMouseOver(); // Show the hover marker
+	                chart.tooltip.refresh(point); // Show the tooltip
+	                chart.xAxis[0].drawCrosshair(e, point); // Show the crosshair
+	            }
+	        }
+	        
+	    });
+    }
+    */
+    
+    /**
+     * Override the reset function, we don't need to hide the tooltips and crosshairs.
+     */
+     /*
+     Highcharts.Tooltip.prototype.hide = false;
+     
+     Highcharts.Pointer.prototype.reset = function () {
+        return false;
+    };
+	*/
+    /**
+     * Synchronize zooming through the setExtremes event handler.
+     */
+    function syncExtremes(e) {
+        Highcharts.each(Highcharts.charts, function (c) {
+            if (c !== e.currentTarget.chart && c) {
+                if (c.xAxis[0].setExtremes) { // It is null while updating
+                    c.xAxis[0].setExtremes(e.min, e.max);
+                }
+            }
+        });
+        
+        if(e.trigger !== 'undefined' && e.trigger == "zoom"){
+        	//console.log('max: '+e.max+' min: '+e.min);
+        	refreshIndicateur(e.min, e.max);
+		}
+    }
+	
 	/**************************************
 	 **** Graphique ***********************
 	 *************************************/
 	function grapheWithTime(data, where, titre) {
 
-		var chart = new Highcharts.Chart({
+		new Highcharts.Chart({
 			chart: {
 				renderTo: where,
 				type: 'spline',
@@ -29,8 +85,11 @@ $(document).ready(function() {
 					rotation: -45,
 				},
 				title: {
-					text: lang.graphic.hour,
-				}
+					text: lang.graphic.hour
+				},
+				events: {
+                	setExtremes: syncExtremes
+                }
 			},
 			yAxis: [{
 				title: {
@@ -47,7 +106,8 @@ $(document).ready(function() {
 			},
 			tooltip: {
 				shared: true,
-				crosshairs: true
+				crosshairs: true,
+				followPointer: true
 			},
 			series: data
 		});
@@ -56,7 +116,8 @@ $(document).ready(function() {
 
 
 	function graphe_error(where, titre) {
-		var chart = new Highcharts.Chart({
+		
+		new Highcharts.Chart({
 			chart: {
 				renderTo: where,
 				type: 'line'
@@ -71,21 +132,50 @@ $(document).ready(function() {
 
 	}
 
+
 	/**************************************
 	 **** Peuplement des graphiques *******
-	 * ***********************************/
-	function refreshAllGraphe() {
-		var jour = $.datepicker.formatDate('yy-mm-dd', $.datepicker.parseDate('dd/mm/yy', $("#date_encours").val()));
-
-		$.api('GET', 'rendu.getIndicByDay', {
-			jour: jour
-		}).done(function(json) {
+	 *************************************/
+	function refreshIndicateur(timeStart, timeEnd){
+		
+		timeStart 	= typeof timeStart 	!== 'undefined' ? timeStart : false;
+		timeEnd 	= typeof timeEnd 	!== 'undefined' ? timeEnd 	: false;
+		
+		try{
+			var jour = $.datepicker.formatDate('yy-mm-dd', $.datepicker.parseDate('dd/mm/yy', $("#date_encours").val()));
+		}catch (error) {
+			$.errorDate();
+			return;
+		}
+		var request;
+		
+		if(!timeStart || !timeEnd){
+			request = {jour: jour};
+		}else{
+			request = {
+				jour: jour,
+				timeStart: timeStart,
+				timeEnd: timeEnd
+			};
+		}
+		
+		$.api('GET', 'rendu.getIndicByDay', request ).done(function(json) {
 
 			$("#tcmax").text($.DecSepa(json.tcExtMax + " °C"));
 			$("#tcmin").text($.DecSepa(json.tcExtMin + " °C"));
 			$("#consoPellet").text($.DecSepa(((json.consoPellet === null) ? 0.0 : json.consoPellet) + " Kg"));
 		});
+	}
+	
+	
+	/**************************************
+	 **** Peuplement des graphiques *******
+	 * ***********************************/
+	function refreshAllGraphe() {
 
+		refreshIndicateur();
+
+		var jour = $.datepicker.formatDate('yy-mm-dd', $.datepicker.parseDate('dd/mm/yy', $("#date_encours").val()));
 
 		$.each($(".graphique"), function(key, val) {
 
@@ -94,6 +184,7 @@ $(document).ready(function() {
 					jour: jour
 				}).done(function(json) {
 					grapheWithTime(json.grapheData, val.id, $("#" + val.id).data("graphename"));
+					//getMousePosition();
 				})
 				.error(function() {
 					graphe_error(val.id, $("#" + val.id).data("graphename"));
@@ -187,9 +278,12 @@ $(document).ready(function() {
 			});
 
 			refreshAllGraphe();
+			
 		})
 		.error(function() {
 			$.growlErreur(lang.error.getGraphe);
 		});
 
+
+	
 });

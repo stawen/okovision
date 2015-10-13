@@ -57,7 +57,8 @@
 			<div class="col-md-12" id="histo-temperature" style="width:100%; height:500px;"></div>
 			<div class="col-md-12"></div>
 		</div>
-		<br/><br/>
+		<p>&nbsp;</p>
+		
 		<div class="page-header row">
 			
 			<div class="col-md-9">
@@ -77,8 +78,24 @@
 		</div>
 		
 		<div id="saison_graphic" style="width:100%; height:400px;"></div>
-			
 		
+		<p>&nbsp;</p>
+		
+		<table id="recap" class="table table-hover">
+	        <thead>
+	            <tr >
+	                <th class="col-md-2">Mois</th>
+	                <th class="col-md-2">Cycle Bruleur</th>
+	                <th class="col-md-2">Conso (Kg)</th>
+	                <th class="col-md-2">gr/DJU/m2</th>
+	                
+	            </tr>
+	        </thead>
+	    
+	        <tbody>
+	        </tbody>
+
+    	</table>
 		
 	</div>	
 		

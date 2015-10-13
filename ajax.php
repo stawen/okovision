@@ -166,7 +166,11 @@ if (is_ajax() && is_valid()) {
     						$r->getGrapheData($_GET['id'],$_GET['jour']);
     						break;
     					case "getIndicByDay":
-    					    $r->getIndicByDay($_GET['jour']);
+    					    if(isset($_GET['timeStart']) && isset($_GET['timeEnd'])){
+    					        $r->getIndicByDay($_GET['jour'],(int)($_GET['timeStart'] / 1000),(int)($_GET['timeEnd'] / 1000));
+    					    }else{
+    					        $r->getIndicByDay($_GET['jour']);
+    					    }
     					    break;
     					case "getIndicByMonth":
     					    $r->getIndicByMonth($_GET['month'],$_GET['year']); 
@@ -180,6 +184,10 @@ if (is_ajax() && is_valid()) {
     					case "getSyntheseSaison":
     					    $r->getSyntheseSaison($_GET['saison']);
     					    break;
+    					case "getSyntheseSaisonTable":
+    					    $r->getSyntheseSaisonTable($_GET['saison']);
+    					    break;
+    					   
     				}
     				break;
     		}		

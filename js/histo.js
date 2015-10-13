@@ -98,12 +98,12 @@ $(document).ready(function() {
 					},
 					title: {
 						text: titre_histo
-					},
+					} /*,
 					legend: {
 						align: 'right',
 						verticalAlign: 'middle',
 						layout: 'vertical'
-					},
+					}*/,
 					xAxis: {
 						categories: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10',
 							'11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
@@ -288,12 +288,12 @@ $(document).ready(function() {
 					},
 					title: {
 						text: lang.graphic.seasonSummary + " " + $('#saison option:selected').text()
-					},
+					}/*,
 					legend: {
 						align: 'right',
 						verticalAlign: 'middle',
 						layout: 'vertical'
-					},
+					}*/,
 					xAxis: {
 						type: 'datetime',
 						dateTimeLabelFormats: {
@@ -360,6 +360,24 @@ $(document).ready(function() {
 				$.growlErreur(lang.error.getSyntheseSaison);
 			});
 	}
+	
+	function generer_tableau_synthese() {
+		$.api('GET', 'rendu.getSyntheseSaisonTable', {
+				saison: $("#saison").val()
+			}).done(function(json) {
+				//console.log(json);
+				$("#recap> tbody").html("");
+				
+				$.each(json, function(key, val) {
+                    $('#recap > tbody:last').append('<tr>  \
+            											<td>'+ val.mois +' </td> \
+        	                                            <td>'+ val.nbCycle +'</td>  \
+        	                                            <td>'+ val.conso +'</td> \
+        	                                            <td>'+ val.g_dju_m+'</td> \
+        	                                          </tr>');
+                });
+			});
+	}
 
 
 	$("#mois").change(function() {
@@ -400,6 +418,7 @@ $(document).ready(function() {
 	$("#saison").change(function() {
 		//console.log('date change');
 		generer_synthese_saison();
+		generer_tableau_synthese();
 	});
 
 
@@ -414,6 +433,7 @@ $(document).ready(function() {
 			$('#saison').append('<option value="' + val.id + '"' + ((today >= startDate && today <= endDate) ? 'selected=selected' : '') + '>' + val.saison + '</option>');
 		});
 		generer_synthese_saison();
+		generer_tableau_synthese();
 	});
 
 
