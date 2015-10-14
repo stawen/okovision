@@ -37,12 +37,13 @@ class rendu extends connectDb{
 			
 			$capteur = $cap->get($c->id);
 			//
-		    //$q = "SELECT jour, DATE_FORMAT(heure,'%H:%i:%s'), round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
-		    $q = "SELECT UNIX_TIMESTAMP(CONCAT_WS(' ',jour,heure))*1000 as timestamp, round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
+		    $q = "SELECT jour, DATE_FORMAT(heure,'%H:%i:%s'), round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
+		    //".date_default_timezone_get()."
+		    //$q = "SELECT UNIX_TIMESTAMP(CONVERT_TZ(CONCAT_WS(' ',jour,heure), @@global.time_zone, '+00:00' ))*1000 as timestamp, round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
 			     ."WHERE jour ='".$jour."'";
 			        
 			$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$c->name." | ".$q);
-			
+			/*
 			$res = $this->query($q);
 			
 			$data = null;
@@ -52,10 +53,10 @@ class rendu extends connectDb{
 			}
 		
 			$data = substr($data,0,strlen($data)-1);
-
+			*/
 			$resultat .= '{ "name": "'.$c->name.'",';
-			//$resultat .= '"data": '.$this->getDataWithTime($q);
-			$resultat .= '"data": ['.$data.']';
+			$resultat .= '"data": '.$this->getDataWithTime($q);
+			//$resultat .= '"data": ['.$data.']';
 			$resultat .= '},';
 		}
 		
@@ -80,7 +81,7 @@ class rendu extends connectDb{
 	
 		while($r = $result->fetch_row() ) {
 			
-			$date = new DateTime($r[0]." ".$r[1], new DateTimeZone('Europe/Paris'));
+			$date = new DateTime($r[0]." ".$r[1]); //, new DateTimeZone(date_default_timezone_get())
 			$utc = ($date->getTimestamp() + $date->getOffset()) * 1000;	
 			$data .= "[".$utc.",".$r[2]."],";
 			
