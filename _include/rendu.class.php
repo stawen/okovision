@@ -32,7 +32,7 @@ class rendu extends connectDb{
 		
 		$resultat = "";
 		$cap = new capteur();
-		//$date = new DateTime(); //, new DateTimeZone(date_default_timezone_get())
+		$date = new DateTime(); //, new DateTimeZone(date_default_timezone_get())
 		//echo "offset::".$date->getOffset();	
     	while($c = $result->fetch_object()){
 			
@@ -40,8 +40,8 @@ class rendu extends connectDb{
 			//
 		    //$q = "SELECT jour, DATE_FORMAT(heure,'%H:%i:%s'), round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
 		    //".date_default_timezone_get()."
-		    //$q = "SELECT (UNIX_TIMESTAMP(CONCAT_WS(' ',jour,heure)) - ".$date->getOffset().")*1000 as timestamp, round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
-		    $q = "SELECT (UNIX_TIMESTAMP(CONCAT_WS(' ',jour,heure)) )*1000 as timestamp, round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
+		    $q = "SELECT (UNIX_TIMESTAMP(CONCAT_WS(' ',jour,heure)) + ".$date->getOffset().")*1000 as timestamp, round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
+		    //$q = "SELECT (UNIX_TIMESTAMP(CONCAT_WS(' ',jour,heure)) )*1000 as timestamp, round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
 			     ."WHERE jour ='".$jour."'";
 			        
 			$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$c->name." | ".$q);
@@ -96,13 +96,12 @@ class rendu extends connectDb{
 	
 
 	public function getIndicByDay($jour, $timeStart = null, $timeEnd = null){
-		/*
+		
 		if($timeStart != null && $timeEnd != null){
 			$date = new DateTime();
 			$timeStart 	=	$timeStart + $date->getOffset();
 			$timeEnd 	=	$timeEnd + $date->getOffset();
 		}
-		*/
 		
 		
 		$c 		= $this->getConsoByday($jour, $timeStart, $timeEnd);
