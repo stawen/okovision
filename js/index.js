@@ -1,45 +1,7 @@
 /* global lang, Highcharts */
 $(document).ready(function() {
 
-	/**
-     * In order to synchronize tooltips and crosshairs, override the 
-     * built-in events with handlers defined on the parent element.
-     */
-     /*
-     function getMousePosition(){
-     	
-	    $('.container-graphe').bind('mousemove touchmove', function (e) {
-	    	
-	    	var chart, point,i ;
-			
-	        for (i = 0; i < Highcharts.charts.length; i = i + 1) {
-	        	
-	            chart = Highcharts.charts[i];
-	            e = chart.pointer.normalize(e); // Find coordinates within the chart
-	            point = chart.series[0].searchPoint(e, true); // Get the hovered point
-	
-	            if (point) {
-	                point.onMouseOver(); // Show the hover marker
-	                chart.tooltip.refresh(point); // Show the tooltip
-	                chart.xAxis[0].drawCrosshair(e, point); // Show the crosshair
-	            }
-	        }
-	        
-	    });
-    }
-    */
-    
-    /**
-     * Override the reset function, we don't need to hide the tooltips and crosshairs.
-     */
-     /*
-     Highcharts.Tooltip.prototype.hide = false;
-     
-     Highcharts.Pointer.prototype.reset = function () {
-        return false;
-    };
-	*/
-    /**
+	 /**
      * Synchronize zooming through the setExtremes event handler.
      */
     function syncExtremes(e) {
@@ -94,8 +56,7 @@ $(document).ready(function() {
 			yAxis: [{
 				title: {
 					text: '...',
-				},
-				min: 0 //,	max : 100
+				},min: 0 //,	max : 100
 			}],
 			plotOptions: {
 				spline: {
@@ -184,7 +145,7 @@ $(document).ready(function() {
 					jour: jour
 				}).done(function(json) {
 					grapheWithTime(json.grapheData, val.id, $("#" + val.id).data("graphename"));
-					//getMousePosition();
+					
 				})
 				.error(function() {
 					graphe_error(val.id, $("#" + val.id).data("graphename"));

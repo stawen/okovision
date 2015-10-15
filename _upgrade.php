@@ -22,6 +22,7 @@ if ($res->num_rows > 0){
         $q = "DROP TABLE `oko_historique`";
         if($this->query($q)){
           @unlink('migration.php');
+          @unlink('js/migration.js');
           $this->log->info("UPGRADE | Suppression migration.php");  
           $this->log->info("UPGRADE | Delete oko_historique Success");
         } 

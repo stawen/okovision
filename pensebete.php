@@ -213,5 +213,8 @@ Merge
 
 include_once 'config.php';
 echo "fuseau:".date_default_timezone_get();
-phpinfo();
+
+$date = new DateTime(); //, new DateTimeZone(date_default_timezone_get())
+echo "offset::".$date->getOffset();	
+//phpinfo();
 ?>
