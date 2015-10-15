@@ -99,8 +99,8 @@ class rendu extends connectDb{
 		
 		if($timeStart != null && $timeEnd != null){
 			$date = new DateTime();
-			$timeStart 	=	$timeStart + $date->getOffset();
-			$timeEnd 	=	$timeEnd + $date->getOffset();
+			$timeStart 	=	$timeStart - $date->getOffset();
+			$timeEnd 	=	$timeEnd - $date->getOffset();
 		}
 		
 		
