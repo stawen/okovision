@@ -32,14 +32,14 @@ class rendu extends connectDb{
 		
 		$resultat = "";
 		$cap = new capteur();
+		$date = new DateTime(); 
 		
     	while($c = $result->fetch_object()){
 			
 			$capteur = $cap->get($c->id);
-			//
-		    //$q = "SELECT jour, DATE_FORMAT(heure,'%H:%i:%s'), round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
-		    $q = "SELECT UNIX_TIMESTAMP(CONCAT_WS(' ',jour,heure))*1000 as timestamp, round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
-			     ."WHERE jour ='".$jour."'";
+			
+			$q = "SELECT (UNIX_TIMESTAMP(CONCAT_WS(' ',jour,heure)) + ".$date->getOffset().")*1000 as timestamp, round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
+		         ."WHERE jour ='".$jour."'";
 			        
 			$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$c->name." | ".$q);
 			
@@ -52,7 +52,7 @@ class rendu extends connectDb{
 			}
 		
 			$data = substr($data,0,strlen($data)-1);
-
+			
 			$resultat .= '{ "name": "'.$c->name.'",';
 			//$resultat .= '"data": '.$this->getDataWithTime($q);
 			$resultat .= '"data": ['.$data.']';
@@ -80,7 +80,7 @@ class rendu extends connectDb{
 	
 		while($r = $result->fetch_row() ) {
 			
-			$date = new DateTime($r[0]." ".$r[1], new DateTimeZone('Europe/Paris'));
+			$date = new DateTime($r[0]." ".$r[1]); //, new DateTimeZone(date_default_timezone_get())
 			$utc = ($date->getTimestamp() + $date->getOffset()) * 1000;	
 			$data .= "[".$utc.",".$r[2]."],";
 			
@@ -93,6 +93,13 @@ class rendu extends connectDb{
 	
 
 	public function getIndicByDay($jour, $timeStart = null, $timeEnd = null){
+		
+		if($timeStart != null && $timeEnd != null){
+			$date 		= 	new DateTime();
+			$timeStart 	=	$timeStart - $date->getOffset();
+			$timeEnd 	=	$timeEnd - $date->getOffset();
+		}
+		
 		
 		$c 		= $this->getConsoByday($jour, $timeStart, $timeEnd);
 		$min 	= $this->getTcMinByDay($jour, $timeStart, $timeEnd);
@@ -114,6 +121,7 @@ class rendu extends connectDb{
 		$c = new capteur();
 		$capteur_vis = $c->getByType('tps_vis');
 		$capteur_vis_pause = $c->getByType('tps_vis_pause');
+		
 		
 		//limiter le calcul une intervalle de temps ou la journéee entiere
 		$intervalle = "";

@@ -210,4 +210,11 @@ Merge
 	$ git merge unstable
 	
 */
+
+include_once 'config.php';
+echo "fuseau:".date_default_timezone_get();
+
+$date = new DateTime(); //, new DateTimeZone(date_default_timezone_get())
+echo "offset::".$date->getOffset();	
+//phpinfo();
 ?>
