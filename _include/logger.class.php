@@ -69,6 +69,7 @@ class logger {
 	 */
 	private function getTime() {
 		$date = new datetime("now", new DateTimeZone('Europe/Paris'));
+		//$date = new datetime("now");
 		return $date->format("d.m.Y | H:i:s");
 		
 		//return date("d.m.Y | H:i:s");

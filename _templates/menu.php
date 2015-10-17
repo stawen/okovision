@@ -73,6 +73,7 @@
 		  <?php
 			if ($page == 'index.php'){
 			    $date = new datetime("now", new DateTimeZone('Europe/Paris'));
+		        //$date = new datetime("now");
 		        echo '<button type="button" id="date_avant" class="btn btn-primary"><strong><<</strong></button>';
 				echo '	<input type="text" id="date_encours" class="form-control" style="width:100px";  value="'.$date->format("d/m/Y").'">';
 				echo '<button type="button" id="date_apres" class="btn btn-primary"><strong>>></strong></button>';
