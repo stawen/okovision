@@ -31,9 +31,6 @@ if ($res->num_rows > 0){
     }
 }
 
-$configFile = file_get_contents('config.php');
-$configFile = str_replace("date_default_timezone_set('Europe/Paris');","//NOTHING",$configFile);
-file_put_contents('config.php',$configFile);
 
 
 $this->log->info("UPGRADE | Update status | Finished in ".$t->getTime());
