@@ -37,8 +37,8 @@ class rendu extends connectDb{
     	while($c = $result->fetch_object()){
 			
 			$capteur = $cap->get($c->id);
-			
 			$q = "SELECT (UNIX_TIMESTAMP(CONCAT_WS(' ',jour,heure)) + ".$date->getOffset().")*1000 as timestamp, round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
+			//$q = "SELECT (UNIX_TIMESTAMP(CONCAT_WS(' ',jour,heure)) + ".$date->getOffset().")*1000 as timestamp, round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
 		         ."WHERE jour ='".$jour."'";
 			        
 			$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$c->name." | ".$q);
