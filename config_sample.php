@@ -62,7 +62,7 @@ DEFINE('SEND_TO_WEB', ($config['send_to_web']==1)?true:false); // default -> fal
 ****/
 //Parametres globaux
 DEFINE('CONTEXT', '###_CONTEXT_###' );
-date_default_timezone_set('Europe/Paris');
+date_default_timezone_set((isset($config['timezone']))?$config['timezone']:'Europe/Paris');
 
 //configuration fichier d'echange
 DEFINE('URL','/logfiles/pelletronic');

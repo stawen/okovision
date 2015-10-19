@@ -62,9 +62,8 @@
     					  	<select id="timezone" class="form-control">
 							  <?php
 								$t = DateTimeZone::listIdentifiers(DateTimeZone::EUROPE);
-								//var_dump($t);
 								$d = date_default_timezone_get();
-							//	var_dump($d); exit;
+								echo "<option>UTC</option>";
 								foreach($t as $zone) {
 									if($d === $zone){
 								    	echo "<option selected=selected>".$zone."</option>";
