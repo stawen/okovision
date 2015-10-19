@@ -31,8 +31,10 @@ if ($res->num_rows > 0){
     }
 }
 
+
 $configFile = file_get_contents('config.php');
 $configFile = str_replace("//NOTHING","date_default_timezone_set('Europe/Paris');",$configFile);
+$configFile = str_replace("date_default_timezone_set('UTC');","date_default_timezone_set('Europe/Paris');",$configFile);
 file_put_contents('config.php',$configFile);
 
 
