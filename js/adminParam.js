@@ -57,6 +57,7 @@ $(document).ready(function() {
 			param_poids_pellet: $('#param_poids_pellet').val(),
 			surface_maison: $('#surface_maison').val(),
 			oko_typeconnect: $('#oko_typeconnect').val(),
+			timezone: $("#timezone").val(),
 			send_to_web: 0
 		};
 		
