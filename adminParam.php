@@ -57,6 +57,29 @@
 					
     					<!-- Text input-->
     					<div class="form-group">
+    					  <label class="col-md-4 control-label" for="param_zone"><?php echo session::getLabel('lang.text.page.admin.param.timezone') ?></label>  
+    					  <div class="col-md-3">
+    					  	<select id="timezone" class="form-control">
+							  <?php
+								$t = DateTimeZone::listIdentifiers(DateTimeZone::EUROPE);
+								$d = date_default_timezone_get();
+								echo "<option>UTC</option>";
+								foreach($t as $zone) {
+									if($d === $zone){
+								    	echo "<option selected=selected>".$zone."</option>";
+								    }else{
+										echo "<option>".$zone."</option>";
+									}
+								}
+								//echo "::".$d."::";
+								?>
+							</select>
+    					
+    					  </div>
+    					</div>
+    					
+    					<!-- Text input-->
+    					<div class="form-group">
     					  <label class="col-md-4 control-label" for="param_tcref"><?php echo session::getLabel('lang.text.page.admin.param.tcref') ?></label>  
     					  <div class="col-md-3">
     					  <input id="param_tcref" name="param_tcref" type="text" placeholder="ex : 20" class="form-control input-md" required="" value="<?php echo TC_REF;?>">

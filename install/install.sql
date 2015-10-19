@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `oko_saisons` (
   `date_debut` date NOT NULL,
   `date_fin` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MYISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- Export de données de la table okovision.oko_saisons: ~1 rows (environ)
 DELETE FROM `oko_saisons`;
@@ -38,7 +38,7 @@ INSERT INTO `oko_saisons` (`id`, `saison`, `date_debut`, `date_fin`) VALUES
 DROP TABLE IF EXISTS `oko_dateref`;
 CREATE TABLE IF NOT EXISTS `oko_dateref` (
   `jour` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='table de reference des dates, sur 30ans a partir du 1er Septembre 2014';
+) ENGINE=MYISAM DEFAULT CHARSET=utf8 COMMENT='table de reference des dates, sur 30ans a partir du 1er Septembre 2014';
 /*!40000 ALTER TABLE `oko_dateref` ENABLE KEYS */;
 
 
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `oko_resume_day` (
   `dju` decimal(6,2) DEFAULT NULL,
   `nb_cycle` int(1) unsigned zerofill DEFAULT '0',
   PRIMARY KEY (`jour`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MYISAM DEFAULT CHARSET=utf8;
 
 /*
 DROP TABLE IF EXISTS `oko_historique`;
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `oko_historique` (
   `heure` time NOT NULL,
   `value` float NOT NULL,
   PRIMARY KEY (`oko_capteur_id`,`jour`,`heure`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MYISAM DEFAULT CHARSET=utf8;
 */
 
 DROP TABLE IF EXISTS `oko_historique_full`;
@@ -168,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `oko_historique_full` (
 	`col_98` DECIMAL(6,2) NULL DEFAULT NULL,
 	`col_99` DECIMAL(6,2) NULL DEFAULT NULL,
 	PRIMARY KEY (`jour`, `heure`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MYISAM DEFAULT CHARSET=utf8;
 
 
 DROP TABLE IF EXISTS `oko_graphe`;
@@ -177,7 +177,7 @@ CREATE TABLE IF NOT EXISTS `oko_graphe` (
   `name` tinytext NOT NULL,
   `position` tinyint(3) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MYISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `oko_capteur`;
 CREATE TABLE IF NOT EXISTS `oko_capteur` (
@@ -188,7 +188,7 @@ CREATE TABLE IF NOT EXISTS `oko_capteur` (
   `original_name` mediumtext NOT NULL,
   `type` mediumtext DEFAULT NULL, /* tc_ext, tps_vis, tps_vis_pause, start_cycle */
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MYISAM DEFAULT CHARSET=utf8;
 
 
 DROP TABLE IF EXISTS `oko_asso_capteur_graphe`;
@@ -197,7 +197,7 @@ CREATE TABLE IF NOT EXISTS `oko_asso_capteur_graphe` (
   `oko_capteur_id` tinyint(3) NOT NULL,
   `position` tinyint(3) NOT NULL DEFAULT '0',
   `correction_effect` mediumtext DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MYISAM DEFAULT CHARSET=utf8;
 
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

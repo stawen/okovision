@@ -60,4 +60,3 @@ class capteur extends connectDb{
 }
 
 ?>
-

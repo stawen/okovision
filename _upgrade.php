@@ -32,6 +32,27 @@ if ($res->num_rows > 0){
 }
 
 
+$configFile = file_get_contents('config.php');
+$configFile = str_replace("//NOTHING","//CHANGE1.4.3",$configFile);
+$configFile = str_replace("date_default_timezone_set('Europe/Paris');","//CHANGE1.4.3",$configFile);
+$configFile = str_replace("date_default_timezone_set('UTC');","//CHANGE1.4.3",$configFile);
+$configFile = str_replace("//CHANGE1.4.3","date_default_timezone_set((isset($"."config['timezone']))?$"."config['timezone']:'Europe/Paris');",$configFile);
+
+
+file_put_contents('config.php',$configFile);
+
+
+$q_alter = "ALTER TABLE oko_saisons ENGINE=MYISAM;";
+$q_alter .= "ALTER TABLE oko_dateref ENGINE=MYISAM;";
+$q_alter .= "ALTER TABLE oko_resume_day ENGINE=MYISAM;";
+$q_alter .= "ALTER TABLE oko_historique_full ENGINE=MYISAM;";
+$q_alter .= "ALTER TABLE oko_graphe ENGINE=MYISAM;";
+$q_alter .= "ALTER TABLE oko_capteur ENGINE=MYISAM;";
+$q_alter .= "ALTER TABLE oko_asso_capteur_graphe ENGINE=MYISAM;";
+$q_alter .= "OPTIMIZE TABLE oko_historique_full;";
+
+$this->multi_query($q_alter);
+
 
 $this->log->info("UPGRADE | Update status | Finished in ".$t->getTime());
 

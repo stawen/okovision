@@ -52,6 +52,7 @@ class administration extends connectDb{
                         "poids_pellet"              => $s['param_poids_pellet'],
                         "surface_maison"            => $s['surface_maison'],
                         "get_data_from_chaudiere"   => $s['oko_typeconnect'],
+                        "timezone"					=> $s['timezone'],
                         "send_to_web"               => $s['send_to_web']
                     );
         
