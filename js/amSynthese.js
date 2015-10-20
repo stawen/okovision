@@ -11,7 +11,14 @@ $(document).ready(function() {
 	/*
 	 * Gestion onglet Calcul synthese
 	 */
-	
+	function addSyntheseRow(srcDay){
+		var jour = $.datepicker.formatDate('dd/mm/yy', $.datepicker.parseDate('yy-mm-dd', srcDay));
+
+		$('#listeDateWithoutSynthese > tbody:last').append('<tr class="day"> \
+		                                                     <td> ' + jour + '</a></td>\
+		                                                     <td>  <button type="button" class="btn btn-default btday" data-day="' + srcDay + '" ><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button></td> \
+		                                                    </tr>');
+	}
 
 
 	function getDayWithoutSynthese() {
@@ -19,16 +26,10 @@ $(document).ready(function() {
 
 			$("#inwork-synthese").hide();
 			$("#listeDateWithoutSynthese> tbody").html("");
+			
 			$.each(json.data, function(key, val) {
-
-				var jour = $.datepicker.formatDate('dd/mm/yy', $.datepicker.parseDate('yy-mm-dd', val.jour));
-
-				$('#listeDateWithoutSynthese > tbody:last').append('<tr class="day"> \
-					                                                            <td> ' + jour + '</a></td>\
-					                                                            <td>  <button type="button" class="btn btn-default btday" data-day="' + val.jour + '" ><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button></td> \
-					                                                       </tr>');
+				 addSyntheseRow(val.jour);
 			});
-
 		});
 	}
 
@@ -79,6 +80,6 @@ $(document).ready(function() {
         
 	}
 
-	getDayWithoutSynthese();;
+	getDayWithoutSynthese();
 	
 });
