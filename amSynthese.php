@@ -23,8 +23,11 @@
     <table id="listeDateWithoutSynthese" class="table table-hover">
         <thead>
             <tr>
-                <th class="col-md-10"><?php echo session::getLabel('lang.text.page.manual.synthese.daywithout') ?></th>
-                <th class="col-md-2">
+                <th class="col-md-9"><?php echo session::getLabel('lang.text.page.manual.synthese.daywithout') ?></th>
+                <th class="col-md-3">
+                    <button type="button" id="openModalgetPeriode" class="btn btn-xs btn-default" data-toggle="modal" data-target="#modal_getPeriode">
+			            <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+		            </button>
                     <button type="button" id="makeAllSynthese" class="btn btn-xs btn-default">
 			            <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> <?php echo session::getLabel('lang.text.page.manual.synthese.makeall') ?>
 		            </button>
@@ -36,7 +39,40 @@
         </tbody>
 
     </table>
-      
+    
+    <div class="modal fade" id="modal_getPeriode" tabindex="-1" role="dialog" aria-labelledby="periodeLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Selection de la période à recalculer</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Date de début</label>
+                            <input type="text" class="form-control" id="dateStart" placeholder="ex : 01/09/2014">
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Date de fin</label>
+                            <input type="text" class="form-control" id="dateEnd" placeholder="ex : 01/09/2014">
+                        </div>
+                        
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </button>
+                    <button type="button" id="confirm" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>  
 
 <?php
 include('_templates/footer.php');

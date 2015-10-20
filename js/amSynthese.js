@@ -79,7 +79,9 @@ $(document).ready(function() {
         }
         
 	}
-
+	//$( "#dateStart" ).datepicker( $.fn.datepicker.dates[ "fr" ] );
+	$( "#dateStart" ).datepicker();
+	$( "#dateEnd" ).datepicker();
 	getDayWithoutSynthese();
 	
 });
