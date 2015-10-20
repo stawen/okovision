@@ -12,7 +12,7 @@ $(document).ready(function() {
 	 * Gestion onglet Calcul synthese
 	 */
 	function addSyntheseRow(srcDay){
-		var jour = $.datepicker.formatDate('dd/mm/yy', $.datepicker.parseDate('yy-mm-dd', srcDay));
+		var jour = $.datepicker.formatDate('dd/mm/yy', srcDay);
 
 		$('#listeDateWithoutSynthese > tbody:last').append('<tr class="day"> \
 		                                                     <td> ' + jour + '</a></td>\
@@ -28,7 +28,7 @@ $(document).ready(function() {
 			$("#listeDateWithoutSynthese> tbody").html("");
 			
 			$.each(json.data, function(key, val) {
-				 addSyntheseRow(val.jour);
+				 addSyntheseRow( $.datepicker.parseDate('yy-mm-dd', val.jour) );
 			});
 		});
 	}
@@ -79,9 +79,52 @@ $(document).ready(function() {
         }
         
 	}
-	//$( "#dateStart" ).datepicker( $.fn.datepicker.dates[ "fr" ] );
-	$( "#dateStart" ).datepicker();
-	$( "#dateEnd" ).datepicker();
+	//$( ".datepicker" ).datepicker( $.datepicker.regional[ "fr" ] );
+	//$( ".datepicker" ).datepicker({ maxDate: -1});
+	$( "#dateEnd"   ).datepicker({ maxDate: -1});
+	$( "#dateStart" ).datepicker({ maxDate: -1});
+	
+	$('#modal_getPeriode').on('show.bs.modal', function() {
+		$( "#dateStart" ).val("");
+		$( "#dateEnd"   ).val("");
+			
+	});
+	
+	$("#confirmPeriode").click(function() {
+		if ($.validateDate($('#modal_getPeriode').find('#dateStart').val()) && $.validateDate($('#modal_getPeriode').find('#dateEnd').val())) {
+			try {
+				var dateStart = $.datepicker.parseDate('dd/mm/yy', $('#modal_getPeriode').find('#dateStart').val());
+				var dateEnd = $.datepicker.parseDate('dd/mm/yy', $('#modal_getPeriode').find('#dateEnd').val());
+			}
+			catch (error) {
+				$.growlWarning(lang.error.date);
+				return;
+			}
+			var diff = (dateEnd - dateStart) / 1000 / 60 / 60 / 24; // days
+			console.log(diff);
+			var day;
+			var s = dateEnd;
+			for(var i=0; i <= diff; i++){
+				day = $.datepicker.formatDate('dd/mm/yy',new Date(dateEnd ) + i);  
+				console.log(day);
+			}
+			
+			$('#modal_getPeriode').modal('hide');
+		}
+		else {
+			$.growlWarning(lang.error.date);
+		}
+	});
+	
+	/*
+	$("body").on("click", "#openModalgetPeriode", function(b) {
+		$.api('GET','admin.getIntervalFirstDay').done(function(json){
+				$( "#dateEnd" ).datepicker({ maxDate: -1});
+				$( "#dateStart" ).datepicker({ maxDate: -1});
+		});
+	});
+	*/
+	
 	getDayWithoutSynthese();
 	
 });

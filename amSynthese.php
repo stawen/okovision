@@ -53,11 +53,11 @@
                     <form>
                         <div class="form-group">
                             <label for="recipient-name" class="control-label">Date de début</label>
-                            <input type="text" class="form-control" id="dateStart" placeholder="ex : 01/09/2014">
+                            <input type="text" class="form-control datepicker" id="dateStart" placeholder="ex : 01/09/2014">
                         </div>
                         <div class="form-group">
                             <label for="recipient-name" class="control-label">Date de fin</label>
-                            <input type="text" class="form-control" id="dateEnd" placeholder="ex : 01/09/2014">
+                            <input type="text" class="form-control datepicker" id="dateEnd" placeholder="ex : 01/09/2014">
                         </div>
                         
                     </form>
@@ -66,7 +66,7 @@
                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     </button>
-                    <button type="button" id="confirm" class="btn btn-default btn-sm">
+                    <button type="button" id="confirmPeriode" class="btn btn-default btn-sm">
                         <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                     </button>
                 </div>
@@ -78,7 +78,8 @@
 include('_templates/footer.php');
 ?>
 <!--appel des scripts personnels de la page -->
-    <script src="js/jquery.fileupload.js"></script>
+    <script src="_langs/<?php echo session::getLang() ?>.datepicker.js"></script>
 	<script src="js/amSynthese.js"></script>
+	
     </body>
 </html>
