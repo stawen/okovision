@@ -47,16 +47,16 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title">Selection de la période à recalculer</h4>
+                    <h4 class="modal-title"><?php echo session::getLabel('lang.text.page.manual.synthese.modal.title') ?></h4>
                 </div>
                 <div class="modal-body">
                     <form>
                         <div class="form-group">
-                            <label for="recipient-name" class="control-label">Date de début</label>
+                            <label for="recipient-name" class="control-label"><?php echo session::getLabel('lang.text.page.manual.synthese.modal.dateStart') ?></label>
                             <input type="text" class="form-control datepicker" id="dateStart" placeholder="ex : 01/09/2014">
                         </div>
                         <div class="form-group">
-                            <label for="recipient-name" class="control-label">Date de fin</label>
+                            <label for="recipient-name" class="control-label"><?php echo session::getLabel('lang.text.page.manual.synthese.modal.dateEnd') ?></label>
                             <input type="text" class="form-control datepicker" id="dateEnd" placeholder="ex : 01/09/2014">
                         </div>
                         

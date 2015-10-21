@@ -13,10 +13,11 @@ $(document).ready(function() {
 	 */
 	function addSyntheseRow(srcDay){
 		var jour = $.datepicker.formatDate('dd/mm/yy', srcDay);
-
+		var dataDay = $.datepicker.formatDate('yy-mm-dd', srcDay);
+		
 		$('#listeDateWithoutSynthese > tbody:last').append('<tr class="day"> \
 		                                                     <td> ' + jour + '</a></td>\
-		                                                     <td>  <button type="button" class="btn btn-default btday" data-day="' + srcDay + '" ><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button></td> \
+		                                                     <td>  <button type="button" class="btn btn-default btday" data-day="' + dataDay + '" ><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button></td> \
 		                                                    </tr>');
 	}
 
@@ -58,9 +59,9 @@ $(document).ready(function() {
 	});
 	
 	function CalculAll(){
-		var row = $('.day').first()
+		var row = $('.day').first();
         //console.log(row);
-        var file = row.find("td:nth-child(1)").text()
+        var file = row.find("td:nth-child(1)").text();
         //console.log(file);
         
         if (file !== '' ){
@@ -71,7 +72,7 @@ $(document).ready(function() {
             	$.api('GET', 'admin.makeSyntheseByDay',{date: row.find(".btday").data('day')},false).done();
                 row.remove(); 
                 CalculAll();
-            },500);
+            },400);
             
         }else{
             $.growlValidate(lang.valid.summary);
@@ -79,8 +80,7 @@ $(document).ready(function() {
         }
         
 	}
-	//$( ".datepicker" ).datepicker( $.datepicker.regional[ "fr" ] );
-	//$( ".datepicker" ).datepicker({ maxDate: -1});
+	
 	$( "#dateEnd"   ).datepicker({ maxDate: -1});
 	$( "#dateStart" ).datepicker({ maxDate: -1});
 	
@@ -103,16 +103,15 @@ $(document).ready(function() {
 			var diff = (dateEnd - dateStart) / 1000 / 60 / 60 / 24; // days
 			if(diff < 0){
 				$.growlWarning(lang.error.dateInvert);
-				return
+				return;
 			}
-			console.log(diff);
-			var day= new Date(dateStart);
-			//var s = dateEnd;
+			
+			$("#listeDateWithoutSynthese> tbody").html("");
+			
 			for(var i=0; i <= diff; i++){
-				//$.datepicker.formatDate('dd/mm/yy',day.setDate(dateStart.getDate()+i));  
+				var day = new Date(dateStart);
 				day.setDate(dateStart.getDate()+i);  
-				
-				console.log(day);
+				addSyntheseRow(day);
 			}
 			
 			$('#modal_getPeriode').modal('hide');
@@ -121,15 +120,6 @@ $(document).ready(function() {
 			$.growlWarning(lang.error.date);
 		}
 	});
-	
-	/*
-	$("body").on("click", "#openModalgetPeriode", function(b) {
-		$.api('GET','admin.getIntervalFirstDay').done(function(json){
-				$( "#dateEnd" ).datepicker({ maxDate: -1});
-				$( "#dateStart" ).datepicker({ maxDate: -1});
-		});
-	});
-	*/
 	
 	getDayWithoutSynthese();
 	

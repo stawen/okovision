@@ -177,42 +177,55 @@ class okofen extends connectDb{
 		
 			//on ne fait rien si la date choisie est la date du jour
 			if ($dayChossen == date('Y-m-d' ,mktime(0, 0, 0, date("m")  , date("d"), date("Y")) )){
-				return;
+				return false;
 			}
 			
-			//si c'est une demande manuelle, nous prenons la date du choisie
+			//si c'est une demande manuelle, nous prenons la date choisie
 			$day = $dayChossen;	
+			if(!$this->deleteSyntheseDay($day)) return false;
+			
 		}else{
 			//si cron, mais pas new day, ou si pas ondemande, nous ne faisons rien
 			return;
 		}
-			
-			$query 	= "INSERT INTO oko_resume_day ( jour, tc_ext_max, tc_ext_min, conso_kg, dju, nb_cycle ) VALUE ";
-			
-			$rendu 	= new rendu();
-			$max 	= $rendu->getTcMaxByDay($day);
-			$min	= $rendu->getTcMinByDay($day);
-			$conso	= $rendu->getConsoByday($day);
-			$dju	= $rendu->getDju($max->tcExtMax,$min->tcExtMin);
-			$cycle	= $rendu->getNbCycleByDay($day);
-			
-			$consoPellet 	= ($conso->consoPellet==null)?0:$conso->consoPellet;
-			$nbCycle		= ($cycle->nbCycle==null)?0:$cycle->nbCycle;
-			
-			$query .= "('".$day."', ".$max->tcExtMax.",".$min->tcExtMin.", ".$consoPellet.", ".$dju.", ".$nbCycle." );";
-					
-			$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$query);
-			
-			$n = $this->query($query);
-			
-			if (!$n){
-				$this->log->error("Class ".__CLASS__." | ".__FUNCTION__." | creation synthèse du ".$day." impossible");
-				return false;
-			}else{
-				$this->log->info("Class ".__CLASS__." | ".__FUNCTION__." | SUCCESS | creation synthèse du ".$day);
-				return true;
-			}
 		
+		return $this->insertSyntheseDay($day);
+	}
+	
+	private function deleteSyntheseDay($day){
+		$q = "DELETE FROM oko_resume_day where jour = '".$day."'";
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
+		
+		return $this->query($q);
+	}
+	
+	private function insertSyntheseDay($day){
+		
+		$query 	= "INSERT INTO oko_resume_day ( jour, tc_ext_max, tc_ext_min, conso_kg, dju, nb_cycle ) VALUE ";
+		
+		$rendu 	= new rendu();
+		$max 	= $rendu->getTcMaxByDay($day);
+		$min	= $rendu->getTcMinByDay($day);
+		$conso	= $rendu->getConsoByday($day);
+		$dju	= $rendu->getDju($max->tcExtMax,$min->tcExtMin);
+		$cycle	= $rendu->getNbCycleByDay($day);
+		
+		$consoPellet 	= ($conso->consoPellet==null)?0:$conso->consoPellet;
+		$nbCycle		= ($cycle->nbCycle==null)?0:$cycle->nbCycle;
+		
+		$query .= "('".$day."', ".$max->tcExtMax.",".$min->tcExtMin.", ".$consoPellet.", ".$dju.", ".$nbCycle." );";
+				
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$query);
+		
+		$n = $this->query($query);
+		
+		if (!$n){
+			$this->log->error("Class ".__CLASS__." | ".__FUNCTION__." | creation synthèse du ".$day." impossible");
+			return false;
+		}else{
+			$this->log->info("Class ".__CLASS__." | ".__FUNCTION__." | SUCCESS | creation synthèse du ".$day);
+			return true;
+		}
 	}
 	
 	
