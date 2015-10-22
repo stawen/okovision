@@ -75,19 +75,7 @@ $(document).ready(function() {
 	}
 
 	
-	$.matriceComplet = function() {
-
-		var r = false;
-		
-		$.api('GET', 'admin.statusMatrice', {}, false).done(function(json) {
-			r = json.response;
-		}).error(function() {
-			$.growlErreur(lang.error.save);
-		});
-		return r;
-
-
-	}
+	
 
 	$.validateDate = function(dtValue) {
 		var dtRegex = new RegExp(/\b\d{1,2}[\/]\d{1,2}[\/]\d{4}\b/);

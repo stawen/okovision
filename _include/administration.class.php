@@ -133,7 +133,11 @@ class administration extends connectDb{
 				}
 				//si rename ok, alors init de la table capteur
 				if(rename($rep.$f['files']['name'][0], $rep.$matrice)){
-					$this->initMatriceFromFile();
+					if(!isset($s['update'])){
+						$this->initMatriceFromFile();
+					}else{
+						$this->updateMatriceFromFile();
+					}
 					
 				}
 				
@@ -161,7 +165,7 @@ class administration extends connectDb{
 	*/
 	private function initMatriceFromFile(){
 		//translation
-		$capteur = json_decode(file_get_contents("_langs/fr.matrice.json"), true);
+		$dico = json_decode(file_get_contents("_langs/fr.matrice.json"), true);
 	    //open matrice file just uploaded, first line
 	    $line = mb_convert_encoding(fgets(fopen('_tmp/matrice.csv', 'r')),'UTF-8'); 
 		//on retire le dernier ; de la ligne
@@ -177,9 +181,9 @@ class administration extends connectDb{
 			if($position != 0 && $position != 1){
 				$title = trim($t);
 				
-				if (isset($capteur[$title])){
-					$name = $capteur[$title]['name'];
-					$type = $capteur[$title]['type'];
+				if (isset($dico[$title])){
+					$name = $dico[$title]['name'];
+					$type = $dico[$title]['type'];
 				}else{
 					$name = $title;
 					$type = "";
@@ -196,7 +200,82 @@ class administration extends connectDb{
 		
 		
 		$result = $this->multi_query($query);
+		while ($this->flush_multi_queries()) {;} // flush multi_queries
 		
+	}
+	
+		/*
+	* Function : update into oko_capteur all capteur in csv file from okofen
+	*/
+	private function updateMatriceFromFile(){
+		//translation
+		$dico = json_decode(file_get_contents("_langs/fr.matrice.json"), true);
+	    //open matrice file just uploaded, first line
+	    $line = mb_convert_encoding(fgets(fopen('_tmp/matrice.csv', 'r')),'UTF-8'); 
+		//on retire le dernier ; de la ligne
+		$line = substr($line,0,strlen($line)-2);
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | CSV First Line | ".$line);
+		
+		$c = new capteur();
+		$capteurs = $c->getMatrix();
+		$capteursCsv = array();
+		$lastColumnOko = $c->getLastColumnOko();
+		
+		$query = ""; 
+	
+		$column = explode(CSV_SEPARATEUR, $line);
+		//$capteursCsv = array_slice(array_flip($column),2);
+		
+		//on deroule la liste des capteurs dans le csv
+		//cela va tester le deplacement d'un capteur par rapport à la bdd ou l'ajout d'un capteur
+		foreach ($column as $position => $t){
+			//set only capteur not day and hour
+			if($position != 0 && $position != 1){
+				
+				
+				$title = trim($t);
+				$capteursCsv[$title] = $position;
+				
+				//on test si le capteur etait deja connu dans la base oko_capteur
+				if(array_key_exists($title,$capteurs)){
+					//on verifie si la position du capteur a changer, si oui, maj de la bdd
+					if($capteurs[$title]->position_column_csv !== $position){
+						$q = "UPDATE oko_capteur set position_column_csv=".$position." where id=".$capteurs[$title]->id.";";
+						$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | Update oko_capteur | ".$q);		
+					}
+				}else{
+					//capteur pas connu dans la base, on le met en fin de table  oko_capteur
+					if (isset($dico[$title])){
+						$name = $dico[$title]['name'];
+						$type = $dico[$title]['type'];
+					}else{
+						$name = $title;
+						$type = "";
+					}
+					$lastColumnOko++;
+					$q = "INSERT INTO oko_capteur(name,position_column_csv,column_oko, original_name,type) VALUE ('".$name."',".$position.",".$lastColumnOko.",'".$title."','".$type."');" ;
+					$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | Create New oko_capteur | ".$q);
+					
+				}
+				
+				$query .=$q;
+			}
+    	}
+    	//on test maintenant le retrait d'un capteur dans le csv par rapport à la base oko_capteur
+    	$forbidenCapteurs = array_diff_key($capteurs,$capteursCsv);
+    	
+    	foreach ($forbidenCapteurs as $t => $position){
+    		//si le capteur n'est plus present dans le csv, on met a jour la table en lui mettant -1 dans sa position_csv
+    		$title = trim($t);
+    		$q = "UPDATE oko_capteur set position_column_csv=-1 where id=".$capteurs[$title]->id.";";
+			$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | Disable oko_capteur | ".$q);
+			
+			$query .=$q;
+    	}
+    	
+		
+		$result = $this->multi_query($query);
+		while ($this->flush_multi_queries()) {;} // flush multi_queries
 		
 	}
 	

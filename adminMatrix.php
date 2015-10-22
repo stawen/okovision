@@ -22,18 +22,17 @@
 	<?php echo session::getLabel('lang.text.page.matrix') ?>
 	<br/><br/>
 	<div id="selectFile" style="display: none;">
+		<?php echo session::getLabel('lang.text.page.matrix.install') ?>
     	<span class="btn btn-success fileinput-button">
 	        <i class="glyphicon glyphicon-plus"></i>
-	        <span><?php echo session::getLabel('lang.text.page.matrix.upload') ?></span>
+	        <span id="btup"><?php echo session::getLabel('lang.text.page.matrix.upload') ?></span>
 	        <!-- The file input field used as target for the file upload widget -->
 	        <input id="fileupload" type="file" name="files[]">
 	    </span>
 	    <br/><br/>
 	    <!-- The global progress bar -->
 	   <div class="progress">
-  			<div id="bar" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-				
-  			</div>
+  			<div id="bar" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
 		</div>
 	</div>
 	<div id="concordance">
@@ -42,7 +41,12 @@
                 <tr>
                     <th class="col-md-3"><?php echo session::getLabel('lang.text.page.matrix.original') ?></th>
                     <th class="col-md-3"><?php echo session::getLabel('lang.text.page.matrix.name') ?></th>
-                    <th class="col-md-6"></th>
+                    <th class="col-md-5"></th>
+                    <th class="col-md-1">
+                    	<button type="button" id="updateMatrix" class="btn btn-xs btn-default" data-toggle="modal" data-target="#confirm-updateMatrix">
+			            	<span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+		            	</button>
+                    </th>
                     
                 </tr>
             </thead>
@@ -52,7 +56,27 @@
 
         </table>
 	<div>
-            
+    
+    <div class="modal fade" id="confirm-updateMatrix" tabindex="-1" role="dialog" aria-labelledby="UpdateMatrix" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Modification de la Matrice</h4>
+                </div>
+                <div class="modal-body">
+                    Etes-vous sur de vouloir modifier la structure de la matrice de lecture des fichiers csv de votre chaudiere ?
+                    <br/><br/>Cette modification ne vous fera pas perde vos données. Vous aurez les nouvelles colonnes dans les capteurs disponibles
+                    <br/><br/>Par contre, si dans le nouveau fichier csv que vous aller fournir, il y a des colonnes en moins, ils seront conservé pour ne pas perde de données.
+               </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo session::getLabel('lang.text.modal.cancel') ?></button>
+                    <button type="button" class="btn btn-danger btn-ok" id="updateConfirm"><?php echo session::getLabel('lang.text.modal.confirm') ?></button>
+                </div>
+            </div>
+        </div>
+    </div>        
 
 
 <?php

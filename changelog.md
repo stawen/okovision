@@ -1,3 +1,8 @@
+##1.5.0
+* Possibilité de recalculer la synthese sur une periode choisie
+
+##1.4.3
+* Ajout du choix du fuseau Horaire
 ##1.4.0
 * Tableau gr/dju/m2
 * Sync zoom graphe + maj indicateur haut de page sur la zone séléctionnée
