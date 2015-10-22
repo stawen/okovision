@@ -32,7 +32,12 @@ $(document).ready(function() {
 			//console.log("data:"+ data);
 			setTimeout(function() {
 				$("#selectFile").hide();
+				$('#bar').css(
+						'width',
+						 '0%'
+				);
 				makeMatrice();
+				
 			}, 1000);
 
 		},
@@ -99,12 +104,14 @@ $(document).ready(function() {
 
 	$("#updateConfirm").click(function(){
 		//console.log('ici');	
-		$("#btup").append(' (Mise à jour)');
+		$("#btup").html('Mise à jour Matrice');
 		//hidden.bs.modal
 		$('#confirm-updateMatrix').modal('hide');
 		//$('#confirm-updateMatrix').hide();
 		$("#selectFile").show();
 		$("#concordance").hide();
+		
+		
 		
 		$('#fileupload').fileupload({
 			formData: { 
