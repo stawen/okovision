@@ -75,7 +75,11 @@ class connectDb {
     	return $con->multi_query($q);
 	}
 	
-	
+	protected function flush_multi_queries(){
+		$con = self::getInstance()->getConnection();
+    	return $con->next_result() && $con->more_results();
+	}
+
 	
 }
 

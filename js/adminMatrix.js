@@ -12,7 +12,8 @@ $(document).ready(function() {
 	/*
 	 * Espace Matrice CSV
 	 */
-
+	
+	
 	$('#fileupload').fileupload({
 
 		url: 'ajax.php?type=admin&action=uploadCsv',
@@ -31,7 +32,12 @@ $(document).ready(function() {
 			//console.log("data:"+ data);
 			setTimeout(function() {
 				$("#selectFile").hide();
+				$('#bar').css(
+						'width',
+						 '0%'
+				);
 				makeMatrice();
+				
 			}, 1000);
 
 		},
@@ -58,6 +64,7 @@ $(document).ready(function() {
 				                                        	<td>' + val.original_name + '</td>\
 				                                        	<td>' + val.name + '</td>\
 				                                        	<td>' + ((val.type != "") ? '<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>' : '') + '</td>\
+				                                        	<td></td> \
 				                                        </tr>');
 				});
 
@@ -70,7 +77,20 @@ $(document).ready(function() {
 		});
 
 	}
+	
+	$.matriceComplet = function() {
 
+		var r = false;
+		
+		$.api('GET', 'admin.statusMatrice', {}, false).done(function(json) {
+			r = json.response;
+		}).error(function() {
+			$.growlErreur(lang.error.save);
+		});
+		return r;
+
+
+	}
 
 
 	
@@ -82,5 +102,25 @@ $(document).ready(function() {
 		$("#concordance").hide();
 	}
 
+	$("#updateConfirm").click(function(){
+		//console.log('ici');	
+		$("#btup").html('Mise à jour Matrice');
+		//hidden.bs.modal
+		$('#confirm-updateMatrix').modal('hide');
+		//$('#confirm-updateMatrix').hide();
+		$("#selectFile").show();
+		$("#concordance").hide();
+		
+		
+		
+		$('#fileupload').fileupload({
+			formData: { 
+				actionFile: 'matrice',
+				update: true
+			}
+		});
+		
+		
+	});
 
 });

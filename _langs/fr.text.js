@@ -13,6 +13,7 @@ var lang = {
         seasonAlreadyExist: 'Attention, cette saison existe déjà !',
         deleteSeason: 'Problème lors de la suppresion de la saison',
         date: 'Format de la date incorrect',
+        dateInvert: 'La date de début doit etre inferieur à la date de fin',
         save: 'Problème lors de la sauvegarde',
         position: 'Impossible de récupérer la derniere position',
         grapehAlreadyExist: 'Attention, le graphe existe déjà !',

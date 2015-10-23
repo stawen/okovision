@@ -20,10 +20,10 @@ if (!file_exists("config.php")) {
 <div class="container theme-showcase" role="main">
 
 	<div class="page-header">
-		<h2><?php echo session::getLabel('lang.text.page.about.title') ?></h2> <?php echo file_get_contents("_include/version.json");?>
+		<h2><?php echo session::getLabel('lang.text.page.about.title') ?></h2> <div id="version"><?php echo file_get_contents("_include/version.json");?></div>
 	</div>
 	<div class="well">
-		<img style='float:left;width:130px;height:130px; margin-right:20px;' src="images/stawen.png" alt="stawen" class="img-circle">
+		<img style='float:left;width:130px;height:130px; margin-right:20px;' src="css/images/stawen.png" alt="stawen" class="img-circle">
 
 		<?php echo session::getLabel( 'lang.text.page.about.information') ?>
 		
