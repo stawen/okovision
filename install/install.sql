@@ -54,17 +54,6 @@ CREATE TABLE IF NOT EXISTS `oko_resume_day` (
   PRIMARY KEY (`jour`)
 ) ENGINE=MYISAM DEFAULT CHARSET=utf8;
 
-/*
-DROP TABLE IF EXISTS `oko_historique`;
-CREATE TABLE IF NOT EXISTS `oko_historique` (
-  `oko_capteur_id` int(3) NOT NULL,
-  `jour` date NOT NULL,
-  `heure` time NOT NULL,
-  `value` float NOT NULL,
-  PRIMARY KEY (`oko_capteur_id`,`jour`,`heure`)
-) ENGINE=MYISAM DEFAULT CHARSET=utf8;
-*/
-
 DROP TABLE IF EXISTS `oko_historique_full`;
 CREATE TABLE IF NOT EXISTS `oko_historique_full` (
 	`jour` DATE NOT NULL,
@@ -194,7 +183,7 @@ CREATE TABLE IF NOT EXISTS `oko_capteur` (
 DROP TABLE IF EXISTS `oko_asso_capteur_graphe`;
 CREATE TABLE IF NOT EXISTS `oko_asso_capteur_graphe` (
   `oko_graphe_id` tinyint(3) NOT NULL,
-  `oko_capteur_id` tinyint(3) NOT NULL,
+  `oko_capteur_id` int(3) NOT NULL,
   `position` tinyint(3) NOT NULL DEFAULT '0',
   `correction_effect` mediumtext DEFAULT NULL
 ) ENGINE=MYISAM DEFAULT CHARSET=utf8;

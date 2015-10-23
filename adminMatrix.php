@@ -63,12 +63,10 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title">Modification de la Matrice</h4>
+                    <h4 class="modal-title"><?php echo session::getLabel('lang.text.page.matrix.modal.title') ?></h4>
                 </div>
                 <div class="modal-body">
-                    Etes-vous sur de vouloir modifier la structure de la matrice de lecture des fichiers csv de votre chaudiere ?
-                    <br/><br/>Cette modification ne vous fera pas perde vos données. Vous aurez les nouvelles colonnes dans les capteurs disponibles
-                    <br/><br/>Par contre, si dans le nouveau fichier csv que vous aller fournir, il y a des colonnes en moins, ils seront conservé pour ne pas perde de données.
+                    <?php echo session::getLabel('lang.text.page.matrix.modal.text') ?>
                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo session::getLabel('lang.text.modal.cancel') ?></button>

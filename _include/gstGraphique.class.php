@@ -158,7 +158,7 @@ class gstGraphique extends connectDb{
     }
     
     public function getCapteurs(){
-    	$q = "select id, name from oko_capteur order by id";
+    	$q = "select id, name from oko_capteur order by id asc";
 	    $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
 	    
 	    $result = $this->query($q);

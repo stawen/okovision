@@ -31,7 +31,7 @@ if ($res->num_rows > 0){
     }
 }
 
-
+/* 1.4.3 
 $configFile = file_get_contents('config.php');
 $configFile = str_replace("//NOTHING","//CHANGE1.4.3",$configFile);
 $configFile = str_replace("date_default_timezone_set('Europe/Paris');","//CHANGE1.4.3",$configFile);
@@ -52,6 +52,20 @@ $q_alter .= "ALTER TABLE oko_asso_capteur_graphe ENGINE=MYISAM;";
 $q_alter .= "OPTIMIZE TABLE oko_historique_full;";
 
 $this->multi_query($q_alter);
+*/ 
+
+/*
+* 1.5.0
+*/
+
+//change format oko_asso_capteur_graphe.oko_capteur_id
+$q = "ALTER TABLE `oko_asso_capteur_graphe`	CHANGE COLUMN `oko_capteur_id` `oko_capteur_id` INT(3) NOT NULL AFTER `oko_graphe_id`;";
+ 
+if($this->query($q)){
+    $this->log->info("UPGRADE | Change format oko_asso_capteur_graphe.oko_capteur_id");   
+}else{
+    $this->log->error("UPGRADE | Change format oko_asso_capteur_graphe.oko_capteur_id");       
+}
 
 
 $this->log->info("UPGRADE | Update status | Finished in ".$t->getTime());

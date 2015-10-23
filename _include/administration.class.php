@@ -283,7 +283,7 @@ class administration extends connectDb{
 		
 		$r = array();
 	    //$lock = array("Datum","Zeit","AT [°C]","PE1 Einschublaufzeit[zs]","PE1 Pausenzeit[zs]","PE1 Status");
-	    $q = "select id, name, original_name, type from oko_capteur order by id";
+	    $q = "select id, name, original_name, type from oko_capteur where position_column_csv <> -1 order by position_column_csv";
 	    $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
 	    
 	    $result = $this->query($q);

@@ -48,7 +48,8 @@ class rendu extends connectDb{
 			$data = null;
 	
 			while($r = $res->fetch_object() ) {
-				$data .= "[".$r->timestamp.",".$r->value."],";
+				//si value == null c'est qu'il n'y a pas de data donc on affiche pas la données
+				if($r->value !== null) $data .= "[".$r->timestamp.",".$r->value."],";
 			}
 		
 			$data = substr($data,0,strlen($data)-1);

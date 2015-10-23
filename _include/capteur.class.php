@@ -37,7 +37,7 @@ class capteur extends connectDb{
 	}
 	
 	public function getForImportCsv(){
-		$result = $this->query("select id, name, position_column_csv, column_oko, original_name, type from oko_capteur and position_column_csv <> -1;");
+		$result = $this->query("select id, name, position_column_csv, column_oko, original_name, type from oko_capteur where position_column_csv <> -1;");
 	    while($row = $result->fetch_assoc()){
             $r[$row['position_column_csv']] = $row;
         }
