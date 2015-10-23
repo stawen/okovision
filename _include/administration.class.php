@@ -468,6 +468,10 @@ class administration extends connectDb{
 	/*
 	* Function return current version
 	*/
+	public function getVersion(){
+		$this->sendResponse($this->getCurrentVersion());
+	}
+	
 	public function getCurrentVersion(){
 		return file_get_contents("_include/version.json");
 	}

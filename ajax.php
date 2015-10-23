@@ -83,6 +83,9 @@ if (is_ajax() && is_valid()) {
                         case "makeUpdate":
                             $a->makeUpdate();
                             break;
+                        case "getVersion":
+                            $a->getVersion();
+                            break;
                         case "getFileFromTmp":
                             $a->getFileFromTmp();
                             break;

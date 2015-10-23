@@ -44,16 +44,19 @@ $(document).ready(function() {
 
             if (json.install) {
                 $.growlValidate(lang.valid.maj);
-
+                 $.api('GET', 'admin.getVersion').done(function(v) {
+                     $("#version").html(v);
+                 });
             }
             else {
                 $('#informations').append(json.information);
                 $.growlErreur(lang.error.maj);
             }
+            
             checkUpdate();
         });
     });
-
+    
     checkUpdate();
 
 });
