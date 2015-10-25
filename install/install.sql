@@ -1,20 +1,7 @@
--- --------------------------------------------------------
--- Hôte:                         nas
--- Version du serveur:           5.5.42-MariaDB - Source distribution
--- Serveur OS:                   Linux
--- HeidiSQL Version:             9.1.0.4867
--- --------------------------------------------------------
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8mb4 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-
--- Export de la structure de la base pour okovision
--- DROP DATABASE IF EXISTS `okovision`;
--- CREATE DATABASE IF NOT EXISTS `okovision` /*!40100 DEFAULT CHARACTER SET utf8 */;
--- USE `okovision`;
-
 
 -- Export de la structure de table okovision. oko_saisons
 DROP TABLE IF EXISTS `oko_saisons`;
