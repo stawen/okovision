@@ -1,3 +1,6 @@
+##1.5.1
+* ajout d'un paraletre dans hightchart pour ne pas appliquer un offset sur le timestamp en fonction du navigateur. Force l'utilisation d'UTC
+
 ##1.5.0
 * Possibilité de recalculer la synthese sur une periode choisie
 * Mise à jour de la matrice possible sans perte de données

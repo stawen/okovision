@@ -92,6 +92,9 @@ $(document).ready(function() {
 	}
 
 	Highcharts.setOptions({
+		global: {
+    		useUTC: false
+    	},
 		lang: {
 			thousandsSep: lang.graphic.thousandsSep,
 			decimalPoint: lang.graphic.decimalPoint,

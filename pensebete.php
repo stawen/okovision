@@ -111,5 +111,11 @@ echo "fuseau:".date_default_timezone_get();
 
 $date = new DateTime(); //, new DateTimeZone(date_default_timezone_get())
 echo "offset::".$date->getOffset();	
-//phpinfo();
+//php:info();
+/*
+okovision.dronek.com -> www site de presentation
+okovision.dronek.com/app -> l'application
+okovision.dronek.com/api -> api de communication
+okovision.dronek.com/back -> visualisation des stats
+*/
 ?>
