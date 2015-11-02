@@ -20,13 +20,7 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>+
     <![endif]-->
 	<?php //include_once("analyticstracking.php"); ?>
-	<script type="text/javascript">
-	  var offset = <?php $date = new DateTime(); 
-	              echo $date->getOffset() / 60;	
-	              ?>;
-	</script>
-
-  </head>
+	</head>
 
   <body role="document">
   
