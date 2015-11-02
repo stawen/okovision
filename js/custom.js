@@ -3,7 +3,7 @@
  * Auteur : Stawen Dronek
  * Utilisation commerciale interdite sans mon accord
  ******************************************************/
-/* global lang, Highcharts, sessionToken */
+/* global lang, Highcharts, sessionToken, offset */
 $(document).ready(function() {
 
 	
@@ -93,7 +93,10 @@ $(document).ready(function() {
 
 	Highcharts.setOptions({
 		global: {
-    		useUTC: false
+    		useUTC: true
+    		/*,
+    		timezoneOffset: offset
+    		*/
     	},
 		lang: {
 			thousandsSep: lang.graphic.thousandsSep,

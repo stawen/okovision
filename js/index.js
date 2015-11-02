@@ -56,7 +56,7 @@ $(document).ready(function() {
 			yAxis: [{
 				title: {
 					text: '...',
-				},min: 0 //,	max : 100
+				}//,min: 0 //,	max : 100
 			}],
 			plotOptions: {
 				spline: {
