@@ -546,6 +546,9 @@ class AutoUpdate extends connectDb{
 			
 			$filename = str_replace($gitFolder,"",zip_entry_name($file));
 			//$filename = zip_entry_name($file);
+			
+			if($filename == null) continue;
+			
 			$foldername = $this->_installDir . dirname($filename);
 			$absoluteFilename = $this->_installDir . $filename;
 
