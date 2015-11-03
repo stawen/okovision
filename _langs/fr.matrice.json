@@ -23,6 +23,10 @@
         "name": "Contact Bruleur (On/Off)",
         "type": ""
     },
+    "Sperrzeit": {
+        "name": "Temps de blocage",
+        "type": ""
+    },
     "HK1 VL Ist[°C]": {
         "name": "T°C Départ",
         "type": ""
@@ -147,6 +151,10 @@
         "name": "OKO 1 - T°C Chaudiere",
         "type": ""
     },
+    "PE1_BR1": {
+        "name": "OKO 1 - Contact Bruleur (On/Off)",
+        "type": ""
+    },
     "PE1 KT_SOLL[°C]": {
         "name": "OKO 1 - T°C Chaudiere Consigne",
         "type": ""
@@ -179,7 +187,15 @@
         "name": "Dépression (Pa)",
         "type": ""
     },
+    "PE1 Unterdruck Ist[EH]": {
+        "name": "Dépression (Pa)",
+        "type": ""
+    },
     "PE1 Unterdruck Soll[Pa]": {
+        "name": "Depression Consigne (Pa)",
+        "type": ""
+    },
+    "PE1 Unterdruck Soll[EH]": {
         "name": "Depression Consigne (Pa)",
         "type": ""
     },
