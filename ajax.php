@@ -170,7 +170,8 @@ if (is_ajax() && is_valid()) {
     						break;
     					case "getIndicByDay":
     					    if(isset($_GET['timeStart']) && isset($_GET['timeEnd'])){
-    					        $r->getIndicByDay($_GET['jour'],(int)($_GET['timeStart'] / 1000),(int)($_GET['timeEnd'] / 1000));
+    					        //$r->getIndicByDay($_GET['jour'],(int)($_GET['timeStart'] / 1000),(int)($_GET['timeEnd'] / 1000));
+    					        $r->getIndicByDay($_GET['jour'], $_GET['timeStart'], $_GET['timeEnd']);
     					    }else{
     					        $r->getIndicByDay($_GET['jour']);
     					    }

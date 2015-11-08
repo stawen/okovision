@@ -38,11 +38,12 @@ class rendu extends connectDb{
 			
 			$capteur = $cap->get($c->id);
 			//$q = "SELECT (FROM_UNIXTIME(CONCAT(jour,' ',heure)))*1000 as timestamp, round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
-			$q = "SELECT jour,heure, round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
+			$q = "SELECT timestamp * 1000 as timestamp, round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
+			//$q = "SELECT jour,heure, round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
 		         ."WHERE jour ='".$jour."'";
 			        
 			$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$c->name." | ".$q);
-			/*
+			
 			$res = $this->query($q);
 			
 			$data = null;
@@ -53,10 +54,10 @@ class rendu extends connectDb{
 			}
 		
 			$data = substr($data,0,strlen($data)-1);
-			*/
+			
 			$resultat .= '{ "name": "'.$c->name.'",';
-			$resultat .= '"data": '.$this->getDataWithTime($q);
-			//$resultat .= '"data": ['.$data.']';
+			//$resultat .= '"data": '.$this->getDataWithTime($q);
+			$resultat .= '"data": ['.$data.']';
 			$resultat .= '},';
 		}
 		
@@ -82,7 +83,7 @@ class rendu extends connectDb{
 		while($r = $result->fetch_object() ) {
 			if($r->value !== null){
 				//$date = new DateTime($r->jour." ".$r->heure,new DateTimeZone(date_default_timezone_get()));
-				$date = new DateTime($r->jour." ".$r->heure); 
+				$date = new DateTime($r->jour." ".$r->heure);
 				$utc = ($date->getTimestamp() + $date->getOffset()) * 1000;	
 				$data .= "[".$utc.",".$r->value."],";
 			}
@@ -98,9 +99,16 @@ class rendu extends connectDb{
 	public function getIndicByDay($jour, $timeStart = null, $timeEnd = null){
 		
 		if($timeStart != null && $timeEnd != null){
-			$date 		= 	new DateTime();
-			$timeStart 	=	$timeStart - $date->getOffset();
-			$timeEnd 	=	$timeEnd - $date->getOffset();
+			//$date 		= 	new DateTime();
+			//$this->log->debug("timeStart:".$timeStart);
+			//$timeStart 	=	round( ($timeStart / 1000) - $date->getOffset() );
+			$timeStart 	=	(int)( $timeStart / 1000 );
+			//$this->log->debug("timeStart:".$timeStart);
+			//$this->log->debug("timeEnd:".$timeEnd);
+			//$timeEnd 	=	round( ($timeEnd / 1000) - $date->getOffset() );
+			$timeEnd 	=	(int)( $timeEnd / 1000 );
+			//$this->log->debug("timeEnd:".$timeEnd);
+			
 		}
 		
 		
@@ -129,7 +137,8 @@ class rendu extends connectDb{
 		//limiter le calcul une intervalle de temps ou la journéee entiere
 		$intervalle = "";
 		if($timeStart != null && $timeEnd != null){
-			$intervalle = "AND (heure BETWEEN TIME(FROM_UNIXTIME(".$timeStart.")) AND TIME(FROM_UNIXTIME(".$timeEnd.")) )";
+			//$intervalle = "AND (heure BETWEEN TIME(FROM_UNIXTIME(".$timeStart.")) AND TIME(FROM_UNIXTIME(".$timeEnd.")) )";
+			$intervalle = "AND timestamp BETWEEN ".$timeStart." AND ".$timeEnd;
 		}
 		
 		$q = "select round (sum((1/(a.col_".$capteur_vis['column_oko']." + a.col_".$capteur_vis_pause['column_oko'].")) * a.col_".$capteur_vis['column_oko'].")*(".$coeff."),2) as consoPellet from oko_historique_full as a "
@@ -149,7 +158,8 @@ class rendu extends connectDb{
 		//limiter le calcul une intervalle de temps ou la journéee entiere
 		$intervalle = "";
 		if($timeStart != null && $timeEnd != null){
-			$intervalle = "AND (heure BETWEEN TIME(FROM_UNIXTIME(".$timeStart.")) AND TIME(FROM_UNIXTIME(".$timeEnd.")) )";
+			//$intervalle = "AND (heure BETWEEN TIME(FROM_UNIXTIME(".$timeStart.")) AND TIME(FROM_UNIXTIME(".$timeEnd.")) )";
+			$intervalle = "AND timestamp BETWEEN ".$timeStart." AND ".$timeEnd;
 		}
 		
 		$q = "SELECT round(max(a.col_".$capteur['column_oko']."),2) as tcExtMax FROM oko_historique_full as a "
@@ -170,7 +180,8 @@ class rendu extends connectDb{
 		//limiter le calcul une intervalle de temps ou la journéee entiere
 		$intervalle = "";
 		if($timeStart != null && $timeEnd != null){
-			$intervalle = "AND (heure BETWEEN TIME(FROM_UNIXTIME(".$timeStart.")) AND TIME(FROM_UNIXTIME(".$timeEnd.")) )";
+			//$intervalle = "AND (heure BETWEEN TIME(FROM_UNIXTIME(".$timeStart.")) AND TIME(FROM_UNIXTIME(".$timeEnd.")) )";
+			$intervalle = "AND timestamp BETWEEN ".$timeStart." AND ".$timeEnd;
 		}
 		
 		$q = "SELECT round(min(a.col_".$capteur['column_oko']."),2) as tcExtMin FROM oko_historique_full as a "

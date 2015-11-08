@@ -55,7 +55,9 @@ class connectDb {
 	
 		if (!$this->db->set_charset("utf8")) {
 		    $this->log->error("GLOBAL | Erreur lors du chargement du jeu de caractères utf8 :" .$this->db->error);
-		} 
+		}
+		
+		$this->query("SET time_zone='+00:00'");
 	}
 	
 	private function disconnect(){

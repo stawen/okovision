@@ -124,7 +124,8 @@ class okofen extends connectDb{
 					$query 	= 	"";
 					
 					$beginValue = 	"jour = STR_TO_DATE('".$jour."','%d.%m.%Y'),".		// jour
-									"heure='".$heure."'";							// heure
+									"heure = '".$heure."',".// heure
+									"timestamp = UNIX_TIMESTAMP(CONCAT(STR_TO_DATE('".$jour."','%d.%m.%Y'),' ',".$heure."))"; //utc timestamp							
 					
 					$query = $insert.$beginValue;			
 					//Detection demarrage d'un cycle //Statut 4 = Debut d'un cycle sur le front montant du statut

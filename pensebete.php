@@ -107,12 +107,18 @@ Merge
 */
 
 include_once 'config.php';
-echo "fuseau:".date_default_timezone_get();
+echo "fuseau: ".date_default_timezone_get();
 
 $date = new DateTime(); //, new DateTimeZone(date_default_timezone_get())
-echo "offset::".$date->getOffset();	
+echo "offset:: ".$date->getOffset();
+echo "date(p)::".date(P);
 //php:info();
+
+//http://www.sitepoint.com/synchronize-php-mysql-timezone-configuration/
 /*
+
+ALTER TABLE `oko_historique_full` DROP COLUMN `timestamp`;
+
 okovision.dronek.com -> www site de presentation
 okovision.dronek.com/app -> l'application
 okovision.dronek.com/api -> api de communication
