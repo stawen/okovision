@@ -45,6 +45,7 @@ DROP TABLE IF EXISTS `oko_historique_full`;
 CREATE TABLE IF NOT EXISTS `oko_historique_full` (
 	`jour` DATE NOT NULL,
 	`heure` TIME NOT NULL,
+	`timestamp` int(11) unsigned NOT NULL,
 	`col_2` DECIMAL(6,2) NULL DEFAULT NULL,
 	`col_3` DECIMAL(6,2) NULL DEFAULT NULL,
 	`col_4` DECIMAL(6,2) NULL DEFAULT NULL,
