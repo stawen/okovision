@@ -1,4 +1,4 @@
-##1.5.1
+##1.5.3
 * ajout d'un paraletre dans hightchart pour ne pas appliquer un offset sur le timestamp en fonction du navigateur. Force l'utilisation d'UTC
 
 ##1.5.0

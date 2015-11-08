@@ -47,12 +47,17 @@ class connectDb {
 	
 	private function connect(){
 		$this->db = new mysqli($this->_ip, $this->_user, $this->_pass, $this->_schema);
-			
+		
 		if ($this->db->connect_errno) {
-			    $this->log->info('GLOBAL | Connection MySQL impossible : ' . $this->db->connect_error );
+			    $this->log->error('GLOBAL | Connection MySQL impossible : ' . $this->db->connect_error );
 			    exit;
 		}
-		$this->db->set_charset("utf8");
+	
+		if (!$this->db->set_charset("utf8")) {
+		    $this->log->error("GLOBAL | Erreur lors du chargement du jeu de caractères utf8 :" .$this->db->error);
+		}
+		
+		$this->query("SET time_zone='+00:00'");
 	}
 	
 	private function disconnect(){

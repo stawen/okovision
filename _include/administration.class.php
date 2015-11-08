@@ -167,9 +167,11 @@ class administration extends connectDb{
 		//translation
 		$dico = json_decode(file_get_contents("_langs/fr.matrice.json"), true);
 	    //open matrice file just uploaded, first line
-	    $line = mb_convert_encoding(fgets(fopen('_tmp/matrice.csv', 'r')),'UTF-8'); 
-		//on retire le dernier ; de la ligne
-		$line = substr($line,0,strlen($line)-2);
+	    $line = fgets(fopen('_tmp/matrice.csv', 'r')); 
+		
+		//on retire le dernier ; de la ligne et on convertie la chaine en utf8
+		$line = mb_convert_encoding(substr($line,0,strlen($line)-2),'UTF-8');
+		
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | CSV First Line | ".$line);
 		
 		$query = ""; 
@@ -211,9 +213,10 @@ class administration extends connectDb{
 		//translation
 		$dico = json_decode(file_get_contents("_langs/fr.matrice.json"), true);
 	    //open matrice file just uploaded, first line
-	    $line = mb_convert_encoding(fgets(fopen('_tmp/matrice.csv', 'r')),'UTF-8'); 
+	    $line = fgets(fopen('_tmp/matrice.csv', 'r')); 
 		//on retire le dernier ; de la ligne
-		$line = substr($line,0,strlen($line)-2);
+		$line = mb_convert_encoding(substr($line,0,strlen($line)-2),'UTF-8');
+		
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | CSV First Line | ".$line);
 		
 		$c = new capteur();
