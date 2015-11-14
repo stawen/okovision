@@ -18,7 +18,19 @@ $(document).ready(function() {
         	refreshIndicateur(e.min, e.max);
 		}
     }
-	
+    
+    function yAxisMin(){
+    	Highcharts.each(Highcharts.charts, function (c) {
+    	
+    		if(c){ 
+    			if(c.yAxis[0].dataMin < 0){
+					c.yAxis[0].setExtremes(c.yAxis[0].dataMin, c.yAxis[0].dataMax);
+				}else{
+					c.yAxis[0].setExtremes(0, c.yAxis[0].dataMax);
+				}
+    		}
+    	});
+    }
 	/**************************************
 	 **** Graphique ***********************
 	 *************************************/
@@ -56,7 +68,7 @@ $(document).ready(function() {
 			yAxis: [{
 				title: {
 					text: '...',
-				}//,min: 0 //,	max : 100
+				}
 			}],
 			plotOptions: {
 				spline: {
@@ -71,7 +83,9 @@ $(document).ready(function() {
 				followPointer: true
 			},
 			series: data
-		});
+		
+			
+		},yAxisMin);
 
 	}
 

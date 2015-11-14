@@ -170,7 +170,9 @@ class administration extends connectDb{
 	    $line = fgets(fopen('_tmp/matrice.csv', 'r')); 
 		
 		//on retire le dernier ; de la ligne et on convertie la chaine en utf8
-		$line = mb_convert_encoding(substr($line,0,strlen($line)-2),'UTF-8');
+		//$line = mb_convert_encoding(substr($line,0,strlen($line)-2),'UTF-8');
+		$string = substr($line,0,strlen($line)-2);
+		$line = mb_convert_encoding($string, "UTF-8", mb_detect_encoding($string, "UTF-8, ISO-8859-1, ISO-8859-15", true));
 		
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | CSV First Line | ".$line);
 		
