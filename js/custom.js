@@ -7,7 +7,22 @@
 $(document).ready(function() {
 
 	
-
+	$.growlUpdateAvailable = function() {
+		$.notify({
+			icon: 'glyphicon glyphicon-thumbs-up',
+			message: lang.text.updateAvailable,
+			url: "about.php",
+			target: "_self"
+		}, {
+			z_index: 9999,
+			type: 'info',
+			placement: {
+				from: "bottom",
+				align: "right"
+			},
+			delay: 120000
+		});
+	}
 
 	$.growlValidate = function(text) {
 		$.notify({

@@ -1,6 +1,6 @@
 /* global lang, Highcharts */
 $(document).ready(function() {
-
+	var loader = true;
 	 /**
      * Synchronize zooming through the setExtremes event handler.
      */
@@ -147,7 +147,8 @@ $(document).ready(function() {
 	 **** Peuplement des graphiques *******
 	 * ***********************************/
 	function refreshAllGraphe() {
-
+	//	$(".se-pre-con").fadeIn();
+		
 		refreshIndicateur();
 
 		var jour = $.datepicker.formatDate('yy-mm-dd', $.datepicker.parseDate('dd/mm/yy', $("#date_encours").val()));
@@ -166,6 +167,8 @@ $(document).ready(function() {
 				});
 
 		});
+		
+		//$(".se-pre-con").fadeOut();
 	}
 
 	/**************************************
@@ -233,11 +236,11 @@ $(document).ready(function() {
 	 * ***********************************/
 
 	$(document).ajaxStart(function() {
-		$(".se-pre-con").fadeIn();
+		if(loader)$(".se-pre-con").fadeIn();
 	});
 
 	$(document).ajaxStop(function() {
-		$(".se-pre-con").fadeOut();
+		if(loader)$(".se-pre-con").fadeOut();
 	});
 
 	/**************************************
@@ -260,5 +263,17 @@ $(document).ready(function() {
 		});
 
 
+	setTimeout(function(){
+			loader = false;
+			$.api('GET', 'admin.checkUpdate').done(function(json) {
+				
+				if(json.newVersion){
+					$.growlUpdateAvailable()
+				}
+				
+			});
+			loader = true;
+	},5000);
+	
 	
 });
