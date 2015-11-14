@@ -43,6 +43,9 @@
             <?php getmenu(); ?>
 			
 			<li class="dropdown">
+			    <!--a href="#" data-toggle="modal" data-target="#login-modal"> 
+			        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+			     </a-->
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                 </a>
@@ -88,4 +91,26 @@
         </div><!--/.nav-collapse -->
       </div>
     </div>
+    
+    
+    <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+    	  <div class="modal-dialog">
+    	      <div class="modal-content">    
+        	    <div class="modal-header">
+    			    <h2 >Espace membre</h2>
+                </div>
+                <div class="modal-body">
+                    <form class="form-signin">
+                        <p><label for="inputEmail" class="sr-only">Identifiant</label>
+                        <input type="email" id="inputEmail" class="form-control" placeholder="Identifiant" required autofocus>
+                        <label for="inputPassword" class="sr-only">Mot de passe</label>
+                        <input type="password" id="inputPassword" class="form-control" placeholder="Mot de passe" required></p>
+                        <p><button class="btn btn-lg btn-primary btn-block" type="submit">Login</button></p>
+                        <brr:>
+                    </form>
+    			</div>
+    	    </div>  	
+		  </div>
+    </div>
+    
     <br/>
