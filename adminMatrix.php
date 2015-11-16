@@ -15,17 +15,17 @@
 <div class="container theme-showcase" role="main">
 <br/>
     <div class="page-header" >
-         <h2><?php echo session::getLabel( 'lang.text.menu.admin.matrix') ?></h2>
+         <h2><?php echo session::getInstance()->getLabel( 'lang.text.menu.admin.matrix') ?></h2>
     </div>
        
             
-	<?php echo session::getLabel('lang.text.page.matrix') ?>
+	<?php echo session::getInstance()->getLabel('lang.text.page.matrix') ?>
 	<br/><br/>
 	<div id="selectFile" style="display: none;">
-		<?php echo session::getLabel('lang.text.page.matrix.install') ?>
+		<?php echo session::getInstance()->getLabel('lang.text.page.matrix.install') ?>
     	<span class="btn btn-success fileinput-button">
 	        <i class="glyphicon glyphicon-plus"></i>
-	        <span id="btup"><?php echo session::getLabel('lang.text.page.matrix.upload') ?></span>
+	        <span id="btup"><?php echo session::getInstance()->getLabel('lang.text.page.matrix.upload') ?></span>
 	        <!-- The file input field used as target for the file upload widget -->
 	        <input id="fileupload" type="file" name="files[]">
 	    </span>
@@ -39,8 +39,8 @@
 	    <table id="headerCsv" class="table table-hover">
             <thead>
                 <tr>
-                    <th class="col-md-3"><?php echo session::getLabel('lang.text.page.matrix.original') ?></th>
-                    <th class="col-md-3"><?php echo session::getLabel('lang.text.page.matrix.name') ?></th>
+                    <th class="col-md-3"><?php echo session::getInstance()->getLabel('lang.text.page.matrix.original') ?></th>
+                    <th class="col-md-3"><?php echo session::getInstance()->getLabel('lang.text.page.matrix.name') ?></th>
                     <th class="col-md-5"></th>
                     <th class="col-md-1">
                     	<button type="button" id="updateMatrix" class="btn btn-xs btn-default" data-toggle="modal" data-target="#confirm-updateMatrix">
@@ -63,14 +63,14 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title"><?php echo session::getLabel('lang.text.page.matrix.modal.title') ?></h4>
+                    <h4 class="modal-title"><?php echo session::getInstance()->getLabel('lang.text.page.matrix.modal.title') ?></h4>
                 </div>
                 <div class="modal-body">
-                    <?php echo session::getLabel('lang.text.page.matrix.modal.text') ?>
+                    <?php echo session::getInstance()->getLabel('lang.text.page.matrix.modal.text') ?>
                </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo session::getLabel('lang.text.modal.cancel') ?></button>
-                    <button type="button" class="btn btn-danger btn-ok" id="updateConfirm"><?php echo session::getLabel('lang.text.modal.confirm') ?></button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo session::getInstance()->getLabel('lang.text.modal.cancel') ?></button>
+                    <button type="button" class="btn btn-danger btn-ok" id="updateConfirm"><?php echo session::getInstance()->getLabel('lang.text.modal.confirm') ?></button>
                 </div>
             </div>
         </div>

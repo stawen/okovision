@@ -497,14 +497,14 @@ class administration extends connectDb{
 		$update->setCurrentVersion($this->getCurrentVersion());
 		
 		if ($update->checkUpdate() === false)
-			$r['information'] = session::getLabel('lang.error.maj.information');
+			$r['information'] = session::getInstance()->getLabel('lang.error.maj.information');
 		
 		elseif ($update->newVersionAvailable()) {
 			$r['newVersion'] = true;
 			$r['list'] = $update->getVersionsInformationToUpdate();
 			
 		}else{
-			$r['information'] = session::getLabel('lang.valid.maj.information');
+			$r['information'] = session::getInstance()->getLabel('lang.valid.maj.information');
 			
 		}
 		
@@ -638,6 +638,27 @@ class administration extends connectDb{
 		
 		$this->sendResponse($r);
 		
+	}
+	
+	public function login($user,$pass){
+		
+		$user = $this->realEscapeString($user);
+		$pass = $this->realEscapeString($pass);
+		
+		$result = $this->query('select count(*) as nb,type from oko_user where user="$user" and password="$pass"');
+		
+		$r['response'] = false;
+		
+		if($result){
+			$res = $result->fetch_object();
+	    	
+	    	if ($res->nb == 1) {
+	    		$r['response'] = true;
+	    		session::getInstance()->setVar("typeUser", $res->type);
+	    		session::getInstance()->setVar("logged", true);
+	    	}
+	    }	
+		$this->sendResponse($r);
 	}
 
 }

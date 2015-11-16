@@ -8,13 +8,11 @@
 include_once 'config.php';
 
 function is_ajax() {
-  //return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
-  return true;
+  return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
 }
 
 function is_valid(){
-    return true;
-   //return ( strcmp(session::getVar('sid'),$_GET['sid']) == 0 )?true:false;
+  return ( strcmp(session::getInstance()->getVar('sid'),$_GET['sid']) == 0 )?true:false;
 }
 
 if (is_ajax() && is_valid()) {
@@ -102,8 +100,9 @@ if (is_ajax() && is_valid()) {
                                 $a->migrateDataForDate($_GET['jour']);
                             }
                             break;
-                            
-                            
+                        case "login":
+                            $a->login($_GET['user'],$_GET['pass']);
+                            break;
     				}
     				break; 
     			case "graphique":

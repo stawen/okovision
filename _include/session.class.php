@@ -1,34 +1,51 @@
 <?php
 
-class session {
-    
-    protected static $lang = 'fr';
+class session extends connectDb {
+    //protected static $lang = 'fr';
+    private $lang = 'fr';
+    private $dico = null;
+    private static $_instance;
     
     public function __construct() {
         
-        //session_start();
-        self::$lang = 'fr';
+        
+        //self::$lang = 'fr';
+        //$this->lang = 'fr';
         /*
-        if(!self::exist('LANG')){
-            self::setVar('LANG',self::getDictionnary(self::$lang));
+        if(!$this->exist('LANG')){
+            $this->setVar('LANG',$this->getDictionnary($this->lang));
         }
         */
         //print_r( self::exist('sid')); exit;
-        /*
-        if(!self::exist('sid')){
-            $t = substr(md5(uniqid($_COOKIE['PHPSESSID'], true)), 0,8);
-            self::setVar('sid', $t);
+        
+        session_start();
+        
+        if(!$this->exist('sid')){
+            $t = substr(md5(uniqid(session_id(), true)), 0,8);
+            $this->setVar('sid', $t);
         }
-        */
+        
+        $this->dico = $this->getDictionnary($this->getLang());
         
     }
     
     public function __destruct(){
         //session_destroy();
-        //if (DEBUG) session_unset();
+        if (DEBUG) session_destroy();
     }
     
-    private static function getDictionnary($lg){
+    	// Magic method clone is empty to prevent duplication of connection
+	private function __clone() { }
+	
+	public static function getInstance() {
+		if(!self::$_instance) { // If no instance then make one
+			self::$_instance = new self();
+		}
+		return self::$_instance;
+	}
+	
+    
+    private function getDictionnary($lg){
 		$file = '_langs/' . $lg . '.text.ini';
 	    if(file_exists($file)){
 	        return parse_ini_file($file);
@@ -36,27 +53,27 @@ class session {
 	    
 	}
 	
-	public static function getLabel($label){
-	    //return $_SESSION['LANG'][$label];
-	    $dico = self::getDictionnary(self::$lang);
-	    return $dico[$label];
+	public function getLabel($label){
+	    return $this->dico[$label];
+	    
 	}
 	
-	public static function getLang(){
-	    return self::$lang;
+	public function getLang(){
+	    return $this->lang;
 	}
 	
-	public static function setVar($index, $value){
-	    $_SESSION[$index] = $value;
+	public function setVar($key, $value){
+	    $_SESSION[$key] = $value;
 	}
 	
-	public static function exist($index){
-	    return isset($_SESSION[$index]);
+	public  function exist($key){
+	    return isset($_SESSION[$key]);
 	}
 	
-	public static function getVar($index){
-	    return $_SESSION[$index];
+	public function getVar($key){
+	    return isset($_SESSION[$key]) ? $_SESSION[$key]:null;
 	}
+	
 }
 
 ?>

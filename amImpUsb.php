@@ -14,15 +14,15 @@
 <br/>
     <div class="page-header" >
     
-        <h2><?php echo session::getLabel( 'lang.text.menu.manual.import.usb') ?></h2>
+        <h2><?php echo session::getInstance()->getLabel( 'lang.text.menu.manual.import.usb') ?></h2>
     </div>    
        
-    	<?php echo session::getLabel('lang.text.page.manual.usb.import') ?>
+    	<?php echo session::getInstance()->getLabel('lang.text.page.manual.usb.import') ?>
     	<br/><br/>
     	<div id="selectFile">
         	<span class="btn btn-success fileinput-button">
     	        <i class="glyphicon glyphicon-plus"></i>
-    	        <span><?php echo session::getLabel('lang.text.page.manual.usb.file') ?></span>
+    	        <span><?php echo session::getInstance()->getLabel('lang.text.page.manual.usb.file') ?></span>
     	        <!-- The file input field used as target for the file upload widget -->
     	        <input id="fileupload" type="file" name="files[]">
     	    </span>
@@ -35,8 +35,8 @@
     		</div>
     	</div>
 	
-    	<div id="inwork" style="display: none;"><br/><br/><span class="glyphicon glyphicon-refresh glyphicon-spin"></span><?php echo session::getLabel('lang.text.page.manual.workinprogress') ?></div>
-    	<div id="complete" style="display: none;"><br/><br/><span class="glyphicon glyphicon-ok" aria-hidden="true"></span><?php echo session::getLabel('lang.text.page.manual.finished') ?></div>
+    	<div id="inwork" style="display: none;"><br/><br/><span class="glyphicon glyphicon-refresh glyphicon-spin"></span><?php echo session::getInstance()->getLabel('lang.text.page.manual.workinprogress') ?></div>
+    	<div id="complete" style="display: none;"><br/><br/><span class="glyphicon glyphicon-ok" aria-hidden="true"></span><?php echo session::getInstance()->getLabel('lang.text.page.manual.finished') ?></div>
     </div>
             
        

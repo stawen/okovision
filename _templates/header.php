@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>OkoVision</title>
-    
+    <script type="text/javascript">
+            var sessionToken = '<?php echo session::getInstance()->getVar('sid'); ?>';		
+   </script>
 	<!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap theme -->
@@ -20,6 +22,7 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>+
     <![endif]-->
 	<?php //include_once("analyticstracking.php"); ?>
+	
 	</head>
 
   <body role="document">

@@ -20,12 +20,12 @@ if (!file_exists("config.php")) {
 <div class="container theme-showcase" role="main">
 
 	<div class="page-header">
-		<h2><?php echo session::getLabel('lang.text.page.about.title') ?></h2> <div id="version"><?php echo file_get_contents("_include/version.json");?></div>
+		<h2><?php echo session::getInstance()->getLabel('lang.text.page.about.title') ?></h2> <div id="version"><?php echo file_get_contents("_include/version.json");?></div>
 	</div>
 	<div class="well">
 		<img style='float:left;width:130px;height:130px; margin-right:20px;' src="css/images/stawen.png" alt="stawen" class="img-circle">
 
-		<?php echo session::getLabel( 'lang.text.page.about.information') ?>
+		<?php echo session::getInstance()->getLabel( 'lang.text.page.about.information') ?>
 		
 		<?php 
 		if (file_exists('migration.php')){ ?>
@@ -33,20 +33,20 @@ if (!file_exists("config.php")) {
 		<?php } ?>
 	</div>
 	<div class="page-header">
-		<h2><?php echo session::getLabel('lang.text.page.about.update') ?></h2>
+		<h2><?php echo session::getInstance()->getLabel('lang.text.page.about.update') ?></h2>
 		<button type="button" id="bt_update" class="btn btn-xs btn-default" style="display: none;">
 			<span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>
-			<?php echo session::getLabel( 'lang.text.page.about.update.install') ?>
+			<?php echo session::getInstance()->getLabel( 'lang.text.page.about.update.install') ?>
 		</button>
 		<div id="inwork-checkupdate">
 			<br/>
 			<br/><span class="glyphicon glyphicon-refresh glyphicon-spin"></span>
-			<?php echo session::getLabel( 'lang.text.page.about.update.check') ?>
+			<?php echo session::getInstance()->getLabel( 'lang.text.page.about.update.check') ?>
 		</div>
 		<div id="inwork-makeupdate" style="display: none;">
 			<br/>
 			<br/><span class="glyphicon glyphicon-refresh glyphicon-spin"></span>
-			<?php echo session::getLabel( 'lang.text.page.about.update.inprogress') ?>
+			<?php echo session::getInstance()->getLabel( 'lang.text.page.about.update.inprogress') ?>
 		</div>
 		<p>
 			<div id="informations"></div>

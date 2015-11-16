@@ -20,9 +20,9 @@ if (!file_exists("config.php")) {
     <div class="container theme-showcase" role="main">
 		
 		<div class="page-header" align="center">
-			<span class="glyphicon glyphicon-hand-right"></span> <?php echo session::getLabel('lang.text.page.label.conso') ?><span id="consoPellet" class="label label-primary">00,00 Kg</span> &nbsp;&nbsp;
-			<span class="glyphicon glyphicon-arrow-up"></span> <?php echo session::getLabel('lang.text.page.label.tcmax') ?> <span id="tcmax" class="label label-success">00,0 °C</span> &nbsp;&nbsp;
-			<span class="glyphicon glyphicon-arrow-down"></span> <?php echo session::getLabel('lang.text.page.label.tcmin') ?> <span id="tcmin" class="label label-warning">00,0 °C</span>
+			<span class="glyphicon glyphicon-hand-right"></span> <?php echo session::getInstance()->getLabel('lang.text.page.label.conso') ?><span id="consoPellet" class="label label-primary">00,00 Kg</span> &nbsp;&nbsp;
+			<span class="glyphicon glyphicon-arrow-up"></span> <?php echo session::getInstance()->getLabel('lang.text.page.label.tcmax') ?> <span id="tcmax" class="label label-success">00,0 °C</span> &nbsp;&nbsp;
+			<span class="glyphicon glyphicon-arrow-down"></span> <?php echo session::getInstance()->getLabel('lang.text.page.label.tcmin') ?> <span id="tcmin" class="label label-warning">00,0 °C</span>
 		</div>
 		<div class="container-graphe">
 		</div>

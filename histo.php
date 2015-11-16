@@ -16,11 +16,11 @@
 		<div class="page-header row">
 		 
 			<div class="col-md-9" >
-				<span class="glyphicon glyphicon-hand-right"></span> <?php echo session::getLabel('lang.text.page.label.conso') ?> <span id="consoPellet" class="label label-primary">00,00 Kg</span> &nbsp;&nbsp;
-				<span class="glyphicon glyphicon-arrow-up"></span> <?php echo session::getLabel('lang.text.page.label.tcmax') ?> <span id="tcmax" class="label label-success">00,0 °C</span> &nbsp;&nbsp;
-				<span class="glyphicon glyphicon-arrow-right"></span> <?php echo session::getLabel('lang.text.page.label.tcmoy') ?> <span id="tcmoy" class="label label-info">00,0 °C</span> &nbsp;&nbsp;
-				<span class="glyphicon glyphicon-arrow-down"></span> <?php echo session::getLabel('lang.text.page.label.tcmin') ?> <span id="tcmin" class="label label-warning">00,0 °C</span> &nbsp;&nbsp;
-				<span class="glyphicon glyphicon-cloud"></span> <?php echo session::getLabel('lang.text.page.label.dju') ?> <span id="dju" class="label label-primary">0<span>
+				<span class="glyphicon glyphicon-hand-right"></span> <?php echo session::getInstance()->getLabel('lang.text.page.label.conso') ?> <span id="consoPellet" class="label label-primary">00,00 Kg</span> &nbsp;&nbsp;
+				<span class="glyphicon glyphicon-arrow-up"></span> <?php echo session::getInstance()->getLabel('lang.text.page.label.tcmax') ?> <span id="tcmax" class="label label-success">00,0 °C</span> &nbsp;&nbsp;
+				<span class="glyphicon glyphicon-arrow-right"></span> <?php echo session::getInstance()->getLabel('lang.text.page.label.tcmoy') ?> <span id="tcmoy" class="label label-info">00,0 °C</span> &nbsp;&nbsp;
+				<span class="glyphicon glyphicon-arrow-down"></span> <?php echo session::getInstance()->getLabel('lang.text.page.label.tcmin') ?> <span id="tcmin" class="label label-warning">00,0 °C</span> &nbsp;&nbsp;
+				<span class="glyphicon glyphicon-cloud"></span> <?php echo session::getInstance()->getLabel('lang.text.page.label.dju') ?> <span id="dju" class="label label-primary">0<span>
 			</div>
 		
 			<div class="col-md-3" align="right">
@@ -49,7 +49,7 @@
 				<a id="bt_apres"><span class="glyphicon glyphicon-arrow-right"></span></a>
 			</div>
 			<div class="col-md-12">
-				<span class="glyphicon glyphicon-hand-right"></span> <?php echo session::getLabel('lang.text.page.label.nbcycle') ?> <span id="cycle" class="label label-primary">0<span>
+				<span class="glyphicon glyphicon-hand-right"></span> <?php echo session::getInstance()->getLabel('lang.text.page.label.nbcycle') ?> <span id="cycle" class="label label-primary">0<span>
 			</div>	
 		</div>
 		
@@ -62,12 +62,12 @@
 		<div class="page-header row">
 			
 			<div class="col-md-9">
-				<span class="glyphicon glyphicon-hand-right"></span> <?php echo session::getLabel('lang.text.page.label.conso') ?> <span id="consoPelletSaison" class="label label-primary">00,00 Kg</span> &nbsp;&nbsp;
-				<span class="glyphicon glyphicon-arrow-up"></span> <?php echo session::getLabel('lang.text.page.label.tcmax') ?> <span id="tcmaxSaison" class="label label-success">00,0 °C</span> &nbsp;&nbsp;
-				<span class="glyphicon glyphicon-arrow-right"></span> <?php echo session::getLabel('lang.text.page.label.tcmoy') ?> <span id="tcmoySaison" class="label label-info">00,0 °C</span> &nbsp;&nbsp;
-				<span class="glyphicon glyphicon-arrow-down"></span> <?php echo session::getLabel('lang.text.page.label.tcmin') ?> <span id="tcminSaison" class="label label-warning">00,0 °C</span> &nbsp;&nbsp;
-				<span class="glyphicon glyphicon-cloud"></span> <?php echo session::getLabel('lang.text.page.label.dju') ?> <span id="djuSaison" class="label label-primary">0</span><br/>
-				<span class="glyphicon glyphicon-hand-right"></span> <?php echo session::getLabel('lang.text.page.label.nbcycle') ?> <span id="cycleSaison" class="label label-primary">0</span>
+				<span class="glyphicon glyphicon-hand-right"></span> <?php echo session::getInstance()->getLabel('lang.text.page.label.conso') ?> <span id="consoPelletSaison" class="label label-primary">00,00 Kg</span> &nbsp;&nbsp;
+				<span class="glyphicon glyphicon-arrow-up"></span> <?php echo session::getInstance()->getLabel('lang.text.page.label.tcmax') ?> <span id="tcmaxSaison" class="label label-success">00,0 °C</span> &nbsp;&nbsp;
+				<span class="glyphicon glyphicon-arrow-right"></span> <?php echo session::getInstance()->getLabel('lang.text.page.label.tcmoy') ?> <span id="tcmoySaison" class="label label-info">00,0 °C</span> &nbsp;&nbsp;
+				<span class="glyphicon glyphicon-arrow-down"></span> <?php echo session::getInstance()->getLabel('lang.text.page.label.tcmin') ?> <span id="tcminSaison" class="label label-warning">00,0 °C</span> &nbsp;&nbsp;
+				<span class="glyphicon glyphicon-cloud"></span> <?php echo session::getInstance()->getLabel('lang.text.page.label.dju') ?> <span id="djuSaison" class="label label-primary">0</span><br/>
+				<span class="glyphicon glyphicon-hand-right"></span> <?php echo session::getInstance()->getLabel('lang.text.page.label.nbcycle') ?> <span id="cycleSaison" class="label label-primary">0</span>
 			</div>
 			<div class="col-md-3" align="right">
 				<select id="saison" name="saison">

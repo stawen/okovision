@@ -15,21 +15,21 @@
 <div class="container theme-showcase" role="main">
 <br/>
     <div class="page-header" >
-         <h2><?php echo session::getLabel( 'lang.text.menu.admin.season') ?></h2>
+         <h2><?php echo session::getInstance()->getLabel( 'lang.text.menu.admin.season') ?></h2>
     </div>    
        
-	<?php echo session::getLabel('lang.text.page.season') ?>
+	<?php echo session::getInstance()->getLabel('lang.text.page.season') ?>
 	
 	<br/><br/>
 	<button type="button" class="btn btn-xs btn-default" id="openModalAddSaison" data-toggle="modal" data-target="#modal_saison">
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <?php echo session::getLabel('lang.text.page.season.add') ?>
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <?php echo session::getInstance()->getLabel('lang.text.page.season.add') ?>
     </button>
     <table id="saisons" class="table table-hover">
         <thead>
             <tr >
-                <th class="col-md-3"><?php echo session::getLabel('lang.text.page.season.title') ?></th>
-                <th class="col-md-3"><?php echo session::getLabel('lang.text.page.season.start') ?></th>
-                <th class="col-md-3"><?php echo session::getLabel('lang.text.page.season.end') ?></th>
+                <th class="col-md-3"><?php echo session::getInstance()->getLabel('lang.text.page.season.title') ?></th>
+                <th class="col-md-3"><?php echo session::getInstance()->getLabel('lang.text.page.season.start') ?></th>
+                <th class="col-md-3"><?php echo session::getInstance()->getLabel('lang.text.page.season.end') ?></th>
                 <th class="col-md-3"></th>
                 
             </tr>
@@ -57,7 +57,7 @@
                     <form>
 
                         <div class="form-group">
-                            <label for="recipient-name" class="control-label"><?php echo session::getLabel('lang.text.page.season.modal.end') ?></label>
+                            <label for="recipient-name" class="control-label"><?php echo session::getInstance()->getLabel('lang.text.page.season.modal.end') ?></label>
                             <input type="text" class="form-control" id="startDateSaison" placeholder="ex : 01/09/2014">
                         </div>
                         
@@ -88,8 +88,8 @@
                     <input type="text" id="saisonId">
                </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo session::getLabel('lang.text.modal.cancel') ?></button>
-                    <button type="button" class="btn btn-danger btn-ok" id="deleteConfirm"><?php echo session::getLabel('lang.text.modal.confirm') ?></button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo session::getInstance()->getLabel('lang.text.modal.cancel') ?></button>
+                    <button type="button" class="btn btn-danger btn-ok" id="deleteConfirm"><?php echo session::getInstance()->getLabel('lang.text.modal.confirm') ?></button>
                 </div>
             </div>
         </div>
