@@ -27,10 +27,6 @@ if (!file_exists("config.php")) {
 
 		<?php echo session::getInstance()->getLabel( 'lang.text.page.about.information') ?>
 		
-		<?php 
-		if (file_exists('migration.php')){ ?>
-			<p><b>Pensez à migrer vos données si vous avez eu Okovision en version inférieur à la V1.3.0. </b><a href="migration.php">Migration des données</a></p>
-		<?php } ?>
 	</div>
 	<div class="page-header">
 		<h2><?php echo session::getInstance()->getLabel('lang.text.page.about.update') ?></h2>

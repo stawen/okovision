@@ -109,9 +109,6 @@ $(document).ready(function() {
 	Highcharts.setOptions({
 		global: {
     		useUTC: true
-    		/*,
-    		timezoneOffset: offset
-    		*/
     	},
 		lang: {
 			thousandsSep: lang.graphic.thousandsSep,
@@ -128,6 +125,32 @@ $(document).ready(function() {
 	});
 
 
+	$("#btlogin").click(function(e){
+		var user = $('#inputUser').val()
+		var pass = $('#inputPassword').val()
+		
+		if(user !== '' && pass !== ''){
+		
+			$.api('POST', 'admin.login', {user: user, pass: pass}, false).done(function(json) {
+						
+				if(!json.response){
+					e.preventDefault();
+					$.growlErreur("User/password incorrect");
+				}
+			});
+		}
+		
+	})
+	
+	$("#btlogout").click(function(){
+		
+		$.api('GET', 'admin.logout',false).done(function(json) {
+				if(json.response){
+					window.location.replace("index.php");
+				}
+			
+		});
+	});
 
 
 });

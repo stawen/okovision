@@ -74,6 +74,10 @@ class session extends connectDb {
 	    return isset($_SESSION[$key]) ? $_SESSION[$key]:null;
 	}
 	
+	public function deleteVar($key){
+		unset($_SESSION[$key]);
+	}
+	
 }
 
 ?>

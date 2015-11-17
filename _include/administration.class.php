@@ -621,7 +621,7 @@ class administration extends connectDb{
             //$this->log->debug("_UPGRADE | ".$insert.$set);
             
             if(!$this->query($insert.$set)){
-				$this->log->info("Class ".__CLASS__." | ".__FUNCTION__." | ".$insert.$set);
+				$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$insert.$set);
 				$error = true;
 			}
 			
@@ -643,9 +643,12 @@ class administration extends connectDb{
 	public function login($user,$pass){
 		
 		$user = $this->realEscapeString($user);
-		$pass = $this->realEscapeString($pass);
+		$pass = sha1( $this->realEscapeString($pass) );
 		
-		$result = $this->query('select count(*) as nb,type from oko_user where user="$user" and password="$pass"');
+		$q = "select count(*) as nb,type from oko_user where user='$user' and pass='$pass'";
+		
+		$result = $this->query($q);
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
 		
 		$r['response'] = false;
 		
@@ -659,6 +662,14 @@ class administration extends connectDb{
 	    	}
 	    }	
 		$this->sendResponse($r);
+	}
+	
+	public function logout(){
+		session::getInstance()->deleteVar("logged");
+		session::getInstance()->deleteVar("typeUser");
+		$r['response'] = true;
+		$this->sendResponse($r);
+			
 	}
 
 }

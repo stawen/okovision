@@ -5,10 +5,11 @@
 * Utilisation commerciale interdite sans mon accord
 ******************************************************/
 
-  $page = basename($_SERVER['SCRIPT_NAME']);
+ 
  
  function getMenu(){
-	global $page;
+	//global $page;
+	$page = basename($_SERVER['SCRIPT_NAME']);
 	
 	$menu = array(  'index.php' => array(
 	                                    'txt' => session::getInstance()->getLabel('lang.text.menu.index'),
@@ -39,7 +40,7 @@
           <a class="navbar-brand" href="#">OkoVision</a>
         </div>
         <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
+          <ul class="nav navbar-nav top-nav">
             <?php getmenu(); ?>
 			
 			<li class="dropdown">
@@ -51,7 +52,7 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                 </a>
-                <ul class="dropdown-menu" role="menu">
+                <ul class="dropdown-menu">
                     <li class="dropdown-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> <?php echo session::getInstance()->getLabel('lang.text.menu.graphic') ?></li>
                         <li><a href="gstrapport.php"><?php echo session::getInstance()->getLabel('lang.text.menu.graphic.report') ?></a></li>
                     <li class="divider"></li>
@@ -73,7 +74,16 @@
                    
                     
                 </ul>
-             <?php } ?>    
+              </li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+			        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+			    </a>
+			    <ul class="dropdown-menu">
+			        <li><a href="">Mon compte </a></li>
+			        <li><a id="btlogout" href="">Déconnexion </a></li>
+			    </ul>    
+            <?php } ?>    
             </li>
 			
            </ul>
@@ -103,14 +113,15 @@
     			    <h2 >Espace membre</h2>
                 </div>
                 <div class="modal-body">
-                    <form class="form-signin">
-                        <p><label for="inputEmail" class="sr-only">Identifiant</label>
-                        <input type="email" id="inputEmail" class="form-control" placeholder="Identifiant" required autofocus>
+                    <form id="formlogin" class="form-signin">
+                        <p><label for="inputUser" class="sr-only">Identifiant</label>
+                        <input type="text" id="inputUser" class="form-control" placeholder="Identifiant" required autofocus>
                         <label for="inputPassword" class="sr-only">Mot de passe</label>
                         <input type="password" id="inputPassword" class="form-control" placeholder="Mot de passe" required></p>
-                        <p><button class="btn btn-lg btn-primary btn-block" type="submit">Login</button></p>
-                        <brr:>
+                        <p><button class="btn btn-lg btn-primary btn-block"id="btlogin">Login</button></p>
+                        <br/>
                     </form>
+                    
     			</div>
     	    </div>  	
 		  </div>

@@ -1,3 +1,12 @@
+<?php 
+ $page = basename($_SERVER['SCRIPT_NAME']);
+ $pageNotLogged = array('setup.php','index.php','histo.php');
+ 
+ if(!in_array($page,$pageNotLogged) && !session::getInstance()->getVar('logged')){
+    header('Location: /errors/401.php');
+    exit();
+ }
+?>
 <!DOCTYPE html>
 <html lang="fr">
   <head>
@@ -7,7 +16,7 @@
 
     <title>OkoVision</title>
     <script type="text/javascript">
-            var sessionToken = '<?php echo session::getInstance()->getVar('sid'); ?>';		
+            var sessionToken = "<?php echo session::getInstance()->getVar('sid'); ?>";		
    </script>
 	<!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
