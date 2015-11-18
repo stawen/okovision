@@ -80,8 +80,8 @@
 			        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
 			    </a>
 			    <ul class="dropdown-menu">
-			        <li><a href="#" data-toggle="modal" data-target="#login-modal">Mon compte </a></li>
-			        <li><a id="btlogout" href="">Déconnexion </a></li>
+			        <li><a href="#" data-toggle="modal" data-target="#password-modal"><?php echo session::getInstance()->getLabel('lang.text.menu.password') ?></a></li>
+			        <li><a id="btlogout" href=""><?php echo session::getInstance()->getLabel('lang.text.menu.logout') ?></a></li>
 			    </ul>    
             <?php } ?>    
             </li>
@@ -110,7 +110,7 @@
     	  <div class="modal-dialog">
     	      <div class="modal-content">    
         	    <div class="modal-header">
-    			    <h2 >Espace membre</h2>
+    			    <h2>Espace membre</h2>
                 </div>
                 <div class="modal-body">
                     <form id="formlogin" class="form-signin">
@@ -118,7 +118,7 @@
                         <input type="text" id="inputUser" class="form-control" placeholder="Identifiant" required autofocus>
                         <label for="inputPassword" class="sr-only">Mot de passe</label>
                         <input type="password" id="inputPassword" class="form-control" placeholder="Mot de passe" required></p>
-                        <p><button class="btn btn-lg btn-primary btn-block"id="btChangePass">Login</button></p>
+                        <p><button class="btn btn-lg btn-primary btn-block"id="btlogin">Login</button></p>
                         <br/>
                     </form>
                     
@@ -134,7 +134,7 @@
 			    <h2>Changer mon mot de passe</h2>
             </div>
             <div class="modal-body">
-                <form id="formChangePass" class="form-signin">
+                <form id="formChangePass" class="form">
                     <p><label for="inputPass" class="sr-only">Mot de passe</label>
                     <input type="password" id="inputPass" class="form-control" placeholder="Mot de passe" required autofocus>
                     <label for="inputPassConfirme" class="sr-only">Confirmation</label>

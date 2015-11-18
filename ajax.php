@@ -110,8 +110,12 @@ if (is_ajax() && is_valid()) {
                         case "logout":
                             $a->logout();
                             break;
+                        case "changePassword":
+                            $a->changePassword($_POST['pass']);
+                            break;
     				}
     				break; 
+    				
     			case "graphique":
     				$g = new gstGraphique();
     				

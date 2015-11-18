@@ -79,7 +79,7 @@ $(document).ready(function() {
 			//console.log(json);
 			if (!json.response){
 				if(json.sessionToken === 'invalid') {
-					$.growlErreur('Session expirée');
+					$.growlErreur(lang.error.sessionEnded);
 					setTimeout(function(){},2500);
 					window.location.replace("index.php");
 				}
@@ -135,7 +135,7 @@ $(document).ready(function() {
 						
 				if(!json.response){
 					e.preventDefault();
-					$.growlErreur("User/password incorrect");
+					$.growlErreur(lang.error.userPassIncorrect);
 				}
 			});
 		}
@@ -160,16 +160,17 @@ $(document).ready(function() {
 		if(pass !== '' && confirm !== ''){
 			
 			if(pass === confirm){
-		
-				$.api('POST', 'admin.ChangePassword', {pass: pass}, false).done(function(json) {
+			
+				$.api('POST', 'admin.changePassword', {pass: pass}).done(function(json) {
 							
 					if(!json.response){
 						e.preventDefault();
-						$.growlErreur("Mot de passe inchangé !");
+						$.growlErreur(lang.error.passNotChanged);
 					}
 				});
 			}else{
-				$.growlErreur("Les deux champs ne sont pas identiques.");
+				e.preventDefault();
+				$.growlErreur(lang.error.passNotTheSame);
 			}
 		}
 		

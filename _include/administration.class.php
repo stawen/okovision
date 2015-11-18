@@ -645,7 +645,7 @@ class administration extends connectDb{
 		$user = $this->realEscapeString($user);
 		$pass = sha1( $this->realEscapeString($pass) );
 		
-		$q = "select count(*) as nb,type from oko_user where user='$user' and pass='$pass'";
+		$q = "select count(*) as nb, id, type from oko_user where user='$user' and pass='$pass'";
 		
 		$result = $this->query($q);
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
@@ -659,6 +659,7 @@ class administration extends connectDb{
 	    		$r['response'] = true;
 	    		session::getInstance()->setVar("typeUser", $res->type);
 	    		session::getInstance()->setVar("logged", true);
+	    		session::getInstance()->setVar("userId", $res->id);
 	    	}
 	    }	
 		$this->sendResponse($r);
@@ -667,9 +668,22 @@ class administration extends connectDb{
 	public function logout(){
 		session::getInstance()->deleteVar("logged");
 		session::getInstance()->deleteVar("typeUser");
+		session::getInstance()->deleteVar("userId");
 		$r['response'] = true;
 		$this->sendResponse($r);
 			
+	}
+	
+	public function changePassword($pass){
+		$pass = sha1( $this->realEscapeString($pass) );
+		$userId = session::getInstance()->getVar("userId");
+		
+		$q = "update oko_user set pass='$pass' where id=$userId";
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
+		
+		$r['response'] = $this->query($q);
+		
+		$this->sendResponse($r);
 	}
 
 }
