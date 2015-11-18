@@ -19,7 +19,10 @@ function is_valid(){
 if (is_ajax() && is_valid()) {
 	
 		if (isset($_GET['type']) && isset($_GET['action']) ){
-			
+			/*
+			* TODO
+			* Ajotuer ici un control pour savoir si l'utilisateur en cours a le droit d'appeler les fonctions suivantes
+			*/
 			switch ($_GET['type']){
     			case "admin":
     				$a = new administration();

@@ -151,6 +151,29 @@ $(document).ready(function() {
 			
 		});
 	});
+	
+	$("#btChangePass").click(function(e){
+		
+		var pass 	= $('#inputPass').val()
+		var confirm = $('#inputPassConfirm').val()
+		
+		if(pass !== '' && confirm !== ''){
+			
+			if(pass === confirm){
+		
+				$.api('POST', 'admin.ChangePassword', {pass: pass}, false).done(function(json) {
+							
+					if(!json.response){
+						e.preventDefault();
+						$.growlErreur("Mot de passe inchangé !");
+					}
+				});
+			}else{
+				$.growlErreur("Les deux champs ne sont pas identiques.");
+			}
+		}
+		
+	});
 
 
 });

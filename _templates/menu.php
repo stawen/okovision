@@ -80,7 +80,7 @@
 			        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
 			    </a>
 			    <ul class="dropdown-menu">
-			        <li><a href="">Mon compte </a></li>
+			        <li><a href="#" data-toggle="modal" data-target="#login-modal">Mon compte </a></li>
 			        <li><a id="btlogout" href="">Déconnexion </a></li>
 			    </ul>    
             <?php } ?>    
@@ -118,13 +118,34 @@
                         <input type="text" id="inputUser" class="form-control" placeholder="Identifiant" required autofocus>
                         <label for="inputPassword" class="sr-only">Mot de passe</label>
                         <input type="password" id="inputPassword" class="form-control" placeholder="Mot de passe" required></p>
-                        <p><button class="btn btn-lg btn-primary btn-block"id="btlogin">Login</button></p>
+                        <p><button class="btn btn-lg btn-primary btn-block"id="btChangePass">Login</button></p>
                         <br/>
                     </form>
                     
     			</div>
     	    </div>  	
 		  </div>
+    </div>
+    
+    <div class="modal fade" id="password-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+	  <div class="modal-dialog">
+	      <div class="modal-content">    
+    	    <div class="modal-header">
+			    <h2>Changer mon mot de passe</h2>
+            </div>
+            <div class="modal-body">
+                <form id="formChangePass" class="form-signin">
+                    <p><label for="inputPass" class="sr-only">Mot de passe</label>
+                    <input type="password" id="inputPass" class="form-control" placeholder="Mot de passe" required autofocus>
+                    <label for="inputPassConfirme" class="sr-only">Confirmation</label>
+                    <input type="password" id="inputPassConfirm" class="form-control" placeholder="Confirmation" required></p>
+                    <p><button class="btn btn-lg btn-primary btn-block"id="btChangePass">Changer</button></p>
+                    <br/>
+                </form>
+                
+			</div>
+	    </div>  	
+	  </div>
     </div>
     
     <br/>

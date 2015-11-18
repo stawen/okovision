@@ -31,7 +31,7 @@ class session extends connectDb {
     
     public function __destruct(){
         //session_destroy();
-        if (DEBUG) session_destroy();
+        //if (DEBUG) session_destroy();
     }
     
     	// Magic method clone is empty to prevent duplication of connection
