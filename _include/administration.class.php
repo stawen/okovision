@@ -497,14 +497,14 @@ class administration extends connectDb{
 		$update->setCurrentVersion($this->getCurrentVersion());
 		
 		if ($update->checkUpdate() === false)
-			$r['information'] = session::getLabel('lang.error.maj.information');
+			$r['information'] = session::getInstance()->getLabel('lang.error.maj.information');
 		
 		elseif ($update->newVersionAvailable()) {
 			$r['newVersion'] = true;
 			$r['list'] = $update->getVersionsInformationToUpdate();
 			
 		}else{
-			$r['information'] = session::getLabel('lang.valid.maj.information');
+			$r['information'] = session::getInstance()->getLabel('lang.valid.maj.information');
 			
 		}
 		
@@ -621,7 +621,7 @@ class administration extends connectDb{
             //$this->log->debug("_UPGRADE | ".$insert.$set);
             
             if(!$this->query($insert.$set)){
-				$this->log->info("Class ".__CLASS__." | ".__FUNCTION__." | ".$insert.$set);
+				$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$insert.$set);
 				$error = true;
 			}
 			
@@ -638,6 +638,52 @@ class administration extends connectDb{
 		
 		$this->sendResponse($r);
 		
+	}
+	
+	public function login($user,$pass){
+		
+		$user = $this->realEscapeString($user);
+		$pass = sha1( $this->realEscapeString($pass) );
+		
+		$q = "select count(*) as nb, id, type from oko_user where user='$user' and pass='$pass'";
+		
+		$result = $this->query($q);
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
+		
+		$r['response'] = false;
+		
+		if($result){
+			$res = $result->fetch_object();
+	    	
+	    	if ($res->nb == 1) {
+	    		$r['response'] = true;
+	    		session::getInstance()->setVar("typeUser", $res->type);
+	    		session::getInstance()->setVar("logged", true);
+	    		session::getInstance()->setVar("userId", $res->id);
+	    	}
+	    }	
+		$this->sendResponse($r);
+	}
+	
+	public function logout(){
+		session::getInstance()->deleteVar("logged");
+		session::getInstance()->deleteVar("typeUser");
+		session::getInstance()->deleteVar("userId");
+		$r['response'] = true;
+		$this->sendResponse($r);
+			
+	}
+	
+	public function changePassword($pass){
+		$pass = sha1( $this->realEscapeString($pass) );
+		$userId = session::getInstance()->getVar("userId");
+		
+		$q = "update oko_user set pass='$pass' where id=$userId";
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
+		
+		$r['response'] = $this->query($q);
+		
+		$this->sendResponse($r);
 	}
 
 }

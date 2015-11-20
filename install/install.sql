@@ -41,6 +41,18 @@ CREATE TABLE IF NOT EXISTS `oko_resume_day` (
   PRIMARY KEY (`jour`)
 ) ENGINE=MYISAM DEFAULT CHARSET=utf8;
 
+-- Export de la structure de table okovision. oko_user
+DROP TABLE IF EXISTS `oko_user`;
+CREATE TABLE IF NOT EXISTS `oko_user` (
+  `id` int(3) NOT NULL AUTO_INCREMENT,
+  `user` tinytext NOT NULL,
+  `pass` tinytext NOT NULL,
+  `type` tinytext NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MYISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+
+
 DROP TABLE IF EXISTS `oko_historique_full`;
 CREATE TABLE IF NOT EXISTS `oko_historique_full` (
 	`jour` DATE NOT NULL,

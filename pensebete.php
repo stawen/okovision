@@ -112,7 +112,9 @@ echo "fuseau: ".date_default_timezone_get();
 $date = new DateTime(); //, new DateTimeZone(date_default_timezone_get())
 echo "offset:: ".$date->getOffset();
 echo "date(p)::".date(P);
-//php:info();
+
+
+phpinfo();
 
 //http://www.sitepoint.com/synchronize-php-mysql-timezone-configuration/
 /*

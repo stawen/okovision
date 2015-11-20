@@ -9,7 +9,7 @@
 	<script src="js/bootstrap-notify.min.js"></script>
 	<script src="js/highcharts.min.js"></script>
 	
-	<script src="_langs/<?php echo session::getLang() ?>.text.js"></script>
+	<script src="_langs/<?php echo session::getInstance()->getLang() ?>.text.js"></script>
 	<script src="js/custom.js"></script>
 	
 

@@ -374,7 +374,7 @@ class AutoUpdate extends connectDb{
 	 *         int: Status code (i.e. AutoUpdate::NO_UPDATE_AVAILABLE)
 	 */
 	public function checkUpdate() {
-		$this->log->info('Checking for a new update...');
+		$this->log->debug('Checking for a new update...');
 
 		// Reset previous updates
 		$this->_latestVersion = new version('0.0.0');

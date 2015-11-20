@@ -17,19 +17,35 @@ $(document).ready(function() {
         	//console.log('max: '+e.max+' min: '+e.min);
         	refreshIndicateur(e.min, e.max);
 		}
+		//yAxisMin;
     }
     
-    function yAxisMin(){
-    	Highcharts.each(Highcharts.charts, function (c) {
+    function yAxisMin(c){
+    	//Highcharts.each(Highcharts.charts, function (c) {
     	
     		if(c){ 
+    		//console.log(e);
+    			//console.log(c);
+    	
     			if(c.yAxis[0].dataMin < 0){
 					c.yAxis[0].setExtremes(c.yAxis[0].dataMin, c.yAxis[0].dataMax);
 				}else{
 					c.yAxis[0].setExtremes(0, c.yAxis[0].dataMax);
 				}
     		}
-    	});
+    	//});
+    }
+    
+    function sync(e){
+    	//syncExtremes(c);
+    	//yAxisMin(c);
+    	syncExtremes(e);
+    	/*
+    	if(typeof e.min == 'undefined' && typeof e.max == 'undefined'){
+             console.log('reset zoom clicked');   
+             console.log(e.currentTarget.chart);
+             yAxisMin(e.currentTarget.chart);
+        } */
     }
 	/**************************************
 	 **** Graphique ***********************
@@ -62,8 +78,8 @@ $(document).ready(function() {
 					text: lang.graphic.hour
 				},
 				events: {
-                	setExtremes: syncExtremes
-                }
+                	setExtremes:  syncExtremes
+               }
 			},
 			yAxis: [{
 				title: {
@@ -268,7 +284,7 @@ $(document).ready(function() {
 			$.api('GET', 'admin.checkUpdate').done(function(json) {
 				
 				if(json.newVersion){
-					$.growlUpdateAvailable()
+					$.growlUpdateAvailable();
 				}
 				
 			});

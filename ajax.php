@@ -13,14 +13,16 @@ function is_ajax() {
 }
 
 function is_valid(){
-    return true;
-   //return ( strcmp(session::getVar('sid'),$_GET['sid']) == 0 )?true:false;
+  return ( strcmp(session::getInstance()->getVar('sid'),$_GET['sid']) == 0 )?true:false;
 }
 
 if (is_ajax() && is_valid()) {
 	
 		if (isset($_GET['type']) && isset($_GET['action']) ){
-			
+			/*
+			* TODO
+			* Ajotuer ici un control pour savoir si l'utilisateur en cours a le droit d'appeler les fonctions suivantes
+			*/
 			switch ($_GET['type']){
     			case "admin":
     				$a = new administration();
@@ -102,10 +104,18 @@ if (is_ajax() && is_valid()) {
                                 $a->migrateDataForDate($_GET['jour']);
                             }
                             break;
-                            
-                            
+                        case "login":
+                            $a->login($_POST['user'],$_POST['pass']);
+                            break;
+                        case "logout":
+                            $a->logout();
+                            break;
+                        case "changePassword":
+                            $a->changePassword($_POST['pass']);
+                            break;
     				}
     				break; 
+    				
     			case "graphique":
     				$g = new gstGraphique();
     				

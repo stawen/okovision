@@ -28,7 +28,11 @@ var lang = {
         getIndicByMonth: "Problème lors de la récuperation des indicateurs du mois",
         getTotalSaison: "Problème lors de la récuperation des indicateurs de la saison",
         getSyntheseSaison: "Probleme lors de la récuperation de la synthèse de la saison",
-        bddFail: "Echec de connexion à la base de données"
+        bddFail: "Echec de connexion à la base de données",
+        passNotChanged: "Mot de passe inchangé !",
+        passNotTheSame: "Les deux champs ne sont pas identiques.",
+        userPassIncorrect: "User/password incorrect",
+        sessionEnded: 'Session expirée'
     },
     valid:{
         communication: 'Communication établie',

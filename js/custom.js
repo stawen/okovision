@@ -62,8 +62,8 @@ $(document).ready(function() {
 		tab = typeof tab !== 'undefined' ? tab : {};
 		typeSync = typeof typeSync !== 'undefined' ? typeSync : true;
 
-		//var urlFinal = 'ajax.php?sid=' + sessionToken + '&' + urlFinal;
-		var urlFinal = 'ajax.php?' + urlFinal;
+		var urlFinal = 'ajax.php?sid=' + sessionToken + '&' + urlFinal;
+		//var urlFinal = 'ajax.php?' + urlFinal;
 		var jxhr =  $.ajax({
 			url: urlFinal,
 			type: mode,
@@ -79,8 +79,8 @@ $(document).ready(function() {
 			//console.log(json);
 			if (!json.response){
 				if(json.sessionToken === 'invalid') {
-					//$.growlErreur('Session expirée');
-					//setTimeout(function(){},2500);
+					$.growlErreur(lang.error.sessionEnded);
+					setTimeout(function(){},2500);
 					window.location.replace("index.php");
 				}
 			}
@@ -109,9 +109,6 @@ $(document).ready(function() {
 	Highcharts.setOptions({
 		global: {
     		useUTC: true
-    		/*,
-    		timezoneOffset: offset
-    		*/
     	},
 		lang: {
 			thousandsSep: lang.graphic.thousandsSep,
@@ -128,6 +125,56 @@ $(document).ready(function() {
 	});
 
 
+	$("#btlogin").click(function(e){
+		var user = $('#inputUser').val()
+		var pass = $('#inputPassword').val()
+		
+		if(user !== '' && pass !== ''){
+		
+			$.api('POST', 'admin.login', {user: user, pass: pass}, false).done(function(json) {
+						
+				if(!json.response){
+					e.preventDefault();
+					$.growlErreur(lang.error.userPassIncorrect);
+				}
+			});
+		}
+		
+	})
+	
+	$("#btlogout").click(function(){
+		
+		$.api('GET', 'admin.logout',false).done(function(json) {
+				if(json.response){
+					window.location.replace("index.php");
+				}
+			
+		});
+	});
+	
+	$("#btChangePass").click(function(e){
+		
+		var pass 	= $('#inputPass').val()
+		var confirm = $('#inputPassConfirm').val()
+		
+		if(pass !== '' && confirm !== ''){
+			
+			if(pass === confirm){
+			
+				$.api('POST', 'admin.changePassword', {pass: pass}).done(function(json) {
+							
+					if(!json.response){
+						e.preventDefault();
+						$.growlErreur(lang.error.passNotChanged);
+					}
+				});
+			}else{
+				e.preventDefault();
+				$.growlErreur(lang.error.passNotTheSame);
+			}
+		}
+		
+	});
 
 
 });

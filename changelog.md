@@ -1,8 +1,16 @@
-###1.5.4
+##1.6.0
+* Creation d'un espace membre contenant la configuration de l'application (defaut admin/okouser)
+* Ajout de page d'erreur
+* Creation d'un .htaccess
+
+##1.5.5
+* Ajout d'une alert growl en page d'index pour un maj disponible
+
+##1.5.4
 * Correction definitive du probleme de fuseau horaire
 * Correction probleme d'encodage lors de la creation de la matrice sur linux
 * Mise en place Y axe min dynamique (par defaut 0 ou alors valeur negative)
-* 
+
 
 ##1.5.3
 * ajout d'un paraletre dans hightchart pour ne pas appliquer un offset sur le timestamp en fonction du navigateur. Force l'utilisation d'UTC
