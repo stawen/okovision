@@ -25,7 +25,7 @@ $(document).ready(function() {
     	
     		if(c){ 
     		//console.log(e);
-    			console.log(c);
+    			//console.log(c);
     	
     			if(c.yAxis[0].dataMin < 0){
 					c.yAxis[0].setExtremes(c.yAxis[0].dataMin, c.yAxis[0].dataMax);
