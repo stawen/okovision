@@ -1,3 +1,7 @@
+##1.6.1
+* Correction upload fichier en erreur
+* Correction setup impossible
+
 ##1.6.0
 * Creation d'un espace membre contenant la configuration de l'application (defaut admin/okouser)
 * Ajout de page d'erreur
