@@ -3,7 +3,7 @@
  * Auteur : Stawen Dronek
  * Utilisation commerciale interdite sans mon accord
  ******************************************************/
-/* global lang */
+/* global lang,sessionToken */
 
 $(document).ready(function() {
 
@@ -16,7 +16,7 @@ $(document).ready(function() {
 	
 	$('#fileupload').fileupload({
 
-		url: 'ajax.php?type=admin&action=uploadCsv',
+		url: 'ajax.php?sid=' + sessionToken + '&type=admin&action=uploadCsv',
 		dataType: 'json',
 		autoUpload: true,
 		acceptFileTypes: /(\.|\/)(csv)$/i,
