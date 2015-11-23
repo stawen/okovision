@@ -86,6 +86,7 @@
 	            <tr >
 	                <th class="col-md-2">Mois</th>
 	                <th class="col-md-2">Cycle Bruleur</th>
+	                <th class="col-md-2">DJU</th>
 	                <th class="col-md-2">Conso (Kg)</th>
 	                <th class="col-md-2">gr/DJU/m2</th>
 	                

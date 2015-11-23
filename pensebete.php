@@ -5,21 +5,7 @@
 * Utilisation commerciale interdite sans mon accord
 ******************************************************/
 
-/*
 
-// pour faire un resume day pour un jour precis 
-insert ignore into oko_resume_day
-select 
-	jour, 
-	max(Tc_exterieur), 
-	min(Tc_exterieur),
-	round(sum( ((60 / (vis_alimentation_tps + vis_alimentation_tps_pause)) * vis_alimentation_tps)) * 0.002,2) as conso_kg,
-	IF( 20 <= (MAX(Tc_exterieur) + MIN(Tc_exterieur))/2, 0, round(20 - (MAX(Tc_exterieur) + MIN(Tc_exterieur))/2,2)) as dju,
-	sum(Debut_cycle) as nb_cycle
-from oko_histo_full where oko_histo_full.jour = '2015-07-07' group by oko_histo_full.jour
-
-
-*/
 /*
 Statut_chaudiere : 
 2 = Ventilations bruleur et fumées à 100%

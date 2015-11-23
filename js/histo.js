@@ -372,6 +372,7 @@ $(document).ready(function() {
                     $('#recap > tbody:last').append('<tr>  \
             											<td>'+ val.mois +' </td> \
         	                                            <td>'+ val.nbCycle +'</td>  \
+        	                                            <td>'+ val.dju +'</td> \
         	                                            <td>'+ val.conso +'</td> \
         	                                            <td>'+ val.g_dju_m+'</td> \
         	                                          </tr>');

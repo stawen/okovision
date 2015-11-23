@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS `oko_user` (
   PRIMARY KEY (`id`)
 ) ENGINE=MYISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
+insert into oko_user set user="admin", pass="97f108bdeaad841227830678c7ecec6dc541bab3" , type="admin";
 
 
 DROP TABLE IF EXISTS `oko_historique_full`;

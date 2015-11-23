@@ -1,3 +1,8 @@
+##1.6.2
+* Correction setup (compte admin non present)
+* Ajout colonne DJU dans tableau recap
+* Maj du texte dans 'A propos'
+
 ##1.6.1
 * Correction upload fichier en erreur
 * Correction setup impossible
