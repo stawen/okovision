@@ -92,7 +92,8 @@ Merge
 	
 */
 
-include_once 'config.php';
+//include_once 'config.php';
+/*
 echo "fuseau: ".date_default_timezone_get();
 
 $date = new DateTime(); //, new DateTimeZone(date_default_timezone_get())
@@ -100,8 +101,8 @@ echo "offset:: ".$date->getOffset();
 echo "date(p)::".date(P);
 
 
-phpinfo();
 
+*/
 //http://www.sitepoint.com/synchronize-php-mysql-timezone-configuration/
 /*
 
@@ -112,4 +113,19 @@ okovision.dronek.com/app -> l'application
 okovision.dronek.com/api -> api de communication
 okovision.dronek.com/back -> visualisation des stats
 */
+//$a = new administration();
+
+//$a->addOkoStat();
+
+//echo $url.'<br/>';
+//var_dump($resp);
+$host = $_SERVER['HTTP_HOST'];
+$folder = dirname($_SERVER['SCRIPT_NAME']);
+$urlsrc = $host.$folder;
+echo $urlsrc.'<br/>';
+$token = rand();
+//echo $token;
+echo sha1($token);
+
+//phpinfo();
 ?>
