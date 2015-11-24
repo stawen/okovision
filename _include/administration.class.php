@@ -523,7 +523,7 @@ class administration extends connectDb{
 		$host = $_SERVER['HTTP_HOST'];
 		$folder = dirname($_SERVER['SCRIPT_NAME']);
 		$source = $host.$folder;
-		//$this->log->info($source);
+		
 		
 		curl_setopt_array($curl, array(
 		    CURLOPT_RETURNTRANSFER => true,
