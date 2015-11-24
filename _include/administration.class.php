@@ -7,6 +7,8 @@
 
 class administration extends connectDb{
 	
+	private $_urlApi = 'http://api.okovision.dronek.com';
+	
 	public function __construct() {
 		parent::__construct();
 	}
@@ -493,6 +495,8 @@ class administration extends connectDb{
 		$r['newVersion'] = false;
 		$r['information'] = '';
 		
+		$this->addOkoStat();
+		
 		$update = new AutoUpdate();
 		$update->setCurrentVersion($this->getCurrentVersion());
 		
@@ -511,6 +515,32 @@ class administration extends connectDb{
 		return $this->sendResponse($r);
 		
 		
+	}
+	//Action : current, update
+	public function addOkoStat(){
+		$curl = curl_init();
+		// Set some options - we are passing in a useragent too here
+		$host = $_SERVER['HTTP_HOST'];
+		$folder = dirname($_SERVER['SCRIPT_NAME']);
+		$source = $host.$folder;
+		
+		
+		curl_setopt_array($curl, array(
+		    CURLOPT_RETURNTRANSFER => true,
+		    CURLOPT_URL => $this->_urlApi,
+		    CURLOPT_USERAGENT => 'Okovision Agent',
+		    CURLOPT_POST => 1,
+		    CURLOPT_POSTFIELDS => array(
+		        'token' => TOKEN,
+		        'source' => $source,
+		        'version' => $this->getCurrentVersion()
+		    )
+		));
+		// Send the request & save response to $resp
+		$resp = curl_exec($curl);
+		// Close request to clear up some resources
+		//var_dump($resp);
+		curl_close($curl);
 	}
 	
 	public function makeUpdate(){

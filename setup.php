@@ -83,13 +83,9 @@
         $configFile = str_replace("###_BDD_PASS_###",$s['db_password'],$configFile);
         $configFile = str_replace("###_BDD_SCHEMA_###",$s['db_schema'],$configFile);
         
-        /*
-        $configFile = str_replace("###_FTP_SERVEUR_###",$s['ftp_adress'],$configFile);
-        $configFile = str_replace("###_FTP_USER_###",$s['ftp_user'],$configFile);
-        $configFile = str_replace("###_FTP_PASS_###",$s['ftp_password'],$configFile);
-        $configFile = str_replace("###_FTP_DEPOT_###",$s['ftp_depot'],$configFile);
-        */
         $configFile = str_replace("###_CONTEXT_###",getcwd(),$configFile);
+        
+        $configFile = str_replace("###_TOKEN_###",sha1(rand()),$configFile);
         
         file_put_contents('config.php',$configFile);
         

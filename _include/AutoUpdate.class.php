@@ -69,7 +69,6 @@ class AutoUpdate extends connectDb{
 	 * @var string
 	 */
 	protected $_updateUrl = 'http://okovision.dronek.com';
-
 	/**
 	 * Version filename on the server.
 	 *
@@ -747,7 +746,7 @@ class AutoUpdate extends connectDb{
 
 		// TODO
 		$this->log->info(sprintf('Update "%s" successfully installed', $version));
-
+	
 		return true;
 	}
 
