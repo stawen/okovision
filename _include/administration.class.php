@@ -7,7 +7,7 @@
 
 class administration extends connectDb{
 	
-	private $_urlApi = 'http://api.okovision.dronek.com/index.php';
+	private $_urlApi = 'http://api.okovision.dronek.com';
 	
 	public function __construct() {
 		parent::__construct();

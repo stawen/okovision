@@ -119,13 +119,7 @@ okovision.dronek.com/back -> visualisation des stats
 
 //echo $url.'<br/>';
 //var_dump($resp);
-$host = $_SERVER['HTTP_HOST'];
-$folder = dirname($_SERVER['SCRIPT_NAME']);
-$urlsrc = $host.$folder;
-echo $urlsrc.'<br/>';
-$token = rand();
-//echo $token;
-echo sha1($token);
+
 
 //phpinfo();
 ?>

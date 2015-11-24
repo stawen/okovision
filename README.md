@@ -1,4 +1,4 @@
-# OKOVISION Version 1.6.0
+# OKOVISION Version 1.6.3
 Interface web de supervison d'une chaudiere Okofen
 http://okovision.dronek.com
 
