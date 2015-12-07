@@ -1,3 +1,7 @@
+##1.6.4
+* préparation livraison 1.7.0
+* correction orthographe / correction synthaxique
+
 ##1.6.2
 * Correction setup (compte admin non present)
 * Ajout colonne DJU dans tableau recap
