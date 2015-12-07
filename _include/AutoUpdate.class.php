@@ -74,7 +74,7 @@ class AutoUpdate extends connectDb{
 	 *
 	 * @var string
 	 */
-	protected $_updateFile = 'update.test.json';
+	protected $_updateFile = 'update.json';
 
 	/**
 	 * Current version.

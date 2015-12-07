@@ -8,7 +8,7 @@
 class okofen extends connectDb{
 	
 	private $_u 				= 'oekofen';
-	private $_p		 			= '5c1o5spiyeba25';
+	private $_p		 			= 'oekofen';
 	private $_loginUrl		 	= '';
 	private $_cookies 			= '';
 	private $_responseBoiler 	= '';

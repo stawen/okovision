@@ -103,6 +103,8 @@ http://chaudiere/?api=CAPPL:LOCAL.anlage_betriebsart?u=oekofen&p=oekofen
         deleted:    js/themes/skies.js
 
 
+d9fe039 et 96ed891 -> commit autoupdate
+
 
 */
 ?>
