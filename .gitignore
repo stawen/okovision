@@ -47,6 +47,7 @@ import.csv
 matrice.csv
 test*
 _tmp/*.sql
+_tmp/*.txt
 php.ini
 
 

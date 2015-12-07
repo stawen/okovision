@@ -92,12 +92,12 @@
     "WW1 AusT Ist[°C]": {
         "name": "T°C ECS (arret)",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:LOCAL.ww[0].temp_absenken"
     },
     "WW1 Soll[°C]": {
         "name": "T°C ECS Consigne",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:LOCAL.ww[0].temp_heizen"
     },
     "WW1 Pumpe": {
         "name": "Circulateur ECS",
@@ -127,62 +127,62 @@
     "Zubrp1 Pumpe": {
         "name": "Pompe (indefini)",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:LOCAL.L_zirkp[0].pumpe"
     },
     "PU1 TPO Ist[°C]": {
         "name": "Ballon Tampon - T°C Haut",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:LOCAL.L_pu[0].ausschaltfuehler_ist"
     },
     "PU1 TPO Soll[°C]": {
         "name": "Ballon Tampon - T°C Haut Consigne",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:LOCAL.L_pu[0].ausschaltfuehler_soll"
     },
     "PU1 TPM Ist[°C]": {
         "name": "Ballon Tampon - T°C milieu",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:LOCAL.L_pu[0].einschaltfuehler_ist"
     },
     "PU1 TPM Soll[°C]": {
         "name": "Ballon Tampon - T°C milieu Consigne",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:LOCAL.L_pu[0].einschaltfuehler_soll"
     },
     "PU1 Pumpe[%]": {
         "name": "Ballon Tampo - Pompe (%)",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:LOCAL.L_pu[0].pumpe"
     },
     "SK1 Koll[°C]": {
         "name": "T°C panneau solaire",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:LOCAL.L_sk[0].kollektortemp_ist"
     },
     "SK1 SPUnten[°C]": {
         "name": "T°C Ballon Bas",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:LOCAL.L_sk[0].speichertemp_ist"
     },
     "SK1 Pumpe[%]": {
         "name": "Pompe Solaire (On/Off)",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:LOCAL.L_sk[0].pumpe"
     },
     "SK2 Koll[°C]": {
         "name": "Solaire 2 - T°C panneau solaire",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:LOCAL.L_sk[1].kollektortemp_ist"
     },
     "SK2 SPUnten[°C]": {
         "name": "Solaire 2 - T°C Ballon Bas",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:LOCAL.L_sk[1].speichertemp_ist"
     },
     "SK2 Pumpe[%]": {
         "name": "Solaire 2 - Pompe Solaire (On/Off)",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:LOCAL.L_sk[1].pumpe"
     },
     "PE1 KT[°C]": {
         "name": "OKO 1 - T°C chaudière",

@@ -204,6 +204,14 @@ if (is_ajax() && is_valid()) {
     					   
     				}
     				break;
+    			case "rt":
+    			    $rt = new realTime();
+    			    switch ($_GET['action']){
+    			        case "getIndic":
+    			            $rt->getIndic();
+    			            break;
+    			    }       
+    			    break;
     		}		
 	    }
 

@@ -45,7 +45,7 @@
 include('_templates/footer.php');
 ?>
 <!--appel des scripts personnels de la page -->
-    <script src="js/jquery.fileupload.js"></script>
+    <script src="js/jquery/jquery.fileupload.js"></script>
 	<script src="js/amImpUsb.js"></script>
     </body>
 </html>

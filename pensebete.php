@@ -18,46 +18,7 @@ compter le nb de cycle : 4
 alimentation pellet dans tremi : 7
 */
 
-/*
-$query .= "INSERT IGNORE INTO oko_histo_full VALUES (".
-							"STR_TO_DATE('".$d[0]."','%d.%m.%Y'),'". //date
-							$d[1]."',". 				// heure
-							$this->cvtDec($d[2]).",". 	// T°C exterieur
-							$this->cvtDec($d[3]).",". 	// T°C Chaudiere
-							$this->cvtDec($d[4]).",". 	// T°C Chaudiere Consigne
-							((int)$d[5])*100 .",". 		// Contact Bruleur
-							$this->cvtDec($d[6]).",". 	// T°C Départ
-							$this->cvtDec($d[7]).",". 	// T°C Départ Consigne
-							$this->cvtDec($d[8]).",". 	// T°C Ambiante
-							$this->cvtDec($d[9]).",". 	// T°C Ambiante Consigne
-							((int)$d[10])*100 .",". 	// Circulateur Chauffage
-							$this->cvtDec($d[11]).",". 	// T°C ECS
-							$this->cvtDec($d[13]).",". 	// T°C ECS Consigne
-							((int)$d[14])*100 .",". 	// Ciruclateur ECS
-							$this->cvtDec($d[16]).",". 	// T°C panneau solaire
-							$this->cvtDec($d[17]).",". 	// T°C Ballon Bas
-							$this->cvtDec($d[18]).",". 	// Pompe Solaire
-							$this->cvtDec($d[21]).",". 	// T°C Flamme
-							$this->cvtDec($d[22]).",". 	// T°C Flamme Consigne
-							$this->cvtDec($d[23]).",". 	// Vis Alimentation temps (ex: 50zs = 5sec)
-							$this->cvtDec($d[24]).",". 	// Vis Alimentation Temps pause
-							$this->cvtDec($d[25]).",". 	// Ventilation Bruleur
-							$this->cvtDec($d[26]).",". 	// Ventilation fumée
-							$this->cvtDec($d[27]).",". 	// Dépression
-							$this->cvtDec($d[28]).",". 	// Depression Consigne
-							$this->cvtDec($d[29]).",". 	// Statut Chaudiere
-							((int)$d[30])*100 .",". 	// Moteur alimentation chaudiere
-							((int)$d[31])*100 .",". 	// Moteur extraxtion silo
-							((int)$d[32])*100 .",". 	// Moteur tremie intermediaire
-							((int)$d[33])*100 .",". 	// Moteur ASPIRATION
-							((int)$d[34])*100 .",". 	// Moteur Allumage
-							$d[35].",". 				// Pompe du circuit primaire
-							((int)$d[39])*100 .",".		// Moteur ramonage
-							//Enregistrement de 1 si nous commençons un cycle d'allumage
-							//Statut 3 = allumage
-							$start_cycle.
-							");\n";
-*/
+
 
 
 
@@ -93,33 +54,55 @@ Merge
 */
 
 //include_once 'config.php';
-/*
-echo "fuseau: ".date_default_timezone_get();
 
-$date = new DateTime(); //, new DateTimeZone(date_default_timezone_get())
-echo "offset:: ".$date->getOffset();
-echo "date(p)::".date(P);
+/*
+http://grafana.org/
+https://influxdb.com/
+
+http://chaudiere/?api=CAPPL:LOCAL.anlage_betriebsart?u=oekofen&p=oekofen
+
+/* v1.6.3 - préparation livraison 1.7 (maj temps reel)
+- update autoloader pour prendre en compte les dates
+- maj des textes et de la matrice pour import / maj dans la 1.7
+
+
+
+
+
+        deleted:    js/adapters/standalone-framework.js
+        deleted:    js/adapters/standalone-framework.src.js
+        deleted:    js/bootstrap-notify.min.js
+        deleted:    js/bootstrap.min.js
+        deleted:    js/highcharts.min.js
+        deleted:    js/jquery-ui.min.js
+        deleted:    js/jquery.fileupload.js
+        deleted:    js/jquery.min.js
+        deleted:    js/modules/canvas-tools.js
+        deleted:    js/modules/canvas-tools.src.js
+        deleted:    js/modules/data.js
+        deleted:    js/modules/data.src.js
+        deleted:    js/modules/drilldown.js
+        deleted:    js/modules/drilldown.src.js
+        deleted:    js/modules/exporting.js
+        deleted:    js/modules/exporting.src.js
+        deleted:    js/modules/funnel.js
+        deleted:    js/modules/funnel.src.js
+        deleted:    js/modules/heatmap.js
+        deleted:    js/modules/heatmap.src.js
+        deleted:    js/modules/no-data-to-display.js
+        deleted:    js/modules/no-data-to-display.src.js
+        deleted:    js/modules/solid-gauge.js
+        deleted:    js/modules/solid-gauge.src.js
+        deleted:    js/themes/dark-blue.js
+        deleted:    js/themes/dark-green.js
+        deleted:    js/themes/dark-unica.js
+        deleted:    js/themes/gray.js
+        deleted:    js/themes/grid-light.js
+        deleted:    js/themes/grid.js
+        deleted:    js/themes/sand-signika.js
+        deleted:    js/themes/skies.js
 
 
 
 */
-//http://www.sitepoint.com/synchronize-php-mysql-timezone-configuration/
-/*
-
-ALTER TABLE `oko_historique_full` DROP COLUMN `timestamp`;
-
-okovision.dronek.com -> www site de presentation
-okovision.dronek.com/app -> l'application
-okovision.dronek.com/api -> api de communication
-okovision.dronek.com/back -> visualisation des stats
-*/
-//$a = new administration();
-
-//$a->addOkoStat();
-
-//echo $url.'<br/>';
-//var_dump($resp);
-
-
-//phpinfo();
 ?>

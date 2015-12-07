@@ -80,7 +80,7 @@
 <?php
 include('_templates/footer.php');
 ?>
-    <script src="js/jquery.fileupload.js"></script>
+    <script src="js/jquery/jquery.fileupload.js"></script>
 	<script src="js/adminMatrix.js"></script>
     </body>
 </html>

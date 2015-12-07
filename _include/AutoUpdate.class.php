@@ -74,7 +74,7 @@ class AutoUpdate extends connectDb{
 	 *
 	 * @var string
 	 */
-	protected $_updateFile = 'update.json';
+	protected $_updateFile = 'update.test.json';
 
 	/**
 	 * Current version.
@@ -657,6 +657,7 @@ class AutoUpdate extends connectDb{
 		$gitFolder = '';
 		$i = -1;
 		
+		$updateScriptExist = false;
 		// Read every file from archive
 		while ($file = zip_read($zip)) {
 			$i++;
@@ -675,7 +676,7 @@ class AutoUpdate extends connectDb{
 			$absoluteFilename = $this->_installDir . $filename;
 
 			$this->log->debug(sprintf('Updating file "%s"', $filename));
-
+/*
 			if (!is_dir($foldername)) {
 				if (!mkdir($foldername, $this->dirPermissions, true)) {
 					$this->log->error(sprintf('Directory "%s" has to be writeable!', $parent));
@@ -728,24 +729,33 @@ class AutoUpdate extends connectDb{
 			}
 
 			fclose($updateHandle);
-
-			//If file is a update script, include
+*/
+			//If file is a update script, juste say yes, and execute it in last file
 			if ($filename == $this->updateScriptName) {
-				$this->log->debug(sprintf('Try to include update script "%s"', $absoluteFilename));
-				require($absoluteFilename);
-
-				$this->log->info(sprintf('Update script "%s" included!', $absoluteFilename));
-				
-				if (!DEBUG){
-					if (!unlink($absoluteFilename)) {
-						$this->log->warn(sprintf('Could not delete update script "%s"!', $absoluteFilename));
-					}
-				}
+				$updateScriptExist = true;
 			}
 		}
-
+		
 		zip_close($zip);
 
+
+		//execute update script
+		if($updateScriptExist){
+			
+			$upgradeFile = $this->_installDir . $this->updateScriptName;
+			$this->log->debug(sprintf('Try to include update script "%s"', $upgradeFile));
+			
+			//require($upgradeFile);
+
+			$this->log->info(sprintf('Update script "%s" included!', $upgradeFile));
+			/*
+			if (!DEBUG){
+				if (!unlink($upgradeFile)) {
+					$this->log->warn(sprintf('Could not delete update script "%s"!', $upgradeFile));
+				}
+			}*/
+			
+		}
 		// TODO
 		$this->log->info(sprintf('Update "%s" successfully installed', $version));
 	

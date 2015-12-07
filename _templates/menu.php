@@ -13,13 +13,20 @@
 	
 	$menu = array(  'index.php' => array(
 	                                    'txt' => session::getInstance()->getLabel('lang.text.menu.index'),
-	                                    'icon' => 'glyphicon glyphicon-dashboard'),
+	                                    'icon' => 'glyphicon glyphicon-dashboard',
+	                                    'logged' => false),
 					'histo.php' => array(
 					                    'txt' => session::getInstance()->getLabel('lang.text.menu.historic'),
-					                    'icon' => 'glyphicon glyphicon-stats')
+					                    'icon' => 'glyphicon glyphicon-stats',
+					                    'logged' => false),
+					'rt.php' => array(
+					                    'txt' => session::getInstance()->getLabel('lang.text.menu.rt'),
+					                    'icon' => 'glyphicon glyphicon-signal',
+					                    'logged' => true)
 			);	
 	
 	foreach ($menu as $url => $title){
+	    if($title['logged'] && !session::getInstance()->getVar('logged')) continue;
 		$active = '';
 		if ($page == $url) $active=' class="active"';  
 	    echo '<li'.$active.'> <a href='.$url.'><span class="'.$title['icon'].'" aria-hidden="true"></span>   '.$title['txt'].'</a></li>';
@@ -42,7 +49,6 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav top-nav">
             <?php getmenu(); ?>
-			
 			<li class="dropdown">
 			  <?php if( !session::getInstance()->getVar('logged') ){   ?>
 			    <a href="#" data-toggle="modal" data-target="#login-modal"> 
@@ -55,6 +61,7 @@
                 <ul class="dropdown-menu">
                     <li class="dropdown-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> <?php echo session::getInstance()->getLabel('lang.text.menu.graphic') ?></li>
                         <li><a href="gstrapport.php"><?php echo session::getInstance()->getLabel('lang.text.menu.graphic.report') ?></a></li>
+                        <li><a href="rtconfig.php"><?php echo session::getInstance()->getLabel('lang.text.menu.rt.config') ?></a></li>
                     <li class="divider"></li>
                    
                         <li class="dropdown-header"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> <?php echo session::getInstance()->getLabel('lang.text.menu.manual') ?></li>    

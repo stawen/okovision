@@ -99,16 +99,8 @@ class rendu extends connectDb{
 	public function getIndicByDay($jour, $timeStart = null, $timeEnd = null){
 		
 		if($timeStart != null && $timeEnd != null){
-			//$date 		= 	new DateTime();
-			//$this->log->debug("timeStart:".$timeStart);
-			//$timeStart 	=	round( ($timeStart / 1000) - $date->getOffset() );
 			$timeStart 	=	(int)( $timeStart / 1000 );
-			//$this->log->debug("timeStart:".$timeStart);
-			//$this->log->debug("timeEnd:".$timeEnd);
-			//$timeEnd 	=	round( ($timeEnd / 1000) - $date->getOffset() );
 			$timeEnd 	=	(int)( $timeEnd / 1000 );
-			//$this->log->debug("timeEnd:".$timeEnd);
-			
 		}
 		
 		

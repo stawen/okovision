@@ -7,9 +7,19 @@
 
 class okofen extends connectDb{
 	
+	private $_u 				= 'oekofen';
+	private $_p		 			= '5c1o5spiyeba25';
+	private $_loginUrl		 	= '';
+	private $_cookies 			= '';
+	private $_responseBoiler 	= '';
+	private $_response			= '';
 	
 	public function __construct() {
 		parent::__construct();
+		
+		$this->_loginUrl = 'http://'.CHAUDIERE.'/index.cgi';
+		$this->_cookies = CONTEXT.'/_tmp/cookies_boiler.txt';
+		
 	}
 	
 	public function __destruct() {
@@ -228,6 +238,111 @@ class okofen extends connectDb{
 			return true;
 		}
 	}
+	
+
+	private function curlConnect(){
+		
+    	$code = false;
+	    $curl = curl_init();
+	    
+	    curl_setopt_array($curl, array(
+	    		   CURLOPT_VERBOSE => false,
+	    		   CURLOPT_RETURNTRANSFER => false,
+	    		   CURLOPT_URL => $this->_loginUrl,
+	    		   CURLOPT_USERAGENT => 'Okovision Agent',
+	    		   CURLOPT_POST => 1,
+	    		   CURLOPT_COOKIEJAR => $this->_cookies,
+	    		   CURLOPT_POSTFIELDS => 
+	        		   http_build_query( array(
+	        		        'username' => $this->_u,
+	        		        'password' => $this->_p,
+	        		        'language' => 'en',
+	        		        'submit'   => 'Login'
+	        		    ))
+	    		));
+	    // Send the request & save response to $resp
+	    $resp = curl_exec($curl);
+	    
+	    $info = curl_getinfo($curl);
+	    //var_dump($info);exit;
+	    if($info['http_code'] == '303'){
+	        $code = true;
+	    }else{
+	        $this->log->info("Class ".__CLASS__." | ".__FUNCTION__." | Open Session impossible in".CHAUDIERE);
+	    }
+	    curl_close($curl);
+	    return $code;
+	}
+
+	private function curlGet(){
+		$code = false;
+	    $curl = curl_init();
+	    
+	    curl_setopt_array($curl, array(
+	           CURLOPT_VERBOSE => false,
+			   CURLOPT_RETURNTRANSFER => true,
+			   CURLOPT_URL => $this->_loginUrl.'?action=get&attr=1',
+			   CURLOPT_POST => 1,
+			   CURLOPT_HTTPHEADER => array(
+			        'Accept: application/json',
+	                'Content-Type: application/x-www-form-urlencoded; charset=UTF-8',
+	                'Accept-Language: fr'),
+			   CURLOPT_COOKIEFILE => $this->_cookies,
+			   CURLOPT_POSTFIELDS => $this->_formdata
+			   
+			));
+	    
+	    $resp = curl_exec($curl);
+	    
+	    if(!curl_errno($curl)){
+	        
+	        $info = curl_getinfo($curl);
+	        //var_dump($info);exit;
+	        
+	        if($info['http_code'] == '200'){
+	            $this->_responseBoiler = $resp;
+	        	$code = true;
+	        }
+	    }
+	    
+	    curl_close($curl);
+	    //print_r($resp);exit;
+	    return $code;
+	}
+	
+	private function sendRequest(){
+		
+		if(!$this->curlGet()){
+	    	
+			$this->curlConnect(); 
+			$this->curlGet();
+		}
+	}
+	
+	public function requestBoilerInfo($data = array()){
+		
+		$this->setFormData($data);
+		$this->_responseBoiler = '';
+		$this->sendRequest();
+		
+	}
+	
+	private function setFormData($a){
+		$d = '';
+		
+		foreach($a as $capteur){
+			$d.=',"'.$capteur.'"';
+		}
+		
+		$this->_formdata = '["CAPPL:LOCAL.L_fernwartung_datum_zeit_sek"'.$d.']';
+		
+	}
+	
+	
+	public function getResponseBoiler(){
+		return $this->_responseBoiler;
+	}
+	
 	
 	
 }

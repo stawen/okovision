@@ -5,7 +5,7 @@ class simu_upgrade extends connectDb{
     
     public function __construct() {
 		parent::__construct();
-		$version = "1.6.0";
+		$version = "1.6.4";
 		require('_upgrade.php');
 	}
 	
