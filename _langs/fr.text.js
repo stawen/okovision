@@ -54,7 +54,7 @@ var lang = {
         deleteGraphe: 'Confirmez-vous la suppresion de',
         updateAsso: "Modification de l'association",
         deleteAsso: "Confirmez-vous la suppresion de l'asso",
-        titreHisto: 'Historique températures / Consommation Pellet',
+        titreHisto: 'Synthèse mensuelle',
         updateAvailable: 'Une nouvelle version Okovision est disponible, cliquez ici'
     },
     graphic:{
