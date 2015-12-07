@@ -5,9 +5,9 @@ $this->log->info("UPGRADE | $version | begin");
 $t = new timeExec();
 /* v1.6.4*/
 //Maj autopudate -> les plus important
+//reorganisation des js
 
 
-/* v1.7.0 */
         @unlink(CONTEXT.'/js/adapters/standalone-framework.js'); //
         @unlink(CONTEXT.'/js/adapters/standalone-framework.src.js');
         @rmdir(CONTEXT.'/js/adapters');
@@ -46,8 +46,9 @@ $t = new timeExec();
         @unlink(CONTEXT.'/js/themes/skies.js');
         @rmdir(CONTEXT.'/js/themes');
 
+/* v1.7.0 */
 
-//reorganisation des js
+
 
 
 

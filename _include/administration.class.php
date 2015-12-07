@@ -197,7 +197,8 @@ class administration extends connectDb{
 					$boiler="";
 				}
 				
-				$q = "INSERT INTO oko_capteur(name,position_column_csv,column_oko, original_name,type,boiler) VALUE ('$name',$position,$position,'$title','$type';'$boiler');" ;
+				//$q = "INSERT INTO oko_capteur(name,position_column_csv,column_oko, original_name,type,boiler) VALUE ('$name',$position,$position,'$title','$type','$boiler');" ;
+				$q = "INSERT INTO oko_capteur(name,position_column_csv,column_oko, original_name,type) VALUE ('$name',$position,$position,'$title','$type');" ;
 				
 				$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | Create oko_capteur | ".$q);
 				$query .= $q;
@@ -264,7 +265,8 @@ class administration extends connectDb{
 						$boiler="";
 					}
 					$lastColumnOko++;
-					$q = "INSERT INTO oko_capteur(name,position_column_csv,column_oko, original_name,type,boiler) VALUE ('$name',$position,$lastColumnOko,'$title','$type','$boiler');";
+					//$q = "INSERT INTO oko_capteur(name,position_column_csv,column_oko, original_name,type,boiler) VALUE ('$name',$position,$lastColumnOko,'$title','$type','$boiler');";
+					$q = "INSERT INTO oko_capteur(name,position_column_csv,column_oko, original_name,type) VALUE ('$name',$position,$lastColumnOko,'$title','$type');";
 					$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | Create New oko_capteur | ".$q);
 					
 				}

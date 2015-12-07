@@ -18,11 +18,11 @@
 					'histo.php' => array(
 					                    'txt' => session::getInstance()->getLabel('lang.text.menu.historic'),
 					                    'icon' => 'glyphicon glyphicon-stats',
-					                    'logged' => false),
+					                    'logged' => false) /*,
 					'rt.php' => array(
 					                    'txt' => session::getInstance()->getLabel('lang.text.menu.rt'),
 					                    'icon' => 'glyphicon glyphicon-signal',
-					                    'logged' => true)
+					                    'logged' => true)*/
 			);	
 	
 	foreach ($menu as $url => $title){
@@ -61,7 +61,7 @@
                 <ul class="dropdown-menu">
                     <li class="dropdown-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> <?php echo session::getInstance()->getLabel('lang.text.menu.graphic') ?></li>
                         <li><a href="gstrapport.php"><?php echo session::getInstance()->getLabel('lang.text.menu.graphic.report') ?></a></li>
-                        <li><a href="rtconfig.php"><?php echo session::getInstance()->getLabel('lang.text.menu.rt.config') ?></a></li>
+                       
                     <li class="divider"></li>
                    
                         <li class="dropdown-header"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> <?php echo session::getInstance()->getLabel('lang.text.menu.manual') ?></li>    
