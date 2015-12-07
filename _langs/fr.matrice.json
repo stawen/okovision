@@ -1,314 +1,392 @@
 {
     "Datum": {
         "name": "jour",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "Zeit": {
         "name": "heure",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "AT [°C]": {
         "name": "T°C Exterieure",
-        "type": "tc_ext"
+        "type": "tc_ext",
+        "boiler": "CAPPL:FA[0].L_aussentemperatur"
     },
     "KT Ist [°C]": {
-        "name": "T°C Chaudiere",
-        "type": ""
+        "name": "T°C Chaudière",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_kesseltemperatur"
     },
     "KT Soll [°C]": {
-        "name": "T°C Chaudiere Consigne",
-        "type": ""
+        "name": "T°C Chaudière Consigne",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_kesseltemperatur_soll"
     },
     "BR": {
         "name": "Contact Bruleur (On/Off)",
-        "type": ""
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_br1"
     },
     "Sperrzeit": {
         "name": "Temps de blocage",
-        "type": ""
+        "type": "",
+		"boiler": "CAPPL:LOCAL.bestke_sperrzeit"
     },
     "HK1 VL Ist[°C]": {
         "name": "T°C Départ",
-        "type": ""
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_hk[0].vorlauftemp_ist"
     },
     "HK1 VL Soll[°C]": {
         "name": "T°C Départ Consigne",
-        "type": ""
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_hk[0].vorlauftemp_soll"
     },
     "HK1 RT Ist[°C]": {
         "name": "T°C Ambiante",
-        "type": ""
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_hk[0].raumtemp_ist"
     },
     "HK1 RT Soll[°C]": {
         "name": "T°C Ambiante Consigne",
-        "type": ""
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_hk[0].raumtemp_soll"
     },
     "HK1 Pumpe": {
         "name": "Circulateur Chauffage (On/Off)",
-        "type": ""
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_hk[0].pumpe"
     },
     "HK2 VL Ist[°C]": {
         "name": "Circuit chauffage 2 - T°C Départ",
-        "type": ""
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_hk[1].vorlauftemp_ist"
     },
     "HK2 VL Soll[°C]": {
         "name": "Circuit chauffage 2 - T°C Départ Consigne",
-        "type": ""
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_hk[1].vorlauftemp_soll"
     },
     "HK2 RT Ist[°C]": {
         "name": "Circuit chauffage 2 - T°C Ambiante",
-        "type": ""
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_hk[0].raumtemp_ist"
     },
     "HK2 RT Soll[°C]": {
         "name": "Circuit chauffage 2 - T°C Ambiante Consigne",
-        "type": ""
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_hk[0].raumtemp_soll"
     },
     "HK2 Pumpe": {
         "name": "Circuit chauffage 2 - Circulateur Chauffage (On/Off)",
-        "type": ""
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_hk[1].pumpe"
     },
     "WW1 EinT Ist[°C]": {
         "name": "T°C ECS",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "WW1 AusT Ist[°C]": {
         "name": "T°C ECS (arret)",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "WW1 Soll[°C]": {
         "name": "T°C ECS Consigne",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "WW1 Pumpe": {
         "name": "Circulateur ECS",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "WW2 EinT Ist[°C]": {
         "name": "ECS 2 - T°C ECS",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "WW2 AusT Ist[°C]": {
         "name": "ECS 2 - T°C ECS (arret)",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "WW2 Soll[°C]": {
         "name": "ECS 2 - T°C ECS Consigne",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "WW2 Pumpe": {
         "name": "ECS 2 - Circulateur ECS",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "Zubrp1 Pumpe": {
         "name": "Pompe (indefini)",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PU1 TPO Ist[°C]": {
         "name": "Ballon Tampon - T°C Haut",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PU1 TPO Soll[°C]": {
         "name": "Ballon Tampon - T°C Haut Consigne",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PU1 TPM Ist[°C]": {
         "name": "Ballon Tampon - T°C milieu",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PU1 TPM Soll[°C]": {
         "name": "Ballon Tampon - T°C milieu Consigne",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PU1 Pumpe[%]": {
-        "name": "Balon Tampo - Pompe (%)",
-        "type": ""
+        "name": "Ballon Tampo - Pompe (%)",
+        "type": "",
+		"boiler": ""
     },
     "SK1 Koll[°C]": {
         "name": "T°C panneau solaire",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "SK1 SPUnten[°C]": {
         "name": "T°C Ballon Bas",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "SK1 Pumpe[%]": {
         "name": "Pompe Solaire (On/Off)",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "SK2 Koll[°C]": {
         "name": "Solaire 2 - T°C panneau solaire",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "SK2 SPUnten[°C]": {
         "name": "Solaire 2 - T°C Ballon Bas",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "SK2 Pumpe[%]": {
         "name": "Solaire 2 - Pompe Solaire (On/Off)",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE1 KT[°C]": {
-        "name": "OKO 1 - T°C Chaudiere",
-        "type": ""
+        "name": "OKO 1 - T°C chaudière",
+        "type": "",
+		"boiler": ""
     },
     "PE1_BR1": {
         "name": "OKO 1 - Contact Bruleur (On/Off)",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE1 KT_SOLL[°C]": {
-        "name": "OKO 1 - T°C Chaudiere Consigne",
-        "type": ""
+        "name": "OKO 1 - T°C chaudière Consigne",
+        "type": "",
+		"boiler": ""
     },
     "PE1 FRT Ist[°C]": {
         "name": "T°C Flamme",
-        "type": ""
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_feuerraumtemperatur"
     },
     "PE1 FRT Soll[°C]": {
         "name": "T°C Flamme Consigne",
-        "type": ""
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_feuerraumtemperatur_soll"
     },
     "PE1 Einschublaufzeit[zs]": {
-        "name": "Vis Alimentation marche (ms)",
-        "type": "tps_vis"
+        "name": "Vis Alimentation marche (ds)",
+        "type": "tps_vis",
+        "boiler": "CAPPL:FA[0].L_einschublaufzeit"
     },
     "PE1 Pausenzeit[zs]": {
-        "name": "Vis Alimentation pause (ms)",
-        "type": "tps_vis_pause"
+        "name": "Vis Alimentation pause (ds)",
+        "type": "tps_vis_pause",
+        "boiler": "CAPPL:FA[0].L_pausenzeit"
     },
     "PE1 Luefterdrehzahl[%]": {
         "name": "Ventilation Bruleur (%)",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE1 Saugzugdrehzahl[%]": {
         "name": "Ventilation fumée (%)",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE1 Unterdruck Ist[Pa]": {
         "name": "Dépression (Pa)",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE1 Unterdruck Ist[EH]": {
         "name": "Dépression (Pa)",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE1 Unterdruck Soll[Pa]": {
         "name": "Depression Consigne (Pa)",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE1 Unterdruck Soll[EH]": {
         "name": "Depression Consigne (Pa)",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE1 Status": {
-        "name": "Statut Chaudiere",
-        "type": "status"
+        "name": "Statut chaudière",
+        "type": "status",
+        "boiler": ""
     },
     "PE1 Motor ES": {
-        "name": "Moteur alimentation chaudiere (On/Off)",
-        "type": ""
+        "name": "Moteur alimentation chaudière (On/Off)",
+        "type": "",
+		"boiler": ""
     },
     "PE1 Motor RA": {
         "name": "Moteur extraxtion silo (On/Off)",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE1 Motor RES1": {
         "name": "Moteur tremie intermediaire",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE1 Motor TURBINE": {
         "name": "Moteur ASPIRATION",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE1 Motor ZUEND": {
         "name": "Moteur Allumage",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE1 Motor UW[%]": {
         "name": "Pompe du circuit primaire (%)",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE1 Motor RM": {
         "name": "Moteur ramonage",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE1 Abgastemp[°C]":{
         "name":"Températures fumées[°C]",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE2 KT[°C]": {
-        "name": "OKO 2 - T°C Chaudiere",
-        "type": ""
+        "name": "OKO 2 - T°C chaudière",
+        "type": "",
+		"boiler": ""
     },
     "PE2 KT_SOLL[°C]": {
-        "name": "OKO 2 - T°C Chaudiere Consigne",
-        "type": ""
+        "name": "OKO 2 - T°C chaudière Consigne",
+        "type": "",
+		"boiler": ""
     },
     "PE2 FRT Ist[°C]": {
         "name": "OKO 2 - T°C Flamme",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE2 FRT Soll[°C]": {
         "name": "OKO 2 - T°C Flamme Consigne",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE2 Einschublaufzeit[zs]": {
-        "name": "OKO 2 - Vis Alimentation marche (ms)",
-        "type": "tps_vis"
+        "name": "OKO 2 - Vis Alimentation marche (ds)",
+        "type": "tps_vis",
+        "boiler": "CAPPL:FA[1].L_einschublaufzeit"
     },
     "PE2 Pausenzeit[zs]": {
-        "name": "OKO 2 - Vis Alimentation pause (ms)",
-        "type": "tps_vis_pause"
+        "name": "OKO 2 - Vis Alimentation pause (ds)",
+        "type": "tps_vis_pause",
+        "boiler": "CAPPL:FA[0].L_pausenzeit"
     },
     "PE2 Luefterdrehzahl[%]": {
         "name": "OKO 2 - Ventilation Bruleur (%)",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE2 Saugzugdrehzahl[%]": {
         "name": "OKO 2 - Ventilation fumée (%)",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE2 Unterdruck Ist[Pa]": {
         "name": "OKO 2 - Dépression (Pa)",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE2 Unterdruck Soll[Pa]": {
         "name": "OKO 2 - Depression Consigne (Pa)",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE2 Status": {
-        "name": "OKO 2 - Statut Chaudiere",
-        "type": "status"
+        "name": "OKO 2 - Statut chaudière",
+        "type": "status",
+        "boiler": ""
     },
     "PE2 Motor ES": {
-        "name": "OKO 2 - Moteur alimentation chaudiere (On/Off)",
-        "type": ""
+        "name": "OKO 2 - Moteur alimentation chaudière (On/Off)",
+        "type": "",
+		"boiler": ""
     },
     "PE2 Motor RA": {
         "name": "OKO 2 - Moteur extraxtion silo (On/Off)",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE2 Motor RES1": {
         "name": "OKO 2 - Moteur tremie intermediaire",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE2 Motor TURBINE": {
         "name": "OKO 2 - Moteur ASPIRATION",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE2 Motor ZUEND": {
         "name": "OKO 2 - Moteur Allumage",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE2 Motor UW[%]": {
         "name": "OKO 2 - Pompe du circuit primaire (%)",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE2 Motor RM": {
         "name": "OKO 2 - Moteur ramonage",
-        "type": ""
+        "type": "",
+		"boiler": ""
     },
     "PE2 Abgastemp[°C]":{
         "name":"OKO 2 - Températures fumées[°C]",
-        "type": ""
+        "type": "",
+		"boiler": ""
     }
 }
