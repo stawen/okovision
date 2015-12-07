@@ -10,7 +10,7 @@
 		"boiler": ""
     },
     "AT [°C]": {
-        "name": "T°C Exterieure",
+        "name": "T°C Extérieure",
         "type": "tc_ext",
         "boiler": "CAPPL:FA[0].L_aussentemperatur"
     },
@@ -25,7 +25,7 @@
 		"boiler": "CAPPL:FA[0].L_kesseltemperatur_soll"
     },
     "BR": {
-        "name": "Contact Bruleur (On/Off)",
+        "name": "Contact Brûleur (On/Off)",
         "type": "",
 		"boiler": "CAPPL:FA[0].L_br1"
     },
@@ -190,7 +190,7 @@
 		"boiler": ""
     },
     "PE1_BR1": {
-        "name": "OKO 1 - Contact Bruleur (On/Off)",
+        "name": "OKO 1 - Contact Brûleur (On/Off)",
         "type": "",
 		"boiler": ""
     },
@@ -220,7 +220,7 @@
         "boiler": "CAPPL:FA[0].L_pausenzeit"
     },
     "PE1 Luefterdrehzahl[%]": {
-        "name": "Ventilation Bruleur (%)",
+        "name": "Ventilation Brûleur (%)",
         "type": "",
 		"boiler": ""
     },
@@ -240,12 +240,12 @@
 		"boiler": ""
     },
     "PE1 Unterdruck Soll[Pa]": {
-        "name": "Depression Consigne (Pa)",
+        "name": "Dépression Consigne (Pa)",
         "type": "",
 		"boiler": ""
     },
     "PE1 Unterdruck Soll[EH]": {
-        "name": "Depression Consigne (Pa)",
+        "name": "Dépression Consigne (Pa)",
         "type": "",
 		"boiler": ""
     },
@@ -260,12 +260,12 @@
 		"boiler": ""
     },
     "PE1 Motor RA": {
-        "name": "Moteur extraxtion silo (On/Off)",
+        "name": "Moteur extraction silo (On/Off)",
         "type": "",
 		"boiler": ""
     },
     "PE1 Motor RES1": {
-        "name": "Moteur tremie intermediaire",
+        "name": "Moteur tremie intermédiaire",
         "type": "",
 		"boiler": ""
     },
@@ -325,7 +325,7 @@
         "boiler": "CAPPL:FA[0].L_pausenzeit"
     },
     "PE2 Luefterdrehzahl[%]": {
-        "name": "OKO 2 - Ventilation Bruleur (%)",
+        "name": "OKO 2 - Ventilation Brûleur (%)",
         "type": "",
 		"boiler": ""
     },
@@ -340,7 +340,7 @@
 		"boiler": ""
     },
     "PE2 Unterdruck Soll[Pa]": {
-        "name": "OKO 2 - Depression Consigne (Pa)",
+        "name": "OKO 2 - Dépression Consigne (Pa)",
         "type": "",
 		"boiler": ""
     },
@@ -355,12 +355,12 @@
 		"boiler": ""
     },
     "PE2 Motor RA": {
-        "name": "OKO 2 - Moteur extraxtion silo (On/Off)",
+        "name": "OKO 2 - Moteur extraction silo (On/Off)",
         "type": "",
 		"boiler": ""
     },
     "PE2 Motor RES1": {
-        "name": "OKO 2 - Moteur tremie intermediaire",
+        "name": "OKO 2 - Moteur tremie intermédiaire",
         "type": "",
 		"boiler": ""
     },
