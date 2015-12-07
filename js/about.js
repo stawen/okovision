@@ -16,7 +16,7 @@ $(document).ready(function() {
                     //console.log(val);
                     $('#informations').append(
                         '<div class="panel panel-default"> \
-    				        <div class="panel-heading">' + val.version + '</div> \
+    				        <div class="panel-heading">' + val.version + '<br/><small>'+ val.date +'</small> </div> \
     				        <div class="panel-body"> \
     				            ' + val.changelog + ' \
     				        </div> \
