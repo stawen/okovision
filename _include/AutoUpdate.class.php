@@ -676,7 +676,7 @@ class AutoUpdate extends connectDb{
 			$absoluteFilename = $this->_installDir . $filename;
 
 			$this->log->debug(sprintf('Updating file "%s"', $filename));
-/*
+
 			if (!is_dir($foldername)) {
 				if (!mkdir($foldername, $this->dirPermissions, true)) {
 					$this->log->error(sprintf('Directory "%s" has to be writeable!', $parent));
@@ -729,7 +729,7 @@ class AutoUpdate extends connectDb{
 			}
 
 			fclose($updateHandle);
-*/
+
 			//If file is a update script, juste say yes, and execute it in last file
 			if ($filename == $this->updateScriptName) {
 				$updateScriptExist = true;
@@ -745,15 +745,15 @@ class AutoUpdate extends connectDb{
 			$upgradeFile = $this->_installDir . $this->updateScriptName;
 			$this->log->debug(sprintf('Try to include update script "%s"', $upgradeFile));
 			
-			//require($upgradeFile);
+			require($upgradeFile);
 
 			$this->log->info(sprintf('Update script "%s" included!', $upgradeFile));
-			/*
+			
 			if (!DEBUG){
 				if (!unlink($upgradeFile)) {
 					$this->log->warn(sprintf('Could not delete update script "%s"!', $upgradeFile));
 				}
-			}*/
+			}
 			
 		}
 		// TODO
