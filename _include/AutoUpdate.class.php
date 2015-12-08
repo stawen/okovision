@@ -564,7 +564,7 @@ class AutoUpdate extends connectDb{
 				$files[$i]['parent_folder_exists'] = false;
 
 				$parent = dirname($foldername);
-				if (!is_writable($parent)) {
+				if (!is_writable($parent) && is_dir($parent)) {
 					$files[$i]['parent_folder_writable'] = false;
 
 					$simulateSuccess = false;
