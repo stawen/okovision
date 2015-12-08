@@ -321,7 +321,8 @@ class AutoUpdate extends connectDb{
 		foreach ($this->_updates as $raw => $info   ){
 			$r[] = array('version' 	=> $info['version']->getVersion(),
 					'url'		=> $info['url'],
-					'changelog' => $info['changelog']
+					'changelog' => $info['changelog'],
+					'date'		=> $info['date']
 					);
 		}
 		//return json_encode( array_reverse($r) );
@@ -446,7 +447,8 @@ class AutoUpdate extends connectDb{
 				$this->_updates[] = array(
 					'version' 	=> $version,
 					'url' 		=> $updateInfo->url,
-					'changelog' => $updateInfo->changelog
+					'changelog' => $updateInfo->changelog,
+					'date'		=> $updateInfo->date
 				);
 			}
 		}
@@ -562,7 +564,7 @@ class AutoUpdate extends connectDb{
 				$files[$i]['parent_folder_exists'] = false;
 
 				$parent = dirname($foldername);
-				if (!is_writable($parent)) {
+				if (!is_writable($parent) && is_dir($parent)) {
 					$files[$i]['parent_folder_writable'] = false;
 
 					$simulateSuccess = false;
@@ -655,6 +657,7 @@ class AutoUpdate extends connectDb{
 		$gitFolder = '';
 		$i = -1;
 		
+		$updateScriptExist = false;
 		// Read every file from archive
 		while ($file = zip_read($zip)) {
 			$i++;
@@ -727,23 +730,32 @@ class AutoUpdate extends connectDb{
 
 			fclose($updateHandle);
 
-			//If file is a update script, include
+			//If file is a update script, juste say yes, and execute it in last file
 			if ($filename == $this->updateScriptName) {
-				$this->log->debug(sprintf('Try to include update script "%s"', $absoluteFilename));
-				require($absoluteFilename);
-
-				$this->log->info(sprintf('Update script "%s" included!', $absoluteFilename));
-				
-				if (!DEBUG){
-					if (!unlink($absoluteFilename)) {
-						$this->log->warn(sprintf('Could not delete update script "%s"!', $absoluteFilename));
-					}
-				}
+				$updateScriptExist = true;
 			}
 		}
-
+		
 		zip_close($zip);
 
+
+		//execute update script
+		if($updateScriptExist){
+			
+			$upgradeFile = $this->_installDir . $this->updateScriptName;
+			$this->log->debug(sprintf('Try to include update script "%s"', $upgradeFile));
+			
+			require($upgradeFile);
+
+			$this->log->info(sprintf('Update script "%s" included!', $upgradeFile));
+			
+			if (!DEBUG){
+				if (!unlink($upgradeFile)) {
+					$this->log->warn(sprintf('Could not delete update script "%s"!', $upgradeFile));
+				}
+			}
+			
+		}
 		// TODO
 		$this->log->info(sprintf('Update "%s" successfully installed', $version));
 	
