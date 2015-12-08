@@ -51,7 +51,7 @@ class okofen extends connectDb{
 	private function newDay(){
 		$hour = date("H"); //17
 		//$this->log->debug("hour::".$hour);
-		if ($hour == '00'){
+		if ($hour == '00' || $hour == '01'){
 			//$this->log->debug("Minuit");
 			return true;
 		}else{
@@ -354,6 +354,9 @@ class okofen extends connectDb{
 		return $this->_connected;
 	}
 	
+	public function boilerDisconnect(){
+		return @unlink($this->_cookies);
+	}
 	
 	
 }

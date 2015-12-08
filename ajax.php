@@ -210,6 +210,12 @@ if (is_ajax() && is_valid()) {
     			        case "getIndic":
     			            $rt->getIndic();
     			            break;
+    			        case "setOkoLogin":
+    			            $rt->setOkoLogin($_POST['user'],$_POST['pass']);
+    			            break;
+    			        case "getData":
+    			            $rt->getData();
+    			            break;
     			    }       
     			    break;
     		}		

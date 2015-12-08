@@ -95,6 +95,36 @@ class realTime extends connectDb{
     }
     
     
+    public function setOkoLogin($user,$pass){
+		
+		$pass = base64_encode( $this->realEscapeString($pass) );
+		$userId = session::getInstance()->getVar("userId");
+		$r['response'] = false;
+		
+		$q = "update oko_user set login_boiler='$user', pass_boiler='$pass' where id=$userId";
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
+		
+		if($this->query($q)){
+			$o = new okofen();
+			$o->boilerDisconnect();
+			$r['response'] = true;
+		}
+		
+		$this->sendResponse(json_encode($r));
+	}
+	
+	public function getdata(){
+		$r = $this->getOkoValue(array(
+									"CAPPL:FA[0].L_feuerraumtemperatur" // t°c flamme
+									)
+				                );
+		$data= '['.substr($r['CAPPL:LOCAL.L_fernwartung_datum_zeit_sek']->value,0,-7).','.$r['CAPPL:FA[0].L_feuerraumtemperatur']->value.']';		                
+		$this->sendResponse($data);		                
+		//$r['CAPPL:FA[0].L_mittlere_laufzeit']->value
+		//CAPPL:LOCAL.L_fernwartung_datum_zeit_sek -> timestamp
+		
+	}
+    
 }
 
 ?>

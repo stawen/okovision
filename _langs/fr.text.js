@@ -32,7 +32,8 @@ var lang = {
         passNotChanged: "Mot de passe inchangé !",
         passNotTheSame: "Les deux champs ne sont pas identiques.",
         userPassIncorrect: "User/password incorrect",
-        sessionEnded: 'Session expirée'
+        sessionEnded: 'Session expirée',
+        connectBoiler: 'Echec de connexion (chaudière)'
     },
     valid:{
         communication: 'Communication établie',

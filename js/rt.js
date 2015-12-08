@@ -9,82 +9,127 @@ $(document).ready(function() {
         
     });
     
-    $.api('GET', 'rt.getIndic').done(function(json) {
-        
-        if(json.response){
-        
-            $.each(json.data, function(key, val) {
-                $('#'+ key).html(val);
-            });
-            $('#logginprogress').hide();
-            $('#communication').show();
-        
+    $.connectBoiler = function() {
+        $.api('GET', 'rt.getIndic').done(function(json) {
             
-        }else{
-            $('#logginprogress').hide();
-            $.growlErreur('Connection impossible !');
-        }
-    });
-    
-    
-    
-    $('#rt').highcharts('StockChart', {
-        chart : {
-            type: 'spline',
-            events : {
-                load : function () {
-
-                    // set up the updating of the chart each second
-                    var series = this.series[0];
-                    setInterval(function () {
-                        var x = (new Date()).getTime(), // current time
-                            y = Math.round(Math.random() * 100);
-                        series.addPoint([x, y], true, true);
-                    }, 1000);
-                }
+            if(json.response){
+            
+                $.each(json.data, function(key, val) {
+                    $('#'+ key).html(val);
+                });
+                $('#logginprogress').hide();
+                $('#communication').show();
+            
+                
+            }else{
+                $('#logginprogress').hide();
+                $.growlErreur(lang.error.connectBoiler);
             }
-        },
-
-        rangeSelector: {
-            buttons: [{
-                count: 1,
-                type: 'minute',
-                text: '1'
-            }, {
-                count: 5,
-                type: 'minute',
-                text: '5M'
-            }, {
-                type: 'all',
-                text: 'TOUT'
-            }],
-            inputEnabled: false,
-            selected: 0
-        },
-
+        });
+    }
+    
+    $.hideData =function(){
+        $('#logginprogress').show();
+        $('#communication').hide();
+    }
+    
+    $.getData = function(){
         
+         $.api('GET', 'rt.getData').done(function(json) {
+             console.log(json);
+             var series = liveChart.series[0],
+               shift = series.data.length > 20; // shift if the series is 
+                                                 // longer than 20
 
-        exporting: {
-            enabled: false
-        },
-
-        series : [{
-            name : 'Random data',
-            data : (function () {
-                // generate an array of random data
-                var data = [], time = (new Date()).getTime(), i;
-
-                for (i = -500; i <= 0; i += 1) {
-                    data.push([
-                        time + i * 1000,
-                        Math.round(Math.random() * 100)
-                    ]);
+                // add the point
+                liveChart.series[0].addPoint(json, true, shift);
+            
+                // call it again after one second
+                setTimeout($.getData(), 1500);    
+         });
+    }
+    
+    var liveChart;
+    
+    $("#grapheValidate").click(function(){
+        console.log('ici');
+        
+       
+        liveChart = new Highcharts.StockChart({
+            chart : {
+                renderTo: 'rt',
+                type: 'spline',
+                events : {
+                    load : $.getData()
                 }
-                return data;
-            }())
-        }]
+            },
+    
+            rangeSelector: {
+                buttons: [{
+                    count: 5,
+                    type: 'minute',
+                    text: '5M'
+                }, {
+                    type: 'all',
+                    text: 'TOUT'
+                }],
+                inputEnabled: false,
+                selected: 0
+            },
+            xAxis: {
+				type: 'datetime',
+				dateTimeLabelFormats: {
+					minute: '%H:%M',
+					hour: '%H:%M'
+
+				},
+				labels: {
+					rotation: -45,
+				},
+				title: {
+					text: lang.graphic.hour
+				}
+			},
+            
+    
+            exporting: {
+                enabled: false
+            },
+    
+            series : [{
+                name : 'Random data',
+                data : []
+            }]
+        });
+        
     });
     
     
+    
+    
+    
+    $("#btconfirm").click(function(e){
+		var user = $('#okologin').val()
+		var pass = $('#okopassword').val()
+		
+		if(user !== '' && pass !== ''){
+		
+			$.api('POST', 'rt.setOkoLogin', {user: user, pass: pass}).done(function(json) {
+				$("#modal_boiler").modal('hide');
+				$.hideData();
+				if(!json.response){
+					e.preventDefault();
+					$.growlErreur(lang.error.save);
+				}else{
+				    $.growlValidate(lang.valid.save);
+				    $.connectBoiler();
+				}
+				
+			});
+		}
+		
+	});
+    
+    $.connectBoiler();
     
 });
