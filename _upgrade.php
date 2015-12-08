@@ -3,8 +3,7 @@
 ini_set('max_execution_time', 600);
 $this->log->info("UPGRADE | $version | begin");
 $t = new timeExec();
-/* v1.6.4*/
-//Maj autopudate -> les plus important
+
 //reorganisation des js
 
 
@@ -46,17 +45,6 @@ $t = new timeExec();
         @unlink(CONTEXT.'/js/themes/skies.js');
         @rmdir(CONTEXT.'/js/themes');
 
-/* v1.7.0 */
-
-
-
-
-
-//ajout du dico à jour
-
-
-
-/*
 
 
 $addColumn = "ALTER TABLE oko_user ADD COLUMN login_boiler TINYTEXT NULL DEFAULT NULL AFTER type, ADD COLUMN pass_boiler TINYTEXT NULL DEFAULT NULL AFTER login_boiler;";
@@ -72,9 +60,9 @@ if($this->query($addColumn)){
 
 $addColumn = "ALTER TABLE oko_capteur ADD COLUMN boiler TINYTEXT NULL DEFAULT NULL AFTER type;";
 if(!$this->query($addColumn)) $this->log->info("UPGRADE | $version | create column boiler in oko_capteur failed !");
-*/
-/* Faire la maj de la table oko_capteur avec fr.matrice.js');on*/
 
+
+/* Faire la maj de la table oko_capteur avec fr.matrice.js');*/
 
 $this->log->info("UPGRADE | $version | end :".$t->getTime());
 ?>
