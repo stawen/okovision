@@ -48,10 +48,12 @@ CREATE TABLE IF NOT EXISTS `oko_user` (
   `user` tinytext NOT NULL,
   `pass` tinytext NOT NULL,
   `type` tinytext NOT NULL,
+  `login_boiler` TINYTEXT NULL DEFAULT NULL,
+  `pass_boiler` TINYTEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MYISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
-insert into oko_user set user="admin", pass="97f108bdeaad841227830678c7ecec6dc541bab3" , type="admin";
+insert into oko_user set user="admin", pass="97f108bdeaad841227830678c7ecec6dc541bab3" , type="admin", login_boiler='oekofen', pass_boiler='b2Vrb2Zlbg==';
 
 
 DROP TABLE IF EXISTS `oko_historique_full`;

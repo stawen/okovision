@@ -18,11 +18,11 @@
 					'histo.php' => array(
 					                    'txt' => session::getInstance()->getLabel('lang.text.menu.historic'),
 					                    'icon' => 'glyphicon glyphicon-stats',
-					                    'logged' => false) /*,
+					                    'logged' => false),
 					'rt.php' => array(
 					                    'txt' => session::getInstance()->getLabel('lang.text.menu.rt'),
 					                    'icon' => 'glyphicon glyphicon-signal',
-					                    'logged' => true)*/
+					                    'logged' => true)
 			);	
 	
 	foreach ($menu as $url => $title){

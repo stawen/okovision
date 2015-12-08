@@ -7,12 +7,11 @@
 
 class okofen extends connectDb{
 	
-	private $_u 				= 'oekofen';
-	private $_p		 			= 'oekofen';
 	private $_loginUrl		 	= '';
 	private $_cookies 			= '';
 	private $_responseBoiler 	= '';
 	private $_response			= '';
+	private $_connected			= true;
 	
 	public function __construct() {
 		parent::__construct();
@@ -242,20 +241,26 @@ class okofen extends connectDb{
 
 	private function curlConnect(){
 		
+    	
+    	$q ="select login_boiler as login, pass_boiler as pass from oko_user where user='admin';";
+    	$result = $this->query($q);
+    	$boiler = $result->fetch_object();
+    	
+    	
     	$code = false;
 	    $curl = curl_init();
 	    
 	    curl_setopt_array($curl, array(
 	    		   CURLOPT_VERBOSE => false,
-	    		   CURLOPT_RETURNTRANSFER => false,
+	    		   CURLOPT_RETURNTRANSFER => true,
 	    		   CURLOPT_URL => $this->_loginUrl,
 	    		   CURLOPT_USERAGENT => 'Okovision Agent',
 	    		   CURLOPT_POST => 1,
 	    		   CURLOPT_COOKIEJAR => $this->_cookies,
 	    		   CURLOPT_POSTFIELDS => 
 	        		   http_build_query( array(
-	        		        'username' => $this->_u,
-	        		        'password' => $this->_p,
+	        		        'username' => $boiler->login,
+	        		        'password' => base64_decode($boiler->pass),
 	        		        'language' => 'en',
 	        		        'submit'   => 'Login'
 	        		    ))
@@ -267,11 +272,13 @@ class okofen extends connectDb{
 	    //var_dump($info);exit;
 	    if($info['http_code'] == '303'){
 	        $code = true;
+	       
 	    }else{
 	        $this->log->info("Class ".__CLASS__." | ".__FUNCTION__." | Open Session impossible in".CHAUDIERE);
+	        $this->_connected = false;
 	    }
 	    curl_close($curl);
-	    return $code;
+	    
 	}
 
 	private function curlGet(){
@@ -341,6 +348,10 @@ class okofen extends connectDb{
 	
 	public function getResponseBoiler(){
 		return $this->_responseBoiler;
+	}
+	
+	public function isConnected(){
+		return $this->_connected;
 	}
 	
 	

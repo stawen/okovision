@@ -11,11 +11,19 @@ $(document).ready(function() {
     
     $.api('GET', 'rt.getIndic').done(function(json) {
         
-        $.each(json, function(key, val) {
-            $('#'+ key).html(val);
-        });
-        $('#logginprogress').hide();
-        $('#communication').show();
+        if(json.response){
+        
+            $.each(json.data, function(key, val) {
+                $('#'+ key).html(val);
+            });
+            $('#logginprogress').hide();
+            $('#communication').show();
+        
+            
+        }else{
+            $('#logginprogress').hide();
+            $.growlErreur('Connection impossible !');
+        }
     });
     
     
