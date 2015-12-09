@@ -69,9 +69,9 @@ $(document).ready(function() {
 			type: mode,
 			data: $.param(tab),
 			async: typeSync
-		}).error(function() {
+		}).error(function(e) {
 			var msg = lang.error.communication + ' : ' + cmd
-				//console.log(msg);
+			//console.log(e);
 			$.growlErreur(msg);
 		});
 		//console.log(jxhr);

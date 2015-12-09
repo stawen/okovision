@@ -36,7 +36,7 @@ if (!file_exists("config.php")) {
         
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active"><a href="#indicateurs" aria-controls="indicateurs" role="tab" data-toggle="tab">Indicateurs</a></li>
-                <li role="presentation"><a href="#reglages" aria-controls="reglages" role="tab" data-toggle="tab">Réglages</a></li>
+                <li role="presentation"><a href="#reglages" aria-controls="reglages" role="tab" data-toggle="tab">Réglages Chaudière</a></li>
                 <li role="presentation"><a href="#graphiques" aria-controls="graphiques" role="tab" data-toggle="tab">Graphiques</a></li>
             </ul>
              
@@ -124,7 +124,7 @@ if (!file_exists("config.php")) {
             			    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
             		    </button>
             		</div>
-                	<br/>
+                	<br/><br/>
                     <div class="graphique" id="rt"></div>
                 	
         		</div>

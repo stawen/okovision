@@ -117,9 +117,20 @@ class realTime extends connectDb{
 		$r = $this->getOkoValue(array(
 									"CAPPL:FA[0].L_feuerraumtemperatur" // t°c flamme
 									)
+		
 				                );
-		$data= '['.substr($r['CAPPL:LOCAL.L_fernwartung_datum_zeit_sek']->value,0,-7).','.$r['CAPPL:FA[0].L_feuerraumtemperatur']->value.']';		                
-		$this->sendResponse($data);		                
+		
+		$resultat = '[{ "name": "test serie 1",';
+		$data= '['.substr($r['CAPPL:LOCAL.L_fernwartung_datum_zeit_sek']->value,0,-7).'000,'.$r['CAPPL:FA[0].L_feuerraumtemperatur']->value.']';
+		
+		$resultat .= '"data": '.$data;
+		$resultat .= '},';
+		
+		$resultat .= '{ "name": "test serie 2","data": ['.substr($r['CAPPL:LOCAL.L_fernwartung_datum_zeit_sek']->value,0,-7).'000,150]}]';
+		
+		
+			                
+		$this->sendResponse($resultat);		                
 		//$r['CAPPL:FA[0].L_mittlere_laufzeit']->value
 		//CAPPL:LOCAL.L_fernwartung_datum_zeit_sek -> timestamp
 		

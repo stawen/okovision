@@ -33,49 +33,50 @@ $(document).ready(function() {
         $('#communication').hide();
     }
     
-    $.getData = function(){
-        
-         $.api('GET', 'rt.getData').done(function(json) {
-             console.log(json);
-             var series = liveChart.series[0],
-               shift = series.data.length > 20; // shift if the series is 
-                                                 // longer than 20
-
-                // add the point
-                liveChart.series[0].addPoint(json, true, shift);
-            
-                // call it again after one second
-                setTimeout($.getData(), 1500);    
-         });
-    }
+    
     
     var liveChart;
     
+    $.initSerieName = function(){
+        var r;
+         $.api('GET', 'rt.getData').done(function(json) {
+             console.log(json);
+             r = json;
+         });
+         
+    }
+    
+    
     $("#grapheValidate").click(function(){
-        console.log('ici');
+        //console.log('ici');
         
        
-        liveChart = new Highcharts.StockChart({
+        liveChart = new Highcharts.Chart({
             chart : {
                 renderTo: 'rt',
                 type: 'spline',
+                zoomType: 'x',
+				panning: true,
+				panKey: 'shift',
                 events : {
                     load : $.getData()
                 }
             },
-    
-            rangeSelector: {
-                buttons: [{
-                    count: 5,
-                    type: 'minute',
-                    text: '5M'
-                }, {
-                    type: 'all',
-                    text: 'TOUT'
-                }],
-                inputEnabled: false,
-                selected: 0
-            },
+            plotOptions: {
+				spline: {
+					marker: {
+						enabled: false
+					}
+				}
+			},
+			tooltip: {
+				shared: true,
+				crosshairs: true,
+				followPointer: true
+			},
+			title: {
+				text: ''
+			},
             xAxis: {
 				type: 'datetime',
 				dateTimeLabelFormats: {
@@ -90,21 +91,44 @@ $(document).ready(function() {
 					text: lang.graphic.hour
 				}
 			},
-            
-    
+            yAxis: [{
+				title: {
+					text: '...',
+				},
+				min: 0
+			}],
             exporting: {
                 enabled: false
             },
-    
-            series : [{
-                name : 'Random data',
-                data : []
-            }]
+            series: [new Date().getTime(), 0]
         });
+        
+        
         
     });
     
     
+    
+    
+    $.getData = function(){
+        
+        setInterval(function(){
+             $.api('GET', 'rt.getData').done(function(json) {
+               // add the point
+                $.each(json , function(key, val){
+                    if (typeof liveChart.series[key] == 'undefined') {
+                        liveChart.addSeries(val,false);
+                    }
+                    if(liveChart.series[key].name != val.name){
+                        liveChart.series[key].update({name:val.name}, false);
+                    }
+                    liveChart.series[key].addPoint(val.data,false);    
+                    
+                });
+                liveChart.redraw();
+             });
+        },3000);
+    }
     
     
     
