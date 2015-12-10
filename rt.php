@@ -35,27 +35,29 @@ if (!file_exists("config.php")) {
         <div id="communication" style="display: none;">
         
             <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#indicateurs" aria-controls="indicateurs" role="tab" data-toggle="tab">Indicateurs</a></li>
-                <li role="presentation"><a href="#reglages" aria-controls="reglages" role="tab" data-toggle="tab">Réglages Chaudière</a></li>
+                <li role="presentation" class="active"><a href="#indicateurs" aria-controls="indicateurs" role="tab" data-toggle="tab">Réglages Chaudière</a></li>
                 <li role="presentation"><a href="#graphiques" aria-controls="graphiques" role="tab" data-toggle="tab">Graphiques</a></li>
             </ul>
              
             <div class="tab-content">
                  
                  <div role="tabpanel" class="tab-pane active" id="indicateurs">  
-                    <br/>
+                    
             		<div class="row">
+            		    <div class="col-md-12" ><h2><small>Indicateurs de fontionnement</small></h2></div>
             		    <div class="col-lg-3 col-md-6">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
+                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign" title="Tooltip on left"></span></div>
                                         <div class="col-xs-12 text-center">
-                                            <div class="huge" id="tpsMoyBruleur">00 min</div>
+                                            <div class="huge" id="CAPPL:FA[0].L_mittlere_laufzeit">--</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="panel-footer">
-                                    <div class="labelbox"><?php echo session::getInstance()->getLabel('lang.text.page.rt.label.tpsbruleur') ?></div>
+                                    <div class="labelbox"><?php echo session::getInstance()->getLabel('lang.capteur.CAPPL.FA.L_mittlere_laufzeit') ?></div>
+                                    
                                 </div>
                                 
                             </div>
@@ -64,8 +66,9 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
+                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign"></span></div>
                                         <div class="col-xs-12 text-center">
-                                            <div class="huge" id="nbStartBruleur">00</div>
+                                            <div class="huge" id="nbStartBruleur">--</div>
                                         </div>
                                     </div>
                                 </div>
@@ -79,8 +82,9 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
+                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign"></span></div>
                                         <div class="col-xs-12 text-center">
-                                            <div class="huge" id="tpsTotalBruleur">000 h</div>
+                                            <div class="huge" id="tpsTotalBruleur">--</div>
                                         </div>
                                     </div>
                                 </div>
@@ -94,8 +98,9 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
+                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign"></span></div>
                                         <div class="col-xs-12 text-center">
-                                            <div class="huge" id="nbstart">000</div>
+                                            <div class="huge" id="nbstart">--</div>
                                         </div>
                                     </div>
                                 </div>
@@ -110,10 +115,6 @@ if (!file_exists("config.php")) {
                     </div>
                 </div>
                 
-                <div role="tabpanel" class="tab-pane " id="reglages">
-                    <br/>
-                    reglages
-                </div>
                 
                 <div role="tabpanel" class="tab-pane " id="graphiques">  
                     <br/>

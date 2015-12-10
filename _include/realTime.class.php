@@ -55,8 +55,8 @@ class realTime extends connectDb{
 											);
 				}else{
 					$r[$capt->name] = (object) array(
-											"value" => ($capt->divisor != '')?($capt->value / $capt->divisor):($capt->value),
-											"unitText" => ($capt->unitText=='???')?'':$capt->unitText
+											"value" => ($capt->divisor != '' && $capt->divisor != '???' )?($capt->value / $capt->divisor):($capt->value),
+											"unitText" => ($capt->unitText=='???')?'':(($capt->unitText=='K')?'°C':$capt->unitText)
 											);
 				}
 			}
@@ -70,23 +70,53 @@ class realTime extends connectDb{
     public function getIndic(){
     	$json['response'] = false;
     	
-    	$r = $this->getOkoValue(array(
-									"CAPPL:FA[0].L_mittlere_laufzeit", // temps moyen du bruleur
-									"CAPPL:FA[0].L_brennerstarts", // nb demarrage bruleur
-									"CAPPL:FA[0].L_brennerlaufzeit_anzeige", //fonct brûleur
-									"CAPPL:FA[0].L_anzahl_zuendung", //nb allumage
-									"CAPPL:LOCAL.touch[0].version"
-                   					) 
-				                );
+    	$indic = array( "CAPPL:FA[0].L_mittlere_laufzeit" 			, // temps moyen du bruleur
+						"CAPPL:FA[0].L_brennerstarts" 				, // nb demarrage bruleur
+						"CAPPL:FA[0].L_brennerlaufzeit_anzeige" 	, //fonct brûleur
+						"CAPPL:FA[0].L_anzahl_zuendung" 			, //nb allumage
+						"CAPPL:LOCAL.touch[0].version" 				, // version
+						//chauffage -> T°C ambiamte
+						"CAPPL:LOCAL.hk[0].raumtemp_heizen"			,//T°C ambiant confort
+						"CAPPL:LOCAL.hk[0].raumtemp_absenken"		,//T°C ambiant reduit
+						"CAPPL:LOCAL.hk[0].heizkurve_steigung"		,//pente
+						"CAPPL:LOCAL.hk[0].heizkurve_fusspunkt"		,//pied de courbe
+						"CAPPL:LOCAL.hk[0].heizgrenze_heizen"		,//T°c ext de coupure (Confort)
+						"CAPPL:LOCAL.hk[0].heizgrenze_absenken"		,//T°c ext de coupure (Reduit)
+						//Chauffage -> Gestion Eau dans Radiateur
+						"CAPPL:LOCAL.hk[0].vorlauftemp_max"			,//T°C depart Max
+						"CAPPL:LOCAL.hk[0].vorlauftemp_min"			,//T°C depart Min
+						"CAPPL:LOCAL.hk[0].ueberhoehung"			,//Augmentation
+						"CAPPL:LOCAL.hk[0].mischer_max_auf_zeit"	,//V3V Ouverture
+						"CAPPL:LOCAL.hk[0].mischer_max_aus_zeit"	,//V3V Pause
+						"CAPPL:LOCAL.hk[0].mischer_max_zu_zeit"		,//V3V Fermeture
+						"CAPPL:LOCAL.hk[0].mischer_regelbereich_quelle",//Plage réglage TC
+						"CAPPL:LOCAL.hk[0].mischer_regelbereich_vorlauf",//Plage réglage TD
+						"CAPPL:LOCAL.hk[0].quellentempverlauf_anstiegstemp",//Hausse ETC
+						"CAPPL:LOCAL.hk[0].quellentempverlauf_regelbereich",//Correction réglage ETC (Evolution Température Chaudière)
+						//	Parametrage bruleur :
+						"CAPPL:FA[0].pe_kesseltemperatur_soll"		,//T°C Consigne
+						"CAPPL:FA[0].pe_abschalttemperatur"			,//T°C Coupure
+						"CAPPL:FA[0].pe_einschalthysterese_smart" 	,// Hysteresis marche
+						"CAPPL:FA[0].pe_kesselleistung" //Puissance chaudiere
+                   	) ;
+    	
+    	
+    	$r = $this->getOkoValue($indic);
 	
+		
 		if(!empty($r)){	
-			$json['data'] = array (
-					'tpsMoyBruleur' 	=> trim($r['CAPPL:FA[0].L_mittlere_laufzeit']->value.' '.$r['CAPPL:FA[0].L_mittlere_laufzeit']->unitText),
-					'nbStartBruleur' 	=> trim($r['CAPPL:FA[0].L_brennerstarts']->value.' '.$r['CAPPL:FA[0].L_brennerstarts']->unitText),
-					'tpsTotalBruleur' 	=> trim($r['CAPPL:FA[0].L_brennerlaufzeit_anzeige']->value.' '.$r['CAPPL:FA[0].L_brennerlaufzeit_anzeige']->unitText),
-					'nbstart'		 	=> trim($r['CAPPL:FA[0].L_anzahl_zuendung']->value.' '.$r['CAPPL:FA[0].L_anzahl_zuendung']->unitText),
-					'version'		 	=> trim($r['CAPPL:LOCAL.touch[0].version']->value.' '.$r['CAPPL:LOCAL.touch[0].version']->unitText),
-			);
+			$tmp = array();
+			
+			foreach($indic as $key){
+				array_push(
+					$tmp,
+					array (
+						$key 	=> trim($r[$key]->value.' '.$r[$key]->unitText)
+					)		
+				);
+				$json['data'] = $tmp;
+			}
+			
 			$json['response'] = true;	
 		}
 		
@@ -120,6 +150,7 @@ class realTime extends connectDb{
 		
 				                );
 		
+		
 		$resultat = '[{ "name": "test serie 1",';
 		$data= '['.substr($r['CAPPL:LOCAL.L_fernwartung_datum_zeit_sek']->value,0,-7).'000,'.$r['CAPPL:FA[0].L_feuerraumtemperatur']->value.']';
 		
@@ -131,9 +162,6 @@ class realTime extends connectDb{
 		
 			                
 		$this->sendResponse($resultat);		                
-		//$r['CAPPL:FA[0].L_mittlere_laufzeit']->value
-		//CAPPL:LOCAL.L_fernwartung_datum_zeit_sek -> timestamp
-		
 	}
     
 }
