@@ -106,5 +106,7 @@ http://chaudiere/?api=CAPPL:LOCAL.anlage_betriebsart?u=oekofen&p=oekofen
 d9fe039 et 96ed891 -> commit autoupdate
 
 
+
+
 */
 ?>

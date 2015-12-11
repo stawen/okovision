@@ -23,7 +23,8 @@ $(document).ready(function() {
             if(json.response){
             
                 $.each(json.data, function(key, val) {
-                    //console.log(lang.sensor[$.IDify(key)]);
+                    console.log($.IDify(key));
+                    console.log(key);
                     $('#'+ $.IDify(key)).html(val);
                 });
                 $('#logginprogress').hide();
