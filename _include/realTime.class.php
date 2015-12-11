@@ -97,7 +97,7 @@ class realTime extends connectDb{
 						"CAPPL:FA[0].pe_kesseltemperatur_soll"		,//T°C Consigne
 						"CAPPL:FA[0].pe_abschalttemperatur"			,//T°C Coupure
 						"CAPPL:FA[0].pe_einschalthysterese_smart" 	,// Hysteresis marche
-						"CAPPL:FA[0].pe_kesselleistung" //Puissance chaudiere
+						"CAPPL:FA[0].pe_kesselleistung" 			 //Puissance chaudiere
                    	) ;
     	
     	
@@ -108,15 +108,9 @@ class realTime extends connectDb{
 			$tmp = array();
 			
 			foreach($indic as $key){
-				array_push(
-					$tmp,
-					array (
-						$key 	=> trim($r[$key]->value.' '.$r[$key]->unitText)
-					)		
-				);
-				$json['data'] = $tmp;
+				$tmp[$key] = trim($r[$key]->value.' '.$r[$key]->unitText);
 			}
-			
+			$json['data'] = $tmp;
 			$json['response'] = true;	
 		}
 		

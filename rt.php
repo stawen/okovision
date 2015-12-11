@@ -51,12 +51,12 @@ if (!file_exists("config.php")) {
                                     <div class="row">
                                         <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign" title="Tooltip on left"></span></div>
                                         <div class="col-xs-12 text-center">
-                                            <div class="huge" id="CAPPL:FA[0].L_mittlere_laufzeit">--</div>
+                                            <div class="huge" id="FA0_L_mittlere_laufzeit">--</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="panel-footer">
-                                    <div class="labelbox"><?php echo session::getInstance()->getLabel('lang.capteur.CAPPL.FA.L_mittlere_laufzeit') ?></div>
+                                    <div class="labelbox"><?php echo session::getInstance()->getLabel('lang.capteur.CAPPL:FA[0].L_mittlere_laufzeit') ?></div>
                                     
                                 </div>
                                 
@@ -68,12 +68,12 @@ if (!file_exists("config.php")) {
                                     <div class="row">
                                         <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign"></span></div>
                                         <div class="col-xs-12 text-center">
-                                            <div class="huge" id="nbStartBruleur">--</div>
+                                            <div class="huge" id="FA0_L_brennerstarts">--</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="panel-footer">
-                                    <div class="labelbox"><?php echo session::getInstance()->getLabel('lang.text.page.rt.label.ndstartbruleur') ?></div>
+                                    <div class="labelbox"><?php echo session::getInstance()->getLabel('lang.capteur.CAPPL:FA[0].L_brennerstarts') ?></div>
                                 </div>
                                 
                             </div>
@@ -84,12 +84,12 @@ if (!file_exists("config.php")) {
                                     <div class="row">
                                         <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign"></span></div>
                                         <div class="col-xs-12 text-center">
-                                            <div class="huge" id="tpsTotalBruleur">--</div>
+                                            <div class="huge" id="FA0_L_brennerlaufzeit_anzeige">--</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="panel-footer">
-                                    <div class="labelbox"><?php echo session::getInstance()->getLabel('lang.text.page.rt.label.totaltpsbruleur') ?></div>
+                                    <div class="labelbox"><?php echo session::getInstance()->getLabel('lang.capteur.CAPPL:FA[0].L_brennerlaufzeit_anzeige') ?></div>
                                 </div>
                                 
                             </div>
@@ -100,17 +100,17 @@ if (!file_exists("config.php")) {
                                     <div class="row">
                                         <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign"></span></div>
                                         <div class="col-xs-12 text-center">
-                                            <div class="huge" id="nbstart">--</div>
+                                            <div class="huge" id="FA0_L_anzahl_zuendung">--</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="panel-footer">
-                                    <div class="labelbox"><?php echo session::getInstance()->getLabel('lang.text.page.rt.label.nballume') ?></div>
+                                    <div class="labelbox"><?php echo session::getInstance()->getLabel('lang.capteur.CAPPL:FA[0].L_anzahl_zuendung') ?></div>
                                 </div>
                                 
                             </div>
                         </div>
-                        <div class="col-md-12" id="version" align="right"></div>
+                        
                         
                     </div>
                 </div>

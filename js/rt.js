@@ -9,13 +9,22 @@ $(document).ready(function() {
         
     });
     
+    $.IDify = function(text) {
+        text = text.replace(/CAPPL:LOCAL\.|[\[\]]|CAPPL:/g, "");
+        text = text.replace(/[\.\/]+/g, "_");
+        return text;
+    }
+    
+    
     $.connectBoiler = function() {
+        
         $.api('GET', 'rt.getIndic').done(function(json) {
             
             if(json.response){
             
                 $.each(json.data, function(key, val) {
-                    $('#'+ key).html(val);
+                    //console.log(lang.sensor[$.IDify(key)]);
+                    $('#'+ $.IDify(key)).html(val);
                 });
                 $('#logginprogress').hide();
                 $('#communication').show();
@@ -36,15 +45,6 @@ $(document).ready(function() {
     
     
     var liveChart;
-    
-    $.initSerieName = function(){
-        var r;
-         $.api('GET', 'rt.getData').done(function(json) {
-             console.log(json);
-             r = json;
-         });
-         
-    }
     
     
     $("#grapheValidate").click(function(){

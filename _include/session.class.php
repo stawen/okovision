@@ -34,7 +34,7 @@ class session extends connectDb {
         //if (DEBUG) session_destroy();
     }
     
-    	// Magic method clone is empty to prevent duplication of connection
+    // Magic method clone is empty to prevent duplication of connection
 	private function __clone() { }
 	
 	public static function getInstance() {
@@ -46,16 +46,21 @@ class session extends connectDb {
 	
     
     private function getDictionnary($lg){
+		/*
 		$file = '_langs/' . $lg . '.text.ini';
 	    if(file_exists($file)){
 	        return parse_ini_file($file);
+	    }
+	    */
+	    $file = '_langs/' . $lg . '.text.json';
+	    if(file_exists($file)){
+	        return (array)json_decode(file_get_contents($file));
 	    }
 	    
 	}
 	
 	public function getLabel($label){
 	    return $this->dico[$label];
-	    
 	}
 	
 	public function getLang(){
