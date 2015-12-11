@@ -6,6 +6,11 @@
 /* global lang, Highcharts, sessionToken, offset */
 $(document).ready(function() {
 
+	$(".tip").tooltip({
+    	placement: "left",
+    	
+    	html: true
+	});
 	
 	$.growlUpdateAvailable = function() {
 		$.notify({

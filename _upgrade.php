@@ -44,6 +44,8 @@ $t = new timeExec();
         @unlink(CONTEXT.'/js/themes/sand-signika.js');
         @unlink(CONTEXT.'/js/themes/skies.js');
         @rmdir(CONTEXT.'/js/themes');
+        
+        @unlink(CONTEXT.'/_langs/fr.text.ini');
 
 
 

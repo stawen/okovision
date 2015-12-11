@@ -49,7 +49,7 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign" title="Tooltip on left"></span></div>
+                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:FA[0].L_mittlere_laufzeit') ?>" data-original-title="Tooltip"></span></div>
                                         <div class="col-xs-12 text-center">
                                             <div class="huge" id="FA0_L_mittlere_laufzeit">--</div>
                                         </div>
@@ -66,7 +66,7 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign"></span></div>
+                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:FA[0].L_brennerstarts') ?>" data-original-title="Tooltip" ></span></div>
                                         <div class="col-xs-12 text-center">
                                             <div class="huge" id="FA0_L_brennerstarts">--</div>
                                         </div>
@@ -82,7 +82,7 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign"></span></div>
+                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:FA[0].L_brennerlaufzeit_anzeige') ?>" data-original-title="Tooltip"></span></div>
                                         <div class="col-xs-12 text-center">
                                             <div class="huge" id="FA0_L_brennerlaufzeit_anzeige">--</div>
                                         </div>
@@ -98,7 +98,7 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign"></span></div>
+                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:FA[0].L_anzahl_zuendung') ?>" data-original-title="Tooltip"></span></div>
                                         <div class="col-xs-12 text-center">
                                             <div class="huge" id="FA0_L_anzahl_zuendung">--</div>
                                         </div>
@@ -110,12 +110,12 @@ if (!file_exists("config.php")) {
                                 
                             </div>
                         </div>
-                        
+                        <div class="col-md-12" ><h2><small>Chauffage - T°C ambiamte</small></h2></div>
                         <div class="col-lg-3 col-md-6">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign" title="Tooltip on left"></span></div>
+                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].raumtemp_heizen') ?>" data-original-title="Tooltip"></span></div>
                                         <div class="col-xs-12 text-center">
                                             <div class="huge" id="hk0_raumtemp_heizen">--</div>
                                         </div>
@@ -132,7 +132,7 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign" title="Tooltip on left"></span></div>
+                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].raumtemp_absenken') ?>" data-original-title="Tooltip"></span></div>
                                         <div class="col-xs-12 text-center">
                                             <div class="huge" id="hk0_raumtemp_absenken">--</div>
                                         </div>
@@ -149,7 +149,7 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign" title="Tooltip on left"></span></div>
+                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].heizkurve_steigung') ?>" data-original-title="Tooltip"></span></div>
                                         <div class="col-xs-12 text-center">
                                             <div class="huge" id="hk0_heizkurve_steigung">--</div>
                                         </div>
@@ -166,7 +166,7 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign" title="Tooltip on left"></span></div>
+                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].heizkurve_fusspunkt') ?>" data-original-title="Tooltip"></span></div>
                                         <div class="col-xs-12 text-center">
                                             <div class="huge" id="hk0_heizkurve_fusspunkt">--</div>
                                         </div>
@@ -183,7 +183,7 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign" title="Tooltip on left"></span></div>
+                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].heizgrenze_heizen') ?>" data-original-title="Tooltip"></span></div>
                                         <div class="col-xs-12 text-center">
                                             <div class="huge" id="hk0_heizgrenze_heizen">--</div>
                                         </div>
@@ -213,6 +213,7 @@ if (!file_exists("config.php")) {
                                 
                             </div>
                         </div>
+                        <div class="col-md-12" ><h2><small>Chauffage - Gestion Eau dans Radiateur</small></h2></div>
                         <div class="col-lg-3 col-md-6">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
@@ -383,6 +384,7 @@ if (!file_exists("config.php")) {
                                 
                             </div>
                         </div>
+                        <div class="col-md-12" ><h2><small>Paramétrage brûleur</small></h2></div>
                         <div class="col-lg-3 col-md-6">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
