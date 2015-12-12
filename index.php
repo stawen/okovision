@@ -31,6 +31,7 @@ if (!file_exists("config.php")) {
 include('_templates/footer.php');
 ?>
 <!--appel des scripts personnels de la page -->
+	<script src="_langs/<?php echo session::getInstance()->getLang() ?>.datepicker.js"></script>
 	<script src="js/index.js"></script>
 	</body>
 </html>
