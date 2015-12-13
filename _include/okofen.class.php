@@ -337,8 +337,15 @@ class okofen extends connectDb{
 	private function setFormData($a){
 		$d = '';
 		
-		foreach($a as $capteur){
-			$d.=',"'.$capteur.'"';
+	
+		foreach($a as $key => $capteur){
+			//var_dump($capteur);
+			if(!is_array($capteur)){
+				$d.=',"'.$capteur.'"';
+			}else{
+				$d.=',"'.$key.'"';
+			}
+			
 		}
 		
 		$this->_formdata = '["CAPPL:LOCAL.L_fernwartung_datum_zeit_sek"'.$d.']';

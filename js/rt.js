@@ -23,8 +23,6 @@ $(document).ready(function() {
             if(json.response){
             
                 $.each(json.data, function(key, val) {
-                    //console.log($.IDify(key));
-                    //console.log(key);
                     $('#'+ $.IDify(key)).html(val);
                 });
                 $('#logginprogress').hide();
@@ -45,23 +43,22 @@ $(document).ready(function() {
     
     
     
-    var liveChart;
+    var liveChart, refreshData;
     
-    
-    $("#grapheValidate").click(function(){
-        //console.log('ici');
+    $.drawChart = function(idGraphe){
+        //console.log(liveChart);
+        if(typeof liveChart !== 'undefined') {
+            liveChart.destroy();
+            clearInterval(refreshData);
+        }
         
-       
         liveChart = new Highcharts.Chart({
             chart : {
                 renderTo: 'rt',
                 type: 'spline',
                 zoomType: 'x',
 				panning: true,
-				panKey: 'shift',
-                events : {
-                    load : $.getData()
-                }
+				panKey: 'shift'
             },
             plotOptions: {
 				spline: {
@@ -92,7 +89,7 @@ $(document).ready(function() {
 					text: lang.graphic.hour
 				}
 			},
-            yAxis: [{
+			yAxis: [{
 				title: {
 					text: '...',
 				},
@@ -100,33 +97,60 @@ $(document).ready(function() {
 			}],
             exporting: {
                 enabled: false
-            },
-            series: [new Date().getTime(), 0]
+            }
+        
         });
         
         
+        
+    }
+    
+    $("#grapheValidate").click(function(){
+        //console.log('ici');
+        var idGraphe = $('#select_graphique').val();
+        
+        $.drawChart(idGraphe);
+        liveChart.showLoading('Loading data from boiler...');
+        
+        $.getUpdateData(idGraphe);
         
     });
     
     
     
     
-    $.getData = function(){
+    $.getUpdateData = function(idGraphe){
         
-        setInterval(function(){
-             $.api('GET', 'rt.getData').done(function(json) {
+        var firstData=0;
+        refreshData = setInterval(function(){
+            
+             $.api('GET', 'rt.getData', {id: idGraphe}).done(function(json) {
+               
                // add the point
                 $.each(json , function(key, val){
+                    
                     if (typeof liveChart.series[key] == 'undefined') {
                         liveChart.addSeries(val,false);
+                    }else{
+                        liveChart.series[key].addPoint(val.data,false);    
                     }
-                    if(liveChart.series[key].name != val.name){
-                        liveChart.series[key].update({name:val.name}, false);
-                    }
-                    liveChart.series[key].addPoint(val.data,false);    
+                    
                     
                 });
+                
                 liveChart.redraw();
+                
+                if(firstData < 2){
+                    
+                    $.each(liveChart.series, function(key){
+                        liveChart.series[key].removePoint(0);  
+                    });
+                    firstData = firstData + 1;
+                    
+                }else if(firstData == 2){
+                    liveChart.hideLoading();
+                }
+                
              });
         },3000);
     }

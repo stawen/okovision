@@ -1,3 +1,9 @@
+##1.7.0
+* Correction orthographe / correction synthaxique
+* Changement de l'unité ms en ds pour la vis sans fin
+* Calendrier lors de la selection de la date sur la page d'accueil
+* 
+
 ##1.6.4
 * préparation livraison 1.7.0
 * correction orthographe / correction synthaxique

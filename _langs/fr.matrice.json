@@ -12,7 +12,7 @@
     "AT [°C]": {
         "name": "T°C Extérieure",
         "type": "tc_ext",
-        "boiler": "CAPPL:FA[0].L_aussentemperatur"
+        "boiler": "CAPPL:LOCAL.L_aussentemperatur_ist"
     },
     "KT Ist [°C]": {
         "name": "T°C Chaudière",
@@ -87,7 +87,7 @@
     "WW1 EinT Ist[°C]": {
         "name": "T°C ECS",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:LOCAL.L_ww[0].einschaltfuehler_ist"
     },
     "WW1 AusT Ist[°C]": {
         "name": "T°C ECS (arret)",
@@ -102,27 +102,27 @@
     "WW1 Pumpe": {
         "name": "Circulateur ECS",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:LOCAL.L_ww[0].pumpe"
     },
     "WW2 EinT Ist[°C]": {
         "name": "ECS 2 - T°C ECS",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:LOCAL.L_ww[1].einschaltfuehler_ist"
     },
     "WW2 AusT Ist[°C]": {
         "name": "ECS 2 - T°C ECS (arret)",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:LOCAL.ww[1].temp_absenken"
     },
     "WW2 Soll[°C]": {
         "name": "ECS 2 - T°C ECS Consigne",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:LOCAL.ww[1].temp_heizen"
     },
     "WW2 Pumpe": {
         "name": "ECS 2 - Circulateur ECS",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:LOCAL.L_ww[1].pumpe"
     },
     "Zubrp1 Pumpe": {
         "name": "Pompe (indefini)",
@@ -187,17 +187,17 @@
     "PE1 KT[°C]": {
         "name": "OKO 1 - T°C chaudière",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:FA[0].L_kesseltemperatur"
     },
     "PE1_BR1": {
         "name": "OKO 1 - Contact Brûleur (On/Off)",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:FA[0].L_br1"
     },
     "PE1 KT_SOLL[°C]": {
         "name": "OKO 1 - T°C chaudière Consigne",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:FA[0].L_kesseltemperatur_soll_anzeige"
     },
     "PE1 FRT Ist[°C]": {
         "name": "T°C Flamme",
@@ -222,32 +222,32 @@
     "PE1 Luefterdrehzahl[%]": {
         "name": "Ventilation Brûleur (%)",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:FA[0].L_luefterdrehzahl"
     },
     "PE1 Saugzugdrehzahl[%]": {
         "name": "Ventilation fumée (%)",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:FA[0].L_saugzugdrehzahl"
     },
     "PE1 Unterdruck Ist[Pa]": {
         "name": "Dépression (Pa)",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:FA[0].L_unterdruck"
     },
     "PE1 Unterdruck Ist[EH]": {
         "name": "Dépression (Pa)",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:FA[0].L_unterdruck"
     },
     "PE1 Unterdruck Soll[Pa]": {
         "name": "Dépression Consigne (Pa)",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:FA[0].unterdruck_sollwert"
     },
     "PE1 Unterdruck Soll[EH]": {
         "name": "Dépression Consigne (Pa)",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:FA[0].unterdruck_sollwert"
     },
     "PE1 Status": {
         "name": "Statut chaudière",
@@ -267,12 +267,12 @@
     "PE1 Motor RES1": {
         "name": "Moteur tremie intermédiaire",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:FA[0].ausgang_motor[3]"
     },
     "PE1 Motor TURBINE": {
         "name": "Moteur ASPIRATION",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:FA[0].ausgang_motor[0]"
     },
     "PE1 Motor ZUEND": {
         "name": "Moteur Allumage",
@@ -282,12 +282,12 @@
     "PE1 Motor UW[%]": {
         "name": "Pompe du circuit primaire (%)",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:FA[0].L_drehzahl_uw_ist"
     },
     "PE1 Motor RM": {
         "name": "Moteur ramonage",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:FA[0].ausgang_motor[5]"
     },
     "PE1 Abgastemp[°C]":{
         "name":"Températures fumées[°C]",
@@ -297,12 +297,12 @@
     "PE2 KT[°C]": {
         "name": "OKO 2 - T°C chaudière",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:FA[1].L_kesseltemperatur"
     },
     "PE2 KT_SOLL[°C]": {
         "name": "OKO 2 - T°C chaudière Consigne",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:FA[1].L_kesseltemperatur_soll_anzeige"
     },
     "PE2 FRT Ist[°C]": {
         "name": "OKO 2 - T°C Flamme",
@@ -327,22 +327,22 @@
     "PE2 Luefterdrehzahl[%]": {
         "name": "OKO 2 - Ventilation Brûleur (%)",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:FA[1].L_luefterdrehzahl"
     },
     "PE2 Saugzugdrehzahl[%]": {
         "name": "OKO 2 - Ventilation fumée (%)",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:FA[1].L_saugzugdrehzahl"
     },
     "PE2 Unterdruck Ist[Pa]": {
         "name": "OKO 2 - Dépression (Pa)",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:FA[1].L_unterdruck"
     },
     "PE2 Unterdruck Soll[Pa]": {
         "name": "OKO 2 - Dépression Consigne (Pa)",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:FA[1].unterdruck_sollwert"
     },
     "PE2 Status": {
         "name": "OKO 2 - Statut chaudière",

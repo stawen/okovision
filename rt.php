@@ -50,7 +50,7 @@ if (!file_exists("config.php")) {
                                 <div class="panel-heading">
                                     <div class="row">
                                         <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:FA[0].L_mittlere_laufzeit') ?>" data-original-title="Tooltip"></span></div>
-                                        <div class="col-xs-12 text-center">
+                                        <div class="col-xs-11 text-center">
                                             <div class="huge" id="FA0_L_mittlere_laufzeit">--</div>
                                         </div>
                                     </div>
@@ -110,7 +110,7 @@ if (!file_exists("config.php")) {
                                 
                             </div>
                         </div>
-                        <div class="col-md-12" ><h2><small>Chauffage - T°C ambiamte</small></h2></div>
+                        <div class="col-md-12" ><h2><small>Chauffage - T°C ambiante</small></h2></div>
                         <div class="col-lg-3 col-md-6">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">

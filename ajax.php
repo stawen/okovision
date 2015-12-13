@@ -214,7 +214,9 @@ if (is_ajax() && is_valid()) {
     			            $rt->setOkoLogin($_POST['user'],$_POST['pass']);
     			            break;
     			        case "getData":
-    			            $rt->getData();
+    			            if(isset($_GET['id'])){
+    			                $rt->getData($_GET['id']);
+    			            }
     			            break;
     			    }       
     			    break;

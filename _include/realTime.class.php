@@ -61,6 +61,7 @@ class realTime extends connectDb{
 				}
 			}
 		}
+		
 		return $r;
 		
 	}
@@ -137,14 +138,41 @@ class realTime extends connectDb{
 		$this->sendResponse(json_encode($r));
 	}
 	
-	public function getdata(){
-		$r = $this->getOkoValue(array(
-									"CAPPL:FA[0].L_feuerraumtemperatur" // t°c flamme
-									)
+	public function getdata($id){
 		
-				                );
+		$q = "select capteur.boiler as boiler, capteur.name as name, capteur.id as id, asso.correction_effect as coeff from oko_asso_capteur_graphe as asso ".
+	            "LEFT JOIN oko_capteur as capteur ON capteur.id = asso.oko_capteur_id  ".
+	            "WHERE asso.oko_graphe_id=".$id." AND capteur.boiler <> '' ORDER BY asso.position";
+	            
+	    $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
+	   
+	    $result = $this->query($q);
+		
+		$sensor = array();
+		
+		while($c = $result->fetch_object()){
+			$sensor[$c->boiler] = array(
+									'name'  => $c->name,
+									'coeff'	=> $c->coeff
+									);
+		}
 		
 		
+		
+		
+		$r = $this->getOkoValue($sensor);
+		$resultat = '';
+		
+		foreach($sensor as $boiler => $param){
+			$resultat .= '{ "name": "'.$param['name'].'",';
+			$data= '['.substr($r['CAPPL:LOCAL.L_fernwartung_datum_zeit_sek']->value,0,-7).'000,'.$r[$boiler]->value * $param['coeff'].']';
+			$resultat .= '"data": '.$data.'},';
+		}
+		
+		//on retire la derniere virgule qui ne sert à rien
+		$resultat = substr($resultat,0,strlen($resultat)-1);
+		
+		/*
 		$resultat = '[{ "name": "test serie 1",';
 		$data= '['.substr($r['CAPPL:LOCAL.L_fernwartung_datum_zeit_sek']->value,0,-7).'000,'.$r['CAPPL:FA[0].L_feuerraumtemperatur']->value.']';
 		
@@ -152,10 +180,8 @@ class realTime extends connectDb{
 		$resultat .= '},';
 		
 		$resultat .= '{ "name": "test serie 2","data": ['.substr($r['CAPPL:LOCAL.L_fernwartung_datum_zeit_sek']->value,0,-7).'000,150]}]';
-		
-		
-			                
-		$this->sendResponse($resultat);		                
+*/
+		$this->sendResponse('['.$resultat.']');		                
 	}
     
 }
