@@ -47,6 +47,13 @@ $(document).ready(function() {
              yAxisMin(e.currentTarget.chart);
         } */
     }
+    
+    function isArray(obj) {
+	    return Object.prototype.toString.call(obj) === '[object Array]';
+	}
+    function splat(obj) {
+	    return isArray(obj) ? obj : [obj];
+	}
 	/**************************************
 	 **** Graphique ***********************
 	 *************************************/
@@ -96,8 +103,21 @@ $(document).ready(function() {
 			tooltip: {
 				shared: true,
 				crosshairs: true,
-				followPointer: true
-			},
+				followPointer: true,
+				formatter: function (tooltip) {
+				                var items = this.points || splat(this),
+				                    series = items[0].series,
+				                    s;
+				
+				                // sort the values
+				                items.sort(function(a, b){
+				                    return ((a.y < b.y) ? -1 : ((a.y > b.y) ? 1 : 0));
+				                });
+				                items.reverse();
+				
+				                return tooltip.defaultFormatter.call(this, tooltip);
+            					}
+            },
 			series: data
 		
 			

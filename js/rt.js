@@ -15,6 +15,12 @@ $(document).ready(function() {
         return text;
     }
     
+    function isArray(obj) {
+	    return Object.prototype.toString.call(obj) === '[object Array]';
+	}
+    function splat(obj) {
+	    return isArray(obj) ? obj : [obj];
+	}
     
     $.connectBoiler = function() {
         
@@ -95,6 +101,24 @@ $(document).ready(function() {
 				},
 				min: 0
 			}],
+			tooltip: {
+				shared: true,
+				crosshairs: true,
+				followPointer: true,
+				formatter: function (tooltip) {
+				                var items = this.points || splat(this),
+				                    series = items[0].series,
+				                    s;
+				
+				                // sort the values
+				                items.sort(function(a, b){
+				                    return ((a.y < b.y) ? -1 : ((a.y > b.y) ? 1 : 0));
+				                });
+				                items.reverse();
+				
+				                return tooltip.defaultFormatter.call(this, tooltip);
+            					}
+            },
             exporting: {
                 enabled: false
             }

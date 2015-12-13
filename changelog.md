@@ -2,7 +2,9 @@
 * Correction orthographe / correction synthaxique
 * Changement de l'unité ms en ds pour la vis sans fin
 * Calendrier lors de la selection de la date sur la page d'accueil
-* 
+* Ajout page "Temps Réel"
+    *  Visualisation des parametres de réglage combustion chaudière
+    *  Visualisation des graphiques en temps réel
 
 ##1.6.4
 * préparation livraison 1.7.0

@@ -60,10 +60,10 @@ if($this->query($addColumn)){
     $this->log->info("UPGRADE | $version | add column login.pass in oko_user failed");
 }
 
-$addColumn = "ALTER TABLE oko_capteur ADD COLUMN boiler TINYTEXT NULL DEFAULT NULL AFTER type;";
+$addColumn = "ALTER TABLE oko_capteur ADD COLUMN boiler TINYTEXT NOT NULL DEFAULT '' AFTER type;";
 if(!$this->query($addColumn)){
   $this->log->info("UPGRADE | $version | create column boiler in oko_capteur failed !");  
-}//else{
+}else{
     
     /* Faire la maj de la table oko_capteur avec fr.matrice.js');*/
     $dico = json_decode(file_get_contents("_langs/fr.matrice.json"), true);
@@ -76,13 +76,13 @@ if(!$this->query($addColumn)){
         $okoSensor = $key['original_name'];
         $q = "update oko_capteur set boiler='".$dico[$okoSensor]['boiler']."' where original_name='$okoSensor'";
         $this->log->info("UPGRADE | $version | update $okoSensor :: ".$dico[$okoSensor]['boiler']);  
-        //$this->log->info("UPGRADE | $version | ".$q);  
+        
         if(!$this->query($q)){
             $this->log->info("UPGRADE | $version | Failed | ".$q);
         }
         
     }
-//}
+}
 
 
 

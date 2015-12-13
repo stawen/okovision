@@ -179,6 +179,7 @@ CREATE TABLE IF NOT EXISTS `oko_capteur` (
   `column_oko` int(2) NOT NULL,
   `original_name` mediumtext NOT NULL,
   `type` mediumtext DEFAULT NULL, /* tc_ext, tps_vis, tps_vis_pause, start_cycle */
+  `boiler` TINYTEXT NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=MYISAM DEFAULT CHARSET=utf8;
 
