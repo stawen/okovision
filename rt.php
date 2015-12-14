@@ -48,11 +48,18 @@ if (!file_exists("config.php")) {
             		    <div class="col-lg-3 col-md-6">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
+                                            
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:FA[0].L_mittlere_laufzeit') ?>" data-original-title="Tooltip"></span></div>
-                                        <div class="col-xs-11 text-center">
+                                        <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:FA[0].L_mittlere_laufzeit') ?>" data-original-title="Tooltip"></span></div>
+                                    
+                                        <div class="col-xs-8 text-center">
                                             <div class="huge" id="FA0_L_mittlere_laufzeit">--</div>
                                         </div>
+                                        
+                                        <div class="col-xs-2 text-right">
+                                            <a href="" class="change"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+                                        </div>
+                                        
                                     </div>
                                 </div>
                                 <div class="panel-footer">
@@ -66,10 +73,11 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:FA[0].L_brennerstarts') ?>" data-original-title="Tooltip" ></span></div>
-                                        <div class="col-xs-12 text-center">
+                                        <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:FA[0].L_brennerstarts') ?>" data-original-title="Tooltip" ></span></div>
+                                        <div class="col-xs-8 text-center">
                                             <div class="huge" id="FA0_L_brennerstarts">--</div>
                                         </div>
+                                        <div class="col-xs-2 text-right"><span class="glyphicon glyphicon-pencil" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:FA[0].L_brennerstarts') ?>" data-original-title="Tooltip"></span></div>
                                     </div>
                                 </div>
                                 <div class="panel-footer">

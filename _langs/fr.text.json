@@ -137,7 +137,7 @@
     "lang.capteur.CAPPL:FA[0].pe_einschalthysterese_smart": "Hystéresis marche",
     "lang.capteur.CAPPL:FA[0].pe_kesselleistung": "Puissance chaudière",
     
-    "lang.tooltip.CAPPL:FA[0].L_mittlere_laufzeit": "",
+    "lang.tooltip.CAPPL:FA[0].L_mittlere_laufzeit": "azaz",
     "lang.tooltip.CAPPL:FA[0].L_brennerstarts": "",
     "lang.tooltip.CAPPL:FA[0].L_brennerlaufzeit_anzeige": "",
     "lang.tooltip.CAPPL:FA[0].L_anzahl_zuendung": "",

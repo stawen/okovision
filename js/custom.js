@@ -7,8 +7,7 @@
 $(document).ready(function() {
 
 	$(".tip").tooltip({
-    	placement: "left",
-    	
+    	placement: "right",
     	html: true
 	});
 	

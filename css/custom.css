@@ -105,7 +105,7 @@ div .vertical-align{
 
 
 .huge {
-  font-size: 40px;
+  font-size: 30px;
 }
 
 .labelbox {
@@ -116,4 +116,14 @@ div .vertical-align{
 .rtTitle {
   font-size: 20px;
 
+}
+
+.tooltip-inner {
+    max-width: none;
+    white-space: nowrap;
+}
+
+.change, 
+.change:hover{
+  color: white;
 }
