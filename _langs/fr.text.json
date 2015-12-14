@@ -58,7 +58,7 @@
     "lang.text.page.season.modal.end": "Date de début :",
     "lang.text.modal.cancel": "Annuler",
     "lang.text.modal.confirm": "Confirmer",
-    "lang.text.page.matrix": "Votre installation Okofen est spécifique. Le format du fichier CSV quelle produit est unique. Vous devez alors \"apprendre\" à okovision comment lire ce fichier. <p><lu><li>HK(n): Circuit Chauffage<\/li><li>KT: Température Chaudière < \/li> < li > WW(n): Circuit Eau Chaude sanitaire < \/li> <li> SK(n): Circuit Solaire ECS <\/li> <li> PE(n): Chaudiere N° n <\/li> <li> PU(n): Ballon Tampon N° n < \/li> < /lu> < /p>",
+    "lang.text.page.matrix": "Votre installation Okofen est spécifique. Le format du fichier CSV quelle produit est unique. Vous devez alors \"apprendre\" à okovision comment lire ce fichier. <p><lu><li>HK(n): Circuit Chauffage<\/li><li>KT: Température Chaudière <\/li> <li> WW(n): Circuit Eau Chaude sanitaire <\/li> <li> SK(n): Circuit Solaire ECS <\/li> <li> PE(n): Chaudiere N° n <\/li> <li> PU(n): Ballon Tampon N° n <\/li> </lu> </p>",
                 	
     "lang.text.page.matrix.install": "<p> Tout d'abord, importer le fichier via le bouton ci-dessous<\/p>" ,
     "lang.text.page.matrix.upload": "Fichier CSV produit par la chaudière",

@@ -41,7 +41,8 @@
                 <tr>
                     <th class="col-md-3"><?php echo session::getInstance()->getLabel('lang.text.page.matrix.original') ?></th>
                     <th class="col-md-3"><?php echo session::getInstance()->getLabel('lang.text.page.matrix.name') ?></th>
-                    <th class="col-md-5"></th>
+                    <th class="col-md-2 text-center">Temps Réel</th>
+                    <th class="col-md-3"></th>
                     <th class="col-md-1">
                     	<button type="button" id="updateMatrix" class="btn btn-xs btn-default" data-toggle="modal" data-target="#confirm-updateMatrix">
 			            	<span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>

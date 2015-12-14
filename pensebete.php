@@ -70,6 +70,22 @@ Merge
 http://grafana.org/
 https://influxdb.com/
 
+"plotBands" : [
+         {
+            "to" : 1448755200000,
+            "color" : "rgba(68, 170, 213, .2)",
+            "from" : 1448582400000,
+            "label" : {
+               "text" : "EA2016"
+            }
+         }
+         
+plotLines: [{
+    color: 'red', // Color value
+    dashStyle: 'longdashdot', // Style of the plot line. Default to solid
+    value: 3, // Value of where the line will appear
+    width: 2 // Width of the line    
+  }]
 
 */
 ?>
