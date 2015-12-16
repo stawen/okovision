@@ -36,6 +36,7 @@ if (!file_exists("config.php")) {
         
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active"><a href="#indicateurs" aria-controls="indicateurs" role="tab" data-toggle="tab">Réglages Chaudière</a></li>
+                 <li role="presentation"><a href="#config" aria-controls="config" role="tab" data-toggle="tab">Suivi Configuration</a></li>
                 <li role="presentation"><a href="#graphiques" aria-controls="graphiques" role="tab" data-toggle="tab">Graphiques</a></li>
             </ul>
              
@@ -466,6 +467,9 @@ if (!file_exists("config.php")) {
                     </div>
                 </div>
                 
+                <div role="tabpanel" class="tab-pane " id="config">  
+                    <h2><small>Sauvegarde et suivi des configurations</small></h2>
+                </div>
                 
                 <div role="tabpanel" class="tab-pane " id="graphiques">  
                     <br/>

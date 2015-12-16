@@ -9,7 +9,9 @@ $(document).ready(function() {
             if (c !== e.currentTarget.chart && c) {
                 if (c.xAxis[0].setExtremes) { // It is null while updating
                     c.xAxis[0].setExtremes(e.min, e.max);
+                   //c.showResetZoom();
                 }
+                 
             }
         });
         
@@ -17,35 +19,17 @@ $(document).ready(function() {
         	//console.log('max: '+e.max+' min: '+e.min);
         	refreshIndicateur(e.min, e.max);
 		}
-		//yAxisMin;
+	
     }
     
     function yAxisMin(c){
-    	//Highcharts.each(Highcharts.charts, function (c) {
-    	
     		if(c){ 
-    		//console.log(e);
-    			//console.log(c);
-    	
     			if(c.yAxis[0].dataMin < 0){
 					c.yAxis[0].setExtremes(c.yAxis[0].dataMin, c.yAxis[0].dataMax);
 				}else{
 					c.yAxis[0].setExtremes(0, c.yAxis[0].dataMax);
 				}
     		}
-    	//});
-    }
-    
-    function sync(e){
-    	//syncExtremes(c);
-    	//yAxisMin(c);
-    	syncExtremes(e);
-    	/*
-    	if(typeof e.min == 'undefined' && typeof e.max == 'undefined'){
-             console.log('reset zoom clicked');   
-             console.log(e.currentTarget.chart);
-             yAxisMin(e.currentTarget.chart);
-        } */
     }
     
     function isArray(obj) {
@@ -57,20 +41,15 @@ $(document).ready(function() {
 	/**************************************
 	 **** Graphique ***********************
 	 *************************************/
-	function grapheWithTime(data, where, titre) {
-
-		new Highcharts.Chart({
+	 
+	//var  generalOption = {
+	Highcharts.setOptions({
 			chart: {
-				renderTo: where,
 				type: 'spline',
 				zoomType: 'x',
 				panning: true,
 				panKey: 'shift'
 			},
-			title: {
-				text: titre
-			},
-
 			xAxis: {
 				type: 'datetime',
 				dateTimeLabelFormats: {
@@ -86,7 +65,7 @@ $(document).ready(function() {
 				},
 				events: {
                 	setExtremes:  syncExtremes
-               }
+               },
 			},
 			yAxis: [{
 				title: {
@@ -117,12 +96,48 @@ $(document).ready(function() {
 				
 				                return tooltip.defaultFormatter.call(this, tooltip);
             					}
-            },
-			series: data
+            }
 		
 			
-		},yAxisMin);
+		});
+	
+	
+	function grapheWithTime(data, where, titre, okoConfig) {
 
+		var a = {
+				chart: {
+					renderTo: where,
+				},
+				title: {
+					text: titre
+				},
+				series: data
+			};
+		
+		var configPlotLine = {
+		
+						    color: 'red', // Color value
+						    dashStyle: 'longdash', // Style of the plot line. Default to solid
+						    width: 2, // Width of the line    
+						    label: { 
+								    align: 'left', // Positioning of the label. 
+								    textAlign: 'left',
+								    rotation : 0
+								  }
+						  };
+			
+		console.log(okoConfig);
+		if(typeof okoConfig 	!== 'undefined'){
+			var b = configPlotLine;
+			b.value = 1450243140000;
+			b.label.text = 'toto';
+			a.xAxis = {
+						plotLines: [b]
+					  };
+		
+		}
+			
+		new Highcharts.Chart(a,yAxisMin);
 	}
 
 
@@ -188,6 +203,8 @@ $(document).ready(function() {
 		refreshIndicateur();
 
 		var jour = $.datepicker.formatDate('yy-mm-dd', $.datepicker.parseDate('dd/mm/yy', $("#date_encours").val()));
+
+		//recuperer si un parametre chuaidere doit etre afficher ou pas
 
 		$.each($(".graphique"), function(key, val) {
 

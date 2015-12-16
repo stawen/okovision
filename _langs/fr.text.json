@@ -64,8 +64,9 @@
     "lang.text.page.matrix.upload": "Fichier CSV produit par la chaudière",
     "lang.text.page.matrix.original": "Nom Original",
     "lang.text.page.matrix.name": "Nom Okovision",
+    "lang.text.page.matrix.rt": "Temps Réel",
     "lang.text.page.matrix.modal.title": "Modification de la Matrice",
-    "lang.text.page.matrix.modal.text": "Etes-vous sur de vouloir modifier la structure de la matrice de lecture des fichiers csv de votre chaudiere ?<br \/><br \/>Cette modification ne vous fera pas perde vos données. Vous aurez les nouvelles colonnes dans les capteurs disponibles<br \/><br \/>Par contre, si dans le nouveau fichier csv que vous aller fournir, il y a des colonnes en moins, ils seront conservées pour ne pas perde de données.",
+    "lang.text.page.matrix.modal.text": "Etes-vous sur de vouloir modifier la structure de la matrice de lecture des fichiers csv de votre chaudière ?<br \/><br \/>Cette modification ne vous fera pas perde vos données. Vous aurez les nouvelles colonnes dans les capteurs disponibles<br\/><br\/>Par contre, si dans le nouveau fichier csv que vous aller fournir, il y a des colonnes en moins, ils seront conservées pour ne pas perde de données.",
     
     "lang.text.page.repport.title": "Nom des graphiques Journaliers :",
     "lang.text.page.repport.add": "Ajouter",
