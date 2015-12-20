@@ -221,6 +221,9 @@ if (is_ajax() && is_valid()) {
     			        case "getSensorInfo":
     			            $rt->getSensorInfo($_POST['sensor']);
     			            break;
+    			        case "saveBoilerConfig":
+    			            $rt->saveBoilerConfig($_POST['config'], $_POST['description']);
+    			            break;
     			    }       
     			    break;
     		}		

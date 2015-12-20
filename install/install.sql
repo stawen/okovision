@@ -55,6 +55,15 @@ CREATE TABLE IF NOT EXISTS `oko_user` (
 
 insert into oko_user set user="admin", pass="97f108bdeaad841227830678c7ecec6dc541bab3" , type="admin", login_boiler='oekofen', pass_boiler='b2Vrb2Zlbg==';
 
+-- Export de la structure de table okovision. oko_user
+DROP TABLE IF EXISTS `oko_boiler`;
+CREATE TABLE IF NOT EXISTS `oko_boiler` (
+  `timestamp` int(11) unsigned NOT NULL,
+  `description` VARCHAR(35) NOT NULL,
+  `config` text NOT NULL,
+  PRIMARY KEY (`timestamp`)
+) ENGINE=MYISAM DEFAULT CHARSET=utf8;
+
 
 DROP TABLE IF EXISTS `oko_historique_full`;
 CREATE TABLE IF NOT EXISTS `oko_historique_full` (

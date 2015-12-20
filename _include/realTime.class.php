@@ -188,6 +188,10 @@ class realTime extends connectDb{
 		$this->sendResponse(json_encode($r[$sensor]));
 	}
     
+    public function saveBoilerConfig($config, $description){
+    	print_r(json_encode($config));exit;
+    }
+    
 }
 
 ?>

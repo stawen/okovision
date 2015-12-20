@@ -213,7 +213,7 @@ $(document).ready(function() {
         var value = $(this).closest('.row').find('.huge').text().split(" ")[0];
         
         $.api('POST', 'rt.getSensorInfo', {sensor: lang.sensor[id] }).done(function(json) {
-            console.log(json);
+            
             var max = json.upperLimit / json.divisor;
             var min = json.lowerLimit / json.divisor;
             
@@ -241,9 +241,6 @@ $(document).ready(function() {
         var newValue = $("#sensorValue").val() + ' ' + $("#sensorUnitText").val()
         var oldValue = $("#"+id).closest(".row").find('.huge').text();
         
-        console.log('::'+ newValue + '::');
-        console.log('::'+ oldValue + '::');
-        
         if(newValue !== oldValue){
             $("#"+id).closest(".row").find('.huge').html(newValue);
             $("#"+id).closest(".panel").switchClass('panel-primary', 'panel-warning',0);
@@ -252,5 +249,27 @@ $(document).ready(function() {
         }
         
         $("#modal_change").modal('hide');
+    });
+    
+    
+    $.getConfigBoiler = function(){
+        var json = {};
+        
+        $.each( $(".2save"), function(key){
+            json[$( this ).attr('id')] = $( this ).text();
+        });
+        return json;
+    }
+    
+    
+    $("#ConfigDescriptionSave").click(function(){
+        var a = $.getConfigBoiler();
+        var desc = $("#configDescription").val();
+        
+        
+        $.api('POST', 'rt.saveBoilerConfig', {config: a, description: desc} ).done(function(json) {
+            
+        });
+        
     });
 });
