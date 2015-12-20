@@ -205,4 +205,8 @@ $(document).ready(function() {
     
     $.connectBoiler();
     
+    
+    $("a[class~='change']").click(function(){
+        console.log('ici');
+    });
 });

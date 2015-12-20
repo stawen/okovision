@@ -49,19 +49,19 @@ if (!file_exists("config.php")) {
             		    <div class="col-lg-3 col-md-6">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
-                                            
+                                    
                                     <div class="row">
+                                        
                                         <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:FA[0].L_mittlere_laufzeit') ?>" data-original-title="Tooltip"></span></div>
                                     
                                         <div class="col-xs-8 text-center">
                                             <div class="huge" id="FA0_L_mittlere_laufzeit">--</div>
                                         </div>
-                                        
-                                        <div class="col-xs-2 text-right">
-                                            <a href="" class="change"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
-                                        </div>
-                                        
+                                        <div class="col-xs-2"></div>
+                                       
                                     </div>
+                                    
+                                    
                                 </div>
                                 <div class="panel-footer">
                                     <div class="labelbox"><?php echo session::getInstance()->getLabel('lang.capteur.CAPPL:FA[0].L_mittlere_laufzeit') ?></div>
@@ -78,7 +78,7 @@ if (!file_exists("config.php")) {
                                         <div class="col-xs-8 text-center">
                                             <div class="huge" id="FA0_L_brennerstarts">--</div>
                                         </div>
-                                        <div class="col-xs-2 text-right"><span class="glyphicon glyphicon-pencil" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:FA[0].L_brennerstarts') ?>" data-original-title="Tooltip"></span></div>
+                                         <div class="col-xs-2"></div>
                                     </div>
                                 </div>
                                 <div class="panel-footer">
@@ -91,10 +91,12 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:FA[0].L_brennerlaufzeit_anzeige') ?>" data-original-title="Tooltip"></span></div>
-                                        <div class="col-xs-12 text-center">
+                                        <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:FA[0].L_brennerlaufzeit_anzeige') ?>" data-original-title="Tooltip"></span></div>
+                                    
+                                        <div class="col-xs-8 text-center">
                                             <div class="huge" id="FA0_L_brennerlaufzeit_anzeige">--</div>
                                         </div>
+                                         <div class="col-xs-2"></div>
                                     </div>
                                 </div>
                                 <div class="panel-footer">
@@ -107,10 +109,11 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:FA[0].L_anzahl_zuendung') ?>" data-original-title="Tooltip"></span></div>
-                                        <div class="col-xs-12 text-center">
+                                        <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:FA[0].L_anzahl_zuendung') ?>" data-original-title="Tooltip"></span></div>
+                                        <div class="col-xs-8 text-center">
                                             <div class="huge" id="FA0_L_anzahl_zuendung">--</div>
                                         </div>
+                                         <div class="col-xs-2"></div>
                                     </div>
                                 </div>
                                 <div class="panel-footer">
@@ -124,9 +127,12 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].raumtemp_heizen') ?>" data-original-title="Tooltip"></span></div>
-                                        <div class="col-xs-12 text-center">
+                                        <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].raumtemp_heizen') ?>" data-original-title="Tooltip"></span></div>
+                                        <div class="col-xs-8 text-center">
                                             <div class="huge" id="hk0_raumtemp_heizen">--</div>
+                                        </div>
+                                        <div class="col-xs-2 text-right">
+                                            <a href="javascript:void(0)" class="change"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -141,9 +147,12 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].raumtemp_absenken') ?>" data-original-title="Tooltip"></span></div>
-                                        <div class="col-xs-12 text-center">
+                                        <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].raumtemp_absenken') ?>" data-original-title="Tooltip"></span></div>
+                                        <div class="col-xs-8 text-center">
                                             <div class="huge" id="hk0_raumtemp_absenken">--</div>
+                                        </div>
+                                        <div class="col-xs-2 text-right">
+                                            <a href="javascript:void(0)" class="change"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -158,9 +167,12 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].heizkurve_steigung') ?>" data-original-title="Tooltip"></span></div>
-                                        <div class="col-xs-12 text-center">
+                                        <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].heizkurve_steigung') ?>" data-original-title="Tooltip"></span></div>
+                                        <div class="col-xs-8 text-center">
                                             <div class="huge" id="hk0_heizkurve_steigung">--</div>
+                                        </div>
+                                        <div class="col-xs-2 text-right">
+                                            <a href="javascript:void(0)" class="change"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -175,9 +187,12 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].heizkurve_fusspunkt') ?>" data-original-title="Tooltip"></span></div>
-                                        <div class="col-xs-12 text-center">
+                                        <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].heizkurve_fusspunkt') ?>" data-original-title="Tooltip"></span></div>
+                                        <div class="col-xs-8 text-center">
                                             <div class="huge" id="hk0_heizkurve_fusspunkt">--</div>
+                                        </div>
+                                        <div class="col-xs-2 text-right">
+                                            <a href="javascript:void(0)" class="change"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -192,9 +207,12 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].heizgrenze_heizen') ?>" data-original-title="Tooltip"></span></div>
-                                        <div class="col-xs-12 text-center">
+                                        <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].heizgrenze_heizen') ?>" data-original-title="Tooltip"></span></div>
+                                        <div class="col-xs-8 text-center">
                                             <div class="huge" id="hk0_heizgrenze_heizen">--</div>
+                                        </div>
+                                        <div class="col-xs-2 text-right">
+                                            <a href="javascript:void(0)" class="change"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -209,9 +227,12 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign" title="Tooltip on left"></span></div>
-                                        <div class="col-xs-12 text-center">
+                                        <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].heizgrenze_absenken') ?>" data-original-title="Tooltip"></span></div>
+                                        <div class="col-xs-8 text-center">
                                             <div class="huge" id="hk0_heizgrenze_absenken">--</div>
+                                        </div>
+                                        <div class="col-xs-2 text-right">
+                                            <a href="javascript:void(0)" class="change"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -227,9 +248,12 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign" title="Tooltip on left"></span></div>
-                                        <div class="col-xs-12 text-center">
+                                        <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].vorlauftemp_max') ?>" data-original-title="Tooltip"></span></div>
+                                        <div class="col-xs-8 text-center">
                                             <div class="huge" id="hk0_vorlauftemp_max">--</div>
+                                        </div>
+                                        <div class="col-xs-2 text-right">
+                                            <a href="javascript:void(0)" class="change"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -244,9 +268,12 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign" title="Tooltip on left"></span></div>
-                                        <div class="col-xs-12 text-center">
+                                        <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].vorlauftemp_min') ?>" data-original-title="Tooltip"></span></div>
+                                        <div class="col-xs-8 text-center">
                                             <div class="huge" id="hk0_vorlauftemp_min">--</div>
+                                        </div>
+                                        <div class="col-xs-2 text-right">
+                                            <a href="javascript:void(0)" class="change"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -261,9 +288,12 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign" title="Tooltip on left"></span></div>
-                                        <div class="col-xs-12 text-center">
+                                        <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].ueberhoehung') ?>" data-original-title="Tooltip"></span></div>
+                                        <div class="col-xs-8 text-center">
                                             <div class="huge" id="hk0_ueberhoehung">--</div>
+                                        </div>
+                                        <div class="col-xs-2 text-right">
+                                            <a href="javascript:void(0)" class="change"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -278,9 +308,12 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign" title="Tooltip on left"></span></div>
-                                        <div class="col-xs-12 text-center">
+                                        <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].mischer_max_auf_zeit') ?>" data-original-title="Tooltip"></span></div>
+                                        <div class="col-xs-8 text-center">
                                             <div class="huge" id="hk0_mischer_max_auf_zeit">--</div>
+                                        </div>
+                                        <div class="col-xs-2 text-right">
+                                            <a href="javascript:void(0)" class="change"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -295,9 +328,12 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign" title="Tooltip on left"></span></div>
-                                        <div class="col-xs-12 text-center">
+                                        <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].mischer_max_aus_zeit') ?>" data-original-title="Tooltip"></span></div>
+                                        <div class="col-xs-8 text-center">
                                             <div class="huge" id="hk0_mischer_max_aus_zeit">--</div>
+                                        </div>
+                                        <div class="col-xs-2 text-right">
+                                            <a href="javascript:void(0)" class="change"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -312,9 +348,12 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign" title="Tooltip on left"></span></div>
-                                        <div class="col-xs-12 text-center">
+                                        <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].mischer_max_zu_zeit') ?>" data-original-title="Tooltip"></span></div>
+                                        <div class="col-xs-8 text-center">
                                             <div class="huge" id="hk0_mischer_max_zu_zeit">--</div>
+                                        </div>
+                                        <div class="col-xs-2 text-right">
+                                            <a href="javascript:void(0)" class="change"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -329,9 +368,12 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign" title="Tooltip on left"></span></div>
-                                        <div class="col-xs-12 text-center">
+                                        <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].mischer_regelbereich_quelle') ?>" data-original-title="Tooltip"></span></div>
+                                        <div class="col-xs-8 text-center">
                                             <div class="huge" id="hk0_mischer_regelbereich_quelle">--</div>
+                                        </div>
+                                        <div class="col-xs-2 text-right">
+                                            <a href="javascript:void(0)" class="change"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -346,9 +388,12 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign" title="Tooltip on left"></span></div>
-                                        <div class="col-xs-12 text-center">
+                                        <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].mischer_regelbereich_vorlauf') ?>" data-original-title="Tooltip"></span></div>
+                                        <div class="col-xs-8 text-center">
                                             <div class="huge" id="hk0_mischer_regelbereich_vorlauf">--</div>
+                                        </div>
+                                        <div class="col-xs-2 text-right">
+                                            <a href="javascript:void(0)" class="change"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -363,9 +408,12 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign" title="Tooltip on left"></span></div>
-                                        <div class="col-xs-12 text-center">
+                                        <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].quellentempverlauf_anstiegstemp') ?>" data-original-title="Tooltip"></span></div>
+                                        <div class="col-xs-8 text-center">
                                             <div class="huge" id="hk0_quellentempverlauf_anstiegstemp">--</div>
+                                        </div>
+                                        <div class="col-xs-2 text-right">
+                                            <a href="javascript:void(0)" class="change"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -380,9 +428,12 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign" title="Tooltip on left"></span></div>
-                                        <div class="col-xs-12 text-center">
+                                        <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:LOCAL.hk[0].quellentempverlauf_regelbereich') ?>" data-original-title="Tooltip"></span></div>
+                                        <div class="col-xs-8 text-center">
                                             <div class="huge" id="hk0_quellentempverlauf_regelbereich">--</div>
+                                        </div>
+                                        <div class="col-xs-2 text-right">
+                                            <a href="javascript:void(0)" class="change"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -398,9 +449,12 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign" title="Tooltip on left"></span></div>
-                                        <div class="col-xs-12 text-center">
+                                        <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:FA[0].pe_kesseltemperatur_soll') ?>" data-original-title="Tooltip"></span></div>
+                                        <div class="col-xs-8 text-center">
                                             <div class="huge" id="FA0_pe_kesseltemperatur_soll">--</div>
+                                        </div>
+                                        <div class="col-xs-2 text-right">
+                                            <a href="javascript:void(0)" class="change"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -415,9 +469,12 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign" title="Tooltip on left"></span></div>
-                                        <div class="col-xs-12 text-center">
+                                        <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:FA[0].pe_abschalttemperatur') ?>" data-original-title="Tooltip"></span></div>
+                                        <div class="col-xs-8 text-center">
                                             <div class="huge" id="FA0_pe_abschalttemperatur">--</div>
+                                        </div>
+                                        <div class="col-xs-2 text-right">
+                                            <a href="javascript:void(0)" class="change"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -432,9 +489,12 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign" title="Tooltip on left"></span></div>
-                                        <div class="col-xs-12 text-center">
+                                        <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:FA[0].pe_einschalthysterese_smart') ?>" data-original-title="Tooltip"></span></div>
+                                        <div class="col-xs-8 text-center">
                                             <div class="huge" id="FA0_pe_einschalthysterese_smart">--</div>
+                                        </div>
+                                        <div class="col-xs-2 text-right">
+                                            <a href="javascript:void(0)" class="change"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -449,9 +509,12 @@ if (!file_exists("config.php")) {
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
-                                        <div class="col-xs-12 text-right"><span class="glyphicon glyphicon-info-sign" title="Tooltip on left"></span></div>
-                                        <div class="col-xs-12 text-center">
+                                        <div class="col-xs-2 text-left"><span class="glyphicon glyphicon-info-sign tip" title="<?php echo session::getInstance()->getLabel('lang.tooltip.CAPPL:FA[0].pe_kesselleistung') ?>" data-original-title="Tooltip"></span></div>
+                                        <div class="col-xs-8 text-center">
                                             <div class="huge" id="FA0_pe_kesselleistung">--</div>
+                                        </div>
+                                        <div class="col-xs-2 text-right">
+                                            <a href="javascript:void(0)" class="change"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
                                         </div>
                                     </div>
                                 </div>
