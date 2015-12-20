@@ -56,7 +56,10 @@ class realTime extends connectDb{
 				}else{
 					$r[$capt->name] = (object) array(
 											"value" => ($capt->divisor != '' && $capt->divisor != '???' )?($capt->value / $capt->divisor):($capt->value),
-											"unitText" => ($capt->unitText=='???')?'':(($capt->unitText=='K')?'°C':$capt->unitText)
+											"unitText" => ($capt->unitText=='???')?'':(($capt->unitText=='K')?'°C':$capt->unitText),
+											"divisor" => $capt->divisor,
+											"lowerLimit" => $capt->lowerLimit,
+											"upperLimit" => $capt->upperLimit
 											);
 				}
 			}
@@ -171,17 +174,18 @@ class realTime extends connectDb{
 		
 		//on retire la derniere virgule qui ne sert à rien
 		$resultat = substr($resultat,0,strlen($resultat)-1);
-		
-		/*
-		$resultat = '[{ "name": "test serie 1",';
-		$data= '['.substr($r['CAPPL:LOCAL.L_fernwartung_datum_zeit_sek']->value,0,-7).'000,'.$r['CAPPL:FA[0].L_feuerraumtemperatur']->value.']';
-		
-		$resultat .= '"data": '.$data;
-		$resultat .= '},';
-		
-		$resultat .= '{ "name": "test serie 2","data": ['.substr($r['CAPPL:LOCAL.L_fernwartung_datum_zeit_sek']->value,0,-7).'000,150]}]';
-*/
 		$this->sendResponse('['.$resultat.']');		                
+	}
+	
+	public function getSensorInfo($sensor){
+		
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$sensor);	
+		
+		$r = $this->getOkoValue(
+						array($sensor)
+					);
+		
+		$this->sendResponse(json_encode($r[$sensor]));
 	}
     
 }

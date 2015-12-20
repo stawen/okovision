@@ -206,7 +206,51 @@ $(document).ready(function() {
     $.connectBoiler();
     
     
-    $("a[class~='change']").click(function(){
-        console.log('ici');
+    $("a[class~='change']").click(function(id){
+        
+        var id = $(this).closest('.row').find('.huge').attr("id");
+        var name = $(this).closest('.panel').find('.labelbox').text();
+        var value = $(this).closest('.row').find('.huge').text().split(" ")[0];
+        
+        $.api('POST', 'rt.getSensorInfo', {sensor: lang.sensor[id] }).done(function(json) {
+            console.log(json);
+            var max = json.upperLimit / json.divisor;
+            var min = json.lowerLimit / json.divisor;
+            
+            $("#sensorId").val(id);
+            $("#sensorUnitText").val(json.unitText);
+            $("#sensorTitle").html(name);
+            $("#sensorMax").html('Max : ' + max);
+            $("#sensorMin").html('Min : ' + min);
+            
+            $("#sensorValue").attr({
+                                "max" : max,
+                                "min" : min
+                                });
+            
+            $("#sensorValue").val(value); 
+            
+            $("#modal_change").modal('show');
+        });
+        
+    
+    });
+    
+    $("#btConfirmSensor").click(function(){
+        var id = $("#sensorId").val();
+        var newValue = $("#sensorValue").val() + ' ' + $("#sensorUnitText").val()
+        var oldValue = $("#"+id).closest(".row").find('.huge').text();
+        
+        console.log('::'+ newValue + '::');
+        console.log('::'+ oldValue + '::');
+        
+        if(newValue !== oldValue){
+            $("#"+id).closest(".row").find('.huge').html(newValue);
+            $("#"+id).closest(".panel").switchClass('panel-primary', 'panel-warning',0);
+            $("#mustSaving").show('pulsate');
+            $("a[href~='#config']").toggleClass("bg-warning");
+        }
+        
+        $("#modal_change").modal('hide');
     });
 });

@@ -308,6 +308,7 @@ class okofen extends connectDb{
 	        
 	        if($info['http_code'] == '200'){
 	            $this->_responseBoiler = $resp;
+	            $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ". $resp);
 	        	$code = true;
 	        }
 	    }

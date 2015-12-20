@@ -124,7 +124,6 @@ div .vertical-align{
 }
 
 .change, 
-.change:focus,
 .change:hover{
   color: white;
 }

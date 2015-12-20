@@ -31,12 +31,14 @@ if (!file_exists("config.php")) {
 		<div id="logginprogress" class="page-header" align="center">
             <p><span class="glyphicon glyphicon-refresh glyphicon-spin"></span>&nbsp;<?php echo session::getInstance()->getLabel('lang.text.page.rt.logginprogress') ?></p>
         </div> 
-        
+        <div id="mustSaving" class="alert alert-warning" style="display: none;" role="alert">
+              <span class="glyphicon glyphicon-floppy-save"></span>&nbsp;Pour prise en compte, vous devez appliquer la nouvelle configuration
+        </div>
         <div id="communication" style="display: none;">
         
-            <ul class="nav nav-tabs" role="tablist">
+            <ul class="nav nav-tabs red" role="tablist">
                 <li role="presentation" class="active"><a href="#indicateurs" aria-controls="indicateurs" role="tab" data-toggle="tab">Réglages Chaudière</a></li>
-                 <li role="presentation"><a href="#config" aria-controls="config" role="tab" data-toggle="tab">Suivi Configuration</a></li>
+                <li role="presentation"><a href="#config" aria-controls="config" role="tab" data-toggle="tab">Suivi Configuration</a></li>
                 <li role="presentation"><a href="#graphiques" aria-controls="graphiques" role="tab" data-toggle="tab">Graphiques</a></li>
             </ul>
              
@@ -514,7 +516,7 @@ if (!file_exists("config.php")) {
                                             <div class="huge" id="FA0_pe_kesselleistung">--</div>
                                         </div>
                                         <div class="col-xs-2 text-right">
-                                            <a href="javascript:void(0)" class="change"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+                                           
                                         </div>
                                     </div>
                                 </div>
@@ -551,37 +553,73 @@ if (!file_exists("config.php")) {
         </div>
         
         <div class="modal fade" id="modal_boiler" tabindex="-1" role="dialog" aria-labelledby="setLogin" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title"><?php echo session::getInstance()->getLabel('lang.text.page.rt.modal.title') ?></h4>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title"><?php echo session::getInstance()->getLabel('lang.text.page.rt.modal.title') ?></h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label"><?php echo session::getInstance()->getLabel('lang.text.page.rt.modal.login') ?></label>
+                                <input type="text" class="form-control" id="okologin" placeholder="Ex : oekofen">
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label"><?php echo session::getInstance()->getLabel('lang.text.page.rt.modal.password') ?></label>
+                                <input type="password" class="form-control" id="okopassword" placeholder="Ex : oekofen">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </button>
+                        <button type="button" id="btconfirm" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    
                 </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="recipient-name" class="control-label"><?php echo session::getInstance()->getLabel('lang.text.page.rt.modal.login') ?></label>
-                            <input type="text" class="form-control" id="okologin" placeholder="Ex : oekofen">
-                        </div>
-                        <div class="form-group">
-                            <label for="recipient-name" class="control-label"><?php echo session::getInstance()->getLabel('lang.text.page.rt.modal.password') ?></label>
-                            <input type="password" class="form-control" id="okopassword" placeholder="Ex : oekofen">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
-                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                    </button>
-                    <button type="button" id="btconfirm" class="btn btn-default btn-sm">
-                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                    </button>
-                </div>
-                
             </div>
         </div>
+        
+        
+        <div class="modal fade" id="modal_change" tabindex="-1" role="dialog" aria-labelledby="changeValue" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="sensorTitle"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="hidden">
+                            <input type="text" id="sensorId">
+                            <input type="number" id="sensorDivisor">
+                            <input type="text" id="sensorUnitText">
+                        </div>
+                        <div class="col-md-6 text-center" id="sensorMin"></div>
+                        <div class="col-md-6 text-center" id="sensorMax"></div>
+                        <br/>
+                        <form>
+                                <input type="number" class="form-control text-center input-lg col-xs-10" id="sensorValue" step="0.1">
+                        </form>
+                        <br/> <br/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </button>
+                        <button type="button" id="btConfirmSensor" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
 

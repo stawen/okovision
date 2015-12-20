@@ -218,6 +218,9 @@ if (is_ajax() && is_valid()) {
     			                $rt->getData($_GET['id']);
     			            }
     			            break;
+    			        case "getSensorInfo":
+    			            $rt->getSensorInfo($_POST['sensor']);
+    			            break;
     			    }       
     			    break;
     		}		
