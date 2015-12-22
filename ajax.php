@@ -201,6 +201,9 @@ if (is_ajax() && is_valid()) {
     					case "getSyntheseSaisonTable":
     					    $r->getSyntheseSaisonTable($_GET['saison']);
     					    break;
+    					case "getAnnotationByDay":
+    			            $r->getAnnotationByDay($_GET['jour']);
+    			            break;   
     					   
     				}
     				break;
@@ -223,6 +226,12 @@ if (is_ajax() && is_valid()) {
     			            break;
     			        case "saveBoilerConfig":
     			            $rt->saveBoilerConfig($_POST['config'], $_POST['description']);
+    			            break;
+    			        case "getListConfigBoiler":
+    			            $rt->getListConfigBoiler();
+    			            break;
+    			        case "deleteConfigBoiler":
+    			            $rt->deleteConfigBoiler($_POST['timestamp']);
     			            break;
     			    }       
     			    break;

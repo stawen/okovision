@@ -368,7 +368,26 @@ class rendu extends connectDb{
 		
 	}
 	
-	
+	public function getAnnotationByDay($day){
+    	$q = "SELECT timestamp * 1000 as timestamp, description FROM oko_boiler where DATE_FORMAT(FROM_UNIXTIME(timestamp), '%Y-%m-%d') LIKE '$day' ;";
+    	
+    	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
+	    
+	    $result = $this->query($q);
+	    
+	    if($result){
+	    	$r['response'] = true;
+	    	$tmp = array();
+	    	while($res = $result->fetch_object()){
+				array_push($tmp,$res);
+			}
+	    	$r['data']=$tmp;
+	    }else{
+	    	$r['response'] = false;
+	    }
+	    
+	    $this->sendResponse(json_encode($r));
+    }
 	
 }
 

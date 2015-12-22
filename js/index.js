@@ -102,7 +102,7 @@ $(document).ready(function() {
 		});
 	
 	
-	function grapheWithTime(data, where, titre, okoConfig) {
+	function grapheWithTime(data, where, titre) {
 
 		var a = {
 				chart: {
@@ -113,30 +113,7 @@ $(document).ready(function() {
 				},
 				series: data
 			};
-		
-		var configPlotLine = {
-		
-						    color: 'red', // Color value
-						    dashStyle: 'longdash', // Style of the plot line. Default to solid
-						    width: 2, // Width of the line    
-						    label: { 
-								    align: 'left', // Positioning of the label. 
-								    textAlign: 'left',
-								    rotation : 0
-								  }
-						  };
-			
-		console.log(okoConfig);
-		if(typeof okoConfig 	!== 'undefined'){
-			var b = configPlotLine;
-			b.value = 1450243140000;
-			b.label.text = 'toto';
-			a.xAxis = {
-						plotLines: [b]
-					  };
-		
-		}
-			
+	
 		new Highcharts.Chart(a,yAxisMin);
 	}
 
@@ -205,21 +182,79 @@ $(document).ready(function() {
 		var jour = $.datepicker.formatDate('yy-mm-dd', $.datepicker.parseDate('dd/mm/yy', $("#date_encours").val()));
 
 		//recuperer si un parametre chuaidere doit etre afficher ou pas
+		$.api('GET', 'rendu.getAnnotationByDay', {jour: jour}).done(function(jsonAnnotation) {
+			//console.log(jsonAnnotation);
+			
+			var configPlotLine = {
+		
+						    color: 'red', // Color value
+						    dashStyle: 'longdash', // Style of the plot line. Default to solid
+						    width: 2, // Width of the line    
+						    label: { 
+								    align: 'left', // Positioning of the label. 
+								    textAlign: 'left',
+								    rotation : 0
+								  }
+						  };
+		
+			
+			var annotation = new Array();
+			
+			$.each(jsonAnnotation.data, function(i, config){
+				//console.log(config);
+				
+				var b = {
+		
+						    color: 'red', // Color value
+						    dashStyle: 'longdash', // Style of the plot line. Default to solid
+						    width: 2, // Width of the line    
+						    label: { 
+								    align: 'left', // Positioning of the label. 
+								    textAlign: 'left',
+								    rotation : 0
+								  }
+						  };
+						  
+				//console.log('Avant ::' + JSON.stringify(b));
+				b.value = config.timestamp;
+				b.label.text = config.description;
+				//console.log(b);
+				//console.log('Apres ::' + JSON.stringify(b));
+				annotation[i] = b;
+				//console.log('Resultat ::' +JSON.stringify(annotation));
+				
+			});
+			
+			console.log(annotation);
+			
+			Highcharts.setOptions({
+						xAxis:{
+							plotLines: annotation
+						}
+				
+			});
+			
+			$.each($(".graphique"), function(key, val) {
 
-		$.each($(".graphique"), function(key, val) {
+				$.api('GET', 'rendu.getGrapheData', {
+						id: val.id,
+						jour: jour
+					}).done(function(json) {
+						grapheWithTime(json.grapheData, val.id, $("#" + val.id).data("graphename"));
+						
+					})
+					.error(function() {
+						graphe_error(val.id, $("#" + val.id).data("graphename"));
+					});
 
-			$.api('GET', 'rendu.getGrapheData', {
-					id: val.id,
-					jour: jour
-				}).done(function(json) {
-					grapheWithTime(json.grapheData, val.id, $("#" + val.id).data("graphename"));
-					
-				})
-				.error(function() {
-					graphe_error(val.id, $("#" + val.id).data("graphename"));
-				});
-
+			});
+			
+			
 		});
+		
+		
+		
+		
 		
 		//$(".se-pre-con").fadeOut();
 	}

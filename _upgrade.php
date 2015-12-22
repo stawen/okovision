@@ -85,7 +85,7 @@ if(!$this->query($addColumn)){
 }
 
 
-$qCreate = "CREATE TABLE IF NOT EXISTS `oko_boiler` (  `timestamp` int(11) unsigned NOT NULL,  `description` VARCHAR(20) NOT NULL,  `config` text NOT NULL,  PRIMARY KEY (`timestamp`)) ENGINE=MYISAM DEFAULT CHARSET=utf8;";
+$qCreate = "CREATE TABLE IF NOT EXISTS `oko_boiler` (  `timestamp` int(11) unsigned NOT NULL,  `description` VARCHAR(35) NOT NULL,  `config` text NOT NULL,  PRIMARY KEY (`timestamp`)) ENGINE=MYISAM DEFAULT CHARSET=utf8;";
 if(!$this->query($qCreate)){
   $this->log->info("UPGRADE | $version | Create table boiler failed !");  
 }

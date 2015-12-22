@@ -32,7 +32,7 @@ if (!file_exists("config.php")) {
             <p><span class="glyphicon glyphicon-refresh glyphicon-spin"></span>&nbsp;<?php echo session::getInstance()->getLabel('lang.text.page.rt.logginprogress') ?></p>
         </div> 
         <div id="mustSaving" class="alert alert-warning" style="display: none;" role="alert">
-              <span class="glyphicon glyphicon-floppy-save"></span>&nbsp;Pour prise en compte, vous devez appliquer la nouvelle configuration
+              <span class="glyphicon glyphicon-floppy-save"></span>&nbsp;Pour prise en compte, vous devez sauvegarder la nouvelle configuration
         </div>
         <div id="communication" style="display: none;">
         
@@ -534,13 +534,13 @@ if (!file_exists("config.php")) {
                 
                 <div role="tabpanel" class="tab-pane " id="config">  
                     <h2><small>Sauvegarde des configurations</small></h2>
-                    <p>Saissez une desciption, toutes les infos dans "Réglages chaudière" sont sauvegardées.</p>
+                    <p>Saissez une desciption, toutes les infos dans "Réglages chaudière" sont sauvegardées. (35 caractères max))</p>
                     <div class="row">
                         <div class="col-xs-5">
                             <input type="text" class="form-control" id="configDescription" maxlength="35" placeholder="Ce Texte est affiché sur les graphes">
                         </div>
                         <div class="col-xs-7">
-                            <button type="button" id="ConfigDescriptionSave" class="btn btn-default">
+                            <button type="button" id="configDescriptionSave" class="btn btn-default">
                 			    <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
                 		    </button>
                         </div>
@@ -548,6 +548,22 @@ if (!file_exists("config.php")) {
                     <hr>
                     <h2><small>Liste des configurations</small></h2>
                     
+                    <div id="liste">
+                	    <table id="listConfig" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="col-md-3">Date</th>
+                                    <th class="col-md-6">Description</th>
+                                    <th class="col-md-3"></th>
+                                    
+                                </tr>
+                            </thead>
+                        
+                            <tbody>
+                            </tbody>
+                
+                        </table>
+                	</div>
                     
                 </div>
                 
@@ -637,6 +653,25 @@ if (!file_exists("config.php")) {
             </div>
         </div>
 
+
+        <div class="modal fade" id="modal_delete" tabindex="-1" role="dialog" aria-labelledby="deleteLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title">Etes vous sur de supprimer cette sauvagarde ?</h4>
+					</div>
+					<div class="hidden">
+						<input type="text" id="deleteid">
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo session::getInstance()->getLabel('lang.text.modal.cancel') ?></button>
+						<button type="button" class="btn btn-danger btn-ok" id="deleteConfirm"><?php echo session::getInstance()->getLabel('lang.text.modal.confirm') ?></button>
+					</div>
+				</div>
+			</div>
+		</div>
 
 <?php
 include('_templates/footer.php');

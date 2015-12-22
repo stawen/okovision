@@ -189,8 +189,60 @@ class realTime extends connectDb{
 	}
     
     public function saveBoilerConfig($config, $description){
-    	print_r(json_encode($config));exit;
+    	//print_r(json_encode($config));exit;
+    	$config = json_encode($config);
+    	$description = $this->realEscapeString($description);
+    	
+    	$date = new DateTime();
+		$utc = ($date->getTimestamp() + $date->getOffset());
+    	
+    	
+    	$q="INSERT INTO oko_boiler set timestamp=$utc, description='$description', config='$config' ;";
+    	
+    	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);	
+    	
+    	$r['response'] = $this->query($q);
+		
+		$this->sendResponse(json_encode($r));
+    	
     }
+    
+    public function deleteConfigBoiler($timestamp){
+    	$q = "DELETE FROM oko_boiler where timestamp=$timestamp;";
+    	
+    	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);	
+    	
+    	$r['response'] = $this->query($q);
+		
+		$this->sendResponse(json_encode($r));
+    	
+    }
+    
+    public function getListConfigBoiler(){
+    	$q = "SELECT timestamp as timestamp, DATE_FORMAT(FROM_UNIXTIME(timestamp), '%d/%m/%Y %H:%i:%s') as date, description, config FROM oko_boiler order by timestamp desc; ";
+    	
+    	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
+	    
+	    $result = $this->query($q);
+	    
+	    if($result){
+	    	$r['response'] = true;
+	    	$tmp = array();
+	    	while($res = $result->fetch_object()){
+				array_push($tmp,$res);
+			}
+	    	$r['data']=$tmp;
+	    }else{
+	    	$r['response'] = false;
+	    }
+	    
+	    $this->sendResponse(json_encode($r));
+    	
+    }
+    
+    
+    
+    
     
 }
 

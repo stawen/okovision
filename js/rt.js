@@ -39,6 +39,8 @@ $(document).ready(function() {
                 $('#logginprogress').hide();
                 $.growlErreur(lang.error.connectBoiler);
             }
+            
+           $.getListConfigboiler();
         });
     }
     
@@ -261,15 +263,81 @@ $(document).ready(function() {
         return json;
     }
     
+    $.getListConfigboiler = function(){
+        
+        $.api('GET', 'rt.getListConfigBoiler').done(function(json) {
+            if (json.response) {
+				$("#listConfig > tbody").html("");
+
+				$.each(json.data, function(key, val) {
+					//console.log(val);
+					$('#listConfig > tbody:last').append('<tr id="' + val.timestamp + '"> \
+				                                        	<td>' + val.date + '</td>\
+				                                        	<td>' + val.description + '</td>\
+				                                        	<td>\
+				                                        	    <button type="button" class="btn btn-default btn-sm"> \
+                                                                    <span class="glyphicon glyphicon-floppy-open" aria-hidden="true"></span> \
+                                                                </button> \
+                                                                <button type="button" id="delete" class="btn btn-default btn-sm"> \
+                                                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> \
+                                                                </button> \
+				                                        	</td> \
+				                                        </tr>');
+				});
+
+			}
+			else {
+				$.growlWarning("Impossible de récuperer la liste des configurations");
+			}
+        });
+    }
     
-    $("#ConfigDescriptionSave").click(function(){
+    
+    $("#configDescriptionSave").click(function(){
         var a = $.getConfigBoiler();
         var desc = $("#configDescription").val();
         
+        if(desc ==''){
+            $.growlWarning('La description ne doit pas etre vide');
+        }else{
         
-        $.api('POST', 'rt.saveBoilerConfig', {config: a, description: desc} ).done(function(json) {
-            
-        });
+            $.api('POST', 'rt.saveBoilerConfig', {config: a, description: desc} ).done(function(json) {
+                if(json.response){
+                    $.growlValidate('Configuration sauvegardée et appliquée sur la chaudière');
+                    $("#configDescription").val("");
+                    $.getListConfigboiler();
+                    $("#mustSaving").hide();
+                    $("a[href~='#config']").removeClass("bg-warning");
+                    $(".panel").switchClass('panel-warning', 'panel-primary',0);
+                    
+                }else{
+                    $.growlErreur('Impossible de sauvegarder la configuration');
+                }
+            });
+        }
         
     });
+    
+    $("body").on("click", ".btn", function() {
+        
+        if ($(this).is('#delete')) {
+           $("#deleteid").val( $(this).closest("tr").attr('id') );
+           $("#modal_delete").modal('show');
+        }
+        
+        if($(this).is('#deleteConfirm')){
+            
+             $.api('POST', 'rt.deleteConfigBoiler', {timestamp: $("#deleteid").val()} ).done(function(json) {
+                 if(json.response){
+                     $("#modal_delete").modal('hide');
+                     $.growlValidate('Suppression effectuée');
+                     $.getListConfigboiler();
+                 }else{
+                     $.growlErreur('Suppression impossible');
+                 }
+             });
+        }
+    });
+    
+    
 });
