@@ -86,6 +86,46 @@ plotLines: [{
     value: 3, // Value of where the line will appear
     width: 2 // Width of the line    
   }]
+  
+  
+  options.series.push({
+            type: 'flags',
+            name: 'Cloud',
+            color: '#333333',
+            shape: 'squarepin',
+            y: -80,
+            data: [
+                { x: Date.UTC(2014, 4, 1), text: 'Highcharts Cloud Beta', title: 'Cloud', shape: 'squarepin' }
+            ],
+            showInLegend: false
+        }, {
+            type: 'flags',
+            name: 'Highmaps',
+            color: '#333333',
+            shape: 'squarepin',
+            y: -55,
+            data: [
+                { x: Date.UTC(2014, 5, 13), text: 'Highmaps version 1.0 released', title: 'Maps' }
+            ],
+            showInLegend: false
+        }, {
+            type: 'flags',
+            name: 'Highcharts',
+            color: '#333333',
+            shape: 'circlepin',
+            data: [
+                { x: Date.UTC(2009, 10, 27), text: 'Highcharts version 1.0 released', title: '1.0' },
+                { x: Date.UTC(2010, 6, 13), text: 'Ported from canvas to SVG rendering', title: '2.0' },
+                { x: Date.UTC(2010, 10, 23), text: 'Dynamically resize and scale to text labels', title: '2.1' },
+                { x: Date.UTC(2011, 9, 18), text: 'Highstock version 1.0 released', title: 'Stock', shape: 'squarepin' },
+                { x: Date.UTC(2012, 7, 24), text: 'Gauges, polar charts and range series', title: '2.3' },
+                { x: Date.UTC(2013, 2, 22), text: 'Multitouch support, more series types', title: '3.0' },
+                { x: Date.UTC(2014, 3, 22), text: '3D charts, heatmaps', title: '4.0' }
+            ],
+            showInLegend: false
+        }, 
+  
+  
 
 */
 ?>

@@ -534,12 +534,12 @@ if (!file_exists("config.php")) {
                 
                 <div role="tabpanel" class="tab-pane " id="config">  
                     <h2><small>Sauvegarde des configurations</small></h2>
-                    <p>Saissez une desciption, toutes les infos dans "Réglages chaudière" sont sauvegardées. (35 caractères max))</p>
+                    <p>Saissez une desciption, toutes les infos dans "Réglages chaudière" sont sauvegardées. (150 caractères max))</p>
                     <div class="row">
-                        <div class="col-xs-5">
-                            <input type="text" class="form-control" id="configDescription" maxlength="35" placeholder="Ce Texte est affiché sur les graphes">
+                        <div class="col-xs-10">
+                            <input type="text" class="form-control" id="configDescription" maxlength="50" placeholder="Ce Texte est affiché sur les graphes">
                         </div>
-                        <div class="col-xs-7">
+                        <div class="col-xs-2">
                             <button type="button" id="configDescriptionSave" class="btn btn-default">
                 			    <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
                 		    </button>
@@ -552,9 +552,9 @@ if (!file_exists("config.php")) {
                 	    <table id="listConfig" class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th class="col-md-3">Date</th>
-                                    <th class="col-md-6">Description</th>
-                                    <th class="col-md-3"></th>
+                                    <th class="col-md-2">Date</th>
+                                    <th class="col-md-8">Description</th>
+                                    <th class="col-md-2"></th>
                                     
                                 </tr>
                             </thead>
@@ -660,7 +660,7 @@ if (!file_exists("config.php")) {
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
 						</button>
-						<h4 class="modal-title">Etes vous sur de supprimer cette sauvagarde ?</h4>
+						<h4 class="modal-title">Etes vous sur de supprimer cette configuration ?</h4>
 					</div>
 					<div class="hidden">
 						<input type="text" id="deleteid">

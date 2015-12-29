@@ -59,7 +59,7 @@ insert into oko_user set user="admin", pass="97f108bdeaad841227830678c7ecec6dc54
 DROP TABLE IF EXISTS `oko_boiler`;
 CREATE TABLE IF NOT EXISTS `oko_boiler` (
   `timestamp` int(11) unsigned NOT NULL,
-  `description` VARCHAR(35) NOT NULL,
+  `description` VARCHAR(150) NOT NULL,
   `config` text NOT NULL,
   PRIMARY KEY (`timestamp`)
 ) ENGINE=MYISAM DEFAULT CHARSET=utf8;

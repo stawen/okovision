@@ -41,8 +41,15 @@ $(document).ready(function() {
 	/**************************************
 	 **** Graphique ***********************
 	 *************************************/
-	 
-	//var  generalOption = {
+	var flag = {
+	            type: 'flags',
+	            name : 'config',
+	            color: '#333333',
+	            shape: 'circlepin',
+	            y: 0,
+	            showInLegend: false
+	        };
+			        
 	Highcharts.setOptions({
 			chart: {
 				type: 'spline',
@@ -52,11 +59,6 @@ $(document).ready(function() {
 			},
 			xAxis: {
 				type: 'datetime',
-				dateTimeLabelFormats: {
-					minute: '%H:%M',
-					hour: '%H:%M'
-
-				},
 				labels: {
 					rotation: -45,
 				},
@@ -77,6 +79,13 @@ $(document).ready(function() {
 					marker: {
 						enabled: false
 					}
+				},
+				tooltip: {
+                	formatter: function() {
+                		//if(this.series.name == 'config'){
+                			console.log('serie config');
+                	//	}
+                	}
 				}
 			},
 			tooltip: {
@@ -84,9 +93,7 @@ $(document).ready(function() {
 				crosshairs: true,
 				followPointer: true,
 				formatter: function (tooltip) {
-				                var items = this.points || splat(this),
-				                    series = items[0].series,
-				                    s;
+				                var items = this.points || splat(this);
 				
 				                // sort the values
 				                items.sort(function(a, b){
@@ -111,9 +118,9 @@ $(document).ready(function() {
 				title: {
 					text: titre
 				},
-				series: data
-			};
-	
+				series : data.concat(flag)
+		};
+		
 		new Highcharts.Chart(a,yAxisMin);
 	}
 
@@ -183,56 +190,35 @@ $(document).ready(function() {
 
 		//recuperer si un parametre chuaidere doit etre afficher ou pas
 		$.api('GET', 'rendu.getAnnotationByDay', {jour: jour}).done(function(jsonAnnotation) {
-			//console.log(jsonAnnotation);
-			
-			var configPlotLine = {
 		
-						    color: 'red', // Color value
-						    dashStyle: 'longdash', // Style of the plot line. Default to solid
-						    width: 2, // Width of the line    
-						    label: { 
-								    align: 'left', // Positioning of the label. 
-								    textAlign: 'left',
-								    rotation : 0
-								  }
-						  };
-		
-			
-			var annotation = new Array();
+			var annotation 	 = new Array();
+			var dataFlag	 = new Array();
 			
 			$.each(jsonAnnotation.data, function(i, config){
-				//console.log(config);
 				
-				var b = {
-		
+				var bar = {
 						    color: 'red', // Color value
 						    dashStyle: 'longdash', // Style of the plot line. Default to solid
-						    width: 2, // Width of the line    
-						    label: { 
-								    align: 'left', // Positioning of the label. 
-								    textAlign: 'left',
-								    rotation : 0
-								  }
+						    width: 2
 						  };
-						  
-				//console.log('Avant ::' + JSON.stringify(b));
-				b.value = config.timestamp;
-				b.label.text = config.description;
-				//console.log(b);
-				//console.log('Apres ::' + JSON.stringify(b));
-				annotation[i] = b;
-				//console.log('Resultat ::' +JSON.stringify(annotation));
+				
+				bar.value = config.timestamp;
+				annotation[i] = bar;
+				
+				dataFlag[i] = { x: config.timestamp , text: config.description, title: 'M' };
 				
 			});
 			
-			console.log(annotation);
+			flag.data = dataFlag;
 			
+			//console.log(flag);
+			//console.log(annotation);
 			Highcharts.setOptions({
 						xAxis:{
 							plotLines: annotation
 						}
-				
 			});
+			
 			
 			$.each($(".graphique"), function(key, val) {
 
