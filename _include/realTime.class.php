@@ -188,14 +188,19 @@ class realTime extends connectDb{
 		$this->sendResponse(json_encode($r[$sensor]));
 	}
     
-    public function saveBoilerConfig($config, $description){
+    public function saveBoilerConfig($config, $description, $dateChoisen = ''){
+    	
+    	if($dateChoisen <> ''){
+    		$date = DateTime::createFromFormat('d/m/Y H:i:s', $dateChoisen);
+    	}else{
+    		$date = new DateTime();	
+    	}
+    	
+    	$utc = ($date->getTimestamp() + $date->getOffset());
+    	
     	//print_r(json_encode($config));exit;
     	$config = json_encode($config);
     	$description = $this->realEscapeString($description);
-    	
-    	$date = new DateTime();
-		$utc = ($date->getTimestamp() + $date->getOffset());
-    	
     	
     	$q="INSERT INTO oko_boiler set timestamp=$utc, description='$description', config='$config' ;";
     	

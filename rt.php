@@ -540,9 +540,20 @@ if (!file_exists("config.php")) {
                             <input type="text" class="form-control" id="configDescription" maxlength="50" placeholder="Ce Texte est affiché sur les graphes">
                         </div>
                         <div class="col-xs-2">
+                            <button type="button" id="btConfigTime" class="btn btn-default">
+                			    <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                		    </button>
                             <button type="button" id="configDescriptionSave" class="btn btn-default">
                 			    <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
                 		    </button>
+                        </div>
+                        <div id="configTime" style="display: none;">
+                            <div class="col-xs-2 text-left">
+                                <input type="text" class="form-control" id="configTimeSelect"> 
+                            </div>
+                            <div class="col-xs-10 text-left" >
+                                Si vous saisissez une date manuellement, la configuration ne sera pas appliquée à la chaudière
+                            </div>
                         </div>
                     </div>
                     <hr>
@@ -677,6 +688,8 @@ if (!file_exists("config.php")) {
 include('_templates/footer.php');
 ?>
 <!--appel des scripts personnels de la page -->
-    <script src="js/rt.js"></script>
+	<script src="js/jquery/jquery-ui-timepicker-addon.js"></script>
+	<script src="_langs/<?php echo session::getInstance()->getLang() ?>.datepicker.js"></script>
+	<script src="js/rt.js"></script>
 	</body>
 </html>

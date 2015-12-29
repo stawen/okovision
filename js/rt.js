@@ -296,12 +296,16 @@ $(document).ready(function() {
     $("#configDescriptionSave").click(function(){
         var a = $.getConfigBoiler();
         var desc = $("#configDescription").val();
+        var date ='';
         
         if(desc ==''){
             $.growlWarning('La description ne doit pas etre vide');
         }else{
-        
-            $.api('POST', 'rt.saveBoilerConfig', {config: a, description: desc} ).done(function(json) {
+            //test si la date est visible ou non
+            if($("#configTime").is(":visible") ){
+                date = $("#configTimeSelect").val();
+            }
+            $.api('POST', 'rt.saveBoilerConfig', {config: a, description: desc, date: date} ).done(function(json) {
                 if(json.response){
                     $.growlValidate('Configuration sauvegardée et appliquée sur la chaudière');
                     $("#configDescription").val("");
@@ -337,6 +341,17 @@ $(document).ready(function() {
                  }
              });
         }
+    });
+    
+    $('#configTimeSelect').datetimepicker({
+        timeFormat: "HH:mm:ss"
+    });
+    
+    
+    $("#btConfigTime").click(function(){
+       // console.log('ici');
+       $("#configTime").toggle();
+       $('#configTimeSelect').datetimepicker('setDate', (new Date()) );
     });
     
     
