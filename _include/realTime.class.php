@@ -177,6 +177,8 @@ class realTime extends connectDb{
 		$this->sendResponse('['.$resultat.']');		                
 	}
 	
+	
+	
 	public function getSensorInfo($sensor){
 		
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$sensor);	
@@ -187,6 +189,8 @@ class realTime extends connectDb{
 		
 		$this->sendResponse(json_encode($r[$sensor]));
 	}
+	
+	
     
     public function saveBoilerConfig($config, $description, $dateChoisen = ''){
     	
@@ -199,7 +203,10 @@ class realTime extends connectDb{
     	$utc = ($date->getTimestamp() + $date->getOffset());
     	
     	//print_r(json_encode($config));exit;
+    	//$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$config);	
     	$config = json_encode($config);
+    	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$config);	
+    	
     	$description = $this->realEscapeString($description);
     	
     	$q="INSERT INTO oko_boiler set timestamp=$utc, description='$description', config='$config' ;";
@@ -242,6 +249,28 @@ class realTime extends connectDb{
 	    }
 	    
 	    $this->sendResponse(json_encode($r));
+    	
+    }
+    
+    public function getConfigBoiler($timestamp){
+    	
+    	$q = "SELECT config FROM oko_boiler where timestamp=$timestamp; ";
+    	
+    	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
+	    
+	    $result = $this->query($q);
+	    $r = null;
+	    
+	    if($result){
+	    	$r .= '"response":true';
+	    	$res = $result->fetch_object();
+	    	$r .= ',"data":'.$res->config;
+	    	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$res->config);
+	    }else{
+	    	$r .= '"response":false';
+	    }
+	    
+	    $this->sendResponse('{'.$r.'}');
     	
     }
     

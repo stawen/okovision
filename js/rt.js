@@ -13,7 +13,7 @@ $(document).ready(function() {
         text = text.replace(/CAPPL:LOCAL\.|[\[\]]|CAPPL:/g, "");
         text = text.replace(/[\.\/]+/g, "_");
         return text;
-    }
+    };
     
     function isArray(obj) {
 	    return Object.prototype.toString.call(obj) === '[object Array]';
@@ -42,12 +42,12 @@ $(document).ready(function() {
             
            $.getListConfigboiler();
         });
-    }
+    };
     
     $.hideData =function(){
         $('#logginprogress').show();
         $('#communication').hide();
-    }
+    };
     
     
     
@@ -108,10 +108,7 @@ $(document).ready(function() {
 				crosshairs: true,
 				followPointer: true,
 				formatter: function (tooltip) {
-				                var items = this.points || splat(this),
-				                    series = items[0].series,
-				                    s;
-				
+				                var items = this.points || splat(this);
 				                // sort the values
 				                items.sort(function(a, b){
 				                    return ((a.y < b.y) ? -1 : ((a.y > b.y) ? 1 : 0));
@@ -127,9 +124,7 @@ $(document).ready(function() {
         
         });
         
-        
-        
-    }
+    };
     
     $("#grapheValidate").click(function(){
         //console.log('ici');
@@ -179,13 +174,13 @@ $(document).ready(function() {
                 
              });
         },3000);
-    }
+    };
     
     
     
     $("#btconfirm").click(function(e){
-		var user = $('#okologin').val()
-		var pass = $('#okopassword').val()
+		var user = $('#okologin').val();
+		var pass = $('#okopassword').val();
 		
 		if(user !== '' && pass !== ''){
 		
@@ -208,7 +203,7 @@ $(document).ready(function() {
     $.connectBoiler();
     
     
-    $("a[class~='change']").click(function(id){
+    $("a[class~='change']").click(function(){
         
         var id = $(this).closest('.row').find('.huge').attr("id");
         var name = $(this).closest('.panel').find('.labelbox').text();
@@ -240,28 +235,54 @@ $(document).ready(function() {
     
     $("#btConfirmSensor").click(function(){
         var id = $("#sensorId").val();
-        var newValue = $("#sensorValue").val() + ' ' + $("#sensorUnitText").val()
-        var oldValue = $("#"+id).closest(".row").find('.huge').text();
+        var newValue = $("#sensorValue").val() + ' ' + $("#sensorUnitText").val();
         
-        if(newValue !== oldValue){
-            $("#"+id).closest(".row").find('.huge').html(newValue);
-            $("#"+id).closest(".panel").switchClass('panel-primary', 'panel-warning',0);
-            $("#mustSaving").show('pulsate');
-            $("a[href~='#config']").toggleClass("bg-warning");
-        }
+        $.changeSensorValue(id, newValue);
         
         $("#modal_change").modal('hide');
     });
     
+    $.viewMessageMustsave = function(b){
+      if(b){
+          $("#mustSaving").show('pulsate');
+          $("a[href~='#config']").toggleClass("bg-warning");
+      }else{
+          $("#mustSaving").hide();
+          $("a[href~='#config']").removeClass("bg-warning");
+          $(".panel").switchClass('panel-warning', 'panel-primary',0);
+      }
+    };
+    
+    $.changeSensorValue = function(id,value){
+        var oldValue = $("#"+id).closest(".row").find('.huge').text();
+        
+        if(value !== oldValue){
+            $("#"+id).closest(".row").find('.huge').text(value);
+            $("#"+id).closest(".panel").switchClass('panel-primary', 'panel-warning',0);
+            $.viewMessageMustsave(true);
+        }
+    };
     
     $.getConfigBoiler = function(){
         var json = {};
         
         $.each( $(".2save"), function(key){
             json[$( this ).attr('id')] = $( this ).text();
+            
         });
+        //console.log(json);
         return json;
-    }
+    };
+    
+    $.setConfigBoiler = function(json){
+        console.log(json);
+        
+        $.each( json, function(id, value){
+            $.changeSensorValue(id, value);
+        });
+        
+        
+    };
     
     $.getListConfigboiler = function(){
         
@@ -290,13 +311,13 @@ $(document).ready(function() {
 				$.growlWarning("Impossible de récuperer la liste des configurations");
 			}
         });
-    }
+    };
     
     
     $("#configDescriptionSave").click(function(){
         var a = $.getConfigBoiler();
         var desc = $("#configDescription").val();
-        var date ='';
+        var date = '';
         
         if(desc ==''){
             $.growlWarning('La description ne doit pas etre vide');
@@ -310,9 +331,8 @@ $(document).ready(function() {
                     $.growlValidate('Configuration sauvegardée et appliquée sur la chaudière');
                     $("#configDescription").val("");
                     $.getListConfigboiler();
-                    $("#mustSaving").hide();
-                    $("a[href~='#config']").removeClass("bg-warning");
-                    $(".panel").switchClass('panel-warning', 'panel-primary',0);
+                    
+                    $.viewMessageMustsave(false);
                     
                 }else{
                     $.growlErreur('Impossible de sauvegarder la configuration');
@@ -323,7 +343,7 @@ $(document).ready(function() {
     });
     
     $("body").on("click", ".btn", function() {
-        
+        console.log($(this));
         if ($(this).is('#delete')) {
            $("#deleteid").val( $(this).closest("tr").attr('id') );
            $("#modal_delete").modal('show');
@@ -341,6 +361,20 @@ $(document).ready(function() {
                  }
              });
         }
+        //relord config
+        if($(this).children().is('.glyphicon-floppy-open')){
+           
+            $.api('POST', 'rt.getConfigBoiler', {timestamp: $(this).closest("tr").attr('id') } ).done(function(json) {
+                
+                if(json.response){
+                    $.setConfigBoiler(json.data);
+                    $.viewMessageMustsave(true);
+                }else{
+                    $.growlErreur('rt.getConfigBoiler.error');
+                }
+             });
+        }
+        
     });
     
     $('#configTimeSelect').datetimepicker({
@@ -353,6 +387,9 @@ $(document).ready(function() {
        $("#configTime").toggle();
        $('#configTimeSelect').datetimepicker('setDate', (new Date()) );
     });
+    
+    
+    
     
     
 });
