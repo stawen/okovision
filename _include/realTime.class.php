@@ -202,10 +202,12 @@ class realTime extends connectDb{
     	
     	$utc = ($date->getTimestamp() + $date->getOffset());
     	
-    	//print_r(json_encode($config));exit;
-    	//$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$config);	
     	$config = json_encode($config);
+    	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$config);
+    	
+    	$config =$this->realEscapeString($config);
     	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$config);	
+    		
     	
     	$description = $this->realEscapeString($description);
     	

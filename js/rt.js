@@ -30,6 +30,7 @@ $(document).ready(function() {
             
                 $.each(json.data, function(key, val) {
                     $('#'+ $.IDify(key)).html(val);
+                    $('#'+ $.IDify(key)).attr("data-livevalue",val);
                 });
                 $('#logginprogress').hide();
                 $('#communication').show();
@@ -254,23 +255,26 @@ $(document).ready(function() {
     };
     
     $.changeSensorValue = function(id,value){
-        var oldValue = $("#"+id).closest(".row").find('.huge').text();
+        
+        var oldValue = $("#"+id).data('livevalue');
         
         if(value !== oldValue){
             $("#"+id).closest(".row").find('.huge').text(value);
             $("#"+id).closest(".panel").switchClass('panel-primary', 'panel-warning',0);
-            $.viewMessageMustsave(true);
+        }else{
+            $("#"+id).closest(".panel").switchClass('panel-warning', 'panel-primary',0);
+            $("#"+id).closest(".row").find('.huge').text(oldValue);
         }
     };
     
-    $.getConfigBoiler = function(){
+    $.getConfigBoiler = function(updateDataLive){
         var json = {};
         
         $.each( $(".2save"), function(key){
-            json[$( this ).attr('id')] = $( this ).text();
+            json[$( this ).attr('id')] = $( this ).html();
+            if(updateDataLive) $("#"+ $( this ).attr('id') ).attr("data-livevalue", $( this ).html() );
             
         });
-        //console.log(json);
         return json;
     };
     
@@ -279,6 +283,7 @@ $(document).ready(function() {
         
         $.each( json, function(id, value){
             $.changeSensorValue(id, value);
+            $.viewMessageMustsave(true);
         });
         
         
@@ -315,7 +320,11 @@ $(document).ready(function() {
     
     
     $("#configDescriptionSave").click(function(){
-        var a = $.getConfigBoiler();
+        
+        var applyToBoiler = ($("#configTime").is(":visible"))?false:true;
+        console.log('applyToBoiler::' + applyToBoiler);
+        
+        var a = $.getConfigBoiler(applyToBoiler);
         var desc = $("#configDescription").val();
         var date = '';
         
@@ -323,7 +332,8 @@ $(document).ready(function() {
             $.growlWarning('La description ne doit pas etre vide');
         }else{
             //test si la date est visible ou non
-            if($("#configTime").is(":visible") ){
+            
+            if(!applyToBoiler){
                 date = $("#configTimeSelect").val();
             }
             $.api('POST', 'rt.saveBoilerConfig', {config: a, description: desc, date: date} ).done(function(json) {
@@ -331,7 +341,7 @@ $(document).ready(function() {
                     $.growlValidate('Configuration sauvegardée et appliquée sur la chaudière');
                     $("#configDescription").val("");
                     $.getListConfigboiler();
-                    
+                   
                     $.viewMessageMustsave(false);
                     
                 }else{
@@ -367,6 +377,7 @@ $(document).ready(function() {
             $.api('POST', 'rt.getConfigBoiler', {timestamp: $(this).closest("tr").attr('id') } ).done(function(json) {
                 
                 if(json.response){
+                    //$.connectBoiler();
                     $.setConfigBoiler(json.data);
                     $.viewMessageMustsave(true);
                 }else{
