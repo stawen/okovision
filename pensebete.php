@@ -126,6 +126,8 @@ plotLines: [{
         }, 
   
   
+  
+  [{"status":"OK","name":"CAPPL:LOCAL.hk[0].heizkurve_fusspunkt","value":"350"}]
 
 */
 ?>

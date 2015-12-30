@@ -327,6 +327,57 @@ class okofen extends connectDb{
 		}
 	}
 	
+	
+	public function applyConfiguration($data = array()){
+		$this->_formdata = json_encode($data);
+		
+		if(!$this->curlSet()){
+	    	
+			$this->curlConnect(); 
+			$this->curlSet();
+		}
+		
+	}
+	
+	private function curlSet(){
+		$code = false;
+	    $curl = curl_init();
+	    
+	    curl_setopt_array($curl, array(
+	           CURLOPT_VERBOSE => false,
+			   CURLOPT_RETURNTRANSFER => true,
+			   CURLOPT_URL => $this->_loginUrl.'?action=set',
+			   CURLOPT_POST => 1,
+			   CURLOPT_HTTPHEADER => array(
+			        'Accept: application/json',
+	                'Content-Type: application/x-www-form-urlencoded; charset=UTF-8',
+	                'Accept-Language: fr'),
+			   CURLOPT_COOKIEFILE => $this->_cookies,
+			   CURLOPT_POSTFIELDS => $this->_formdata
+			   
+			));
+	    
+	    $resp = curl_exec($curl);
+	    
+	    if(!curl_errno($curl)){
+	        
+	        $info = curl_getinfo($curl);
+	        //var_dump($info);exit;
+	        
+	        if($info['http_code'] == '200'){
+	            $this->_responseBoiler = $resp;
+	            $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ". $resp);
+	        	$code = true;
+	        }
+	    }
+	    
+	    curl_close($curl);
+	    //print_r($resp);exit;
+	    return $code;
+	}
+	
+	
+	
 	public function requestBoilerInfo($data = array()){
 		
 		$this->setFormData($data);

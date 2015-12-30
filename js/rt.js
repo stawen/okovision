@@ -1,3 +1,8 @@
+/*****************************************************
+* Projet : Okovision - Supervision chaudiere OeKofen
+* Auteur : Stawen Dronek
+* Utilisation commerciale interdite sans mon accord
+******************************************************/
 /* global lang, Highcharts */ 
 $(document).ready(function() {
     
@@ -29,8 +34,9 @@ $(document).ready(function() {
             if(json.response){
             
                 $.each(json.data, function(key, val) {
-                    $('#'+ $.IDify(key)).html(val);
-                    $('#'+ $.IDify(key)).attr("data-livevalue",val);
+                    var id = $.IDify(key);
+                    $('#'+ id).html(val);
+                    $('#'+ id).attr("data-livevalue",val);
                 });
                 $('#logginprogress').hide();
                 $('#communication').show();
@@ -210,7 +216,7 @@ $(document).ready(function() {
         var name = $(this).closest('.panel').find('.labelbox').text();
         var value = $(this).closest('.row').find('.huge').text().split(" ")[0];
         
-        $.api('POST', 'rt.getSensorInfo', {sensor: lang.sensor[id] }).done(function(json) {
+        $.api('POST', 'rt.getSensorInfo', {sensor: id }).done(function(json) {
             
             var max = json.upperLimit / json.divisor;
             var min = json.lowerLimit / json.divisor;
@@ -258,12 +264,13 @@ $(document).ready(function() {
         
         var oldValue = $("#"+id).data('livevalue');
         
-        if(value !== oldValue){
+        if(value.trim() !== oldValue.trim()){
             $("#"+id).closest(".row").find('.huge').text(value);
             $("#"+id).closest(".panel").switchClass('panel-primary', 'panel-warning',0);
         }else{
-            $("#"+id).closest(".panel").switchClass('panel-warning', 'panel-primary',0);
             $("#"+id).closest(".row").find('.huge').text(oldValue);
+            $("#"+id).closest(".panel").switchClass('panel-warning', 'panel-primary',0);
+            
         }
     };
     
@@ -285,8 +292,17 @@ $(document).ready(function() {
             $.changeSensorValue(id, value);
             $.viewMessageMustsave(true);
         });
+    };
+    
+    $.getConfigToApply = function(){
+        var json = {};
         
-        
+        $.each( $(".panel-warning"), function(key){
+            //console.log($(this));
+            json[ $( this ).find('.huge').attr('id')] = $( this ).find('.huge').html();
+        });
+        console.log(json);
+        return json;    
     };
     
     $.getListConfigboiler = function(){
@@ -324,7 +340,7 @@ $(document).ready(function() {
         var applyToBoiler = ($("#configTime").is(":visible"))?false:true;
         console.log('applyToBoiler::' + applyToBoiler);
         
-        var a = $.getConfigBoiler(applyToBoiler);
+        var config = $.getConfigBoiler(applyToBoiler);
         var desc = $("#configDescription").val();
         var date = '';
         
@@ -336,14 +352,21 @@ $(document).ready(function() {
             if(!applyToBoiler){
                 date = $("#configTimeSelect").val();
             }
-            $.api('POST', 'rt.saveBoilerConfig', {config: a, description: desc, date: date} ).done(function(json) {
+            $.api('POST', 'rt.saveBoilerConfig', {config: config, description: desc, date: date} ).done(function(json) {
                 if(json.response){
-                    $.growlValidate('Configuration sauvegardée et appliquée sur la chaudière');
+                    
+                    if (applyToBoiler){
+                        $.api('POST', 'rt.applyBoilerConfig', {config: $.getConfigToApply() }).done(function(json) {
+                             $.growlValidate('Configuration appliquée sur la chaudière'); 
+                        });
+                         
+                    }
+                    
+                    $.growlValidate('Configuration sauvegardée ');
                     $("#configDescription").val("");
                     $.getListConfigboiler();
                    
                     $.viewMessageMustsave(false);
-                    
                 }else{
                     $.growlErreur('Impossible de sauvegarder la configuration');
                 }
@@ -353,7 +376,7 @@ $(document).ready(function() {
     });
     
     $("body").on("click", ".btn", function() {
-        console.log($(this));
+        //console.log($(this));
         if ($(this).is('#delete')) {
            $("#deleteid").val( $(this).closest("tr").attr('id') );
            $("#modal_delete").modal('show');

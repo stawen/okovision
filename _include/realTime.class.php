@@ -28,8 +28,6 @@ class realTime extends connectDb{
         $o->requestBoilerInfo( $data );
         
 		$r = array();
-		//$r = stdObject();
-		
 		
 		$dataBoiler = json_decode($o->getResponseBoiler());
 		
@@ -181,6 +179,8 @@ class realTime extends connectDb{
 	
 	public function getSensorInfo($sensor){
 		
+		$sensor = session::getInstance()->getSensorName($sensor);
+		
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$sensor);	
 		
 		$r = $this->getOkoValue(
@@ -273,6 +273,43 @@ class realTime extends connectDb{
 	    }
 	    
 	    $this->sendResponse('{'.$r.'}');
+    	
+    }
+    
+    public function applyBoilerConfig($config){
+    
+    	//$config = json_decode($config);
+    	$sensors 	= array();
+    	$param		= array();
+    	
+    	foreach($config as $key => $value ){
+    		$t = explode(" ",$value);
+    		$name = session::getInstance()->getSensorName($key);
+    		
+    		$param[$name] = $t[0];
+    		$sensors[] = $name;
+    	}
+    	//var_dump($sensors);exit;
+    	//preparation du message a transmettre au boiler
+    	//recuperation des informations de chaque capteur pour le mettre au bon format
+    	$sensorsInfo = $this->getOkoValue($sensors);
+    	
+    	//var_dump($sensorsInfo); exit;
+    	
+    	foreach($param as $name => $value){
+    		$c = $sensorsInfo[$name];
+    		$message = '{"'.$name.'":"'.$value * $c->divisor.'"}';
+    		$param[$name] = $value * $c->divisor;
+    		
+    	}
+    	
+    	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".json_encode($param));
+    	
+    	$o = new okofen();
+    	$o->applyConfiguration($param);
+    	
+    	$this->sendResponse($o->getResponseBoiler());
+    	
     	
     }
     

@@ -83,6 +83,10 @@ class session extends connectDb {
 		unset($_SESSION[$key]);
 	}
 	
+	public function getSensorName($sensor){
+		return $this->dico[$sensor];
+	}
+	
 }
 
 ?>

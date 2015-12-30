@@ -236,6 +236,9 @@ if (is_ajax() && is_valid()) {
     			        case "getConfigBoiler":
     			            $rt->getConfigBoiler($_POST['timestamp']);
     			            break;
+    			        case "applyBoilerConfig":
+    			            $rt->applyBoilerConfig($_POST['config']);
+    			            break;
     			    }       
     			    break;
     		}		
