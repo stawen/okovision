@@ -10,7 +10,7 @@
     *  Modification des parametres de la chaudiere via okovision
     *  Rechargement de parametres sauvegardées et modification des parametres de la chaudière
     *  Visualisation sur les graphes journaliers de la modification des parametres de la chaudière
-*  Suppression de la matrices sans perte de données de l'historique (mais suppresion des données journalières)
+*  Suppression de la matrice sans perte de données de l'historique (mais suppresion des données journalières)
 
 
 
