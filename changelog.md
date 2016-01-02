@@ -1,3 +1,6 @@
+##1.7.1
+* Ajout d'une alerte pour dire de sauvegarder si changement de parametres
+
 ##1.7.0
 * Correction orthographe / correction synthaxique
 * Changement de l'unité ms en ds pour la vis sans fin

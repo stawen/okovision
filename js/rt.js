@@ -282,6 +282,7 @@ $(document).ready(function() {
         if (value.trim() !== $.trim(oldValue)) {
             $("#" + id).closest(".row").find('.huge').text(value);
             $("#" + id).closest(".panel").switchClass('panel-primary', 'panel-warning', 0);
+            $.viewMessageMustsave(true);
         }
         else {
             $("#" + id).closest(".row").find('.huge').text(oldValue);

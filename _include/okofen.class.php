@@ -111,6 +111,7 @@ class okofen extends connectDb{
 		$ln 			= 0;
 		$old_status  	= 0;
 		$start_cycle 	= 0;
+		$nbColCsv 		= count($capteurs);
 		
 		//$insert = "INSERT IGNORE INTO oko_historique (jour,heure,oko_capteur_id,value) VALUES ";
 		$insert = "INSERT IGNORE INTO oko_historique_full SET ";
@@ -126,7 +127,7 @@ class okofen extends connectDb{
 					
 				if(isset($colCsv[1])){ //test si ligne non vide
 					
-					$nbColCsv = count($colCsv);
+					//$nbColCsv = count($colCsv);
 					
 					$jour 	= $colCsv[0];
 					$heure 	= $colCsv[1];
@@ -147,7 +148,7 @@ class okofen extends connectDb{
 					
 					//creation de la requette sql pour les capteurs
 					//on commence à la deuxieme colonne de la ligne du csv
-					for($i=2;$i<$nbColCsv;$i++){
+					for($i=2;$i<=$nbColCsv;$i++){
 					    $query 	.= 	", col_".$capteurs[$i]['column_oko']."=".$this->cvtDec( $colCsv[$i] );
 					}
 					
