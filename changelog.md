@@ -2,10 +2,16 @@
 * Correction orthographe / correction synthaxique
 * Changement de l'unité ms en ds pour la vis sans fin
 * Calendrier lors de la selection de la date sur la page d'accueil
+* Afficher les noms des courbes dans l'ordre des courbes
 * Ajout page "Temps Réel"
     *  Visualisation des parametres de réglage combustion chaudière et régulation
     *  Visualisation des graphiques en temps réel
-    
+    *  Sauvegarde de la configuration de la chaudiere
+    *  Modification des parametres de la chaudiere via okovision
+    *  Rechargement de parametres sauvegardées et modification des parametres de la chaudière
+    *  Visualisation sur les graphes journaliers de la modification des parametres de la chaudière
+*  Suppression de la matrices sans perte de données de l'historique (mais suppresion des données journalières)
+
 
 
 ##1.6.4
@@ -36,7 +42,7 @@
 
 
 ##1.5.3
-* ajout d'un paraletre dans hightchart pour ne pas appliquer un offset sur le timestamp en fonction du navigateur. Force l'utilisation d'UTC
+* ajout d'un parametre dans hightchart pour ne pas appliquer un offset sur le timestamp en fonction du navigateur. Force l'utilisation d'UTC
 
 ##1.5.0
 * Possibilité de recalculer la synthese sur une periode choisie
