@@ -186,6 +186,8 @@ class administration extends connectDb{
 			//set only capteur not day and hour
 			if($position != 0 && $position != 1){
 				$title = trim($t);
+				//si multi chaudiere, on ne prend pas en compte
+				if(preg_match('/^(PE2|PE3|PE4)/', $title)) continue;
 				
 				if (isset($dico[$title])){
 					$name = $dico[$title]['name'];
@@ -243,6 +245,9 @@ class administration extends connectDb{
 				
 				
 				$title = trim($t);
+				
+				if(preg_match('/^(PE2|PE3|PE4)/', $title)) continue;
+				
 				$capteursCsv[$title] = $position;
 				
 				//on test si le capteur etait deja connu dans la base oko_capteur
