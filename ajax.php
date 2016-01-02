@@ -54,6 +54,9 @@ if (is_ajax() && is_valid()) {
                         case "statusMatrice":
                         	$a->statusMatrice();
                         	break;
+                        case "deleteMatrice":
+                            $a->deleteMatrice();
+                            break;
                         case "importcsv":
                         	$a->importcsv();
                         	break;

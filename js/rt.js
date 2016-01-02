@@ -140,7 +140,7 @@ $(document).ready(function() {
         var idGraphe = $('#select_graphique').val();
 
         $.drawChart(idGraphe);
-        liveChart.showLoading('Loading data from boiler...');
+        liveChart.showLoading(lang.graphic.loading);
 
         $.getUpdateData(idGraphe);
 
@@ -345,7 +345,7 @@ $(document).ready(function() {
 
             }
             else {
-                $.growlWarning("Impossible de récuperer la liste des configurations");
+                $.growlWarning(lang.error.getListConfigBoiler);
             }
         });
     };
@@ -361,7 +361,7 @@ $(document).ready(function() {
         var date = '';
 
         if (desc == '') {
-            $.growlWarning('La description ne doit pas etre vide');
+            $.growlWarning(lang.error.commentConfigBoiler);
         }
         else {
             //test si la date est visible ou non
@@ -383,7 +383,7 @@ $(document).ready(function() {
                         if(!$.isEmptyObject(config)){
                             
                             $.api('POST', 'rt.applyBoilerConfig', { config: config}).done(function(json) {
-                                $.growlValidate('Configuration appliquée sur la chaudière');
+                                $.growlValidate(lang.valid.applyConfigboiler);
                             });
                         }
 
@@ -396,7 +396,7 @@ $(document).ready(function() {
                     $.viewMessageMustsave(false);
                 }
                 else {
-                    $.growlErreur('Impossible de sauvegarder la configuration');
+                    $.growlErreur(lang.error.saveBoilerConfig);
                 }
             });
         }
@@ -418,11 +418,11 @@ $(document).ready(function() {
                 
                 if (json.response) {
                     $("#modal_delete").modal('hide');
-                    $.growlValidate('Suppression effectuée');
+                    $.growlValidate(lang.valid.delete);
                     $.getListConfigboiler();
                 }
                 else {
-                    $.growlErreur('Suppression impossible');
+                    $.growlErreur(lang.error.deleteBoilerConfig);
                 }
                 
             });

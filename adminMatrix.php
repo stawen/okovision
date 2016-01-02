@@ -47,6 +47,9 @@
                     	<button type="button" id="updateMatrix" class="btn btn-xs btn-default" data-toggle="modal" data-target="#confirm-updateMatrix">
 			            	<span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
 		            	</button>
+		            	<button type="button" id="deleteMatrix" class="btn btn-xs btn-default" data-toggle="modal" data-target="#confirm-deleteMatrix">
+			            	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+		            	</button>
                     </th>
                     
                 </tr>
@@ -75,7 +78,26 @@
                 </div>
             </div>
         </div>
-    </div>        
+    </div> 
+    
+    <div class="modal fade" id="confirm-deleteMatrix" tabindex="-1" role="dialog" aria-labelledby="DeleteMatrix" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title"><?php echo session::getInstance()->getLabel('lang.text.page.matrix.delete.modal.title') ?></h4>
+                </div>
+                <div class="modal-body">
+                    <?php echo session::getInstance()->getLabel('lang.text.page.matrix.delete.modal.text') ?>
+               </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo session::getInstance()->getLabel('lang.text.modal.cancel') ?></button>
+                    <button type="button" class="btn btn-danger btn-ok" id="deleteConfirm"><?php echo session::getInstance()->getLabel('lang.text.modal.confirm') ?></button>
+                </div>
+            </div>
+        </div>
+    </div> 
 
 
 <?php

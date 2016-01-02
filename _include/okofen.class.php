@@ -281,14 +281,14 @@ class okofen extends connectDb{
 	    
 	}
 
-	private function curlGet(){
+	private function curlGet($action = 'get&attr=1'){
 		$code = false;
 	    $curl = curl_init();
 	    
 	    curl_setopt_array($curl, array(
 	           CURLOPT_VERBOSE => false,
 			   CURLOPT_RETURNTRANSFER => true,
-			   CURLOPT_URL => $this->_loginUrl.'?action=get&attr=1',
+			   CURLOPT_URL => $this->_loginUrl.'?action='.$action,
 			   CURLOPT_POST => 1,
 			   CURLOPT_HTTPHEADER => array(
 			        'Accept: application/json',
@@ -304,7 +304,6 @@ class okofen extends connectDb{
 	    if(!curl_errno($curl)){
 	        
 	        $info = curl_getinfo($curl);
-	        //var_dump($info);exit;
 	        
 	        if($info['http_code'] == '200'){
 	            $this->_responseBoiler = $resp;
@@ -314,7 +313,6 @@ class okofen extends connectDb{
 	    }
 	    
 	    curl_close($curl);
-	    //print_r($resp);exit;
 	    return $code;
 	}
 	
@@ -331,52 +329,14 @@ class okofen extends connectDb{
 	public function applyConfiguration($data = array()){
 		$this->_formdata = json_encode($data);
 		
-		if(!$this->curlSet()){
+		if(!$this->curlGet('set')){
 	    	
 			$this->curlConnect(); 
-			$this->curlSet();
+			$this->curlSet('set');
 		}
 		
 	}
-	
-	private function curlSet(){
-		$code = false;
-	    $curl = curl_init();
-	    
-	    curl_setopt_array($curl, array(
-	           CURLOPT_VERBOSE => false,
-			   CURLOPT_RETURNTRANSFER => true,
-			   CURLOPT_URL => $this->_loginUrl.'?action=set',
-			   CURLOPT_POST => 1,
-			   CURLOPT_HTTPHEADER => array(
-			        'Accept: application/json',
-	                'Content-Type: application/x-www-form-urlencoded; charset=UTF-8',
-	                'Accept-Language: fr'),
-			   CURLOPT_COOKIEFILE => $this->_cookies,
-			   CURLOPT_POSTFIELDS => $this->_formdata
-			   
-			));
-	    
-	    $resp = curl_exec($curl);
-	    
-	    if(!curl_errno($curl)){
-	        
-	        $info = curl_getinfo($curl);
-	        //var_dump($info);exit;
-	        
-	        if($info['http_code'] == '200'){
-	            $this->_responseBoiler = $resp;
-	            $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ". $resp);
-	        	$code = true;
-	        }
-	    }
-	    
-	    curl_close($curl);
-	    //print_r($resp);exit;
-	    return $code;
-	}
-	
-	
+
 	
 	public function requestBoilerInfo($data = array()){
 		

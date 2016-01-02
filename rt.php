@@ -20,7 +20,7 @@ if (!file_exists("config.php")) {
         
 		<div class="page-header">
 		    <div class="row">
-		        <div class="col-md-11 rtTitle">Données de la chaudière <?php echo 'http://'.CHAUDIERE ?></div>
+		        <div class="col-md-11 rtTitle"><?php echo session::getInstance()->getLabel('lang.text.page.rt.boilerName') ?> <?php echo 'http://'.CHAUDIERE ?></div>
 		        <div class="col-md-1 text-right">
 		            <button type="button" class="btn btn-xs btn-default" data-toggle="modal" data-target="#modal_boiler">
 			            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
@@ -32,14 +32,14 @@ if (!file_exists("config.php")) {
             <p><span class="glyphicon glyphicon-refresh glyphicon-spin"></span>&nbsp;<?php echo session::getInstance()->getLabel('lang.text.page.rt.logginprogress') ?></p>
         </div> 
         <div id="mustSaving" class="alert alert-warning" style="display: none;" role="alert">
-              <span class="glyphicon glyphicon-floppy-save"></span>&nbsp;Pour prise en compte, vous devez sauvegarder la nouvelle configuration
+              <span class="glyphicon glyphicon-floppy-save"></span>&nbsp;<?php echo session::getInstance()->getLabel('lang.text.page.rt.alertWarning') ?>
         </div>
         <div id="communication" style="display: none;">
         
             <ul class="nav nav-tabs red" role="tablist">
-                <li role="presentation" class="active"><a href="#indicateurs" aria-controls="indicateurs" role="tab" data-toggle="tab">Réglages Chaudière</a></li>
-                <li role="presentation"><a href="#config" aria-controls="config" role="tab" data-toggle="tab">Suivi Configuration</a></li>
-                <li role="presentation"><a href="#graphiques" aria-controls="graphiques" role="tab" data-toggle="tab">Graphiques</a></li>
+                <li role="presentation" class="active"><a href="#indicateurs" aria-controls="indicateurs" role="tab" data-toggle="tab"><?php echo session::getInstance()->getLabel('lang.text.page.rt.tab.boilerInfo') ?></a></li>
+                <li role="presentation"><a href="#config" aria-controls="config" role="tab" data-toggle="tab"><?php echo session::getInstance()->getLabel('lang.text.page.rt.tab.boilerConfig') ?></a></li>
+                <li role="presentation"><a href="#graphiques" aria-controls="graphiques" role="tab" data-toggle="tab"><?php echo session::getInstance()->getLabel('lang.text.page.rt.tab.graphe') ?></a></li>
             </ul>
              
             <div class="tab-content">
@@ -47,7 +47,7 @@ if (!file_exists("config.php")) {
                  <div role="tabpanel" class="tab-pane active" id="indicateurs">  
                     
             		<div class="row">
-            		    <div class="col-md-12" ><h2><small>Indicateurs de fontionnement</small></h2></div>
+            		    <div class="col-md-12" ><h2><small><?php echo session::getInstance()->getLabel('lang.text.page.rt.title.indic') ?></small></h2></div>
             		    <div class="col-lg-3 col-md-6">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
@@ -124,7 +124,7 @@ if (!file_exists("config.php")) {
                                 
                             </div>
                         </div>
-                        <div class="col-md-12" ><h2><small>Chauffage - T°C ambiante</small></h2></div>
+                        <div class="col-md-12" ><h2><small><?php echo session::getInstance()->getLabel('lang.text.page.rt.title.tcambiante') ?></small></h2></div>
                         <div class="col-lg-3 col-md-6">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
@@ -245,7 +245,7 @@ if (!file_exists("config.php")) {
                                 
                             </div>
                         </div>
-                        <div class="col-md-12" ><h2><small>Chauffage - Gestion Eau dans Radiateur</small></h2></div>
+                        <div class="col-md-12" ><h2><small><?php echo session::getInstance()->getLabel('lang.text.page.rt.title.waterHT') ?></small></h2></div>
                         <div class="col-lg-3 col-md-6">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
@@ -446,7 +446,7 @@ if (!file_exists("config.php")) {
                                 
                             </div>
                         </div>
-                        <div class="col-md-12" ><h2><small>Paramétrage brûleur</small></h2></div>
+                        <div class="col-md-12" ><h2><small><?php echo session::getInstance()->getLabel('lang.text.page.rt.paramBruleur') ?></small></h2></div>
                         <div class="col-lg-3 col-md-6">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
@@ -533,8 +533,8 @@ if (!file_exists("config.php")) {
                 </div>
                 
                 <div role="tabpanel" class="tab-pane " id="config">  
-                    <h2><small>Sauvegarde des configurations</small></h2>
-                    <p>Saissez une desciption, toutes les infos dans "Réglages chaudière" sont sauvegardées. (150 caractères max))</p>
+                    <h2><small><?php echo session::getInstance()->getLabel('lang.text.page.rt.title.saveConfig') ?></small></h2>
+                    <p><?php echo session::getInstance()->getLabel('lang.text.page.rt.descSaveConfig') ?></p>
                     <div class="row">
                         <div class="col-xs-10">
                             <input type="text" class="form-control" id="configDescription" maxlength="50" placeholder="Ce Texte est affiché sur les graphes">
@@ -552,19 +552,19 @@ if (!file_exists("config.php")) {
                                 <input type="text" class="form-control" id="configTimeSelect"> 
                             </div>
                             <div class="col-xs-10 text-left" >
-                                Si vous saisissez une date manuellement, la configuration ne sera pas appliquée à la chaudière
+                                <?php echo session::getInstance()->getLabel('lang.text.page.rt.dateChoised') ?>
                             </div>
                         </div>
                     </div>
                     <hr>
-                    <h2><small>Liste des configurations</small></h2>
+                    <h2><small> <?php echo session::getInstance()->getLabel('lang.text.page.rt.title.listConfigBoiler') ?></small></h2>
                     
                     <div id="liste">
                 	    <table id="listConfig" class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th class="col-md-2">Date</th>
-                                    <th class="col-md-8">Description</th>
+                                    <th class="col-md-2"><?php echo session::getInstance()->getLabel('lang.text.page.rt.table.title.date') ?></th>
+                                    <th class="col-md-8"><?php echo session::getInstance()->getLabel('lang.text.page.rt.table.title.desc') ?></th>
                                     <th class="col-md-2"></th>
                                     
                                 </tr>
@@ -671,7 +671,7 @@ if (!file_exists("config.php")) {
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
 						</button>
-						<h4 class="modal-title">Etes vous sur de supprimer cette configuration ?</h4>
+						<h4 class="modal-title"><?php echo session::getInstance()->getLabel('lang.text.page.rt.deleteConfig') ?></h4>
 					</div>
 					<div class="hidden">
 						<input type="text" id="deleteid">

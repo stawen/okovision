@@ -33,7 +33,12 @@ var lang = {
         passNotTheSame: "Les deux champs ne sont pas identiques.",
         userPassIncorrect: "User/password incorrect",
         sessionEnded: 'Session expirée',
-        connectBoiler: 'Echec de connexion (chaudière)'
+        connectBoiler: 'Echec de connexion (chaudière)',
+        getListConfigBoiler: 'Impossible de récuperer la liste des configurations',
+        commentConfigBoiler: 'La description ne doit pas être vide',
+        saveBoilerConfig: 'Impossible de sauvegarder la configuration',
+        deleteBoilerConfig: 'Suppression impossible',
+        deleteMatrix : "Echec lors de la suppression de la matrice"
     },
     valid:{
         communication: 'Communication établie',
@@ -43,7 +48,8 @@ var lang = {
         configSave: 'Configuration sauvegardée',
         save: 'Enregistrement réussi',
         update: 'Mise à jour réussie',
-        delete: 'Suppression réussie'
+        delete: 'Suppression réussie',
+        applyConfigboiler: 'Configuration appliquée sur la chaudière'
     },
     text:{
         seeFileOnboiler: 'Visualiser les fichiers sur la chaudière',
@@ -70,8 +76,10 @@ var lang = {
         tc: 'T°C',
         kgAndDju: 'Kg et DJU',
         nbCycle: 'Nb Cycle',
-        seasonSummary: "Synthèse Saison"
-    },
+        seasonSummary: "Synthèse Saison",
+        loading : 'Loading data from boiler...'
+    }
+    /*,
     sensor:{
         FA0_L_mittlere_laufzeit:"CAPPL:FA[0].L_mittlere_laufzeit",
         FA0_L_brennerstarts:"CAPPL:FA[0].L_brennerstarts",
@@ -98,6 +106,6 @@ var lang = {
         FA0_pe_abschalttemperatur:"CAPPL:FA[0].pe_abschalttemperatur",
         FA0_pe_einschalthysterese_smart:"CAPPL:FA[0].pe_einschalthysterese_smart",
         FA0_pe_kesselleistung:"CAPPL:FA[0].pe_kesselleistung"
-    }
+    }*/
 };
     

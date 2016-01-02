@@ -28,8 +28,6 @@ $(document).ready(function() {
 			//console.log('Uploads started');
 		},
 		done: function(e, data) {
-			//console.log("e:"+e);
-			//console.log("data:"+ data);
 			setTimeout(function() {
 				$("#selectFile").hide();
 				$('#bar').css(
@@ -43,7 +41,7 @@ $(document).ready(function() {
 		},
 		progress: function(e, data) {
 			var progress = parseInt(data.loaded / data.total * 100, 10);
-			//console.log('ici::'+ progress);
+			
 			$('#bar').css(
 				'width',
 				progress + '%'
@@ -59,7 +57,7 @@ $(document).ready(function() {
 				$("#headerCsv > tbody").html("");
 
 				$.each(json.data, function(key, val) {
-					//console.log(val);
+					
 					$('#headerCsv > tbody:last').append('<tr> \
 				                                        	<td>' + val.original_name + '</td>\
 				                                        	<td>' + val.name + '</td>\
@@ -104,11 +102,11 @@ $(document).ready(function() {
 	}
 
 	$("#updateConfirm").click(function(){
-		//console.log('ici');	
+		
 		$("#btup").html('Mise à jour Matrice');
 		//hidden.bs.modal
 		$('#confirm-updateMatrix').modal('hide');
-		//$('#confirm-updateMatrix').hide();
+		
 		$("#selectFile").show();
 		$("#concordance").hide();
 		
@@ -122,6 +120,22 @@ $(document).ready(function() {
 		});
 		
 		
+	});
+	
+	$("#deleteConfirm").click(function(){
+		$.api('GET', 'admin.deleteMatrice').done(function(json) {
+			
+			if(json.response){
+			
+				$("#selectFile").show();
+				$("#concordance").hide();
+				$('#confirm-deleteMatrix').modal('hide');
+				
+			}else{
+				$.growlErreur(lang.error.deleteMatrix);
+			}
+		});
+	
 	});
 
 });
