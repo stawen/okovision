@@ -127,6 +127,13 @@ $(document).ready(function() {
 			
 			if(json.response){
 				
+				$('#fileupload').fileupload({
+					formData: { 
+						actionFile: 'matrice'
+					}
+				});
+				$("#btup").html('Fichier CSV produit par la chaudière');
+				
 				$("#selectFile").show();
 				$("#concordance").hide();
 				$('#confirm-deleteMatrix').modal('hide');
