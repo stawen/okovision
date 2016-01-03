@@ -188,7 +188,7 @@ class administration extends connectDb{
 			if($position > 1){
 				$title = trim($t);
 				//si multi chaudiere, on ne prend pas en compte
-				if(preg_match('/^(PE2|PE3|PE4)/', $title)) continue;
+				//if(preg_match('/^(PE2|PE3|PE4)/', $title)) continue;
 				
 				if (isset($dico[$title])){
 					$name = $dico[$title]['name'];
@@ -261,8 +261,8 @@ class administration extends connectDb{
 				
 				
 				$title = trim($t);
-				
-				if(preg_match('/^(PE2|PE3|PE4)/', $title)) continue;
+				//si multi chaudiere, on ne prend pas en compte
+				//if(preg_match('/^(PE2|PE3|PE4)/', $title)) continue;
 				
 				$capteursCsv[$title] = $position;
 				
