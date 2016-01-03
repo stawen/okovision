@@ -313,7 +313,6 @@ class rendu extends connectDb{
 		$where = ", DATE_FORMAT(oko_dateref.jour,'%Y-%m-01 00:00:00') FROM oko_saisons, oko_resume_day ".
 					"RIGHT JOIN oko_dateref ON oko_dateref.jour = oko_resume_day.jour ".
 					"WHERE oko_saisons.id=".$idSaison." AND oko_dateref.jour BETWEEN oko_saisons.date_debut AND oko_saisons.date_fin ".
-					/*"AND ( MONTH(oko_dateref.jour) <> MONTH(now()) AND YEAR(oko_dateref.jour) <> YEAR(now())) ".*/
 					"GROUP BY MONTH(oko_dateref.jour) ".
 					"ORDER BY YEAR(oko_dateref.jour), MONTH(oko_dateref.jour) ASC;";
 				
@@ -321,8 +320,9 @@ class rendu extends connectDb{
 		
 		foreach ($categorie as $label => $colonneSql){
 			
-			$q = "SELECT ".$colonneSql." ".$where;
-			$this->log->debug("Class ".get_called_class()." | getSyntheseSaison | ".$q); 
+			$q = "SELECT if(MONTH(oko_dateref.jour) = MONTH(NOW()) AND YEAR(oko_dateref.jour) = YEAR(now()),null,".$colonneSql.") ".$where;
+			
+			$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
 			
 			$result = $this->query($q);
 			$data = null;
