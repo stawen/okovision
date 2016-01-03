@@ -4,7 +4,7 @@ ini_set('max_execution_time', 600);
 $this->log->info("UPGRADE | $version | begin");
 $t = new timeExec();
 
-//suppirmer les colonnes de histo-full inutile, fairer attention a col_99, le renommer et supprimer ensuite
+//supprimer les colonnes de histo-full inutile, fairer attention a col_99, le renommer et supprimer ensuite
 
 $q = "select max(column_oko) as num from oko_capteur where column_oko <> 99";
 $this->log->info("UPGRADE | $version | ".$q);
@@ -35,9 +35,6 @@ if($this->query($copy) && $this->query($maj)){
  if($this->query($q)){
      $this->log->info("UPGRADE | $version | Suppresion des colonnes inutiles OK");
  }
- /* execute multi query */
- //$this->multi_query($delete);
- //while ($this->flush_multi_queries()) {;} // flush multi_queries
  
 }
 
