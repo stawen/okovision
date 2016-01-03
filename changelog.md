@@ -2,6 +2,7 @@
 * Ajout d'une alerte pour dire de sauvegarder si changement de parametres
 * Prise en compte d'installation multi-chaudiére (le calcul de la conso ne sera que pour la chaudière maitre)
 * Revision de la methode d'installation -> optimisation de l'espace de stockage necessaire pour les données journalières
+* Graphe synthèse saison, ne pas voir le mois en cours
 
 ##1.7.0
 * Correction orthographe / correction synthaxique
