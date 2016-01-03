@@ -179,12 +179,13 @@ class administration extends connectDb{
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | CSV First Line | ".$line);
 		
 		$query = ""; 
-	
+		$positionOko = 2;
 		$column = explode(CSV_SEPARATEUR, $line);
 		
 		foreach ($column as $position => $t){
 			//set only capteur not day and hour
-			if($position != 0 && $position != 1){
+			//if($position != 0 && $position != 1){
+			if($position > 1){
 				$title = trim($t);
 				//si multi chaudiere, on ne prend pas en compte
 				if(preg_match('/^(PE2|PE3|PE4)/', $title)) continue;
@@ -199,14 +200,17 @@ class administration extends connectDb{
 					$boiler="";
 				}
 				
-				$q = "INSERT INTO oko_capteur(name,position_column_csv,column_oko, original_name,type,boiler) VALUE ('$name',$position,$position,'$title','$type','$boiler');" ;
+				$q = "INSERT INTO oko_capteur(name,position_column_csv,column_oko, original_name,type,boiler) VALUE ('$name',$position,$positionOko,'$title','$type','$boiler');" ;
+				
+				$positionOko++;
 				
 				$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | Create oko_capteur | ".$q);
 				$query .= $q;
 			}
     	}
 		//insertion d'une reference au demarrage des cycles de chauffe
-		$query .= "INSERT INTO oko_capteur(name,position_column_csv,column_oko,original_name,type) VALUES ('Start Cycle',99,99,'Start Cycle','startCycle');" ;
+		$nbColumnCsv =  count($column);
+		$query .= "INSERT INTO oko_capteur(name,position_column_csv,column_oko,original_name,type) VALUES ('Start Cycle',$nbColumnCsv,$positionOko,'Start Cycle','startCycle');" ;
 		
 		
 		$result = $this->multi_query($query);
@@ -241,7 +245,8 @@ class administration extends connectDb{
 		//cela va tester le deplacement d'un capteur par rapport à la bdd ou l'ajout d'un capteur
 		foreach ($column as $position => $t){
 			//set only capteur not day and hour
-			if($position != 0 && $position != 1){
+			//if($position != 0 && $position != 1){
+			if($position > 1){
 				
 				
 				$title = trim($t);
@@ -290,6 +295,10 @@ class administration extends connectDb{
 			$query .=$q;
     	}
     	
+    	//on met a jour le startCycle
+    	$nbColumnCsv =  count($column);
+    	$q = "UPDATE oko_capteur set position_column_csv=$nbColumnCsv where type = 'startCycle';";
+    	$query .=$q;
 		
 		$result = $this->multi_query($query);
 		while ($this->flush_multi_queries()) {;} // flush multi_queries
@@ -300,7 +309,7 @@ class administration extends connectDb{
 		
 		$r = array();
 	    //$lock = array("Datum","Zeit","AT [°C]","PE1 Einschublaufzeit[zs]","PE1 Pausenzeit[zs]","PE1 Status");
-	    $q = "select id, name, original_name, type, boiler from oko_capteur where position_column_csv <> -1 order by position_column_csv";
+	    $q = "select id, name, original_name, type, boiler from oko_capteur where position_column_csv <> -1 order by column_oko";
 	    $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
 	    
 	    $result = $this->query($q);

@@ -316,12 +316,12 @@
     },
     "PE2 Einschublaufzeit[zs]": {
         "name": "OKO 2 - Vis Alimentation marche (ds)",
-        "type": "tps_vis",
+        "type": "",
         "boiler": "CAPPL:FA[1].L_einschublaufzeit"
     },
     "PE2 Pausenzeit[zs]": {
         "name": "OKO 2 - Vis Alimentation pause (ds)",
-        "type": "tps_vis_pause",
+        "type": "",
         "boiler": "CAPPL:FA[0].L_pausenzeit"
     },
     "PE2 Luefterdrehzahl[%]": {
@@ -346,7 +346,7 @@
     },
     "PE2 Status": {
         "name": "OKO 2 - Statut chaudière",
-        "type": "status",
+        "type": "",
         "boiler": "CAPPL:FA[1].L_kesselstatus"
     },
     "PE2 Motor ES": {
