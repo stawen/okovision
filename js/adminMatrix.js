@@ -126,7 +126,7 @@ $(document).ready(function() {
 		$.api('GET', 'admin.deleteMatrice').done(function(json) {
 			
 			if(json.response){
-			
+				
 				$("#selectFile").show();
 				$("#concordance").hide();
 				$('#confirm-deleteMatrix').modal('hide');

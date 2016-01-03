@@ -5,7 +5,7 @@ $this->log->info("UPGRADE | $version | begin");
 $t = new timeExec();
 
 //reorganisation des js
-
+/*
 
         @unlink(CONTEXT.'/js/adapters/standalone-framework.js'); //
         @unlink(CONTEXT.'/js/adapters/standalone-framework.src.js');
@@ -64,8 +64,8 @@ $addColumn = "ALTER TABLE oko_capteur ADD COLUMN boiler TINYTEXT NOT NULL DEFAUL
 if(!$this->query($addColumn)){
   $this->log->info("UPGRADE | $version | create column boiler in oko_capteur failed !");  
 }else{
-    
-    /* Faire la maj de la table oko_capteur avec fr.matrice.js');*/
+  
+    // Faire la maj de la table oko_capteur avec fr.matrice.js');
     $dico = json_decode(file_get_contents("_langs/fr.matrice.json"), true);
     
 	$c = new capteur();
@@ -89,7 +89,7 @@ $qCreate = "CREATE TABLE IF NOT EXISTS `oko_boiler` (  `timestamp` int(11) unsig
 if(!$this->query($qCreate)){
   $this->log->info("UPGRADE | $version | Create table boiler failed !");  
 }
-
+*/
 
 $this->log->info("UPGRADE | $version | end :".$t->getTime());
 ?>

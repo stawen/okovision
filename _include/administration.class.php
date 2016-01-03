@@ -200,6 +200,11 @@ class administration extends connectDb{
 					$boiler="";
 				}
 				
+				$addColumn = "ALTER TABLE oko_historique_full ADD COLUMN col_$positionOko DECIMAL(6,2) NULL DEFAULT NULL;";
+				$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | Create oko_capteur | ".$addColumn);
+				
+				$query .= $addColumn;
+				
 				$q = "INSERT INTO oko_capteur(name,position_column_csv,column_oko, original_name,type,boiler) VALUE ('$name',$position,$positionOko,'$title','$type','$boiler');" ;
 				
 				$positionOko++;
@@ -210,6 +215,12 @@ class administration extends connectDb{
     	}
 		//insertion d'une reference au demarrage des cycles de chauffe
 		$nbColumnCsv =  count($column);
+		
+		$addColumn = "ALTER TABLE oko_historique_full ADD COLUMN col_$positionOko DECIMAL(6,2) NULL DEFAULT NULL;";
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | Create oko_capteur | ".$addColumn);
+		
+		$query .= $addColumn;
+		
 		$query .= "INSERT INTO oko_capteur(name,position_column_csv,column_oko,original_name,type) VALUES ('Start Cycle',$nbColumnCsv,$positionOko,'Start Cycle','startCycle');" ;
 		
 		
@@ -274,6 +285,11 @@ class administration extends connectDb{
 						$boiler="";
 					}
 					$lastColumnOko++;
+					
+					$addColumn = "ALTER TABLE oko_historique_full ADD COLUMN col_$lastColumnOko DECIMAL(6,2) NULL DEFAULT NULL;";
+					$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | Create New oko_capteur | ".$addColumn);
+					$query .= $addColumn;
+					
 					$q = "INSERT INTO oko_capteur(name,position_column_csv,column_oko, original_name,type,boiler) VALUE ('$name',$position,$lastColumnOko,'$title','$type','$boiler');";
 					
 					$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | Create New oko_capteur | ".$q);
@@ -309,7 +325,7 @@ class administration extends connectDb{
 		
 		$r = array();
 	    //$lock = array("Datum","Zeit","AT [°C]","PE1 Einschublaufzeit[zs]","PE1 Pausenzeit[zs]","PE1 Status");
-	    $q = "select id, name, original_name, type, boiler from oko_capteur where position_column_csv <> -1 order by column_oko";
+	    $q = "select id, name, original_name, type, boiler from oko_capteur where position_column_csv <> -1 order by position_column_csv";
 	    $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
 	    
 	    $result = $this->query($q);
@@ -354,10 +370,19 @@ class administration extends connectDb{
 		
 		$r['response'] = false;
 		
-		$q = "TRUNCATE TABLE oko_capteur";
-		if($this->query($q)){
-			$q = "TRUNCATE TABLE oko_historique_full";
-			$r['response'] = $this->query($q);
+		$truncCapteur = "TRUNCATE TABLE oko_capteur;";
+		$drop = "DROP TABLE IF EXISTS oko_historique_full;";
+		
+		if($this->query($truncCapteur) && $this->query($drop)){
+			$create = 	"CREATE TABLE IF NOT EXISTS `oko_historique_full` ("
+						."jour DATE NOT NULL,"
+						."heure TIME NOT NULL,"
+						."timestamp int(11) unsigned NOT NULL,"
+						."PRIMARY KEY (jour, heure)"
+						.") ENGINE=MYISAM DEFAULT CHARSET=utf8;";
+						
+			$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$create);
+			$r['response'] = $this->query($create);
 		}
 		
 		$this->sendResponse($r);
