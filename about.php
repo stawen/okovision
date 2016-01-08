@@ -28,6 +28,7 @@ if (!file_exists("config.php")) {
 		<?php echo session::getInstance()->getLabel( 'lang.text.page.about.information') ?>
 		
 	</div>
+	<div>TOKEN API : <?php echo substr(TOKEN, 0,12); ?></div>
 	<div class="page-header">
 		<h2><?php echo session::getInstance()->getLabel('lang.text.page.about.update') ?></h2>
 		<button type="button" id="bt_update" class="btn btn-xs btn-default" style="display: none;">

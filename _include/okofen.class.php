@@ -294,7 +294,7 @@ class okofen extends connectDb{
 			   CURLOPT_HTTPHEADER => array(
 			        'Accept: application/json',
 	                'Content-Type: application/x-www-form-urlencoded; charset=UTF-8',
-	                'Accept-Language: fr'),
+	                'Accept-Language: en'),
 			   CURLOPT_COOKIEFILE => $this->_cookies,
 			   CURLOPT_POSTFIELDS => $this->_formdata
 			   

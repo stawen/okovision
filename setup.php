@@ -86,6 +86,7 @@
         $configFile = str_replace("###_CONTEXT_###",getcwd(),$configFile);
         
         $configFile = str_replace("###_TOKEN_###",sha1(rand()),$configFile);
+        //$configFile = str_replace("###_TOKEN-API_###",sha1(rand()),$configFile);
         
         file_put_contents('config.php',$configFile);
         

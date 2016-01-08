@@ -62,6 +62,7 @@ if (is_ajax() && is_valid()) {
                         	break;
                         case "getSaisons":
                         	$a->getSaisons();
+                        	break;
                         case "existSaison":
                         	if( isset( $_GET['date'] ) ){
                         		$a->existSaison($_GET['date']);
