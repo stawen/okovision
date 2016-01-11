@@ -314,10 +314,10 @@ class realTime extends connectDb{
     	
     }
     
-    public function getBoilerMode(){
+    public function getBoilerMode($way = 1){
     	$json['response'] = false;
     	
-    	$sensor = array( "CAPPL:LOCAL.hk[0].betriebsart[1]", // temps moyen du bruleur
+    	$sensor = array( "CAPPL:LOCAL.hk[0].betriebsart[$way]", // temps moyen du bruleur
 				) ;
     	
     	
@@ -337,12 +337,12 @@ class realTime extends connectDb{
 		$this->sendResponse(json_encode($json));
     }
     
-    public function setBoilerMode($mode = 0,$circuit = 1){
+    public function setBoilerMode($mode = 0,$way = 1){
     	
     	$o = new okofen();
     	$o->applyConfiguration(
     			array(
-    				"CAPPL:LOCAL.hk[0].betriebsart[$circuit]" => $mode	
+    				"CAPPL:LOCAL.hk[0].betriebsart[$way]" => $mode	
     			)
     		);
     	

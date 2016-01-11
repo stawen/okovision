@@ -1,3 +1,6 @@
+##1.7.2
+* Ajout d'une API permettant à des applications tiers d'interagir avec okovision et la chaudière
+
 ##1.7.1
 * Ajout d'une alerte pour dire de sauvegarder si changement de parametres
 * Prise en compte d'installation multi-chaudiére (le calcul de la conso ne sera que pour la chaudière maitre)

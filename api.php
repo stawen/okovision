@@ -121,7 +121,9 @@ if (is_ajax() && is_valid()) {
     			            }
     			            break;
     			        case "getBoilerMode":
-    			            $rt->getBoilerMode();
+    			            if(isset($_GET['way'])){
+    			                $rt->getBoilerMode($_GET['way']);
+    			            }
     			            break;
     			        case "setBoilerMode":
     			            if(isset($_GET['mode']) && isset($_GET['way'])){
@@ -140,6 +142,7 @@ if (is_ajax() && is_valid()) {
     if(!is_valid()){
         header("Content-type: text/json; charset=utf-8");
 		echo '{"response": false,"apiToken": "invalid"}';
+		
     }
 }
 
