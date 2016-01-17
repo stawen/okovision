@@ -1,3 +1,7 @@
+##1.7.3
+* Correction mineur dans initialisation de la base de donnée (bgorge)
+* Quand un utilisateur import pour la meme journée le vsv en http et CSV, les données ne sont plus en double.
+
 ##1.7.2
 * Ajout d'une API permettant à des applications tiers d'interagir avec okovision et la chaudière
 
