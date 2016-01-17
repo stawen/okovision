@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `oko_saisons` (
 DELETE FROM `oko_saisons`;
 /*!40000 ALTER TABLE `oko_saisons` DISABLE KEYS */;
 INSERT INTO `oko_saisons` (`id`, `saison`, `date_debut`, `date_fin`) VALUES
-	(1, '2015-2016', '2015-09-01', '2016-08-30');
+	(1, '2015-2016', '2015-09-01', '2016-08-31');
 /*!40000 ALTER TABLE `oko_saisons` ENABLE KEYS */;
 
 
