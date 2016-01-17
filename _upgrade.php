@@ -1,6 +1,7 @@
 <?php
 
 ini_set('max_execution_time', 600);
+
 $this->log->info("UPGRADE | $version | begin");
 $t = new timeExec();
 
@@ -12,8 +13,8 @@ $t = new timeExec();
     
     foreach($res as $key){
         $okoSensor = $key['original_name'];
-        $q = "update oko_capteur set boiler='".$dico[$okoSensor]['boiler']."' where original_name='$okoSensor'";
-        $this->log->info("UPGRADE | $version | update $okoSensor :: ".$dico[$okoSensor]['boiler']);  
+        $q = "update oko_capteur set name='".$dico[$okoSensor]['name']."' where original_name='$okoSensor'";
+        $this->log->info("UPGRADE | $version | update $okoSensor :: ".$dico[$okoSensor]['name']);  
         
         if(!$this->query($q)){
             $this->log->info("UPGRADE | $version | Failed | ".$q);
