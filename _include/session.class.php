@@ -8,22 +8,18 @@ class session extends connectDb {
     
     public function __construct() {
         
-        
-        //self::$lang = 'fr';
-        //$this->lang = 'fr';
-        /*
-        if(!$this->exist('LANG')){
-            $this->setVar('LANG',$this->getDictionnary($this->lang));
-        }
-        */
-        //print_r( self::exist('sid')); exit;
-        
         session_start();
         
         if(!$this->exist('sid')){
             $t = substr(md5(uniqid(session_id(), true)), 0,8);
             $this->setVar('sid', $t);
         }
+        
+        $cf = json_decode(file_get_contents("config.json"), true);
+        
+        $this->setLang(
+        		isset($cf['lang'])?$cf['lang']:'en'
+        );
         
         $this->dico = $this->getDictionnary($this->getLang());
         
@@ -65,6 +61,10 @@ class session extends connectDb {
 	
 	public function getLang(){
 	    return $this->lang;
+	}
+	
+	private function setLang($lg){
+	    $this->lang = $lg;
 	}
 	
 	public function setVar($key, $value){
