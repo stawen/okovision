@@ -131,7 +131,13 @@ class okofen extends connectDb{
 					
 					$jour 	= $colCsv[0];
 					$heure 	= $colCsv[1];
-					$query 	= 	"";
+                                   
+                                   // Round to the minute, since in some cases it is possible to
+                                   // import two files with the same data but not the same seconds
+                                   // Case of an import on the same day of the web files and the USB files
+                                   $heure 	= preg_replace('/:[0-9]{2}$/', ':00', $heure);
+					
+                                   $query 	= 	"";
 					
 					$beginValue = 	"jour = STR_TO_DATE('".$jour."','%d.%m.%Y'),".		// jour
 									"heure = '".$heure."',".// heure
