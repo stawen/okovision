@@ -35,6 +35,12 @@ alimentation pellet dans tremi : 7
 
 /*
 SELECT table_schema AS NomBaseDeDonnees, ROUND(SUM( data_length + index_length ) / 1024 / 1024, 2) AS BaseDonneesMo FROM information_schema.TABLES GROUP BY TABLE_SCHEMA;
+
+SELECT 
+ TABLE_NAME,
+ CONCAT(ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2), 'Mo') AS TailleMo 
+FROM information_schema.TABLES 
+WHERE TABLE_SCHEMA = 'oko_test'
 */
 
 
