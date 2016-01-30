@@ -18,7 +18,7 @@ class session extends connectDb {
         $cf = json_decode(file_get_contents("config.json"), true);
         
         $this->setLang(
-        		isset($cf['lang'])?$cf['lang']:'en'
+        		isset($cf['lang'])?$cf['lang']:'fr'
         );
         
         $this->dico = $this->getDictionnary($this->getLang());
