@@ -1,3 +1,6 @@
+##1.7.4
+* Correction perte des noms des capteurs suite maj 1.7.3
+
 ##1.7.3
 * Correction mineur dans initialisation de la base de donnée (bgorge)
 * Quand un utilisateur import pour la meme journée le vsv en http et CSV, les données ne sont plus en double (bgorge)

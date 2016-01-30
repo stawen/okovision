@@ -13,8 +13,12 @@ $t = new timeExec();
     
     foreach($res as $key){
         $okoSensor = $key['original_name'];
-        $q = "update oko_capteur set name='".$dico[$okoSensor]['name']."' where original_name='$okoSensor'";
-        $this->log->info("UPGRADE | $version | update $okoSensor :: ".$dico[$okoSensor]['name']);  
+        
+        $name = isset($dico[$okoSensor]['name'])?$dico[$okoSensor]['name']:$okoSensor;
+        
+        $q = "update oko_capteur set name='".$name."' where original_name='$okoSensor'";
+        
+        $this->log->info("UPGRADE | $version | update $okoSensor :: ".$name);  
         
         if(!$this->query($q)){
             $this->log->info("UPGRADE | $version | Failed | ".$q);
