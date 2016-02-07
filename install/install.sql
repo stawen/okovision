@@ -20,15 +20,6 @@ INSERT INTO `oko_saisons` (`id`, `saison`, `date_debut`, `date_fin`) VALUES
 	(1, '2015-2016', '2015-09-01', '2016-08-31');
 /*!40000 ALTER TABLE `oko_saisons` ENABLE KEYS */;
 
-
--- Export de la structure de table okovision. oko_dateref
-DROP TABLE IF EXISTS `oko_dateref`;
-CREATE TABLE IF NOT EXISTS `oko_dateref` (
-  `jour` date NOT NULL
-) ENGINE=MYISAM DEFAULT CHARSET=utf8 COMMENT='table de reference des dates, sur 30ans a partir du 1er Septembre 2014';
-/*!40000 ALTER TABLE `oko_dateref` ENABLE KEYS */;
-
-
 -- Export de la structure de table okovision. oko_resume_day
 DROP TABLE IF EXISTS `oko_resume_day`;
 CREATE TABLE IF NOT EXISTS `oko_resume_day` (
