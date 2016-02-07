@@ -238,44 +238,69 @@ class rendu extends connectDb{
 	}
 	
 	public function getHistoByMonth($month,$year){
-		$categorie = array( session::getInstance()->getLabel('lang.text.graphe.label.tcmax') => 'tc_ext_max',
-							session::getInstance()->getLabel('lang.text.graphe.label.tcmin') => 'tc_ext_min',
-							session::getInstance()->getLabel('lang.text.graphe.label.conso') => 'conso_kg',
-							session::getInstance()->getLabel('lang.text.graphe.label.dju') => 'dju',
-							session::getInstance()->getLabel('lang.text.graphe.label.nbcycle') => 'nb_cycle'
-						);
-						
-		$where ='FROM oko_resume_day '
-				.'RIGHT JOIN oko_dateref ON oko_resume_day.jour = oko_dateref.jour '
-				.'WHERE MONTH(oko_dateref.jour) = '.$month.' AND ' 
-				.'YEAR(oko_dateref.jour) = '.$year.' '
-				.'ORDER BY oko_dateref.jour ASC	';
-		
+		$fields = array( session::getInstance()->getLabel('lang.text.graphe.label.tcmax') => 'tc_ext_max',
+                          session::getInstance()->getLabel('lang.text.graphe.label.tcmin') => 'tc_ext_min',
+                          session::getInstance()->getLabel('lang.text.graphe.label.conso') => 'conso_kg',
+                          session::getInstance()->getLabel('lang.text.graphe.label.dju') => 'dju',
+                          session::getInstance()->getLabel('lang.text.graphe.label.nbcycle') => 'nb_cycle'
+                      );
+
 		$resultat = array();
-		
-		foreach ($categorie as $label => $colonneSql){
-			$q = "SELECT ".$colonneSql." ".$where;
-			
-			$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
-			
-			$result = $this->query($q);
-			
-			$data = array();
-			while($r = $result->fetch_row() ) {
-				$data[] = $r[0];
-			}
-			
-			array_push($resultat,array( 'name' => $label,
-										'data' => $data
-									)
-						);
-		}
-		
-		$this->sendResponse( json_encode( $resultat ,JSON_NUMERIC_CHECK) );
-		
-		
+
+        $day = new DateTime($year. '/' . $month . '/' . 1);
+        $start =  $day->format('y-m-d');
+        $day->add(new DateInterval('P1M'));
+        $day->sub(new DateInterval('P1D'));
+        $end = $day->format('y-m-d');
+
+        $columns = implode(', ', $fields);
+        $sql = "SELECT $columns FROM oko_resume_day "
+             . "WHERE oko_resume_day.jour BETWEEN '$start' AND '$end' "
+             . "ORDER BY oko_resume_day.jour ASC";
+
+        $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$sql); 
+
+        $result = $this->query($sql);
+
+        $data = array();
+        while($r = $result->fetch_assoc() )
+        {
+          foreach ($fields as $label => $colonneSql){
+            $data[$colonneSql][] = $r[$colonneSql];
+          }
+        }
+
+        foreach ($fields as $label => $colonneSql){
+            $this->normalizeDaysInMonth($month, $year, $data[$colonneSql]);
+            array_push($resultat,array( 'name' => $label,
+                                               'data' => $data[$colonneSql]
+                                        )
+                   );
+        }
+
+        $this->sendResponse( json_encode( $resultat ,JSON_NUMERIC_CHECK) );
 	}
 	
+    /**
+     * Initializes an array with an entry per day 
+     * in a month, starting with 0 for day 1
+     * 
+     * @param type $inArray
+     */
+    private function normalizeDaysInMonth($month, $year, &$inArray)
+    {
+        $day = new DateTime($year. '/' . $month . '/' . 1);
+
+        while ($month == $day->format('m')){
+            if (!isset($inArray[$day->format('d') - 1]))
+                $inArray[$day->format('d') - 1] = null;
+
+            $day->add(new DateInterval('P1D'));
+        }
+
+        ksort($inArray);
+    }
+       
 	public function getTotalSaison($idSaison){
 		
 		$q = "SELECT max(Tc_ext_max) as tcExtMax, min(Tc_ext_min) as tcExtMin, ".
@@ -302,61 +327,95 @@ class rendu extends connectDb{
 	}
 	
 	public function getSyntheseSaison($idSaison){
-		
-		$categorie = array( session::getInstance()->getLabel('lang.text.graphe.label.tcmax') => 'max(Tc_ext_max)',
-							session::getInstance()->getLabel('lang.text.graphe.label.tcmin') => 'min(Tc_ext_min)',
-							session::getInstance()->getLabel('lang.text.graphe.label.conso') => 'sum(conso_kg)',
-							session::getInstance()->getLabel('lang.text.graphe.label.dju') => 'sum(dju)',
-							session::getInstance()->getLabel('lang.text.graphe.label.nbcycle') => 'sum(nb_cycle)'
-						);
-		
-		$where = ", DATE_FORMAT(oko_dateref.jour,'%Y-%m-01 00:00:00') FROM oko_saisons, oko_resume_day ".
-					"RIGHT JOIN oko_dateref ON oko_dateref.jour = oko_resume_day.jour ".
-					"WHERE oko_saisons.id=".$idSaison." AND oko_dateref.jour BETWEEN oko_saisons.date_debut AND oko_saisons.date_fin ".
-					"GROUP BY MONTH(oko_dateref.jour) ".
-					"ORDER BY YEAR(oko_dateref.jour), MONTH(oko_dateref.jour) ASC;";
-				
-		$resultat = null;
-		
-		foreach ($categorie as $label => $colonneSql){
-			
-			$q = "SELECT if(MONTH(oko_dateref.jour) = MONTH(NOW()) AND YEAR(oko_dateref.jour) = YEAR(now()),null,".$colonneSql.") ".$where;
-			
-			$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
-			
-			$result = $this->query($q);
-			$data = null;
-			
-			while($r = $result->fetch_row() ) {
-				$date = new DateTime($r[1], new DateTimeZone('Europe/Paris'));
-				$utc = ($date->getTimestamp() + $date->getOffset()) * 1000;	
-				$data .= "[".$utc.",".(($r[0]<>'')?$r[0]:'null')."],";
-			}
-			$data = substr($data,0,strlen($data)-1);
-			
-			$resultat .= '{ "name": "'.$label.'",';
-			$resultat .= '"data": ['.$data.']';
-			$resultat .= '},';
-		
-		}
-		$resultat = substr($resultat,0,strlen($resultat)-1);
-		
-		$this->sendResponse( '{ "grapheData": ['.$resultat.']}' );		
+
+        // First get the bounds of the season:
+        $sql = "SELECT oko_saisons.date_debut, oko_saisons.date_fin FROM oko_saisons WHERE id = $idSaison";
+        $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$sql); 
+
+        $result = $this->query($sql);
+        if (!$r = $result->fetch_assoc())
+           return null;
+        
+        $season_start = $r['date_debut'];
+        $season_end = $r['date_fin'];
+        
+		$fields = array( session::getInstance()->getLabel('lang.text.graphe.label.tcmax') => 'MAX(Tc_ext_max)',
+                         session::getInstance()->getLabel('lang.text.graphe.label.tcmin') => 'MIN(Tc_ext_min)',
+                         session::getInstance()->getLabel('lang.text.graphe.label.conso') => 'SUM(conso_kg)',
+                         session::getInstance()->getLabel('lang.text.graphe.label.dju') => 'SUM(dju)',
+                         session::getInstance()->getLabel('lang.text.graphe.label.nbcycle') => 'SUM(nb_cycle)'
+                      );
+
+        $columns = implode(', ', $fields);
+        
+        $sql = "SELECT $columns, DATE_FORMAT(MIN(oko_resume_day.jour),'%Y-%m-01') AS jour "
+              ."FROM oko_saisons "
+              ."INNER JOIN oko_resume_day "
+              ."WHERE oko_saisons.id = $idSaison "
+              ."AND oko_resume_day.jour BETWEEN oko_saisons.date_debut AND oko_saisons.date_fin "
+              ."GROUP BY YEAR(oko_resume_day.jour), MONTH(oko_resume_day.jour)"; // implicite order by when grouping
+
+        $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$sql); 
+
+        $result = $this->query($sql);
+
+        while($r = $result->fetch_assoc() ) {
+          $date = new DateTime($r['jour'], new DateTimeZone('Europe/Paris'));
+          $utc = ($date->getTimestamp() + $date->getOffset()) * 1000;	
+
+          foreach ($fields as $label => $colonneSql){
+              $data[$colonneSql][$date->format('Ym')] = "[".$utc.",".$r[$colonneSql]."]";
+          }
+        }
+        
+        $resultat = array();        
+        foreach ($fields as $label => $colonneSql){
+          // Add nulls to empty months so that the chart looks always the same with 12 months
+          $this->normalizeMonthsInSynthese($season_start, $season_end, $data[$colonneSql]);
+          $resultat[] = '{ "name": "'.$label.'", "data": ['.implode(', ', $data[$colonneSql]).']}';
+        }        
+
+        $strResultat = implode(', ', $resultat);
+
+		$this->sendResponse( '{ "grapheData": ['.$strResultat.']}' );		
 	}
 	
+    /**
+     * Adds empty entries in the array for each data between start and end
+     * that is not set already
+     * 
+     * @param type $start
+     * @param type $end
+     * @param type $inArray
+     */
+    private function normalizeMonthsInSynthese($start, $end, &$inArray)
+    {
+        $date = new DateTime($start, new DateTimeZone('Europe/Paris'));
+        $date_fin = new DateTime($end);
+
+        while ($date < $date_fin){
+            $utc = ($date->getTimestamp() + $date->getOffset()) * 1000;	
+            if (!isset($inArray[$date->format('Ym')]))
+              $inArray[$date->format('Ym')] = "[".$utc.", null]";
+              
+            $date->add(new DateInterval('P1M'));
+        }
+
+        ksort($inArray);   
+    }
+    
 	public function getSyntheseSaisonTable($idSaison){
-		
-		$q = "select DATE_FORMAT(oko_dateref.jour,'%m-%Y') as mois, ".
+				
+        $q = "SELECT DATE_FORMAT(oko_resume_day.jour,'%m-%Y') as mois, ".
 					"IFNULL(sum(oko_resume_day.nb_cycle),'-') as nbCycle, ".
 					"IFNULL(sum(oko_resume_day.conso_kg),'-') as conso, ".
 					"IFNULL(sum(oko_resume_day.dju),'-') as dju, ".
 					"IFNULL(round( ((sum(oko_resume_day.conso_kg) * 1000) / sum(oko_resume_day.dju) / ".SURFACE_HOUSE."),2),'-') as g_dju_m ".
-					"FROM oko_saisons, oko_resume_day ".
-					"RIGHT JOIN oko_dateref ON oko_dateref.jour = oko_resume_day.jour ".
-					"WHERE oko_saisons.id=".$idSaison." AND oko_dateref.jour BETWEEN oko_saisons.date_debut AND oko_saisons.date_fin ".
-					"GROUP BY MONTH(oko_dateref.jour) ".
-					"ORDER BY YEAR(oko_dateref.jour), MONTH(oko_dateref.jour) ASC;";
-					
+              "FROM oko_saisons ".
+              "INNER JOIN oko_resume_day ON oko_resume_day.jour BETWEEN oko_saisons.date_debut AND oko_saisons.date_fin ".
+              "WHERE oko_saisons.id = $idSaison ".
+              "GROUP BY YEAR(oko_resume_day.jour), MONTH(oko_resume_day.jour)";
+        
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
 		
 		$result = $this->query($q);
@@ -365,8 +424,8 @@ class rendu extends connectDb{
 		while($r = $result->fetch_object() ) {
 			$data[] = $r;
 		}
+
 		$this->sendResponse( json_encode($data, JSON_NUMERIC_CHECK) );
-		
 	}
 	
 	public function getAnnotationByDay($day){
