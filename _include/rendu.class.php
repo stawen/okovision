@@ -327,24 +327,32 @@ class rendu extends connectDb{
 	}
 	
 	public function getSyntheseSaison($idSaison){
-		
+
+        // First get the bounds of the season:
+        $sql = "SELECT oko_saisons.date_debut, oko_saisons.date_fin FROM oko_saisons WHERE id = $idSaison";
+        $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$sql); 
+
+        $result = $this->query($sql);
+        if (!$r = $result->fetch_assoc())
+           return null;
+        
+        $season_start = $r['date_debut'];
+        $season_end = $r['date_fin'];
+        
 		$fields = array( session::getInstance()->getLabel('lang.text.graphe.label.tcmax') => 'MAX(Tc_ext_max)',
-							session::getInstance()->getLabel('lang.text.graphe.label.tcmin') => 'MIN(Tc_ext_min)',
-							session::getInstance()->getLabel('lang.text.graphe.label.conso') => 'SUM(conso_kg)',
-							session::getInstance()->getLabel('lang.text.graphe.label.dju') => 'SUM(dju)',
-							session::getInstance()->getLabel('lang.text.graphe.label.nbcycle') => 'SUM(nb_cycle)'
-						);
-		
+                         session::getInstance()->getLabel('lang.text.graphe.label.tcmin') => 'MIN(Tc_ext_min)',
+                         session::getInstance()->getLabel('lang.text.graphe.label.conso') => 'SUM(conso_kg)',
+                         session::getInstance()->getLabel('lang.text.graphe.label.dju') => 'SUM(dju)',
+                         session::getInstance()->getLabel('lang.text.graphe.label.nbcycle') => 'SUM(nb_cycle)'
+                      );
 
         $columns = implode(', ', $fields);
         
-        $sql = "SELECT $columns, MIN(oko_resume_day.jour) AS jour "
+        $sql = "SELECT $columns, DATE_FORMAT(MIN(oko_resume_day.jour),'%Y-%m-01') AS jour "
               ."FROM oko_saisons "
               ."INNER JOIN oko_resume_day "
               ."WHERE oko_saisons.id = $idSaison "
-              ."AND oko_resume_day.jour "
-              ."BETWEEN oko_saisons.date_debut "
-              ."AND oko_saisons.date_fin "
+              ."AND oko_resume_day.jour BETWEEN oko_saisons.date_debut AND oko_saisons.date_fin "
               ."GROUP BY YEAR(oko_resume_day.jour), MONTH(oko_resume_day.jour)"; // implicite order by when grouping
 
         $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$sql); 
@@ -356,21 +364,46 @@ class rendu extends connectDb{
           $utc = ($date->getTimestamp() + $date->getOffset()) * 1000;	
 
           foreach ($fields as $label => $colonneSql){
-              $data[$colonneSql][] = "[".$utc.",".$r[$colonneSql]."]";
+              $data[$colonneSql][$date->format('Ym')] = "[".$utc.",".$r[$colonneSql]."]";
           }
         }
         
         $resultat = array();        
         foreach ($fields as $label => $colonneSql){
-            $resultat[] = '{ "name": "'.$label.'", "data": ['.implode(', ', $data[$colonneSql]).']}';
+          // Add nulls to empty months so that the chart looks always the same with 12 months
+          $this->normalizeMonthsInSynthese($season_start, $season_end, $data[$colonneSql]);
+          $resultat[] = '{ "name": "'.$label.'", "data": ['.implode(', ', $data[$colonneSql]).']}';
         }        
 
         $strResultat = implode(', ', $resultat);
-        		
+
 		$this->sendResponse( '{ "grapheData": ['.$strResultat.']}' );		
 	}
 	
-	
+    /**
+     * Adds empty entries in the array for each data between start and end
+     * that is not set already
+     * 
+     * @param type $start
+     * @param type $end
+     * @param type $inArray
+     */
+    private function normalizeMonthsInSynthese($start, $end, &$inArray)
+    {
+        $date = new DateTime($start, new DateTimeZone('Europe/Paris'));
+        $date_fin = new DateTime($end);
+
+        while ($date < $date_fin){
+            $utc = ($date->getTimestamp() + $date->getOffset()) * 1000;	
+            if (!isset($inArray[$date->format('Ym')]))
+              $inArray[$date->format('Ym')] = "[".$utc.", null]";
+              
+            $date->add(new DateInterval('P1M'));
+        }
+
+        ksort($inArray);   
+    }
+    
 	public function getSyntheseSaisonTable($idSaison){
 				
         $q = "SELECT DATE_FORMAT(oko_resume_day.jour,'%m-%Y') as mois, ".
