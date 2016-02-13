@@ -107,6 +107,36 @@
 				
 				    </fieldset>
     			
+
+                    <fieldset>
+    				
+    				<!-- Form Name -->
+    					<legend><?php echo session::getInstance()->getLabel('lang.text.page.admin.silo') ?></legend>
+    					
+    					<!-- Select Basic -->
+    					<div class="form-group">
+    					  <label class="col-md-4 control-label" for="oko_loadingmode"><?php echo session::getInstance()->getLabel('lang.text.page.admin.loading_mode') ?></label>
+    					  <div class="col-md-3">
+    					    <select id="oko_loadingmode" name="oko_loadingmode" class="form-control">
+    					        <option value="0"><?php echo session::getInstance()->getLabel('lang.text.page.admin.loading_mode_bags') ?></option>
+    			                <option value="1" <?php if(HAS_SILO){ echo "selected=selected";} ?> ><?php echo session::getInstance()->getLabel('lang.text.page.admin.loading_mode_silo') ?></option>
+    					    </select>
+    					  </div>
+    					 
+    					</div>
+    					
+                        <!-- Text input-->
+                        <div class="form-group" id="form-silo-details" <?php if(!HAS_SILO){ echo 'style="display: none;"';} ?>>
+                            <label class="col-md-4 control-label" for="oko_silo_size"><?php echo session::getInstance()->getLabel('lang.text.page.admin.silo_size') ?></label>  
+                            <div class="col-md-3">
+                                <input id="oko_silo_size" name="oko_silo_size" type="text" class="form-control input-md" placeholder="ex : 3500" value="<?php echo SILO_SIZE;?>">
+                                <span class="help-block" id="url_csv"></span> 
+                            </div>
+    					</div>
+    				
+    				</fieldset>                    
+                    
+                    
     			</form>
                 <div  align="center">
 					    <button id="bt_save_infoge" name="bt_save_infoge" class="btn btn-primary" type="button"><?php echo session::getInstance()->getLabel('lang.text.page.admin.save') ?></button>

@@ -55,7 +55,9 @@ class administration extends connectDb{
                         "surface_maison"            => $s['surface_maison'],
                         "get_data_from_chaudiere"   => $s['oko_typeconnect'],
                         "timezone"					=> $s['timezone'],
-                        "send_to_web"               => $s['send_to_web']
+                        "send_to_web"               => $s['send_to_web'],
+                        "has_silo"                  => $s['has_silo'],
+                        "silo_size"                 => $s['silo_size']
                     );
         
         $r = array();
