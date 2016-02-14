@@ -105,7 +105,6 @@
 <?php
 include('_templates/footer.php');
 ?>
-    <script src="js/jquery.fileupload.js"></script>
 	<script src="js/adminSeason.js"></script>
     </body>
 </html>
