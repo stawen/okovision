@@ -25,6 +25,21 @@ $t = new timeExec();
         }
         
     }
-
+    
+    $q = "CREATE TABLE IF NOT EXISTS `oko_silo_events` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `event_date` date NOT NULL,
+            `quantity` int(5) unsigned NOT NULL COMMENT 'in kg',
+            `price` int(8) NOT NULL,
+            `event_type` char(10) NOT NULL DEFAULT 'PELLET',
+            PRIMARY KEY (`id`)
+          ) ENGINE=MYISAM DEFAULT CHARSET=utf8";
+        
+    $this->log->info("UPGRADE | $version | Adding table oko_silo_events");  
+        
+    if(!$this->query($q)){
+        $this->log->info("UPGRADE | $version | Failed | ".$q);
+    }  
+  
 $this->log->info("UPGRADE | $version | end :".$t->getTime());
 ?>

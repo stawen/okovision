@@ -74,6 +74,7 @@
                         <li class="dropdown-header"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> <?php echo session::getInstance()->getLabel('lang.text.menu.admin') ?></li>
                             <li><a href="adminParam.php"><?php echo session::getInstance()->getLabel('lang.text.menu.admin.information') ?></a></li>
                             <li><a href="adminSeason.php"><?php echo session::getInstance()->getLabel('lang.text.menu.admin.season') ?></a></li>
+                            <li><a href="adminEvents.php"><?php echo session::getInstance()->getLabel('lang.text.menu.admin.events') ?></a></li>
                             <li><a href="adminMatrix.php"><?php echo session::getInstance()->getLabel('lang.text.menu.admin.matrix') ?></a></li>
                     <li class="divider"></li>
                     

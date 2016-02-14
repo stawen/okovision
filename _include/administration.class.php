@@ -532,7 +532,86 @@ class administration extends connectDb{
 		$this->sendResponse($r);
 	}
 	
+	///-------------------
+    
+
+	public function getEvents(){
+		
+		$r = array();
+
+        $q = "SELECT id, "
+                  . "DATE_FORMAT(event_date,'%d/%m/%Y') AS event_date, "
+                  . "quantity, "
+                  . "price, "
+                  . "event_type "
+              . "FROM oko_silo_events "
+              . "ORDER BY oko_silo_events.event_date DESC";
+         
+	    $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
+	    
+	    $result = $this->query($q);
+	    
+	    if($result){
+	    	$r['response'] = true;
+	    	$tmp = array();
+	    	while($res = $result->fetch_object()){
+				array_push($tmp, $res);
+			}
+            
+	    	$r['data'] = $tmp;
+	    }else{
+	    	$r['response'] = false;
+	    }
+	    
+	    $this->sendResponse($r);
+	}
 	
+	public function setEvent($s){
+		$r = array();
+		
+        $query = "INSERT INTO oko_silo_events "
+                . "(event_date, quantity,  price,  event_type) "
+                . "VALUES "
+                . "('".$this->realEscapeString($s['event_date'])."',"
+                . " '".$this->realEscapeString($s['quantity'])."',"
+                . " '".$this->realEscapeString($s['price'])."',"
+                . " '".$this->realEscapeString($s['event_type'])."')" ;
+        
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$query);
+		
+		$r['response'] = $this->query($query);
+		
+		$this->sendResponse($r);
+	}
+	
+	public function updateEvent($s){
+		$r = array();
+		
+		$query = "UPDATE oko_silo_events SET "
+                . " event_date='".$this->realEscapeString($s['event_date'])."', "
+                . " quantity='".$this->realEscapeString($s['quantity'])."', "
+                . " price='".$this->realEscapeString($s['price'])."', "
+                . " event_type='".$this->realEscapeString($s['event_type'])."' "
+                . " WHERE id=".$s['idEvent']  ;
+		
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$query);
+		
+		$r['response'] = $this->query($query);
+		
+		$this->sendResponse($r);
+	}
+	
+	
+	public function deleteEvent($s){
+		$r = array();
+		$query = "DELETE FROM oko_silo_events where id=".$s['idEvent'];
+		
+		$r['response'] = $this->query($query);
+		$this->sendResponse($r);
+	}
+
+    ///-------------------
+    
 	/*
 	* Function return current version
 	*/
