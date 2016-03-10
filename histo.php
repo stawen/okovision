@@ -12,7 +12,38 @@
 ?>   
 
     <div class="container" role="main">
-		
+
+<?php
+
+if (HAS_SILO)
+{
+?>
+    <div class="page-header row">
+
+        <div class="col-md-4" >
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><?php echo session::getInstance()->getLabel('lang.text.page.label.silo') ?></h3>
+                </div>
+                <div class="panel-body">
+
+                    <div id="silo_status">
+                      <div class="progress">
+                          <div id="silo_progress_bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                          </div>
+                      </div>                    
+
+                      <p class="text-center " id="silo_remains"></p>
+                    </div>
+                    <div id="silo_status_alert" class="alert alert-danger" role="alert"></div>
+                </div>
+            </div>            
+        </div>
+    </div>
+
+<?php
+} // HAS_SILO
+?>		
 		<div class="page-header row">
 		 
 			<div class="col-md-9" >

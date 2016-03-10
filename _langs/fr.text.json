@@ -122,6 +122,7 @@
     "lang.text.page.label.tcmin": "T°C Min (ext) :",
     "lang.text.page.label.dju": "DJU :",
     "lang.text.page.label.nbcycle": "Nb Cycle :",
+    "lang.text.page.label.silo": "Silo",
     
     "lang.text.page.rt.logginprogress": "Connexion en cours...",
     "lang.text.page.rt.modal.title": "Paramètres de connexion à votre chaudière<br \/><small>Ceux pour vous connecter à l'interface web de votre chaudière<\/small>",

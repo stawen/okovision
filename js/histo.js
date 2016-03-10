@@ -4,6 +4,15 @@
  * Utilisation commerciale interdite sans mon accord
  ******************************************************/
 /* global lang, Highcharts */
+if (!String.prototype.format) {
+    String.prototype.format = function () {
+        var args = arguments;
+        return this.replace(/\{(\d+)\}/g, function (m, n) {
+            return args[n];
+        });
+    };
+}
+
 $(document).ready(function() {
 
 
@@ -200,6 +209,41 @@ $(document).ready(function() {
 
 	}
 
+        function status_silo()
+        {
+            /*
+             * Gestion des indicateurs du mois 
+             */
+            $.api('GET', 'rendu.getSiloStatus', {}).done(function(json) {
+
+                        if (json.no_silo)
+                        {
+                            return;
+                        }
+                        
+                        if (json.no_silo_size)
+                        {
+                            $('#silo_status').hide();
+                            $('#silo_status_alert').html(lang.text.no_silo_size);                            
+                        }
+                        
+                        if (json.no_fill_date)
+                        {
+                            $('#silo_status').hide();
+                            $('#silo_status_alert').html(lang.text.no_fill_date_for_silo);
+                        }
+                        $('#silo_status_alert').hide();
+                        
+                        $("#silo_progress_bar").text(json.percent + "% ("+json.remains+" Kg)");
+                        $("#silo_progress_bar").css('width', json.percent+'%').attr('aria-valuenow', json.percent);  
+                        $("#silo_remains").text(lang.text.estimatedEmptyDate.format(json.estimatedFillDate)); // "(Est. vide le {0})
+
+                    })
+                    .error(function() {
+                            $.growlErreur(lang.error.getSiloStatus);
+                    });            
+        }
+        
 	function generer_synthese_saison() {
 
 		$.api('GET', 'rendu.getTotalSaison', {
@@ -424,6 +468,8 @@ $(document).ready(function() {
 
 
 	generer_graphic();
+        
+        status_silo();
 
 	$.api('GET', 'admin.getSaisons').done(function(json) {
 		var today = new Date();
