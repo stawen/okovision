@@ -237,7 +237,7 @@ $(document).ready(function() {
                         $("#silo_progress_bar").text(json.percent + "% ("+json.remains+" Kg)");
                         $("#silo_progress_bar").css('width', json.percent+'%').attr('aria-valuenow', json.percent);  
                         $("#silo_remains").text(lang.text.estimatedEmptyDate.format(json.estimatedFillDate)); // "(Est. vide le {0})
-
+                        $("#silo_remains_tip").attr('data-original-title', lang.text.estimationReliability.format(json.estimationReliability));
                     })
                     .error(function() {
                             $.growlErreur(lang.error.getSiloStatus);

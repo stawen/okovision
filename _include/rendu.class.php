@@ -305,11 +305,17 @@ class rendu extends connectDb{
 		while ($row = $result->fetch_assoc()) {
            $quantity_per_day[$row['jour']] = $row['conso_kg'];
         }
-				        
+				
+        $nbDays = 0;
+        $nbReliableDays = 0;
+        
         while ($woodLeft > 0)
         {
           if (isset($quantity_per_day[$today->format('Y-m-d')]))
+          {
             $woodForToday = $quantity_per_day[$today->format('Y-m-d')];
+            $nbReliableDays ++;
+          }
           else
             $woodForToday = $qtyUsedTheDayBefore;
 
@@ -317,13 +323,16 @@ class rendu extends connectDb{
 
           $woodLeft -= $woodForToday;
           $today->add(new DateInterval('P1D'));
+          $nbDays ++;
         }
 
         $estimatedFillDate = $today;
-        
+        $estimationReliability = round(100 * $nbReliableDays / $nbDays);
+
 		$this->sendResponse( json_encode( 	array( 	"remains" => $remains,
                                                     "percent" => $percent,
-                                                    "estimatedFillDate" => $estimatedFillDate->format('d/m/Y')
+                                                    "estimatedFillDate" => $estimatedFillDate->format('d/m/Y'),
+                                                    "estimationReliability" => $estimationReliability
 											)
 											, JSON_NUMERIC_CHECK ) );
 		

@@ -33,7 +33,10 @@ if (HAS_SILO)
                           </div>
                       </div>                    
 
-                      <p class="text-center " id="silo_remains"></p>
+                      <p class="text-center">
+                          <span id="silo_remains_tip" class="glyphicon glyphicon-info-sign tip" title="" data-original-title=""></span> 
+                          <span id="silo_remains"></span>
+                      </p>
                     </div>
                     <div id="silo_status_alert" class="alert alert-danger" role="alert"></div>
                 </div>
