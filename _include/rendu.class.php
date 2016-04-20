@@ -37,10 +37,9 @@ class rendu extends connectDb{
     	while($c = $result->fetch_object()){
 			
 			$capteur = $cap->get($c->id);
-			//$q = "SELECT (FROM_UNIXTIME(CONCAT(jour,' ',heure)))*1000 as timestamp, round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
+			
 			$q = "SELECT timestamp * 1000 as timestamp, round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
-			//$q = "SELECT jour,heure, round((col_".$capteur['column_oko']." * ".$c->coeff."),2) as value FROM oko_historique_full "
-		         ."WHERE jour ='".$jour."'";
+			     ."WHERE jour ='".$jour."'";
 			        
 			$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$c->name." | ".$q);
 			
@@ -129,7 +128,6 @@ class rendu extends connectDb{
 		//limiter le calcul une intervalle de temps ou la journéee entiere
 		$intervalle = "";
 		if($timeStart != null && $timeEnd != null){
-			//$intervalle = "AND (heure BETWEEN TIME(FROM_UNIXTIME(".$timeStart.")) AND TIME(FROM_UNIXTIME(".$timeEnd.")) )";
 			$intervalle = "AND timestamp BETWEEN ".$timeStart." AND ".$timeEnd;
 		}
 		
@@ -150,7 +148,7 @@ class rendu extends connectDb{
 		//limiter le calcul une intervalle de temps ou la journéee entiere
 		$intervalle = "";
 		if($timeStart != null && $timeEnd != null){
-			//$intervalle = "AND (heure BETWEEN TIME(FROM_UNIXTIME(".$timeStart.")) AND TIME(FROM_UNIXTIME(".$timeEnd.")) )";
+			
 			$intervalle = "AND timestamp BETWEEN ".$timeStart." AND ".$timeEnd;
 		}
 		
@@ -172,7 +170,7 @@ class rendu extends connectDb{
 		//limiter le calcul une intervalle de temps ou la journéee entiere
 		$intervalle = "";
 		if($timeStart != null && $timeEnd != null){
-			//$intervalle = "AND (heure BETWEEN TIME(FROM_UNIXTIME(".$timeStart.")) AND TIME(FROM_UNIXTIME(".$timeEnd.")) )";
+			
 			$intervalle = "AND timestamp BETWEEN ".$timeStart." AND ".$timeEnd;
 		}
 		

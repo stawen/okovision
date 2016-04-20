@@ -1,3 +1,6 @@
+##1.7.5
+* Correction orthographe (bgorge)
+
 ##1.7.4
 * Correction perte des noms des capteurs suite maj 1.7.3
 
