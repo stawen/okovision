@@ -54,8 +54,10 @@ DEFINE('REP_DEPOT', '###_FTP_DEPOT_###');
 DEFINE('GET_CHAUDIERE_DATA_BY_IP', ($config['get_data_from_chaudiere']==1)?true:false); // default -> true //json
 // Activation/Desctivation du transfert du fichier de la chaudiere vers une autre serveur en + de celui hebergeant l'application.
 DEFINE('SEND_TO_WEB', ($config['send_to_web']==1)?true:false); // default -> false //json
-
-
+//
+// Utilisation d'un silo
+DEFINE('HAS_SILO', ($config['has_silo']==1)?true:false); // default -> true //json
+DEFINE('SILO_SIZE', $config['silo_size']); // kg
 
 /****
 	DONT'T TOUCH 

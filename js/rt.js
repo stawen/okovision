@@ -3,7 +3,7 @@
  * Auteur : Stawen Dronek
  * Utilisation commerciale interdite sans mon accord
  ******************************************************/
-/* global lang, Highcharts */
+/* global lang, Highcharts, $ */
 $(document).ready(function() {
 
     $.api('GET', 'graphique.getGraphe').done(function(json) {

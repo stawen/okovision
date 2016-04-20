@@ -104,6 +104,17 @@ CREATE TABLE IF NOT EXISTS `oko_asso_capteur_graphe` (
 ) ENGINE=MYISAM DEFAULT CHARSET=utf8;
 
 
+DROP TABLE IF EXISTS `oko_silo_events`;
+CREATE TABLE IF NOT EXISTS `oko_silo_events` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `event_date` date NOT NULL,
+  `quantity` int(5) unsigned NOT NULL COMMENT 'in kg',
+  `remaining` int(6)  NOT NULL COMMENT 'in kg',
+  `price` int(8) NOT NULL,
+  `event_type` char(10) NOT NULL DEFAULT 'PELLET',
+  PRIMARY KEY (`id`)
+) ENGINE=MYISAM DEFAULT CHARSET=utf8;
+
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

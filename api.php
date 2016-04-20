@@ -90,6 +90,9 @@ if (is_ajax() && is_valid()) {
     					case "getIndicByMonth":
     					    $r->getIndicByMonth($_GET['month'],$_GET['year']); 
     					    break;
+    					case "getSiloStatus":
+    					    $r->getSiloStatus(); 
+    					    break;                          
     					case "getHistoByMonth":
     					    $r->getHistoByMonth($_GET['month'],$_GET['year']);
     					    break;

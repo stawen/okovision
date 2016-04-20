@@ -3,7 +3,7 @@
  * Auteur : Stawen Dronek
  * Utilisation commerciale interdite sans mon accord
  ******************************************************/
-/* global lang */
+/* global lang, $ */
 
 $(document).ready(function() {
 
@@ -48,7 +48,17 @@ $(document).ready(function() {
 		}
 		*/
 	});
+        
+	$("#oko_loadingmode").change(function() {
 
+		if ($(this).val() == 1) {
+			$("#form-silo-details").show();
+		}
+		else {
+			$("#form-silo-details").hide();
+		}
+	});
+        
 	$('#bt_save_infoge').click(function() {
 
 		var tab = {
@@ -58,7 +68,9 @@ $(document).ready(function() {
 			surface_maison: $('#surface_maison').val(),
 			oko_typeconnect: $('#oko_typeconnect').val(),
 			timezone: $("#timezone").val(),
-			send_to_web: 0
+			send_to_web: 0,
+            has_silo: $('#oko_loadingmode').val(),
+            silo_size: $('#oko_silo_size').val()              
 		};
 		
 		$.api('POST', 'admin.saveInfoGe', tab, false).done(function(json) {

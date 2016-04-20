@@ -25,6 +25,29 @@ $t = new timeExec();
         }
         
     }
+    
+    $q = "CREATE TABLE IF NOT EXISTS `oko_silo_events` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `event_date` date NOT NULL,
+            `quantity` int(5) unsigned NOT NULL COMMENT 'in kg',
+            `remaining` int(6) NOT NULL COMMENT 'in kg',
+            `price` int(8) NOT NULL,
+            `event_type` char(10) NOT NULL DEFAULT 'PELLET',
+            PRIMARY KEY (`id`)
+          ) ENGINE=MYISAM DEFAULT CHARSET=utf8";
+        
+    $this->log->info("UPGRADE | $version | Adding table oko_silo_events");  
+        
+    if(!$this->query($q)){
+        $this->log->info("UPGRADE | $version | Failed | ".$q);
+    }  
+  
+  
+//ajouter dans config.php
+// Utilisation d'un silo
+$configFile = file_get_contents('config.php');
+$configFile = str_replace("//NEWPARAMUPDATE","// Utilisation d'un silo\nDEFINE('HAS_SILO', ($"."config['has_silo']==1)?true:false); // default -> true //json \nDEFINE('SILO_SIZE', $"."config['silo_size']); // kg \n//NEWPARAMUPDATE",$configFile);
+file_put_contents('config.php',$configFile);
 
 $this->log->info("UPGRADE | $version | end :".$t->getTime());
 ?>

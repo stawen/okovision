@@ -3,7 +3,7 @@
  * Auteur : Stawen Dronek
  * Utilisation commerciale interdite sans mon accord
  ******************************************************/
-/* global lang */
+/* global lang, $ */
 $(document).ready(function() {
 
 	

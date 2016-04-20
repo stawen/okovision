@@ -77,6 +77,20 @@ if (is_ajax() && is_valid()) {
                         case "updateSaison":
                         	$a->updateSaison($_POST);
                         	break;
+                          
+                        case "getEvents":
+                        	$a->getEvents();
+                        	break;
+                        case "setEvent":
+                        	$a->setEvent($_POST);
+                        	break;
+                        case "deleteEvent":
+                        	$a->deleteEvent($_POST);
+                        	break;
+                        case "updateEvent":
+                        	$a->updateEvent($_POST);
+                        	break;
+                          
                         case "makeSyntheseByDay":
                             $a->makeSyntheseByDay($_GET['date']);
                             break;
@@ -193,6 +207,9 @@ if (is_ajax() && is_valid()) {
     					case "getIndicByMonth":
     					    $r->getIndicByMonth($_GET['month'],$_GET['year']); 
     					    break;
+                        case "getSiloStatus":
+                            $r->getSiloStatus(); 
+    					    break;  
     					case "getHistoByMonth":
     					    $r->getHistoByMonth($_GET['month'],$_GET['year']);
     					    break;

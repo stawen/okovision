@@ -235,6 +235,112 @@ class rendu extends connectDb{
 		
 	}
 	
+    /**
+     * Calculates how much is left in the silo (not now : when it will be empty (if enough data available)).
+     * 
+     */
+	public function getSiloStatus(){
+		
+		if (!HAS_SILO){
+          $this->sendResponse( json_encode( 	
+									array( 	"no_silo" => true) 
+									) 
+							);           
+          return;
+        }
+        
+        if (!SILO_SIZE){
+          // The user needs to enter more data!
+          $this->sendResponse( json_encode( 	array( 	"no_silo_size" => true
+                                              ) ) );          
+          return;          
+        }
+        
+        // First, get the last time the silo has been filed up. max() doesn't work
+        //$q = "SELECT MAX(event_date) as date_last_fill, (quantity + remaining) as pellet_quantity FROM oko_silo_events WHERE event_type='PELLET'";
+        $q = "SELECT event_date as date_last_fill, (quantity + remaining) as pellet_quantity FROM oko_silo_events WHERE event_type='PELLET' order by event_date desc limit 1;";
+        
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
+		
+		$result = $this->query($q);
+		$r = $result->fetch_object();
+		
+        if (empty($r->date_last_fill)){
+          // The user needs to enter more data!
+          $this->sendResponse( json_encode( 	array( 	"no_fill_date" => true
+                                              ) ) );          
+          return;
+        }
+        $pelletQuantity = $r->pellet_quantity;
+        
+        // Now see how much we have burned since then:
+		$q = "SELECT sum(conso_kg) as consoPellet ".
+				"FROM oko_resume_day ".
+				"WHERE oko_resume_day.jour > '".$r->date_last_fill. "'";
+		
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
+		
+		$result = $this->query($q);
+		$r = $result->fetch_object();
+		
+        $remains = round($pelletQuantity - $r->consoPellet);
+        $percent = round(100 * $remains / SILO_SIZE);
+        
+        // Now for some code not very good looking... We are going to estimate
+        // when the silo will be empty:
+  //      $today = new DateTime();
+  //      $to_date = $today->format('Y-m-d');
+  //      $today->sub(new DateInterval('P1Y')); // same day last year
+  //      $from_date = $today->format('Y-m-d');
+  //      $woodLeft = $remains;
+  //      $qtyUsedTheDayBefore = 20; // set a default quantity, that will be reset and used whenever the data is incomplete.
+
+  //      // Lets get 12 months worth of data for the year before:
+  //      $q = "SELECT jour, conso_kg 
+  //            FROM oko_resume_day
+  //            WHERE oko_resume_day.jour BETWEEN '$from_date' AND '$to_date'";
+		
+  //      $this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
+		// $result = $this->query($q);
+  //      $quantity_per_day_month_year = array();
+		// while ($row = $result->fetch_assoc()) {
+  //         $quantity_per_day[$row['jour']] = $row['conso_kg'];
+  //      }
+				
+  //      $nbDays = 0;
+  //      $nbReliableDays = 0;
+        
+  //      while ($woodLeft > 0)
+  //      {
+  //        if (isset($quantity_per_day[$today->format('Y-m-d')]))
+  //        {
+  //          $woodForToday = $quantity_per_day[$today->format('Y-m-d')];
+  //          $nbReliableDays ++;
+  //        }
+  //        else
+  //          $woodForToday = $qtyUsedTheDayBefore;
+
+  //        $qtyUsedTheDayBefore = $woodForToday;
+
+  //        $woodLeft -= $woodForToday;
+  //        $today->add(new DateInterval('P1D'));
+  //        $nbDays ++;
+  //      }
+
+  //      $estimatedFillDate = $today;
+  //      $estimationReliability = round(100 * $nbReliableDays / $nbDays);
+
+		$this->sendResponse( json_encode( 	array( 	"remains" => $remains,
+                                                    "percent" => $percent /*,
+                                                    "estimatedFillDate" => $estimatedFillDate->format('d/m/Y'),
+                                                    "estimationReliability" => $estimationReliability */
+											)
+											, JSON_NUMERIC_CHECK ) );
+		
+		
+	}
+	    
+    
 	public function getHistoByMonth($month,$year){
 		$categorie = array( session::getInstance()->getLabel('lang.text.graphe.label.tcmax') => 'tc_ext_max',
 							session::getInstance()->getLabel('lang.text.graphe.label.tcmin') => 'tc_ext_min',
