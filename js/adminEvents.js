@@ -121,6 +121,9 @@ $(document).ready(function () {
             $(this).find('#typeModal').val("add");
             $(this).find('.modal-title').html(lang.text.addEvent);
             $(this).find('#event-modal-form')[0].reset();
+            $("#form-event-quantity").show();
+            $("#form-event-remaining").show();
+            $("#form-event-price").show();
         });
     }
 

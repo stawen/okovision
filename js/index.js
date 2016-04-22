@@ -1,4 +1,9 @@
-/* global lang, Highcharts */
+/*****************************************************
+ * Projet : Okovision - Supervision chaudiere OeKofen
+ * Auteur : Stawen Dronek
+ * Utilisation commerciale interdite sans mon accord
+ ******************************************************/
+/* global lang, Highcharts, $ */
 $(document).ready(function() {
 	var loader = true;
 	/**
@@ -332,7 +337,18 @@ $(document).ready(function() {
 	/**************************************
 	 **** Creation de la structure de la page 
 	 ************************************/
-
+	$.api('GET', 'rendu.getSiloStatus').done(function(json) {
+		if(json.percent <= 10){
+			$('#stock_alert').show();
+		}
+	});
+	
+	$.api('GET', 'rendu.getAshtrayStatus').done(function(json) {
+		if(json.emptying_ashtrey){
+			$('#ashtray_alert').show();
+		}
+	});
+	
 	$.api('GET', 'rendu.getGraphe').done(function(json) {
 
 			$.each(json.data, function(key, val) {

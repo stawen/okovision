@@ -209,7 +209,10 @@ if (is_ajax() && is_valid()) {
     					    break;
                         case "getSiloStatus":
                             $r->getSiloStatus(); 
-    					    break;  
+    					    break;
+    					case "getAshtrayStatus":
+    					    $r->getAshtrayStatus();
+    					    break;
     					case "getHistoByMonth":
     					    $r->getHistoByMonth($_GET['month'],$_GET['year']);
     					    break;

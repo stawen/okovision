@@ -216,21 +216,24 @@ $(document).ready(function() {
              */
             $.api('GET', 'rendu.getSiloStatus', {}).done(function(json) {
 
-                        if (json.no_silo){
-                        	$("#silo_status").hide();
-                            return;
-                        }
-                        
+                        // if (json.no_silo){ //if no silo, it's bag
+                        // 	$("#silo_status").hide();
+                        //     return;
+                        // }
+                    
                         if (json.no_silo_size){
                             $('#silo_status').hide();
                             $('#silo_status_alert').html(lang.text.no_silo_size);                            
                             $('#silo_status_alert').show('pulsate');
+                            return;
                         }
                         
                         if (json.no_fill_date)
                         {
                             $('#silo_status').hide();
                             $('#silo_status_alert').html(lang.text.no_fill_date_for_silo);
+                            $('#silo_status_alert').show('pulsate');
+                            return;
                         }
                         
                         if(json.percent <=50 && json.percent >= 25){
@@ -243,6 +246,7 @@ $(document).ready(function() {
                         $("#silo_progress_bar").css('width', json.percent+'%').attr('aria-valuenow', json.percent);  
                         // $("#silo_remains").text(lang.text.estimatedEmptyDate.format(json.estimatedFillDate)); // "(Est. vide le {0})
                         // $("#silo_remains_tip").attr('data-original-title', lang.text.estimationReliability.format(json.estimationReliability));
+                        
                     })
                     .error(function() {
                             $.growlErreur(lang.error.getSiloStatus);

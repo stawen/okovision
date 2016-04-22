@@ -57,8 +57,8 @@ DEFINE('SEND_TO_WEB', ($config['send_to_web']==1)?true:false); // default -> fal
 //
 // Utilisation d'un silo
 DEFINE('HAS_SILO', ($config['has_silo']==1)?true:false); // default -> true //json
-DEFINE('SILO_SIZE', $config['silo_size']); // kg
-
+DEFINE('SILO_SIZE', (isset($config['silo_size']))?$config['silo_size']:''); // kg 
+DEFINE('ASHTRAY', (isset($config['ashtray']))?$config['ashtray']:''); // kg 
 /****
 	DONT'T TOUCH 
 ****/

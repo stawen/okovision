@@ -241,15 +241,7 @@ class rendu extends connectDb{
      */
 	public function getSiloStatus(){
 		
-		if (!HAS_SILO){
-          $this->sendResponse( json_encode( 	
-									array( 	"no_silo" => true) 
-									) 
-							);           
-          return;
-        }
-        
-        if (!SILO_SIZE){
+        if (HAS_SILO && !SILO_SIZE){
           // The user needs to enter more data!
           $this->sendResponse( json_encode( 	array( 	"no_silo_size" => true
                                               ) ) );          
@@ -258,7 +250,12 @@ class rendu extends connectDb{
         
         // First, get the last time the silo has been filed up. max() doesn't work
         //$q = "SELECT MAX(event_date) as date_last_fill, (quantity + remaining) as pellet_quantity FROM oko_silo_events WHERE event_type='PELLET'";
-        $q = "SELECT event_date as date_last_fill, (quantity + remaining) as pellet_quantity FROM oko_silo_events WHERE event_type='PELLET' order by event_date desc limit 1;";
+        $eventType = 'PELLET';
+        $totalStockMax = SILO_SIZE;
+        if(!HAS_SILO){
+        	$eventType = 'BAG';
+        }
+        $q = "SELECT event_date as date_last_fill, (quantity + remaining) as pellet_quantity FROM oko_silo_events WHERE event_type='$eventType' order by event_date desc limit 1;";
         
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
 		
@@ -284,7 +281,13 @@ class rendu extends connectDb{
 		$r = $result->fetch_object();
 		
         $remains = round($pelletQuantity - $r->consoPellet);
-        $percent = round(100 * $remains / SILO_SIZE);
+        
+        $totalStockMax = SILO_SIZE;
+        if(!HAS_SILO){
+        	$totalStockMax = $pelletQuantity;
+        }
+        
+        $percent = round(100 * $remains / $totalStockMax);
         
         // Now for some code not very good looking... We are going to estimate
         // when the silo will be empty:
@@ -336,6 +339,43 @@ class rendu extends connectDb{
                                                     "estimationReliability" => $estimationReliability */
 											)
 											, JSON_NUMERIC_CHECK ) );
+		
+		
+	}
+	
+	public function getAshtrayStatus(){
+		$q = "select max(event_date) as date_emptied_ashtray from oko_silo_events where event_type='ASHES';";
+        
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
+		
+		$result = $this->query($q);
+		$r = $result->fetch_object();
+		
+		if (empty($r->date_emptied_ashtray)){
+          // The user needs to enter more data!
+          $this->sendResponse( json_encode( 	array( 	"no_emptied_ashtray" => true
+                                              ) ) );          
+          return;
+        }
+        
+        $q = "SELECT sum(conso_kg) as consoPellet ".
+				"FROM oko_resume_day ".
+				"WHERE oko_resume_day.jour > '".$r->date_emptied_ashtray. "'";
+		
+		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q); 
+		
+		$result = $this->query($q);
+		$r = $result->fetch_object();
+		
+		$remain = ASHTRAY - $r->consoPellet;
+		
+        if($remain <= 0){
+        	$this->sendResponse( json_encode( 	
+        									array("emptying_ashtrey" => true
+                                                ) 
+                                             ) 
+                                );    	
+        }
 		
 		
 	}

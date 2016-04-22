@@ -46,7 +46,7 @@ $t = new timeExec();
 //ajouter dans config.php
 // Utilisation d'un silo
 $configFile = file_get_contents('config.php');
-$configFile = str_replace("//NEWPARAMUPDATE","// Utilisation d'un silo\nDEFINE('HAS_SILO', ($"."config['has_silo']==1)?true:false); // default -> true //json \nDEFINE('SILO_SIZE', $"."config['silo_size']); // kg \n//NEWPARAMUPDATE",$configFile);
+$configFile = str_replace("//NEWPARAMUPDATE","// Utilisation d'un silo\nDEFINE('HAS_SILO', ($"."config['has_silo']==1)?true:false); // default -> true //json \nDEFINE('SILO_SIZE', $"."config['silo_size']); // kg \nDEFINE('ASHTRAY', (isset($"."config['ashtray']))?$"."config['ashtray']:''); // kg \n//NEWPARAMUPDATE",$configFile);
 file_put_contents('config.php',$configFile);
 
 $this->log->info("UPGRADE | $version | end :".$t->getTime());

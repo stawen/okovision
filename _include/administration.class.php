@@ -76,7 +76,8 @@ class administration extends connectDb{
                         "timezone"					=> $s['timezone'],
                         "send_to_web"               => $s['send_to_web'],
                         "has_silo"                  => $s['has_silo'],
-                        "silo_size"                 => $s['silo_size']
+                        "silo_size"                 => $s['silo_size'],
+                        "ashtray"					=> $s['ashtray']
                     );
         
         $r = array();
