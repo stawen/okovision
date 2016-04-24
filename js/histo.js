@@ -214,7 +214,7 @@ $(document).ready(function() {
             /*
              * Gestion des indicateurs du mois 
              */
-            $.api('GET', 'rendu.getSiloStatus', {}).done(function(json) {
+            $.api('GET', 'rendu.getStockStatus', {}).done(function(json) {
 
                         // if (json.no_silo){ //if no silo, it's bag
                         // 	$("#silo_status").hide();

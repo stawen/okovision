@@ -337,13 +337,22 @@ $(document).ready(function() {
 	/**************************************
 	 **** Creation de la structure de la page 
 	 ************************************/
-	$.api('GET', 'rendu.getSiloStatus').done(function(json) {
+	$.api('GET', 'rendu.getStockStatus').done(function(json) {
 		if(json.percent <= 10){
 			$('#stock_alert').show();
 		}
 	});
 	
 	$.api('GET', 'rendu.getAshtrayStatus').done(function(json) {
+		if(json.no_ashtray_info){
+			$('#ashtray_noInfo').show();
+			return
+		}
+		if(json.no_date_emptied_ashtray){
+			$('#ashtray_noDate').show();
+			return
+		}
+		
 		if(json.emptying_ashtrey){
 			$('#ashtray_alert').show();
 		}

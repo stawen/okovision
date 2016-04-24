@@ -127,7 +127,9 @@
     "lang.text.page.label.nbcycle": "Nb Cycle :",
     "lang.text.page.label.stock": "Stock de Pellet disponible :",
     "lang.text.page.label.alertStock": "Attention : Votre stock est inférieur à 10 %, Faites le plein !",
-    "lang.text.page.label.alertAshtray": "Votre cendrier est plein. Vider le et <a href=\"adminEvents.php\">mettez à jour le tableau de suivi</a>",
+    "lang.text.page.label.alertAshtrayNoInfo": "Vous devez préciser la <a href=\"adminParam.php\">taille de votre cendrier<\/a>",
+    "lang.text.page.label.alertAshtrayNoDate": "Vous devez préciser le <a href=\"adminEvents.php\">premier vidage de votre cendrier<\/a>",
+    "lang.text.page.label.alertAshtray": "Votre cendrier est plein. Vider le et <a href=\"adminEvents.php\">mettez à jour le tableau de suivi<\/a>",
     
     "lang.text.page.rt.logginprogress": "Connexion en cours...",
     "lang.text.page.rt.modal.title": "Paramètres de connexion à votre chaudière<br \/><small>Ceux pour vous connecter à l'interface web de votre chaudière<\/small>",

@@ -872,9 +872,11 @@ class administration extends connectDb{
 		$files = scandir('_tmp');
 		$r = array();
 		foreach($files as $f){
-			if ($f <> '.' && $f <> '..' && $f <> 'matrice.csv' && $f <> 'import.csv' && $f <> 'readme.md'){
-				$r[] = $f;
-			}
+			//if ($f == '*.csv'){
+				if ($f <> '.' && $f <> '..' && $f <> 'matrice.csv' && $f <> 'import.csv' && $f <> 'readme.md' && $f <> 'cookies_boiler.txt'){
+					$r[] = $f;
+				}
+			//}
 		}
 		
 		return $this->sendResponse($r);
