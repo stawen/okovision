@@ -84,11 +84,6 @@ $(document).ready(function() {
                     }
                 }
             },
-            tooltip: {
-                shared: true,
-                crosshairs: true,
-                followPointer: true
-            },
             title: {
                 text: ''
             },
@@ -181,7 +176,7 @@ $(document).ready(function() {
                     firstData = firstData + 1;
 
                 }
-                else if (firstData == 2) {
+                else if (firstData === 2) {
                     liveChart.hideLoading();
                 }
 

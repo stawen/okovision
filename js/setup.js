@@ -3,7 +3,7 @@
  * Auteur : Stawen Dronek
  * Utilisation commerciale interdite sans mon accord
  ******************************************************/
-/* global lang */
+/* global lang, $ */
 $(document).ready(function() {
 
 	$("#bt_testConnection").click(function() {
@@ -44,7 +44,7 @@ $(document).ready(function() {
 
 	$("#oko_typeconnect").change(function() {
 
-		if ($(this).val() == 1) {
+		if ($(this).val() === 1) {
 			$("#form-ip").show();
 		}
 		else {

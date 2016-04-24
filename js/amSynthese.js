@@ -92,15 +92,17 @@ $(document).ready(function() {
 	
 	$("#confirmPeriode").click(function() {
 		if ($.validateDate($('#modal_getPeriode').find('#dateStart').val()) && $.validateDate($('#modal_getPeriode').find('#dateEnd').val())) {
+			
+			var dateStart,dateEnd;
 			try {
-				var dateStart = new Date($.datepicker.parseDate('dd/mm/yy', $('#modal_getPeriode').find('#dateStart').val()) ); 
-				var dateEnd = new Date($.datepicker.parseDate('dd/mm/yy', $('#modal_getPeriode').find('#dateEnd').val()) );
-			}
-			catch (error) {
+				dateStart = new Date($.datepicker.parseDate('dd/mm/yy', $('#modal_getPeriode').find('#dateStart').val()) ); 
+				dateEnd = new Date($.datepicker.parseDate('dd/mm/yy', $('#modal_getPeriode').find('#dateEnd').val()) );
+			}catch (error) {
 				$.growlWarning(lang.error.date);
 				return;
 			}
 			var diff = (dateEnd - dateStart) / 1000 / 60 / 60 / 24; // days
+			
 			if(diff < 0){
 				$.growlWarning(lang.error.dateInvert);
 				return;

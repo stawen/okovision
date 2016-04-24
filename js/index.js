@@ -157,9 +157,10 @@ $(document).ready(function() {
 
 		timeStart = typeof timeStart !== 'undefined' ? timeStart : false;
 		timeEnd = typeof timeEnd !== 'undefined' ? timeEnd : false;
-
+		var jour;
+		
 		try {
-			var jour = $.datepicker.formatDate('yy-mm-dd', $.datepicker.parseDate('dd/mm/yy', $("#date_encours").val()));
+			jour = $.datepicker.formatDate('yy-mm-dd', $.datepicker.parseDate('dd/mm/yy', $("#date_encours").val()));
 		}
 		catch (error) {
 			$.errorDate();
@@ -346,11 +347,11 @@ $(document).ready(function() {
 	$.api('GET', 'rendu.getAshtrayStatus').done(function(json) {
 		if(json.no_ashtray_info){
 			$('#ashtray_noInfo').show();
-			return
+			return;
 		}
 		if(json.no_date_emptied_ashtray){
 			$('#ashtray_noDate').show();
-			return
+			return;
 		}
 		
 		if(json.emptying_ashtrey){
