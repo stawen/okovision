@@ -1,7 +1,7 @@
 
 ##1.8.0
 * Correction orthographe
-* Ajout gestion du stock des pellet (Silo et sac)
+* Ajout gestion du stock des pellets (Silo et sac)
 * Gestion des evenements de la chaudière (ramonage, vidage du cendrier, entretien)
 
 ##1.7.4
