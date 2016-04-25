@@ -57,8 +57,9 @@ $(document).ready(function() {
 	function addSaison() {
 
 		if ($.validateDate($('#modal_saison').find('#startDateSaison').val())) {
+			var date;
 			try {
-				var date = $.datepicker.parseDate('dd/mm/yy', $('#modal_saison').find('#startDateSaison').val());
+				date = $.datepicker.parseDate('dd/mm/yy', $('#modal_saison').find('#startDateSaison').val());
 			}
 			catch (error) {
 				$.growlWarning(lang.error.date);
