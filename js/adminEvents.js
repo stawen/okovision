@@ -3,7 +3,7 @@
  * Auteur : Stawen Dronek
  * Utilisation commerciale interdite sans mon accord
  ******************************************************/
-/* global lang */
+/* global lang, $ */
 
 
 if (!String.prototype.format) {
@@ -27,19 +27,28 @@ $(document).ready(function () {
         switch ($(this).val())
         {
             case 'PELLET':
+                $("#form-event-quantity").show();
+                $("#form-event-remaining").show();
+                $("#form-event-price").show();
+                break;
             case 'BAG':
                 $("#form-event-price").show();
                 $("#form-event-quantity").show();
                 break;
             case 'MAINT':
+                $("#form-event-quantity").hide();
+                $("#form-event-remaining").hide();
+                $("#form-event-price").show();
+                break;
             case 'SWEEP':
                 $("#form-event-price").show();
                 $("#form-event-quantity").hide();
+                $("#form-event-remaining").hide();
                 break;
             case 'ASHES':
-            default:
                 $("#form-event-price").hide();
                 $("#form-event-quantity").hide();
+                $("#form-event-remaining").hide();
                 break;
         }
     });
@@ -85,6 +94,7 @@ $(document).ready(function () {
                                                         <td> \
                                                             <input type="hidden" class="event_date" value="' + val.event_date + '">\
                                                             <input type="hidden" class="quantity" value="' + val.quantity + '">\
+                                                            <input type="hidden" class="remaining" value="' + val.remaining + '">\
                                                             <input type="hidden" class="price" value="' + val.price + '">\
                                                             <input type="hidden" class="event_type" value="' + val.event_type + '">\
                                                             <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal_event"> \
@@ -111,6 +121,9 @@ $(document).ready(function () {
             $(this).find('#typeModal').val("add");
             $(this).find('.modal-title').html(lang.text.addEvent);
             $(this).find('#event-modal-form')[0].reset();
+            $("#form-event-quantity").show();
+            $("#form-event-remaining").show();
+            $("#form-event-price").show();
         });
     }
 
@@ -125,9 +138,12 @@ $(document).ready(function () {
         }
 
         try { 
+            var remaining = $('#modal_event').find('#remaining').val()
+            
             var tab = {
                 event_date: $.datepicker.formatDate('yy-mm-dd', date),
                 quantity: 0 + $('#modal_event').find('#quantity').val(),
+                remaining: $.isNumeric(remaining)?remaining:0,
                 price: 0 + $('#modal_event').find('#price').val(),
                 event_type: $('#modal_event').find('#event_type').val()
             };
@@ -144,8 +160,7 @@ $(document).ready(function () {
             if (json.response) {
                 $.growlValidate(lang.valid.save);
                 setTimeout(refreshEvent(), 1000);
-            }
-            else {
+            }else{
                 $.growlErreur(lang.error.saveEvent);
             }
         });
@@ -163,9 +178,11 @@ $(document).ready(function () {
                 $.growlWarning(lang.error.date);
                 return;
             }
+            var remaining = $('#modal_event').find('#remaining').val()
             var tab = {
                 event_date: $.datepicker.formatDate('yy-mm-dd', date),
                 quantity: 0 + $('#modal_event').find('#quantity').val(),
+                remaining: $.isNumeric(remaining)?remaining:0,
                 price: 0 + $('#modal_event').find('#price').val(),
                 event_type: $('#modal_event').find('#event_type').val(),                
                 idEvent: $('#modal_event').find('#eventId').val()
@@ -212,22 +229,25 @@ $(document).ready(function () {
     }
 
     function initModalEditEvent(row) {
+        var event = row.find("td:nth-child(1)").text();
         var id = row.attr("id");
 
         var event_date = row.find(".event_date").val();
         var quantity = row.find(".quantity").val();
+        var remaining = row.find(".remaining").val();
         var price = row.find(".price").val();
         var event_type = row.find(".event_type").val();
 
         $('#modal_event').on('show.bs.modal', function () {
 
             $('#typeModal').val("edit");
-            $('#EventTitle-title').html(lang.text.updateEvent + " : " + event);
+            $('#EventTitle').html(lang.text.updateEvent + " : " + event);
             
             $('#eventId').val(id);
             $('#event_date').val(event_date);
             $('#price').val(price);
             $('#quantity').val(quantity);
+            $('#remaining').val(remaining);
             $('#event_type').val(event_type);   
             
             $('#event_type').change();
@@ -276,6 +296,7 @@ $(document).ready(function () {
 
     });
 
+    $( "#event_date" ).datepicker({ maxDate: 0});
     refreshEvent();
 
 

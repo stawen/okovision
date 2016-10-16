@@ -3,7 +3,7 @@
  * Auteur : Stawen Dronek
  * Utilisation commerciale interdite sans mon accord
  ******************************************************/
-/* global lang, Highcharts */
+/* global lang, Highcharts, $ */
 $(document).ready(function() {
 
     $.api('GET', 'graphique.getGraphe').done(function(json) {
@@ -83,11 +83,6 @@ $(document).ready(function() {
                         enabled: false
                     }
                 }
-            },
-            tooltip: {
-                shared: true,
-                crosshairs: true,
-                followPointer: true
             },
             title: {
                 text: ''
@@ -181,7 +176,7 @@ $(document).ready(function() {
                     firstData = firstData + 1;
 
                 }
-                else if (firstData == 2) {
+                else if (firstData === 2) {
                     liveChart.hideLoading();
                 }
 

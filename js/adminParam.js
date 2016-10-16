@@ -3,7 +3,7 @@
  * Auteur : Stawen Dronek
  * Utilisation commerciale interdite sans mon accord
  ******************************************************/
-/* global lang */
+/* global lang, $ */
 
 $(document).ready(function() {
 
@@ -13,7 +13,7 @@ $(document).ready(function() {
 
 	$("#oko_typeconnect").change(function() {
 
-		if ($(this).val() == 1) {
+		if ($(this).val() === 1) {
 			$("#form-ip").show();
 		}
 		else {
@@ -69,8 +69,9 @@ $(document).ready(function() {
 			oko_typeconnect: $('#oko_typeconnect').val(),
 			timezone: $("#timezone").val(),
 			send_to_web: 0,
-                        has_silo: $('#oko_loadingmode').val(),
-                        silo_size: $('#oko_silo_size').val()              
+            has_silo: $('#oko_loadingmode').val(),
+            silo_size: $('#oko_silo_size').val(),
+            ashtray : $('#oko_ashtray').val()
 		};
 		
 		$.api('POST', 'admin.saveInfoGe', tab, false).done(function(json) {

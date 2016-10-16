@@ -1,3 +1,9 @@
+
+##1.8.0
+* Correction orthographe
+* Ajout gestion du stock des pellets (Silo et sac)
+* Gestion des evenements de la chaudière (ramonage, vidage du cendrier, entretien)
+
 ##1.7.4
 * Correction perte des noms des capteurs suite maj 1.7.3
 

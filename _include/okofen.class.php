@@ -245,7 +245,10 @@ class okofen extends connectDb{
 		}
 	}
 	
-
+	/**
+	* Function making live connection whit boiler
+	* 
+	*/
 	private function curlConnect(){
 		
     	
@@ -288,6 +291,11 @@ class okofen extends connectDb{
 	    
 	}
 
+	/**
+	* Function getting/sending live value into boiler
+	* 
+	* @return json
+	*/
 	private function curlGet($action = 'get&attr=1'){
 		$code = false;
 	    $curl = curl_init();
@@ -323,6 +331,10 @@ class okofen extends connectDb{
 	    return $code;
 	}
 	
+	/**
+	* Function sending live resquest into boiler, and make connection if it doesn't exist
+	* 
+	*/
 	private function sendRequest(){
 		
 		if(!$this->curlGet()){
@@ -332,7 +344,11 @@ class okofen extends connectDb{
 		}
 	}
 	
-	
+	/**
+	* Function for changing in live a boiler configuration
+	* 
+	* @param array list of value boiler to change
+	*/
 	public function applyConfiguration($data = array()){
 		$this->_formdata = json_encode($data);
 		

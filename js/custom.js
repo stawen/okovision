@@ -3,7 +3,7 @@
  * Auteur : Stawen Dronek
  * Utilisation commerciale interdite sans mon accord
  ******************************************************/
-/* global lang, Highcharts, sessionToken, offset */
+/* global lang, Highcharts, sessionToken, $ */
 $(document).ready(function() {
 
 	$(".tip").tooltip({
@@ -26,7 +26,7 @@ $(document).ready(function() {
 			},
 			delay: 120000
 		});
-	}
+	};
 
 	$.growlValidate = function(text) {
 		$.notify({
@@ -36,7 +36,7 @@ $(document).ready(function() {
 			z_index: 9999,
 			type: 'success'
 		});
-	}
+	};
 
 	$.growlErreur = function(text) {
 		$.notify({
@@ -46,7 +46,7 @@ $(document).ready(function() {
 			z_index: 9999,
 			type: 'danger'
 		});
-	}
+	};
 
 	$.growlWarning = function(text) {
 		$.notify({
@@ -56,7 +56,7 @@ $(document).ready(function() {
 			z_index: 9999,
 			type: 'warning'
 		});
-	}
+	};
 	
 	$.api = function(mode, cmd, tab, typeSync) {
 
@@ -66,7 +66,7 @@ $(document).ready(function() {
 		tab = typeof tab !== 'undefined' ? tab : {};
 		typeSync = typeof typeSync !== 'undefined' ? typeSync : true;
 
-		var urlFinal = 'ajax.php?sid=' + sessionToken + '&' + urlFinal;
+		urlFinal = 'ajax.php?sid=' + sessionToken + '&' + urlFinal;
 		//var urlFinal = 'ajax.php?' + urlFinal;
 		var jxhr =  $.ajax({
 			url: urlFinal,
@@ -74,7 +74,7 @@ $(document).ready(function() {
 			data: $.param(tab),
 			async: typeSync
 		}).error(function(e) {
-			var msg = lang.error.communication + ' : ' + cmd
+			var msg = lang.error.communication + ' : ' + cmd;
 			//console.log(e);
 			$.growlErreur(msg);
 		});
@@ -91,7 +91,7 @@ $(document).ready(function() {
 		});
 		
 		return jxhr;
-	}
+	};
 
 	
 	
@@ -99,16 +99,16 @@ $(document).ready(function() {
 	$.validateDate = function(dtValue) {
 		var dtRegex = new RegExp(/\b\d{1,2}[\/]\d{1,2}[\/]\d{4}\b/);
 		return dtRegex.test(dtValue);
-	}
+	};
 
 	$.errorDate = function() {
 		$.growlWarning(lang.error.date);
 		return;
-	}
+	};
 
 	$.DecSepa = function(s) {
 		return s.replace(".", ",");
-	}
+	};
 
 	Highcharts.setOptions({
 		global: {
@@ -130,8 +130,8 @@ $(document).ready(function() {
 
 
 	$("#btlogin").click(function(e){
-		var user = $('#inputUser').val()
-		var pass = $('#inputPassword').val()
+		var user = $('#inputUser').val();
+		var pass = $('#inputPassword').val();
 		
 		if(user !== '' && pass !== ''){
 		
@@ -144,7 +144,7 @@ $(document).ready(function() {
 			});
 		}
 		
-	})
+	});
 	
 	$("#btlogout").click(function(){
 		
@@ -158,8 +158,8 @@ $(document).ready(function() {
 	
 	$("#btChangePass").click(function(e){
 		
-		var pass 	= $('#inputPass').val()
-		var confirm = $('#inputPassConfirm').val()
+		var pass 	= $('#inputPass').val();
+		var confirm = $('#inputPassConfirm').val();
 		
 		if(pass !== '' && confirm !== ''){
 			

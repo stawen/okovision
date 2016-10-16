@@ -67,11 +67,16 @@
     					    </select>
 
                             <label for="event_date" class="control-label"><?php echo session::getInstance()->getLabel('lang.text.page.events.modal.date') ?></label>
-                            <input type="text" class="form-control" name="event_date" id="event_date" placeholder="ex : 01/09/2014" value="<?php echo date('d/m/Y'); ?>">
+                            <input type="text" class="form-control datepicker" name="event_date" id="event_date" placeholder="ex : 01/09/2014" value="<?php echo date('d/m/Y'); ?>">
 
                             <div id="form-event-quantity">
                               <label for="quantity" class="control-label"><?php echo session::getInstance()->getLabel('lang.text.page.events.modal.quantity') ?></label>
                               <input type="text" class="form-control" name="quantity" id="quantity" placeholder="ex : 3000">
+                            </div>
+                            
+                             <div id="form-event-remaining">
+                              <label for="quantity" class="control-label"><?php echo session::getInstance()->getLabel('lang.text.page.events.modal.remaining') ?></label>
+                              <input type="text" class="form-control" name="remaining" id="remaining" placeholder="ex : 200">
                             </div>
                             
                             <div id="form-event-price">
@@ -125,6 +130,7 @@
 <?php
 include('_templates/footer.php');
 ?>
+	<script src="_langs/<?php echo session::getInstance()->getLang() ?>.datepicker.js"></script>
 	<script src="js/adminEvents.js"></script>
     </body>
 </html>

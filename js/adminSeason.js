@@ -3,7 +3,7 @@
  * Auteur : Stawen Dronek
  * Utilisation commerciale interdite sans mon accord
  ******************************************************/
-/* global lang */
+/* global lang,$ */
 
 $(document).ready(function() {
 
@@ -57,8 +57,9 @@ $(document).ready(function() {
 	function addSaison() {
 
 		if ($.validateDate($('#modal_saison').find('#startDateSaison').val())) {
+			var date;
 			try {
-				var date = $.datepicker.parseDate('dd/mm/yy', $('#modal_saison').find('#startDateSaison').val());
+				date = $.datepicker.parseDate('dd/mm/yy', $('#modal_saison').find('#startDateSaison').val());
 			}
 			catch (error) {
 				$.growlWarning(lang.error.date);
@@ -105,8 +106,9 @@ $(document).ready(function() {
 
 	function updateSaison() {
 		if ($.validateDate($('#modal_saison').find('#startDateSaison').val())) {
+			var date;
 			try {
-				var date = $.datepicker.parseDate('dd/mm/yy', $('#modal_saison').find('#startDateSaison').val());
+				date = $.datepicker.parseDate('dd/mm/yy', $('#modal_saison').find('#startDateSaison').val());
 			}
 			catch (error) {
 				//alert(error);
@@ -209,7 +211,7 @@ $(document).ready(function() {
 
 		}
 		if ($(this).children().is(".glyphicon-trash")) {
-			confirmDeleteSaison($(this).closest("tr"))
+			confirmDeleteSaison($(this).closest("tr"));
 		}
 		if ($(this).children().is(".glyphicon-plus")) {
 			initModalAddSaison();
@@ -217,10 +219,10 @@ $(document).ready(function() {
 
 		if ($(this).is("#confirm")) {
 			//console.log($("#modal_action").find('#typeModal').val());
-			if ($("#modal_saison").find('#typeModal').val() == "add") {
+			if ($("#modal_saison").find('#typeModal').val() === "add") {
 				addSaison();
 			}
-			if ($("#modal_saison").find('#typeModal').val() == "edit") {
+			if ($("#modal_saison").find('#typeModal').val() === "edit") {
 				updateSaison();
 			}
 		}

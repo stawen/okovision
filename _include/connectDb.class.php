@@ -50,7 +50,7 @@ class connectDb {
 		
 		if ($this->db->connect_errno) {
 			    $this->log->error('GLOBAL | Connection MySQL impossible : ' . $this->db->connect_error );
-			    exit;
+			    exit(22);
 		}
 	
 		if (!$this->db->set_charset("utf8")) {

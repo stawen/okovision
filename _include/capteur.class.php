@@ -15,6 +15,11 @@ class capteur extends connectDb{
 		parent::__destruct();
 	}
 	
+	/**
+	* Function geting all sensor 
+	* 
+	* @return json (id, name, position_column_csv, column_oko, original_name, type)
+	*/
 	public function getAll(){
 	    $result = $this->query("select id, name, position_column_csv, column_oko, original_name, type from oko_capteur;");
 	    while($row = $result->fetch_assoc()){
@@ -25,6 +30,12 @@ class capteur extends connectDb{
         
 	}
 	
+	/**
+	* Function geting on sensor  by is own id
+	* 
+	* param integer id
+	* @return json (id, name, position_column_csv, column_oko, original_name, type)
+	*/
 	public function get($id){
 	    $capteur = array();
 	    if ($id <> null){

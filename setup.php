@@ -25,7 +25,7 @@
         header("Content-type: text/json");
 		echo json_encode($t, JSON_NUMERIC_CHECK);
 		
-		exit;
+		exit(23);
 	}
 	
 	function makeInstallation($s){
@@ -37,7 +37,7 @@
 	        /* check connection */
     	    if ($mysqli->connect_errno) {
         	    printf("Connect failed: %s\n", $mysqli->connect_error);
-            	exit();
+            	exit(24);
         	}
         
 	        $q = "CREATE DATABASE IF NOT EXISTS `".$s['db_schema']."` /*!40100 DEFAULT CHARACTER SET utf8 */;";

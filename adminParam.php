@@ -71,7 +71,7 @@
 										echo "<option>".$zone."</option>";
 									}
 								}
-								//echo "::".$d."::";
+							
 								?>
 							</select>
     					
@@ -130,10 +130,17 @@
                             <label class="col-md-4 control-label" for="oko_silo_size"><?php echo session::getInstance()->getLabel('lang.text.page.admin.silo_size') ?></label>  
                             <div class="col-md-3">
                                 <input id="oko_silo_size" name="oko_silo_size" type="text" class="form-control input-md" placeholder="ex : 3500" value="<?php echo SILO_SIZE;?>">
-                                <span class="help-block" id="url_csv"></span> 
                             </div>
     					</div>
     				
+    				    <!-- Text input-->
+    					<div class="form-group">
+    					  <label class="col-md-4 control-label" for="oko_ashtray"><?php echo session::getInstance()->getLabel('lang.text.page.admin.param.ashtray') ?></label>  
+    					  <div class="col-md-3">
+    					  <input id="oko_ashtray" name="oko_ashtray" type="text" placeholder="ex : 1000" class="form-control input-md" required=""  value="<?php echo ASHTRAY;?>">
+    					  <span class="help-block"><?php echo session::getInstance()->getLabel('lang.text.page.admin.param.ashtray.desc') ?></span>  
+    					  </div>
+    					</div>
     				</fieldset>                    
                     
                     
@@ -150,7 +157,7 @@
 <?php
 include('_templates/footer.php');
 ?>
-    <script src="js/jquery.fileupload.js"></script>
+    <!--script src="js/jquery.fileupload.js"></script-->
 	<script src="js/adminParam.js"></script>
     </body>
 </html>

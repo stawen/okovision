@@ -13,42 +13,18 @@
 
     <div class="container" role="main">
 
-<?php
-
-if (HAS_SILO)
-{
-?>
-    <div class="page-header row">
-
-        <div class="col-md-4" >
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title"><?php echo session::getInstance()->getLabel('lang.text.page.label.silo') ?></h3>
-                </div>
-                <div class="panel-body">
-
-                    <div id="silo_status">
-                      <div class="progress">
-                          <div id="silo_progress_bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
-                          </div>
-                      </div>                    
-
-                      <p class="text-center">
-                          <span id="silo_remains_tip" class="glyphicon glyphicon-info-sign tip" title="" data-original-title=""></span> 
-                          <span id="silo_remains"></span>
-                      </p>
-                    </div>
-                    <div id="silo_status_alert" class="alert alert-danger" role="alert"></div>
-                </div>
-            </div>            
-        </div>
-    </div>
-
-<?php
-} // HAS_SILO
-?>		
+	
 		<div class="page-header row">
-		 
+		 	<div class="col-md-12" >
+		 		<div id="silo_status_alert" class="alert alert-warning" role="warning" style="display: none;"></div>
+		 	</div>	
+		 	<div class="col-md-12" id="silo_status">
+				<span class="glyphicon glyphicon-fire"></span> <?php echo session::getInstance()->getLabel('lang.text.page.label.stock') ?>
+				<div class="progress">
+					<div id="silo_progress_bar" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+				</div>
+			</div>
+			
 			<div class="col-md-9" >
 				<span class="glyphicon glyphicon-hand-right"></span> <?php echo session::getInstance()->getLabel('lang.text.page.label.conso') ?> <span id="consoPellet" class="label label-primary">00,00 Kg</span> &nbsp;&nbsp;
 				<span class="glyphicon glyphicon-arrow-up"></span> <?php echo session::getInstance()->getLabel('lang.text.page.label.tcmax') ?> <span id="tcmax" class="label label-success">00,0 °C</span> &nbsp;&nbsp;
@@ -85,6 +61,10 @@ if (HAS_SILO)
 			<div class="col-md-12">
 				<span class="glyphicon glyphicon-hand-right"></span> <?php echo session::getInstance()->getLabel('lang.text.page.label.nbcycle') ?> <span id="cycle" class="label label-primary">0<span>
 			</div>	
+			
+			
+			
+			
 		</div>
 		
 		<div>	

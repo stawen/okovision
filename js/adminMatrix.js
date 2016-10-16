@@ -3,7 +3,7 @@
  * Auteur : Stawen Dronek
  * Utilisation commerciale interdite sans mon accord
  ******************************************************/
-/* global lang,sessionToken */
+/* global lang,sessionToken, $ */
 
 $(document).ready(function() {
 
@@ -61,8 +61,8 @@ $(document).ready(function() {
 					$('#headerCsv > tbody:last').append('<tr> \
 				                                        	<td>' + val.original_name + '</td>\
 				                                        	<td>' + val.name + '</td>\
-				                                        	<td class="text-center">' + ((val.boiler != "") ? '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>' : '') + '</td>\
-				                                        	<td>' + ((val.type != "") ? '<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>' : '') + '</td>\
+				                                        	<td class="text-center">' + ((val.boiler !== "") ? '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>' : '') + '</td>\
+				                                        	<td>' + ((val.type !== "") ? '<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>' : '') + '</td>\
 				                                        	<td></td> \
 				                                        </tr>');
 				});

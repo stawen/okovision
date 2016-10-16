@@ -63,13 +63,10 @@ class gstGraphique extends connectDb{
 	    if($result){
 	    	
 	    	$res = $result->fetch_row();
-	    //	$this->log->debug("Nb capteur | ".$res[0]);
 	    	if ($res[0] > 0) {
 	    		$r['exist'] = true;
 	    	}
 	    }
-	    
-	    //$result->free();
 	    $this->sendResponse($r);
     }
     
@@ -189,20 +186,15 @@ class gstGraphique extends connectDb{
 	    $r['exist'] = false;
 	    if($result){
 	    	$res = $result->fetch_row();
-	    //	$this->log->debug("Nb capteur | ".$res[0]);
+
 	    	if ($res[0] > 0) {
 	    		$r['exist'] = true;
 	    	}
 	    }
-	    
-	    //$result->free();
 	    $this->sendResponse($r);
-    	
     }
     
     public function addGrapheAsso($s){
-    	
-    	//$name = $this->db->real_escape_string($s['name']);
     	
     	$q = "INSERT INTO oko_asso_capteur_graphe (oko_graphe_id, oko_capteur_id, position, correction_effect) value (".$s['id_graphe'].",".$s['id_capteur'].",".$s['position'].",".$s['coeff'].")";
     	$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
@@ -267,10 +259,8 @@ class gstGraphique extends connectDb{
      
     	if($this->query($q)){
     		if($s['position']>$s['current'] ){
-    			//$q = "UPDATE oko_graphe SET position=(position - 1) WHERE position <= ".$s['position']." AND position > ".$s['current']." AND id <> ".$s['id_graphe'];
-				$q = "UPDATE oko_asso_capteur_graphe SET position=(position - 1) WHERE position <= ".$s['position']." AND position > ".$s['current']." AND oko_graphe_id = ".$s['id_graphe']." AND oko_capteur_id <> ".$s['id_capteur'];
+    			$q = "UPDATE oko_asso_capteur_graphe SET position=(position - 1) WHERE position <= ".$s['position']." AND position > ".$s['current']." AND oko_graphe_id = ".$s['id_graphe']." AND oko_capteur_id <> ".$s['id_capteur'];
     	   	}else{
-    			//$q = "UPDATE oko_graphe SET position=(position + 1) WHERE position >= ".$s['position']." AND position < (".$s['current']." + 1) AND id <> ".$s['id_graphe'];
     			$q = "UPDATE oko_asso_capteur_graphe SET position=(position + 1) WHERE position >= ".$s['position']." AND position < (".$s['current']." + 1) AND oko_graphe_id = ".$s['id_graphe']." AND oko_capteur_id <> ".$s['id_capteur'];
     		}
     		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);
