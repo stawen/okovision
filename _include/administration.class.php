@@ -142,7 +142,7 @@ class administration extends connectDb{
 	    $import = false;
 	    
 	    $oko = new okofen();
-	    $status = $oko->getChaudiereData('onDemande',$s['url']);
+	    $status = $oko->getChaudiereData($s['url']);
 	    //$status =true;
 	    if($status){
 	        $import = $oko->csv2bdd();
@@ -506,7 +506,7 @@ class administration extends connectDb{
 	
 	public function makeSyntheseByDay($day){
 		$oko = new okofen();
-		$r['response'] = $oko->makeSyntheseByDay('onDemande', $day);
+		$r['response'] = $oko->makeSyntheseByDay($day);
 		$this->sendResponse($r);
 		
 	}
