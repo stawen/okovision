@@ -12,8 +12,8 @@ $(document).ready(function() {
 	 */
 
 	$("#oko_typeconnect").change(function() {
-
-		if ($(this).val() === 1) {
+		
+		if ($(this).val() == 1) {
 			$("#form-ip").show();
 		}
 		else {

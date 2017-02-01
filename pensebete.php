@@ -72,11 +72,8 @@ Merge
 	
 */
 
-//include_once 'config.php';
-
 /*
-http://grafana.org/
-https://influxdb.com/
+
 
 "plotBands" : [
          {
@@ -147,4 +144,10 @@ plotLines: [{
     * @param string $toto description
     * @param string $toto description
     */
+    
+    /*
+    code secret ["CAPPL:LOCAL.L_fernwartung_code_1","CAPPL:LOCAL.L_fernwartung_code_2"]
+    
+    */
+    
 ?>

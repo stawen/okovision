@@ -26,6 +26,7 @@ class administration extends connectDb{
 	private function sendResponse($t){
         header("Content-type: text/json; charset=utf-8");
 		echo json_encode($t, JSON_NUMERIC_CHECK);
+		
     }
 	
 	/**
