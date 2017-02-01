@@ -148,7 +148,7 @@ $(document).ready(function() {
 	
 	$("#btlogout").click(function(){
 		
-		$.api('GET', 'admin.logout',false).done(function(json) {
+		$.api('GET', 'admin.logout',{},false).done(function(json) {
 				if(json.response){
 					window.location.replace("index.php");
 				}
