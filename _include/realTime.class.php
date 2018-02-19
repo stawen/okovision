@@ -82,12 +82,16 @@ class realTime extends connectDb{
 						"CAPPL:FA[0].L_brennerlaufzeit_anzeige" 	, //fonct brûleur
 						"CAPPL:FA[0].L_anzahl_zuendung" 			, //nb allumage
 						"CAPPL:LOCAL.touch[0].version" 				, // version
+						//chauffage -> T°C sonde
+						"CAPPL:LOCAL.L_aussentemperatur_ist"			,//T°C extérieur mesurée par la sonde
+						"CAPPL:LOCAL.L_hk[$hk].raumtemp_ist"			,//T°C intérieur mesurée par la sonde
+						"CAPPL:LOCAL.L_hk[$hk].raumtemp_soll"			,//T°C intérieur consigne actuelle
 						//chauffage -> T°C ambiante
-						"CAPPL:LOCAL.hk[$hk].raumtemp_heizen"			,//T°C ambiant confort
-						"CAPPL:LOCAL.hk[$hk].raumtemp_absenken"		,//T°C ambiant reduit
+						"CAPPL:LOCAL.hk[$hk].raumtemp_heizen"			,//T°C ambiante confort
+						"CAPPL:LOCAL.hk[$hk].raumtemp_absenken"			,//T°C ambiante reduit
 						"CAPPL:LOCAL.hk[$hk].heizkurve_steigung"		,//pente
 						"CAPPL:LOCAL.hk[$hk].heizkurve_fusspunkt"		,//pied de courbe
-						"CAPPL:LOCAL.hk[$hk].heizgrenze_heizen"		,//T°c ext de coupure (Confort)
+						"CAPPL:LOCAL.hk[$hk].heizgrenze_heizen"			,//T°c ext de coupure (Confort)
 						"CAPPL:LOCAL.hk[$hk].heizgrenze_absenken"		,//T°c ext de coupure (Reduit)
 						//Chauffage -> Gestion Eau dans Radiateur
 						"CAPPL:LOCAL.hk[$hk].vorlauftemp_max"			,//T°C depart Max
