@@ -71,32 +71,35 @@ class realTime extends connectDb{
 	
 	
 
-    public function getIndic(){
+    public function getIndic($way = 1){
     	$json['response'] = false;
-    	
+
+		//la numérotation des circuits commencent à 0
+		//zone 1 = 0
+		$hk = $way - 1;
     	$indic = array( "CAPPL:FA[0].L_mittlere_laufzeit" 			, // temps moyen du bruleur
 						"CAPPL:FA[0].L_brennerstarts" 				, // nb demarrage bruleur
 						"CAPPL:FA[0].L_brennerlaufzeit_anzeige" 	, //fonct brûleur
 						"CAPPL:FA[0].L_anzahl_zuendung" 			, //nb allumage
 						"CAPPL:LOCAL.touch[0].version" 				, // version
-						//chauffage -> T°C ambiamte
-						"CAPPL:LOCAL.hk[0].raumtemp_heizen"			,//T°C ambiant confort
-						"CAPPL:LOCAL.hk[0].raumtemp_absenken"		,//T°C ambiant reduit
-						"CAPPL:LOCAL.hk[0].heizkurve_steigung"		,//pente
-						"CAPPL:LOCAL.hk[0].heizkurve_fusspunkt"		,//pied de courbe
-						"CAPPL:LOCAL.hk[0].heizgrenze_heizen"		,//T°c ext de coupure (Confort)
-						"CAPPL:LOCAL.hk[0].heizgrenze_absenken"		,//T°c ext de coupure (Reduit)
+						//chauffage -> T°C ambiante
+						"CAPPL:LOCAL.hk[$hk].raumtemp_heizen"			,//T°C ambiant confort
+						"CAPPL:LOCAL.hk[$hk].raumtemp_absenken"		,//T°C ambiant reduit
+						"CAPPL:LOCAL.hk[$hk].heizkurve_steigung"		,//pente
+						"CAPPL:LOCAL.hk[$hk].heizkurve_fusspunkt"		,//pied de courbe
+						"CAPPL:LOCAL.hk[$hk].heizgrenze_heizen"		,//T°c ext de coupure (Confort)
+						"CAPPL:LOCAL.hk[$hk].heizgrenze_absenken"		,//T°c ext de coupure (Reduit)
 						//Chauffage -> Gestion Eau dans Radiateur
-						"CAPPL:LOCAL.hk[0].vorlauftemp_max"			,//T°C depart Max
-						"CAPPL:LOCAL.hk[0].vorlauftemp_min"			,//T°C depart Min
-						"CAPPL:LOCAL.hk[0].ueberhoehung"			,//Augmentation
-						"CAPPL:LOCAL.hk[0].mischer_max_auf_zeit"	,//V3V Ouverture
-						"CAPPL:LOCAL.hk[0].mischer_max_aus_zeit"	,//V3V Pause
-						"CAPPL:LOCAL.hk[0].mischer_max_zu_zeit"		,//V3V Fermeture
-						"CAPPL:LOCAL.hk[0].mischer_regelbereich_quelle",//Plage réglage TC
-						"CAPPL:LOCAL.hk[0].mischer_regelbereich_vorlauf",//Plage réglage TD
-						"CAPPL:LOCAL.hk[0].quellentempverlauf_anstiegstemp",//Hausse ETC
-						"CAPPL:LOCAL.hk[0].quellentempverlauf_regelbereich",//Correction réglage ETC (Evolution Température Chaudière)
+						"CAPPL:LOCAL.hk[$hk].vorlauftemp_max"			,//T°C depart Max
+						"CAPPL:LOCAL.hk[$hk].vorlauftemp_min"			,//T°C depart Min
+						"CAPPL:LOCAL.hk[$hk].ueberhoehung"			,//Augmentation
+						"CAPPL:LOCAL.hk[$hk].mischer_max_auf_zeit"	,//V3V Ouverture
+						"CAPPL:LOCAL.hk[$hk].mischer_max_aus_zeit"	,//V3V Pause
+						"CAPPL:LOCAL.hk[$hk].mischer_max_zu_zeit"		,//V3V Fermeture
+						"CAPPL:LOCAL.hk[$hk].mischer_regelbereich_quelle",//Plage réglage TC
+						"CAPPL:LOCAL.hk[$hk].mischer_regelbereich_vorlauf",//Plage réglage TD
+						"CAPPL:LOCAL.hk[$hk].quellentempverlauf_anstiegstemp",//Hausse ETC
+						"CAPPL:LOCAL.hk[$hk].quellentempverlauf_regelbereich",//Correction réglage ETC (Evolution Température Chaudière)
 						//	Parametrage bruleur :
 						"CAPPL:FA[0].pe_kesseltemperatur_soll"		,//T°C Consigne
 						"CAPPL:FA[0].pe_abschalttemperatur"			,//T°C Coupure
