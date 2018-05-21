@@ -128,7 +128,7 @@
 
 
 <?php
-include('_templates/footer.php');
+include(__DIR__ . '/_templates/footer.php');
 ?>
 	<script src="_langs/<?php echo session::getInstance()->getLang() ?>.datepicker.js"></script>
 	<script src="js/adminEvents.js"></script>
