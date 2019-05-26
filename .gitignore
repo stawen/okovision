@@ -49,6 +49,6 @@ test*
 _tmp/*.sql
 _tmp/*.txt
 php.ini
-
+.c9/
 
 
