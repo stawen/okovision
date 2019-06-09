@@ -992,7 +992,7 @@ class administration extends connectDb{
 		$user = $this->realEscapeString($user);
 		$pass = sha1( $this->realEscapeString($pass) );
 		
-		$q = "select count(*) as nb, id, type from oko_user where user='$user' and pass='$pass'";
+		$q = "select count(*) as nb, id, type from oko_user where user='$user' and pass='$pass' group by id";
 		
 		$result = $this->query($q);
 		$this->log->debug("Class ".__CLASS__." | ".__FUNCTION__." | ".$q);

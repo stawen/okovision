@@ -97,7 +97,8 @@
                         "poids_pellet"              => $s['param_poids_pellet'],
                         "surface_maison"            => $s['surface_maison'],
                         "get_data_from_chaudiere"   => $s['oko_typeconnect'],
-                        "send_to_web"               => "0"
+                        "send_to_web"               => "0",
+                        "has_silo"									=> "0"
                     );
         
         file_put_contents('config.json',json_encode($param));

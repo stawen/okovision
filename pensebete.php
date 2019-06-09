@@ -1,13 +1,81 @@
 <?php
+phpinfo();
 /*****************************************************
 * Projet : Okovision - Supervision chaudiere OeKofen
 * Auteur : Stawen Dronek
 * Utilisation commerciale interdite sans mon accord
 ******************************************************/
 /*
-AWS Cloud 9
+$ sudo mysql -uroot
 
-test 3
+Lancer la console Mysql et ajouter un user 
+CREATE USER 'test'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON *.* TO 'test'@'localhost' WITH GRANT OPTION;
+
+
+
+-- github
+$ git clone https://github.com/stawen/okovision.git
+$ git config --global user.name stawen
+$ git config --global user.email stawen@dronek.com
+$ git fetch origin
+$ git remote add upstream https://github.com/stawen/okovision.git/
+
+$ git config credential.helper store
+$ git push https://github.com/stawen/okovision.git/
+
+
+
+le module php-mbstring, php-curl, php-xml doit etre activé 
+
+import du jeu de test
+$ mysql -utest -p  -h localhost okovision < /home/ubuntu/environment/_tmp/okovision-jeudedonnee.sql
+
+
+*/
+
+/*
+select 
+t_mois.mois,
+IFNULL(t_data.nbCycle,'-') AS cycle,
+IFNULL(t_data.conso,'-') as conso,
+IFNULL(t_data.dju,'-') as dju,
+IFNULL(t_data.g_dju_m,'-') as gdjum
+from
+(
+	select 
+	DATE_FORMAT(oko_dateref.jour,'%Y-%m') as mois
+	from 
+		oko_dateref,
+		oko_saisons
+	where 
+		oko_saisons.id = 5
+	and oko_dateref.jour BETWEEN oko_saisons.date_debut AND oko_saisons.date_fin
+	GROUP BY 
+		MONTH(oko_dateref.jour)
+	ORDER BY mois ASC
+	) as t_mois 
+left join 
+	(
+	select 
+	DATE_FORMAT(oko_resume_day.jour,'%Y-%m') as mois,
+	sum(nb_cycle) as nbCycle,
+	sum(conso_kg) as conso, 
+	sum(dju) as dju,
+	round( ((sum(oko_resume_day.conso_kg) * 1000) / sum(oko_resume_day.dju) / 180),2) as g_dju_m 
+	
+	FROM
+		oko_saisons, oko_resume_day
+	WHERE
+		oko_saisons.id=5
+		AND oko_resume_day.jour BETWEEN oko_saisons.date_debut AND oko_saisons.date_fin 
+	GROUP BY 
+		MONTH(oko_resume_day.jour)
+	ORDER BY mois ASC
+	) as t_data 
+ON  t_mois.mois = t_data.mois 
+
+
 */
 
 /*
