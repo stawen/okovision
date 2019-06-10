@@ -34,6 +34,11 @@ $ mysql -utest -p  -h localhost okovision < /home/ubuntu/environment/_tmp/okovis
 rendre compatbible mysql5.7 avec mariadb 10.3.7 
 $ SET @@SQL_MODE = CONCAT(@@SQL_MODE, ',ONLY_FULL_GROUP_BY,NO_ZERO_IN_DATE,NO_ZERO_DATE');
 
+Cron synology
+$ wget http://127.0.0.1/okovision/cron.php 1>/dev/null 2>/dev/null;
+
+
+
 */
 
 /*
