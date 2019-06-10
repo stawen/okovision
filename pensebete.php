@@ -31,6 +31,8 @@ le module php-mbstring, php-curl, php-xml doit etre activé
 import du jeu de test
 $ mysql -utest -p  -h localhost okovision < /home/ubuntu/environment/_tmp/okovision-jeudedonnee.sql
 
+rendre compatbible mysql5.7 avec mariadb 10.3.7 
+$ SET @@SQL_MODE = CONCAT(@@SQL_MODE, ',ONLY_FULL_GROUP_BY,NO_ZERO_IN_DATE,NO_ZERO_DATE');
 
 */
 

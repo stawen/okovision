@@ -58,6 +58,7 @@ class connectDb {
 		}
 		
 		$this->query("SET time_zone='+00:00'");
+		$this->query("SET @@SESSION.SQL_MODE = REPLACE(@@SQL_MODE, 'ONLY_FULL_GROUP_BY,', '')");
 	}
 	
 	private function disconnect(){
