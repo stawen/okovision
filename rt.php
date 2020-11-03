@@ -685,7 +685,7 @@ if (!file_exists("config.php")) {
 		</div>
 
 <?php
-include('_templates/footer.php');
+include(__DIR__ . '/_templates/footer.php');
 ?>
 <!--appel des scripts personnels de la page -->
 	<script src="js/jquery/jquery-ui-timepicker-addon.js"></script>

@@ -21,9 +21,9 @@ class autoloader{
 						"NotAIntegerException","InvalidMessageTypeException");
 						
 		if (in_array($class,$logException)){
-			require '_include/exceptions.logger.class.php';
+			require __DIR__ . '/exceptions.logger.class.php';
 		}else{
-			require '_include/' . $class . '.class.php';
+			require __DIR__ . '/' . $class . '.class.php';
 		}
     }
 

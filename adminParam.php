@@ -155,7 +155,7 @@
 
 
 <?php
-include('_templates/footer.php');
+include(__DIR__ . '/_templates/footer.php');
 ?>
     <!--script src="js/jquery.fileupload.js"></script-->
 	<script src="js/adminParam.js"></script>

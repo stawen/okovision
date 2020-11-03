@@ -75,7 +75,7 @@
     </div>  
 
 <?php
-include('_templates/footer.php');
+include(__DIR__ . '/_templates/footer.php');
 ?>
 <!--appel des scripts personnels de la page -->
     <script src="_langs/<?php echo session::getInstance()->getLang() ?>.datepicker.js"></script>
