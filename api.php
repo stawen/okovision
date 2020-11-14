@@ -136,9 +136,14 @@ if (is_ajax() && is_valid()) {
                     break;
                 case 'rt':
                     $rt = new realTime();
+
                     switch ($_GET['action']) {
                         case 'getIndic':
-                            $rt->getIndic();
+                            if (isset($_GET['way'])) {
+                                $rt->getIndic($_GET['way']);
+                            } else {
+                                $rt->getIndic();
+                            }
 
                             break;
                         case 'getData':
