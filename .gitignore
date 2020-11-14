@@ -47,3 +47,6 @@ test*
 _tmp/*.sql
 php.ini
 .c9/
+
+_tmp/
+_logs/
