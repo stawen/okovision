@@ -11,7 +11,7 @@
 
 		// Browser globals
 		factory( jQuery.datepicker );
-	}
+	} 
 }(function( datepicker ) {
 	datepicker.regional['fr'] = {
 		closeText: 'Fermer',

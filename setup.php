@@ -1,129 +1,125 @@
 <?php
 
-/*****************************************************
+/*
 * Projet : Okovision - Supervision chaudiere OeKofen
 * Auteur : Stawen Dronek
 * Utilisation commerciale interdite sans mon accord
-******************************************************/
-	
-	function is_ajax() {
-	  return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
-	}
-	
-	function testBddConnection($s){
-		mysqli_report(MYSQLI_REPORT_STRICT);
-		
-		$r = true;
-		
-		try{
-			$db = new mysqli($s['db_adress'], $s['db_user'], $s['db_password']);
-		} catch (Exception $e ) {
-			$r=false;
-     		
-		}
-		$t['response'] = $r;
-        header("Content-type: text/json");
-		echo json_encode($t, JSON_NUMERIC_CHECK);
-		
-		exit(23);
-	}
-	
-	function makeInstallation($s){
-	    
-	    if($s['createDb']){
-	    	/* create BDD */
-	    	$mysqli = new mysqli($s['db_adress'], $s['db_user'], $s['db_password']);
+*/
 
-	        /* check connection */
-    	    if ($mysqli->connect_errno) {
-        	    printf("Connect failed: %s\n", $mysqli->connect_error);
-            	exit(24);
-        	}
-        
-	        $q = "CREATE DATABASE IF NOT EXISTS `".$s['db_schema']."` /*!40100 DEFAULT CHARACTER SET utf8 */;";
-        	//echo "Création BDD ::".$q;
-        	//exit;
-        	if(!$mysqli->query($q)) {
-	        	echo "Création BDD impossible";
-        		exit;
-        	}
-        	$mysqli->close();
-	    }
-	    
+    function is_ajax()
+    {
+        return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && 'xmlhttprequest' == strtolower($_SERVER['HTTP_X_REQUESTED_WITH']);
+    }
+
+    function testBddConnection($s)
+    {
+        mysqli_report(MYSQLI_REPORT_STRICT);
+
+        $r = true;
+
+        try {
+            $db = new mysqli($s['db_adress'], $s['db_user'], $s['db_password']);
+        } catch (Exception $e) {
+            $r = false;
+        }
+        $t['response'] = $r;
+        header('Content-type: text/json');
+        echo json_encode($t, JSON_NUMERIC_CHECK);
+
+        exit(23);
+    }
+
+    function makeInstallation($s)
+    {
+        if ($s['createDb']) {
+            // create BDD
+            $mysqli = new mysqli($s['db_adress'], $s['db_user'], $s['db_password']);
+
+            // check connection
+            if ($mysqli->connect_errno) {
+                printf("Connect failed: %s\n", $mysqli->connect_error);
+                exit(24);
+            }
+
+            $q = 'CREATE DATABASE IF NOT EXISTS `'.$s['db_schema'].'` /*!40100 DEFAULT CHARACTER SET utf8 */;';
+            //echo "Création BDD ::".$q;
+            //exit;
+            if (!$mysqli->query($q)) {
+                echo 'Création BDD impossible';
+                exit;
+            }
+            $mysqli->close();
+        }
+
         $mysqli = new mysqli($s['db_adress'], $s['db_user'], $s['db_password'], $s['db_schema']);
-        
-        /* execute multi query */
+
+        // execute multi query
         $mysqli->multi_query(file_get_contents('install/install.sql'));
-        while ($mysqli->next_result()) {;} // flush multi_queries
-        
-        /* init de la table des dates de reference */
-        $start_day = mktime(0, 0, 0, 9  , 1, 2014); //1er septembre 2014
-		$stop_day = mktime(0, 0, 0, 9  , 1, 2037); //justqu'au 1er septembre 2037, on verra en 2037 si j'utilise encore l'app.
-		$nb_day = ($stop_day - $start_day)/86400;
-		$query = "INSERT INTO oko_dateref (jour) VALUES ";
-		for ($i = 0; $i<= $nb_day; $i++){
-			$day = date('Y-m-d' ,mktime(0, 0, 0, date("m",$start_day)  , date("d",$start_day)+$i, date("Y",$start_day)) );
-			$query .= "('".$day."'),";
-		}
-		
-		$query = substr($query,0,strlen($query)-1).";";
-		
-		//print_r($query);exit;
-		
-		$mysqli->query($query);
-        
-        
+        while ($mysqli->next_result()) {
+        } // flush multi_queries
+
+        // init de la table des dates de reference
+        $start_day = mktime(0, 0, 0, 9, 1, 2014); //1er septembre 2014
+        $stop_day = mktime(0, 0, 0, 9, 1, 2037); //justqu'au 1er septembre 2037, on verra en 2037 si j'utilise encore l'app.
+        $nb_day = ($stop_day - $start_day) / 86400;
+        $query = 'INSERT INTO oko_dateref (jour) VALUES ';
+        for ($i = 0; $i <= $nb_day; ++$i) {
+            $day = date('Y-m-d', mktime(0, 0, 0, date('m', $start_day), date('d', $start_day) + $i, date('Y', $start_day)));
+            $query .= "('".$day."'),";
+        }
+
+        $query = substr($query, 0, strlen($query) - 1).';';
+
+        //print_r($query);exit;
+
+        $mysqli->query($query);
+
         $mysqli->close();
-	    
-	    /* Make Config.php */
+
+        // Make Config.php
         $configFile = file_get_contents('config_sample.php');
-        
-        $configFile = str_replace("###_BDD_IP_###",$s['db_adress'],$configFile);
-        $configFile = str_replace("###_BDD_USER_###",$s['db_user'],$configFile);
-        $configFile = str_replace("###_BDD_PASS_###",$s['db_password'],$configFile);
-        $configFile = str_replace("###_BDD_SCHEMA_###",$s['db_schema'],$configFile);
-        
-        $configFile = str_replace("###_CONTEXT_###",getcwd(),$configFile);
-        
-        $configFile = str_replace("###_TOKEN_###",sha1(rand()),$configFile);
+
+        $configFile = str_replace('###_BDD_IP_###', $s['db_adress'], $configFile);
+        $configFile = str_replace('###_BDD_USER_###', $s['db_user'], $configFile);
+        $configFile = str_replace('###_BDD_PASS_###', $s['db_password'], $configFile);
+        $configFile = str_replace('###_BDD_SCHEMA_###', $s['db_schema'], $configFile);
+
+        $configFile = str_replace('###_CONTEXT_###', getcwd(), $configFile);
+
+        $configFile = str_replace('###_TOKEN_###', sha1(rand()), $configFile);
         //$configFile = str_replace("###_TOKEN-API_###",sha1(rand()),$configFile);
-        
-        file_put_contents('config.php',$configFile);
-        
-        /* Make config.json */
-        $param = array(
-                        "chaudiere"                 => $s['oko_ip'],
-                        "tc_ref"                    => $s['param_tcref'],
-                        "poids_pellet"              => $s['param_poids_pellet'],
-                        "surface_maison"            => $s['surface_maison'],
-                        "get_data_from_chaudiere"   => $s['oko_typeconnect'],
-                        "send_to_web"               => "0",
-                        "has_silo"									=> "0"
-                    );
-        
-        file_put_contents('config.json',json_encode($param));
-        
-        
-	}
-	
-	
-	
-	if (is_ajax()) {
-		
-		if (isset($_GET['type'])  ){
-		
-			switch ($_GET['type']){
-				case "connect":
-					testBddConnection($_POST);
-					break;
-				case "install":
-				    makeInstallation($_POST);
-				    break;
-				
-			}		
-		}
-	}
-	
+
+        file_put_contents('config.php', $configFile);
+
+        // Make config.json
+        $param = [
+            'chaudiere' => $s['oko_ip'],
+            'tc_ref' => $s['param_tcref'],
+            'poids_pellet' => $s['param_poids_pellet'],
+            'surface_maison' => $s['surface_maison'],
+            'get_data_from_chaudiere' => $s['oko_typeconnect'],
+            'send_to_web' => '0',
+            'has_silo' => '0',
+        ];
+
+        file_put_contents('config.json', json_encode($param));
+    }
+
+    if (is_ajax()) {
+        if (isset($_GET['type'])) {
+            switch ($_GET['type']) {
+                case 'connect':
+                    testBddConnection($_POST);
+
+                    break;
+                case 'install':
+                    makeInstallation($_POST);
+
+                    break;
+            }
+        }
+    }
+
 ?>
 
 <!DOCTYPE html>
@@ -147,7 +143,7 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>+
     <![endif]-->
-	<?php //include_once("analyticstracking.php"); ?>
+	<?php //include_once("analyticstracking.php");?>
 	
 	</head>
 
