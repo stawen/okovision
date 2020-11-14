@@ -1,3 +1,14 @@
+##1.8.3
+* Merge Fix84 proposer par bertrandgorge : Include all files with absolute paths
+* Refactoring du code pour respecter l'indentation PHP
+
+##1.8.2
+* Version compatible PHP 5.6 et PHP 7.2
+* Correction de compatibilité avec Mysql 5.7 et MariaDB 10.3
+
+##1.8.1
+* Correction anomalie lors du setup pour le choix IP / USB
+* Correction déconnexion sous FireFox
 
 ##1.8.0
 * Correction orthographe
