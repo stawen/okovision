@@ -50,3 +50,4 @@ php.ini
 
 _tmp/
 _logs/
+config.php
