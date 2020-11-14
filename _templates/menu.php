@@ -1,37 +1,40 @@
  <?php
- /*****************************************************
+ /*
 * Projet : Okovision - Supervision chaudiere OeKofen
 * Auteur : Stawen Dronek
 * Utilisation commerciale interdite sans mon accord
-******************************************************/
+*/
 
- 
- 
- function getMenu(){
-	//global $page;
-	$page = basename($_SERVER['SCRIPT_NAME']);
-	
-	$menu = array(  'index.php' => array(
-	                                    'txt' => session::getInstance()->getLabel('lang.text.menu.index'),
-	                                    'icon' => 'glyphicon glyphicon-dashboard',
-	                                    'logged' => false),
-					'histo.php' => array(
-					                    'txt' => session::getInstance()->getLabel('lang.text.menu.historic'),
-					                    'icon' => 'glyphicon glyphicon-stats',
-					                    'logged' => false),
-					'rt.php' => array(
-					                    'txt' => session::getInstance()->getLabel('lang.text.menu.rt'),
-					                    'icon' => 'glyphicon glyphicon-signal',
-					                    'logged' => true)
-			);	
-	
-	foreach ($menu as $url => $title){
-	    if($title['logged'] && !session::getInstance()->getVar('logged')) continue;
-		$active = '';
-		if ($page == $url) $active=' class="active"';  
-	    echo '<li'.$active.'> <a href='.$url.'><span class="'.$title['icon'].'" aria-hidden="true"></span>   '.$title['txt'].'</a></li>';
-	}
-}
+ function getMenu()
+ {
+     //global $page;
+     $page = basename($_SERVER['SCRIPT_NAME']);
+
+     $menu = ['index.php' => [
+         'txt' => session::getInstance()->getLabel('lang.text.menu.index'),
+         'icon' => 'glyphicon glyphicon-dashboard',
+         'logged' => false, ],
+         'histo.php' => [
+             'txt' => session::getInstance()->getLabel('lang.text.menu.historic'),
+             'icon' => 'glyphicon glyphicon-stats',
+             'logged' => false, ],
+         'rt.php' => [
+             'txt' => session::getInstance()->getLabel('lang.text.menu.rt'),
+             'icon' => 'glyphicon glyphicon-signal',
+             'logged' => true, ],
+     ];
+
+     foreach ($menu as $url => $title) {
+         if ($title['logged'] && !session::getInstance()->getVar('logged')) {
+             continue;
+         }
+         $active = '';
+         if ($page == $url) {
+             $active = ' class="active"';
+         }
+         echo '<li'.$active.'> <a href='.$url.'><span class="'.$title['icon'].'" aria-hidden="true"></span>   '.$title['txt'].'</a></li>';
+     }
+ }
 
 ?>
  <!-- Fixed navbar -->
@@ -50,7 +53,7 @@
           <ul class="nav navbar-nav top-nav">
             <?php getmenu(); ?>
 			<li class="dropdown">
-			  <?php if( !session::getInstance()->getVar('logged') ){   ?>
+			  <?php if (!session::getInstance()->getVar('logged')) {   ?>
 			    <a href="#" data-toggle="modal" data-target="#login-modal"> 
 			        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
 			     </a>
@@ -59,26 +62,26 @@
                     <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li class="dropdown-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> <?php echo session::getInstance()->getLabel('lang.text.menu.graphic') ?></li>
-                        <li><a href="gstrapport.php"><?php echo session::getInstance()->getLabel('lang.text.menu.graphic.report') ?></a></li>
-                       
+                    <li class="dropdown-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> <?php echo session::getInstance()->getLabel('lang.text.menu.graphic'); ?></li>
+                        <li><a href="gstrapport.php"><?php echo session::getInstance()->getLabel('lang.text.menu.graphic.report'); ?></a></li>
+                        
                     <li class="divider"></li>
                    
-                        <li class="dropdown-header"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> <?php echo session::getInstance()->getLabel('lang.text.menu.manual') ?></li>    
-                            <?php if(GET_CHAUDIERE_DATA_BY_IP){ ?><li><a href="amImpBoiler.php"><?php echo session::getInstance()->getLabel('lang.text.menu.manual.import.ip') ?></a></li> <?php } ?>
-                            <li><a href="amImpUsb.php"><?php echo session::getInstance()->getLabel('lang.text.menu.manual.import.usb') ?></a></li>
-                            <li><a href="amImportMass.php"><?php echo session::getInstance()->getLabel('lang.text.menu.manual.import.mass') ?></a></li>
-                            <li><a href="amSynthese.php"><?php echo session::getInstance()->getLabel('lang.text.menu.manual.synthese') ?></a></li>
+                        <li class="dropdown-header"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> <?php echo session::getInstance()->getLabel('lang.text.menu.manual'); ?></li>    
+                            <?php if (GET_CHAUDIERE_DATA_BY_IP) { ?><li><a href="amImpBoiler.php"><?php echo session::getInstance()->getLabel('lang.text.menu.manual.import.ip'); ?></a></li> <?php } ?>
+                            <li><a href="amImpUsb.php"><?php echo session::getInstance()->getLabel('lang.text.menu.manual.import.usb'); ?></a></li>
+                            <li><a href="amImportMass.php"><?php echo session::getInstance()->getLabel('lang.text.menu.manual.import.mass'); ?></a></li>
+                            <li><a href="amSynthese.php"><?php echo session::getInstance()->getLabel('lang.text.menu.manual.synthese'); ?></a></li>
                     <li class="divider"></li>
                     
-                        <li class="dropdown-header"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> <?php echo session::getInstance()->getLabel('lang.text.menu.admin') ?></li>
-                            <li><a href="adminParam.php"><?php echo session::getInstance()->getLabel('lang.text.menu.admin.information') ?></a></li>
-                            <li><a href="adminSeason.php"><?php echo session::getInstance()->getLabel('lang.text.menu.admin.season') ?></a></li>
-                            <li><a href="adminEvents.php"><?php echo session::getInstance()->getLabel('lang.text.menu.admin.events') ?></a></li>
-                            <li><a href="adminMatrix.php"><?php echo session::getInstance()->getLabel('lang.text.menu.admin.matrix') ?></a></li>
+                        <li class="dropdown-header"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> <?php echo session::getInstance()->getLabel('lang.text.menu.admin'); ?></li>
+                            <li><a href="adminParam.php"><?php echo session::getInstance()->getLabel('lang.text.menu.admin.information'); ?></a></li>
+                            <li><a href="adminSeason.php"><?php echo session::getInstance()->getLabel('lang.text.menu.admin.season'); ?></a></li>
+                            <li><a href="adminEvents.php"><?php echo session::getInstance()->getLabel('lang.text.menu.admin.events'); ?></a></li>
+                            <li><a href="adminMatrix.php"><?php echo session::getInstance()->getLabel('lang.text.menu.admin.matrix'); ?></a></li>
                     <li class="divider"></li>
                     
-                        <li><a href="about.php"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> <?php echo session::getInstance()->getLabel('lang.text.menu.about') ?></a></li>
+                        <li><a href="about.php"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> <?php echo session::getInstance()->getLabel('lang.text.menu.about'); ?></a></li>
                    
                     
                 </ul>
@@ -88,8 +91,8 @@
 			        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
 			    </a>
 			    <ul class="dropdown-menu">
-			        <li><a href="#" data-toggle="modal" data-target="#password-modal"><?php echo session::getInstance()->getLabel('lang.text.menu.password') ?></a></li>
-			        <li><a id="btlogout" href=""><?php echo session::getInstance()->getLabel('lang.text.menu.logout') ?></a></li>
+			        <li><a href="#" data-toggle="modal" data-target="#password-modal"><?php echo session::getInstance()->getLabel('lang.text.menu.password'); ?></a></li>
+			        <li><a id="btlogout" href=""><?php echo session::getInstance()->getLabel('lang.text.menu.logout'); ?></a></li>
 			    </ul>    
             <?php } ?>    
             </li>
@@ -98,15 +101,15 @@
 		  
 		  <div class="navbar-form navbar-right">
 		  <?php
-			if ($page == 'index.php'){
-			    //$date = new datetime("now", new DateTimeZone('Europe/Paris'));
-		        $date = new datetime("now");
-		        echo '<button type="button" id="date_avant" class="btn btn-primary"><strong><<</strong></button>';
-				echo '	<input type="text" id="date_encours" class="form-control" style="width:100px";  value="'.$date->format("d/m/Y").'">';
-				//echo '	<input type="text" id="date_encours" class="form-control" style="width:100px";  value="'.date("d/m/Y").'">';
-				echo '<button type="button" id="date_apres" class="btn btn-primary"><strong>>></strong></button>';
-			}
-			
+            if ('index.php' == $page) {
+                //$date = new datetime("now", new DateTimeZone('Europe/Paris'));
+                $date = new datetime('now');
+                echo '<button type="button" id="date_avant" class="btn btn-primary"><strong><<</strong></button>';
+                echo '	<input type="text" id="date_encours" class="form-control" style="width:100px";  value="'.$date->format('d/m/Y').'">';
+                //echo '	<input type="text" id="date_encours" class="form-control" style="width:100px";  value="'.date("d/m/Y").'">';
+                echo '<button type="button" id="date_apres" class="btn btn-primary"><strong>>></strong></button>';
+            }
+
           ?>
 		  </div> 
         </div><!--/.nav-collapse -->

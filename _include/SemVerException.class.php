@@ -4,14 +4,12 @@
 
 class SemVerException extends Exception
 {
-
-    protected $version = null;
+    protected $version;
 
     public function __construct($message, $version)
     {
         $this->version = $version;
-        parent::__construct($message . ' [[' . $version . ']]');
-        
+        parent::__construct($message.' [['.$version.']]');
     }
 
     public function getVersion()
@@ -19,5 +17,3 @@ class SemVerException extends Exception
         return $this->version;
     }
 }
-
-?>

@@ -1,13 +1,13 @@
-<?php 
+<?php
  $page = basename($_SERVER['SCRIPT_NAME']);
- $pageNotLogged = array('setup.php','index.php','histo.php');
- 
- if(!in_array($page,$pageNotLogged) && !session::getInstance()->getVar('logged')){
-    header('Location: /errors/401.php');
-    exit();
+ $pageNotLogged = ['setup.php', 'index.php', 'histo.php'];
+
+ if (!in_array($page, $pageNotLogged) && !session::getInstance()->getVar('logged')) {
+     header('Location: /errors/401.php');
+     exit();
  }
 ?>
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="fr">
   <head>
     <meta charset="utf-8">
@@ -31,7 +31,7 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>+
     <![endif]-->
-	<?php //include_once("analyticstracking.php"); ?>
+	<?php //include_once("analyticstracking.php");?>
 	
 	</head>
 
