@@ -1,6 +1,7 @@
 ##1.8.3
-* Merge Fix84 proposer par bertrandgorge : Include all files with absolute paths
 * Refactoring du code pour respecter l'indentation PHP
+* Merge Fix84 proposé par bertrandgorge : Include all files with absolute paths
+* Merge Fix82 proposé par grouxx : Gestion dans GetIndic de plusieurs circuite + ajout de nouveaux retours
 
 ##1.8.2
 * Version compatible PHP 5.6 et PHP 7.2
