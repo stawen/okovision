@@ -99,99 +99,6 @@ if (is_ajax() && is_valid()) {
                             }
 
                             break;
-    				}
-    				break; 
-    				
-    			case "graphique":
-    				$g = new gstGraphique();
-    				
-    				switch ($_GET['action']){
-    				    case "getCapteurs":	
-    				    	$g->getCapteurs();
-    				    	break;
-    				    case "getGrapheAsso":
-    				    	$g->getGrapheAsso($_GET['id']);
-    				    	break;
-    				}
-    				break;
-    			case "rendu":
-    			    $r = new rendu();
-    				switch ($_GET['action']){
-    				    case "getGraphe":
-    						$g = new gstGraphique();
-    						$g->getGraphe();
-    						break;
-    					case "getGrapheData":
-    						$r->getGrapheData($_GET['id'],$_GET['day']);
-    						break;
-    					case "getIndicByDay":
-    					    if(isset($_GET['timeStart']) && isset($_GET['timeEnd'])){
-    					        $r->getIndicByDay($_GET['day'], $_GET['timeStart'], $_GET['timeEnd']);
-    					    }else{
-    					        $r->getIndicByDay($_GET['day']);
-    					    }
-    					    break;
-    					case "getIndicByMonth":
-    					    $r->getIndicByMonth($_GET['month'],$_GET['year']); 
-    					    break;
-    					case "getStockStatus":
-    					    $r->getStockStatus(); 
-    					    break;  
-    					case "getAshtrayStatus":
-    					    $r->getAshtrayStatus();
-    					    break;    
-    					case "getHistoByMonth":
-    					    $r->getHistoByMonth($_GET['month'],$_GET['year']);
-    					    break;
-    					case "getTotalSaison":
-    					    $r->getTotalSaison($_GET['id']);
-    					    break;
-    					case "getSyntheseSaison":
-    					    $r->getSyntheseSaison($_GET['id']);
-    					    break;
-    					case "getSyntheseSaisonTable":
-    					    $r->getSyntheseSaisonTable($_GET['id']);
-    					    break;
-    					case "getAnnotationByDay":
-    			            $r->getAnnotationByDay($_GET['day']);
-    			            break;   
-    					   
-    				}
-    				break;
-    			case "rt":
-    			    $rt = new realTime();
-    			    switch ($_GET['action']){
-    			        case "getIndic":
-							if(isset($_GET['way'])){
-								$rt->getIndic($_GET['way']);
-							}else {
-								$rt->getIndic();
-							}
-    			            break;
-    			            
-    			        case "getData":
-    			            if(isset($_GET['idgraphe'])){
-    			                $rt->getData($_GET['idgraphe']);
-    			            }
-    			            break;
-    			        case "getBoilerMode":
-    			            if(isset($_GET['way'])){
-    			                $rt->getBoilerMode($_GET['way']);
-    			            }
-    			            break;
-    			        case "setBoilerMode":
-    			            if(isset($_GET['mode']) && isset($_GET['way'])){
-    			                $rt->setBoilerMode($_GET['mode']);
-    			                break;
-    			            }
-    			    }       
-    			    break;
-    		}		
-	    }
-
-}else{
-    if(!is_ajax()){
-
                         case 'getIndicByMonth':
                             $r->getIndicByMonth($_GET['month'], $_GET['year']);
 
@@ -229,9 +136,14 @@ if (is_ajax() && is_valid()) {
                     break;
                 case 'rt':
                     $rt = new realTime();
+
                     switch ($_GET['action']) {
                         case 'getIndic':
-                            $rt->getIndic();
+                            if (isset($_GET['way'])) {
+                                $rt->getIndic($_GET['way']);
+                            } else {
+                                $rt->getIndic();
+                            }
 
                             break;
                         case 'getData':
