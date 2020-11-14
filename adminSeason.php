@@ -103,7 +103,7 @@
 
 
 <?php
-include('_templates/footer.php');
+include(__DIR__ . '/_templates/footer.php');
 ?>
 	<script src="js/adminSeason.js"></script>
     </body>

@@ -108,6 +108,10 @@ git branch -D [name_of_your_new_branch]
 
 * Delete the branch on github :
 ```
+git push origin --delete [name_of_your_new_branch]
+```
+
+```
 git push origin :[name_of_your_new_branch]
 ```
 
