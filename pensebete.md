@@ -129,3 +129,9 @@ git merge unstable
 - la possibilité d'y intégrer des sondes externes. N'ayant pas de sonde d'ambiance, j'ai ajouté une sonde Température et humidité que j’intègre dans oko_historique -> comment recuperer les valeurs de la sonde externe ?
 et ce sur point je suis moins convaincu:
 - Utilisation de la température intérieur et extérieur pour faire le calcul minute pas minute du "DJU". ce n'est plus vraiment unifié mais il me semble que ce qui est intéressant c'est de représenter au mieux la bâti pour pouvoir comparer d'une année à l'autre les variations de ce "DJU" en fonction des réglages chaudière, des granulés, d'une ré isolation au autres.
+
+# Compatibilité Okofen Touch
+
+- V2 - Ok
+- Jusqu'au 3.00d ou 3.10d la connexion non sécurisée fonctionne.
+- A partir du 4.00 il va falloir trouver une autre méthode (plus accès au log)
