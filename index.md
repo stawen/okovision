@@ -1,9 +1,8 @@
 # Installation
 
-  * [Hébergeur Web Gratuit - A completer]
+  * [Hébergeur Web Gratuit](/md/free-hosting.md)
   * [Linux](/md/instalLinux.md)
   * [Nas Synology](/md/synology.md)
-  * [Free - page perso](/md/free-page-perso.md)
   * [UWamp - Windows](/md/UWamp.md)
 
 
