@@ -2,7 +2,7 @@
 
 ## Compatiblités
 
-Important: Okovision est compatible avec le Firmware V2 et V3.
+Important: Okovision est compatible avec le Firmware Oekofen V2 et V3.
 
 Note: La compatibilité avec les Firmwares V4 est en cours de developpement
 
