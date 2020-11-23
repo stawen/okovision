@@ -1,6 +1,6 @@
 # Hebergement sur les pages Perso de Free
 
-**Info : ** si quelqu'un veut contribuer à cette page, il peut m'envoyer la procedure et des captures d'écrans sur mon mail de contact.
+Info: si quelqu'un veut contribuer à cette page, il peut m'envoyer la procedure et des captures d'écrans sur mon mail de contact.
 
 ## Installation sur le compte free
 

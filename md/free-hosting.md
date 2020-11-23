@@ -1,6 +1,6 @@
 # Hebergement gratuit
 
-## Autre hebergeur
+## Autres hebergeurs
 
 Voici une [liste d'hebergement gratuit](https://korben.info/hebergement-web-gratuit-2019.html)
 
@@ -8,14 +8,17 @@ Voici une [liste d'hebergement gratuit](https://korben.info/hebergement-web-grat
 J'ai choisi `Byet.host` un peu par hazard, il repond bien à mes attentes. Okovision fonctionne sans configuration particulière dessus.
 Le nom de domaine n'est pas jolie, ce n'est pas très important. Nous verrons dans le temps.
 
-## Byet.host
+# Installation sur Byet.host
 
+Attention: Hébergeur en cours de test et de validation
 
-**1 - Creation du compte**
+Note: La preconisation de cet hébergeur peut etre ammener à evoluer
+
+## Creation du compte
 
 Rendez vous sur le lien ici https://byet.host/free-hosting/news
 
-**Important:** Le mot de passe que vous choisirez ici sera le meme pour toute la configuration
+Important: Le mot de passe que vous choisirez ici sera le meme pour toute la configuration
 
 Pour en creer un (decocher Include Symbole et preciser 12 en longeur ) : https://passwordsgenerator.net/
 
@@ -25,20 +28,20 @@ Remplissez le formulaire suivant :
 
 
 
-**2 - Email de validation**
+## Email de validation
 
-**Attention :** A la validation le site vous previent que le mail de confirmation sera peut etre dans le **SPAM**. Cela a été le cas pour moi
+Attention : A la validation le site vous previent que le mail de confirmation sera peut etre dans le **SPAM**. Cela a été le cas pour moi
 
 ![Warning](/wiki/freehosting/020-warning.png)
 
 ![SPAM](/wiki/freehosting/030-spam.png)
 
 
-**3 - Information de connexion**
+## Information de connexion
 
 Lorsque vous avez cliqué sur le lien de validation, vous disposerez de vos informations de connexion.
 
-**Notez les bien immediatement !** Meme si vous allez recevoir un mail de recap
+Important ! Même si vous allez recevoir un mail de recap
 
 ![Cpanel](/wiki/freehosting/040-informations.png)
 
@@ -47,7 +50,7 @@ Vous pouvez dés à present connaitre le nom de domaine pour acceder à votre in
 Rendez vous sur le lien du `Control Panel URL`. Par exemple : http://cpanel.byethost8.com/
 
 
-**4 - Creation de la base de données**
+## Creation de la base de données
 
 Une fois dans le Control Panel (ou CPANEL), vous devrez creer la base de données qui recevra toutes les données de votre chaudière.
 
@@ -62,7 +65,7 @@ Creation de la base de donnée :
 Le nom de la base sera `bx_xxxxxx51_okovision`
 
 
-**5 - Installation des fichiers sur l'hebergeur**
+## Installation des fichiers sur l'hebergeur
 
 Récupérer en local les fichiers de la [derniere version](https://github.com/stawen/okovision/archive/master.zip)
 
@@ -72,7 +75,7 @@ Dezipper le zip
 
 Pour transferer les fichiers, il vous faut [Filezila](https://filezilla-project.org/download.php)
 
-Ouvir Filezila et configurer les parametres de connexion
+Ouvir Filezila et configurer les parametres de connexion 
 
 ![FZ create](/wiki/freehosting/080-filezila-create.png)
 
@@ -85,7 +88,6 @@ Accepter la connexion
 Se placer dans htdocs sur le serveur distant
 
 ![FZ HTDOCS](/wiki/freehosting/110-filezila-htdocs.png)
-
 ![FZ HTDOCS Inside](/wiki/freehosting/120-filezila-htdocs-inside.png)
 
 Vous aller dans la colonne de droite vous mettre dans le repertoire okovision que vous avez dezippé, et vous les glissez dans la fenêtre de droite
@@ -93,7 +95,7 @@ Vous aller dans la colonne de droite vous mettre dans le repertoire okovision qu
 ![FZ Drag and drop](/wiki/freehosting/130-dragdrop.png)
 
 
-**6 - Lancer le setup okovision**
+## Lancer le setup okovision
 
 Rendez vous sur votre site, dans mon cas http://demo-okovision.byethost7.com/
 La page de setup se lance.
@@ -102,9 +104,9 @@ Remplir tout avec les bons identifiants, ceux indiqués lors de votre inscriptio
 
 ![Oko Setup](/wiki/freehosting/140-oko-setup.png)
 
-Si vous revenez a la racine sur site, la page d'accueil vous dire par une alerte : `Error getIndic`, cela est normal. Il faut initialiser la matrice
+Note: Si vous revenez a la racine sur site, la page d'accueil vous dire par une alerte : `Error getIndic`, cela est normal. Il faut initialiser la matrice
 
-**7 - Recuperation automatique des données de la chaudiere**
+## Recuperation automatique des données de la chaudiere
 
 Vous devez parametrer le CRON
 
@@ -121,8 +123,9 @@ Indiquez le fichier `cron.php`
 
 Dans l'offre gratuite, le traitement du Cron doit prendre moins de 5 secondes. Ce qui est le cas si tout va bien, il prend entre 2 et 3 sec.
 
+-----------------------------
 
-**8 - On fait apprendre la matrice**
+## Next Step : On fait apprendre la matrice
 
 
 On recupere un fichier de la chaudiere, et on l'injecte dans okovision pour qu'il finisse de se configurer.

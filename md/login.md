@@ -1,7 +1,8 @@
 # Accès espace sécurisé
 
-Par défaut, à partir de la version V1.6.0, les acccès au menu de configuration sont protégés.
+Note: Les acccès aux menu de configuration sont protégés.
 
+```txt
 login: admin
-
-pass: okouser
+password: okouser
+```

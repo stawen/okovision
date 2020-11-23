@@ -1,23 +1,30 @@
-#Modification / Mise à jour / Suppresion de la matrice
+# Gestion de la Matrice (Modification / Mise a jour / Suppresion )
 
-##Modification / Mise à jour  de la matrice ![update](/wiki/oko/w-0320-oko.png)
+Attention: Il faut etre **authentifié**. Accessible dans le menu **MAtrice de lecteure CSV**
 
-Si votre installation de chauffage change, par exemple :
+Note: La suppression de la matrice ne supprime pas les données, mais vous ne pourrez plus en ajouter **tant que vous n'en avez pas récréé une**
+
+Si votre installation de chauffage change, par exemple ppir :
 
 * Ajout d'un nouveau circuit de chauffage
 * Ajout de capteur solaire
 * Mise a jour du firmware
 
 
-Le format du fichier CSV va etre modifié. L'importation des données ne marchera plus.
-Vous devez faire une mise a jour de la matrice. 
+Le format du fichier CSV généré par votre chaudière va etre modifié. 
 
-Pour cela, il vous suffit de cliquer sur l'icone  et de reimporter un fichier CSV provenant de votre chaudière.
+Note: L'importation des données ne marchera plus si vous ne mettez pas la matrice à jour
 
 
-##Suppression de la matrice ![delete](/wiki/oko/w-0330-oko.png)
+![update](/wiki/oko/w-0320-oko.png) Cliquer sur l'icone de mise à jour
 
-Si vous avez eu un probleme lors de l'import d'un fichier CSV et que la matrice est incoherente. 
+Re-importer un fichier CSV provenant de votre chaudière. 
 
-Vous pouvez l'effacer en cliquant sur l'icone 
-Mais attention, toutes les données journalières seront supprimées. Par contre, l'historique est conservée.
+
+## Suppression de la matrice 
+
+Si vous avez eu un probleme lors de l'import d'un fichier CSV et que la matrice est incohérente. 
+
+![delete](/wiki/oko/w-0330-oko.png)  Vous pouvez l'effacer en cliquant sur l'icone 
+
+Attention: **Toutes les données journalières seront supprimées**. Par contre, l'historique est conservée.

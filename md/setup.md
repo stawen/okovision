@@ -1,7 +1,5 @@
 # SETUP
 
-## La page de setup
-
 ![](/wiki/oko/w-0080-oko.png)
 
 ## **Configuration / Connexion** à la base de donnée
@@ -20,7 +18,8 @@
 ## **Mode de recuperation** des fichiers CSV
 
 Si votre chaudière est connectée à votre réseau informatique, indiquer son ip (vous pourrez la changer plus tard via la menu de configuration)
-**Si vous avez opté pour un hebergement exterieur (par ex chez hostinger) vous devez definir l'ip public de votre box / ou son nom dns. De plus, vous devrez alors faire du port fowarding du port 80 de votre box vers la chaudiere.**
+
+Note: Si vous avez opté pour un [hebergement exterieur](/md/free-hosting.md#Installation_sur_Byet.host) vous devez definir l'ip public de votre box / ou son nom dns. De plus, vous devrez alors faire du port fowarding du port 80 de votre box vers la chaudiere.
 
 voir le chapitre detaillé  [Configurer sa box pour rendre accessible la chaudiere depuis internet](/md/box.md)
 
@@ -34,7 +33,9 @@ Sinon, choisissez USB, ainsi vous pourrez transferez manuellement les fichiers r
 
 ![](/wiki/oko/w-0130-oko.png)
 
-## Finalisation installation
+------------------
 
-Il vous faut initialiser la [matrice de transposition](/md/matrix.md)
+## Next Step : Finalisation installation
+
+Note: Il vous faut initialiser la [matrice de transposition](/md/matrix.md#Apprentissage_à_okovision_de_tous_les_elements_presents_sur_votre_chaudiere)
 

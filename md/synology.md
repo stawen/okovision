@@ -17,7 +17,7 @@ Ouvrez l'archive de source d'okovision que vous venez de télécharger et **copi
 
 ![](/wiki/nas/Nas-0050-inst.png)
 
-Dans le NAS, **faites clic droit sur le repertoire "okovision"**, puis propriété
+Dans le NAS, **faites clic droit sur le repertoire "okovision"**, puis propriétés
 
 ![](/wiki/nas/Nas-0060-inst.png)
 
@@ -27,7 +27,7 @@ Dans le NAS, **faites clic droit sur le repertoire "okovision"**, puis propriét
 
 ## Configuration de Web Station et de PHP
 
-Vous devez verifier que les modules PHP sont bien activés.
+Note: Vous devez verifier que les modules PHP sont bien activés.
 
 ![](/wiki/nas/Nas-0071-inst.png)
 
@@ -44,4 +44,8 @@ Avec votre navigateur, **accedez à okovision http://[ip]/okovision** (si vous a
 
 ![](/wiki/nas/Nas-0080-inst.png)
 
-**Nota :** Recuperez automatiquement le fichier sur la chaudiere : [Cron - Synology](/md/cronSynology.md)
+-------------
+
+## Next Step
+
+Note: Recuperez automatiquement le fichier sur la chaudiere : [Cron - Synology](/md/cronSynology.md)

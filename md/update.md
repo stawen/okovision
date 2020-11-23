@@ -1,6 +1,8 @@
-# Mise à jour OkOvision
+# Mise à jour Okovision
 
-Aller sur la page "A propos".
+Important: `Okovision` verifie automatiquement si des mises à jour sont disponibles
 
-OkOvision verifie automatiquement et vous dira si une mise à jour est disponible.
+
+Note: Aller sur la page `A propos`
+
 Si cela est le cas, vous pourrez lancer la mise à jour automatique. Vous n'avez rien d'autre à faire.

@@ -7,15 +7,17 @@ Cela vous permet aussi d'agir sur votre directement sur chaudiere via cette api.
 
 ## Fonctionnement
 
-Les appels sont des GET, et l'api retourne du Json
-Vous devez fournir dans votre GET votre TOKEN-API (visible dans la page "A propos")
+Important: Les appels sont des GET, et l'api retourne du Json
 
-Requette  :
-```
-* http://okovision/api.php?token=sdjknrjkfndvjb&type=admin&action=getFileFromChaudiere
+Important: Vous devez fournir dans votre GET votre TOKEN-API (visible dans la page "A propos")
+
+Exemple de Requette  :
+```bash
+curl http://okovision/api.php?token=sdjknrjkfndvjb&type=admin&action=getFileFromChaudiere
 ```
 Reponse :
-```
+
+```json
 {
   "response": true,
   "listefiles": [
@@ -40,12 +42,15 @@ Reponse :
 ```
 
 
-Requette  :
+Exemple Requette  :
+```bash
+curl http://okovision/api.php?token=sdjknrjkfndvjb&type=rt&action=setBoilerMode&way=1&mode=2
 ```
-* http://okovision/api.php?token=sdjknrjkfndvjb&type=rt&action=setBoilerMode&way=1&mode=2
-```
+
 Reponse :
-```
+
+```json
+[
   {
     "status": "OK",
     "name": "CAPPL:LOCAL.hk[0].betriebsart[1]",
@@ -54,13 +59,13 @@ Reponse :
 ]
 ```
 
-Requette  :
-```
-* http://okovision/api.php?token=sdjknrjkfndvjb&type=rendu&action=getIndicByDay&day=2015-12-22
+Exmple Requette  :
+```bash
+curl http://okovision/api.php?token=sdjknrjkfndvjb&type=rendu&action=getIndicByDay&day=2015-12-22
 ```
 
 Reponse :
-```
+```json
 {
   "consoPellet": 22.25,
   "tcExtMax": 12.8,
@@ -69,31 +74,35 @@ Reponse :
 ```
 
 
-##Lecture de la documentation
+## Lecture de la documentation
 
-Par exemple 'setBoilerMode'
+Par exemple `setBoilerMode`
 
-
-```
+```txt
 * rt :
   * setBoilerMode (permet de forcer le mode d'un circuit)
       * way : 0 / 1 / 2 / etc (numero du circuit)
       * mode : 0 - arret / 1 - Auto / 2 - Confort / 3 - Reduit
 ```
+
 il faut ecrire :
 
+```txt
 * type=rt
 * action=setBoilerMode
 * way=1 (si vous avez un seul circuit de chauffage, 1 sera toujours la valeur, si vous plusieur circuit, Aller dans l'interface web d'okofen, le numero du circuit de chauffage est precisé
 * mode=2 (ici force le mode Confort)
+```
 
-Ne pas oublier de mettre le token, sinon la commande sera rejecté :
+Important: Ne pas oublier de mettre le token, sinon la commande sera rejecté
 
+```txt
 * token=sdjknrjkfndvjb  (mettre celui present dans la page "A propos" de votre okovision)
+```
 
 Le resultat
-```
-* http://okovision/api.php?TOKEN=sdjknrjkfndvjb&TYPE=rt&ACTION=setBoilerMode&WAY=1&MODE=2
+```bash
+curl http://okovision/api.php?TOKEN=sdjknrjkfndvjb&TYPE=rt&ACTION=setBoilerMode&WAY=1&MODE=2
 ```
 
 ## Liste des services disponibles
