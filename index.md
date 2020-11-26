@@ -2,9 +2,20 @@
 
 ## Compatiblités
 
-Important: Okovision est compatible avec le Firmware Oekofen V2 et V3.
+Important: Okovision est compatible avec le Firmware Oekofen et Paradigma V2 et V3.
 
 Note: La compatibilité avec les Firmwares V4 est en cours de developpement
+
+## Architectures
+
+### Okovision
+
+![software architecture](/wiki/architecture/010-archi-okovision-v1.8.png)
+
+### Chaudière Oekofen avec My.oekofen.info
+
+![My Oekofen Architecture](/wiki/architecture/020-archi-my-oekofen.png)
+
 
 ## Installation
 
@@ -50,3 +61,5 @@ Attention: Okovision est une logiciel serveur qui est accessbile depuis votre na
 
   * [Liste des services disponibles](/md/api.md#Liste_des_services_disponibles)
   * [Exemple](/md/api.md#Fonctionnement)
+
+
