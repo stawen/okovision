@@ -47,10 +47,10 @@ if (is_ajax() && is_valid()) {
                             $a->importFileFromChaudiere($_POST);
 
                             break;
-                        case 'importFileFromUpload':
-                            $a->importFileFromUpload($_POST);
+                        // case 'importFileFromUpload':
+                        //     $a->importFileFromUpload($_POST);
 
-                            break;
+                        //     break;
                         case 'uploadCsv':
                             $a->uploadCsv($_POST, $_FILES);
 
@@ -139,16 +139,16 @@ if (is_ajax() && is_valid()) {
                             }
 
                             break;
-                        case 'getDateForMigrate':
-                            $a->getDateForMigrate();
+                        // case 'getDateForMigrate':
+                        //     $a->getDateForMigrate();
 
-                            break;
-                        case 'migrateDataForDate':
-                            if (isset($_GET['jour'])) {
-                                $a->migrateDataForDate($_GET['jour']);
-                            }
+                        //     break;
+                        // case 'migrateDataForDate':
+                        //     if (isset($_GET['jour'])) {
+                        //         $a->migrateDataForDate($_GET['jour']);
+                        //     }
 
-                            break;
+                        //     break;
                         case 'login':
                             $a->login($_POST['user'], $_POST['pass']);
 
@@ -243,7 +243,6 @@ if (is_ajax() && is_valid()) {
                             break;
                         case 'getIndicByDay':
                             if (isset($_GET['timeStart'], $_GET['timeEnd'])) {
-                                //$r->getIndicByDay($_GET['jour'],(int)($_GET['timeStart'] / 1000),(int)($_GET['timeEnd'] / 1000));
                                 $r->getIndicByDay($_GET['jour'], $_GET['timeStart'], $_GET['timeEnd']);
                             } else {
                                 $r->getIndicByDay($_GET['jour']);

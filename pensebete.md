@@ -120,4 +120,18 @@ git push origin :[name_of_your_new_branch]
 git merge unstable
 ```	
 
+# Evolution à statuer
 
+- restructurer le code pour etre mieux decouper et avoir des class bcp moins grosse
+- séparation de la conso ECS et Chauffage
+- Changement de la page d'accueil, avoir un resumé de la conso du jour et non les graphiques
+- gestion d'une chaudière avec réserve à chargement manuel. Finalement on a deux stocks: un stock de sacs et un niveau dans notre trémie de 130kg.
+- la possibilité d'y intégrer des sondes externes. N'ayant pas de sonde d'ambiance, j'ai ajouté une sonde Température et humidité que j’intègre dans oko_historique -> comment recuperer les valeurs de la sonde externe ?
+et ce sur point je suis moins convaincu:
+- Utilisation de la température intérieur et extérieur pour faire le calcul minute pas minute du "DJU". ce n'est plus vraiment unifié mais il me semble que ce qui est intéressant c'est de représenter au mieux la bâti pour pouvoir comparer d'une année à l'autre les variations de ce "DJU" en fonction des réglages chaudière, des granulés, d'une ré isolation au autres.
+
+# Compatibilité Okofen Touch
+
+- V2 - Ok
+- Jusqu'au 3.00d ou 3.10d la connexion non sécurisée fonctionne.
+- A partir du 4.00 il va falloir trouver une autre méthode (plus accès au log)
