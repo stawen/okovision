@@ -125,5 +125,10 @@
         "url": "https://github.com/stawen/okovision/archive/1.8.3.zip",
         "date": "14/11/2020",
         "changelog": "<ul><li>Refactoring du code pour respecter l'indentation PHP</li><li>Merge Fix84 proposé par bertrandgorge : Include all files with absolute paths</li><li>Merge Fix82 proposé par grouxx : Gestion dans GetIndic de plusieurs circuite + ajout de nouveaux retours</li><li>Merge Fix81 proposé par grouxx : Correction get and set boiler Mode pour choisir le bon circuit</li></ul>"
+    },
+    "1.8.4": {
+        "url": "https://github.com/stawen/okovision/archive/1.8.4.zip",
+        "date": "29/11/2020",
+        "changelog": "<ul><li>Okovision V2 Foundation : Cleanning Code</li><li>Fix #95 : Import from CSV file Firmware V3 doesn't work (thank's John47 !) </li><li>Improvement Wiki Documentation</li></ul>"
     }
 }
