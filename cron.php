@@ -8,7 +8,7 @@
 include_once __DIR__.'/config.php';
 
 $oko = new okofen();
-
+$log = new logger();
 //on telecharge le csv depuis la chaudiere
 if (GET_CHAUDIERE_DATA_BY_IP) {
     $files = $oko->getAvailableBoilerDataFiles();
@@ -16,7 +16,7 @@ if (GET_CHAUDIERE_DATA_BY_IP) {
         $date = $oko->getDateFromFilename($fileToDownload);
 
         if (!$oko->isDayComplete($date)) {
-            $this->log->info("Cron | {$fileToDownload} --> need to download again");
+            $log->info("Cron | {$fileToDownload} --> need to download again");
 
             $oko->getChaudiereData('http://'.CHAUDIERE.URL.'/'.$fileToDownload);
             $oko->csv2bdd();
@@ -24,7 +24,7 @@ if (GET_CHAUDIERE_DATA_BY_IP) {
             // Force the synthese in case it has been built already
             $oko->makeSyntheseByDay($date, true);
         } else {
-            $this->log->info("Cron | {$fileToDownload} --> Day is complete - building synthese if required");
+            $log->info("Cron | {$fileToDownload} --> Day is complete - building synthese if required");
 
             // The synthese will be rebuilt only if needed
             $oko->makeSyntheseByDay($date, false);
