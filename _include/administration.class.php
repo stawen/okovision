@@ -869,7 +869,7 @@ class administration extends connectDb
         //translation
         $dico = json_decode(file_get_contents('_langs/fr.matrice.json'), true);
         //open matrice file just uploaded, first line
-        $line = fgets(fopen('_tmp/matrice.csv', 'r'));
+        $line = trim(fgets(fopen('_tmp/matrice.csv', 'r')));
 
         //on retire le dernier ; de la ligne et on convertie la chaine en utf8
         $string = substr($line, 0, strlen($line) - 2);
