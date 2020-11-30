@@ -130,5 +130,10 @@
         "url": "https://github.com/stawen/okovision/archive/1.8.4.zip",
         "date": "29/11/2020",
         "changelog": "<ul><li>Okovision V2 Foundation : Cleanning Code</li><li>Fix #95 : Import from CSV file Firmware V3 doesn't work (thank's John47 !) </li><li>Improvement Wiki Documentation</li></ul>"
+    },
+    "1.8.5": {
+        "url": "https://github.com/stawen/okovision/archive/1.8.5.zip",
+        "date": "30/11/2020",
+        "changelog": "<ul><li>Fix #37 : Improved Cron function - Get ALL CSV on boiler if not yet imported (Thank's Contributor Bertrand Gorge)</li></ul>"
     }
 }
