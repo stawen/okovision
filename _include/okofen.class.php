@@ -26,30 +26,15 @@ class okofen extends connectDb
         parent::__destruct();
     }
 
-    /*
-    * Fonction pour recuperer les fichiers csv present sur la chaudiere
-    * Cron / OnDemand :
-    *	Cron -> en finction de l'heure d'appel il recupere le fichier du jour ou de la veille
-    *	Ondemande -> recupere celui qui lui est precisé
-    */
-    public function getChaudiereData($trigger = 'cron', $url = '')
+    // Fonction pour recuperer les fichiers csv present sur la chaudiere
+    public function getChaudiereData($url)
     {
-        if ('onDemande' != $trigger) {
-            if ($this->newDay()) {
-                $today = date('Ymd', mktime(0, 0, 0, date('m'), date('d') - 1, date('Y')));
-            } else {
-                $today = date('Ymd'); // 20010310
-            }
-
-            $link = PATH.$today.EXTENTION;
-        } else {
-            $link = $url;
-        }
+        $link = $url;
 
         $this->log->info('Class '.__CLASS__.' | '.__FUNCTION__.' |  Recuperation du fichier '.$link);
         //on lance le dl
         $result = $this->download($link, CSVFILE);
-        //$result = true;
+
         if (!$result) {
             //throw new Exception('Download error...');
             $this->log->error('Class '.__CLASS__.' | '.__FUNCTION__.' | Données chaudiere non recupérées');
@@ -59,6 +44,51 @@ class okofen extends connectDb
         $this->log->info('Class '.__CLASS__.' | '.__FUNCTION__.' | SUCCESS - données chaudiere récupérées');
 
         return true;
+    }
+
+    /**
+     * Look into the DB to check if we have the data for the last minute of the data.
+     * If the minute is missing, then we need to download the file again.
+     *
+     * @param type  $dataFilename
+     * @param mixed $dateChoosen
+     */
+    public function isDayComplete($dateChoosen)
+    {
+        if (empty($dateChoosen)) {
+            return false;
+        }
+        $sql = "SELECT COUNT(*) FROM oko_historique_full WHERE jour = '{$dateChoosen}' AND heure = '23:59:00'";
+
+        $result = $this->query($sql);
+
+        if ($result) {
+            if ($res = $result->fetch_row()) {
+                return 1 == $res[0];
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Converts a filename of the form 'touch_20161016.csv' to the corresponding
+     * date - ie : '2016-10-16'.
+     *
+     * @param type $dataFilename
+     */
+    public function getDateFromFilename($dataFilename)
+    {
+        $matches = [];
+        if (preg_match('@touch_([0-9]{4})([0-9]{2})([0-9]{2})\.csv@', $dataFilename, $matches)) {
+            $year = $matches[1];
+            $month = $matches[2];
+            $day = $matches[3];
+
+            return "{$year}-{$month}-{$day}";
+        }
+
+        return false;
     }
 
     // integration du fichier csv dans okovision
@@ -80,7 +110,6 @@ class okofen extends connectDb
         $start_cycle = 0;
         $nbColCsv = count($capteurs);
 
-        //$insert = "INSERT IGNORE INTO oko_historique (jour,heure,oko_capteur_id,value) VALUES ";
         $insert = 'INSERT IGNORE INTO oko_historique_full SET ';
         while (!feof($file)) {
             $ligne = fgets($file);
@@ -91,8 +120,6 @@ class okofen extends connectDb
                 $colCsv = explode(CSV_SEPARATEUR, $ligne);
 
                 if (isset($colCsv[1])) { //test si ligne non vide
-                    //$nbColCsv = count($colCsv);
-
                     $jour = $colCsv[0];
                     $heure = $colCsv[1];
 
@@ -139,31 +166,32 @@ class okofen extends connectDb
         return true;
     }
 
-    // Fonction lancant les requettes de synthèse du jour, elle ne s'active que si nous sommes dans le traitement de minuit. Elle fera la synthese
-    // des jours precedents.
-
-    public function makeSyntheseByDay($trigger = 'cron', $dayChossen = null)
+    /**
+     * Fonction lancant les requettes de synthèse du jour, elle ne s'active
+     * que si la date demandée est dans le passé.
+     *
+     * @param string $dateChoosen A date of the form '2015-10-25'
+     * @param bool   $bForce      If true, the synthese will be rebuilt even if it
+     *                            exists already
+     *
+     * @return bool
+     */
+    public function makeSyntheseByDay($dateChoosen = null, $bForce = true)
     {
-        if ($this->newDay() && 'cron' == $trigger) {
-            //Il est minuit nous lançons la synthèse, et prenons la date d'hier
-            $day = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d') - 1, date('Y')));
-        } elseif ('onDemande' == $trigger) {
-            //on ne fait rien si la date choisie est la date du jour
-            if ($dayChossen == date('Y-m-d', mktime(0, 0, 0, date('m'), date('d'), date('Y')))) {
-                return false;
-            }
-
-            //si c'est une demande manuelle, nous prenons la date choisie
-            $day = $dayChossen;
-            if (!$this->deleteSyntheseDay($day)) {
-                return false;
-            }
-        } else {
-            //si cron, mais pas new day, ou si pas ondemande, nous ne faisons rien
-            return;
+        //on ne fait rien si la date choisie est la date du jour
+        if ($dateChoosen == date('Y-m-d', mktime(0, 0, 0, date('m'), date('d'), date('Y')))) {
+            return false;
         }
 
-        return $this->insertSyntheseDay($day);
+        if (!$bForce && $this->isSyntheseDone($dateChoosen)) {
+            return true;
+        }
+        // On supprime les data éventuels
+        if (!$this->deleteSyntheseDay($dateChoosen)) {
+            return false;
+        }
+
+        return $this->insertSyntheseDay($dateChoosen);
     }
 
     /**
@@ -204,6 +232,26 @@ class okofen extends connectDb
         return @unlink($this->_cookies);
     }
 
+    /**
+     * Look at the boiler data repository, and returns a list of the data
+     * files that are available.
+     */
+    public function getAvailableBoilerDataFiles()
+    {
+        $rh = fopen('http://'.CHAUDIERE.URL, 'rb');
+        while (!feof($rh)) {
+            $dirData = fread($rh, 4096);
+        }
+        fclose($rh);
+
+        $matches = [];
+        if (preg_match_all('@touch_[0-9]{8}\.csv@sm', $dirData, $matches)) {
+            return array_unique($matches[0]);
+        }
+
+        return $matches;
+    }
+
     //fonction de telechargement de fichier sur internet
     // download('http://xxx','/usr/var/tmp)');
     private function download($file_source, $file_target)
@@ -226,22 +274,6 @@ class okofen extends connectDb
         return true;
     }
 
-    //pour que cela marche, il faut le la tache cron s'execute toutes les 2 heure a partir de 00:15
-    //si nous sommes entre 00 et 02 heures du matin, nous recuperons le fichir de la veuille, sinon le fichier du jour courant
-    //le cron doit s'executer a 00:15 pour etre bien
-
-    private function newDay()
-    {
-        $hour = date('H'); //17
-        //$this->log->debug("hour::".$hour);
-        if ('00' == $hour || '01' == $hour) {
-            //$this->log->debug("Minuit");
-            return true;
-        }
-
-        return false;
-    }
-
     //function de convertion du format decimal de l'import au format bdd
     private function cvtDec($n)
     {
@@ -254,6 +286,26 @@ class okofen extends connectDb
         $this->log->debug('Class '.__CLASS__.' | '.__FUNCTION__.' | '.$q);
 
         return $this->query($q);
+    }
+
+    /**
+     * Checks if a synthese already exists for this date.
+     *
+     * @param type $day
+     */
+    private function isSyntheseDone($day)
+    {
+        $sql = "SELECT COUNT(*) FROM oko_resume_day WHERE jour = '{$day}'";
+
+        $result = $this->query($sql);
+
+        if ($result) {
+            if ($res = $result->fetch_row()) {
+                return 1 == $res[0];
+            }
+        }
+
+        return false;
     }
 
     private function insertSyntheseDay($day)

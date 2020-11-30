@@ -1,3 +1,11 @@
+##1.8.5
+* Fix #37 : Improved Cron function - Get ALL CSV on boiler if not yet imported
+
+##1.8.4
+* Okovision V2 Foundation : Cleanning Code
+* Fix #95 : Import from CSV file Firmware V3 doesn't work (thank's John47 !)
+* Improvement Wiki Documentation
+
 ##1.8.3
 * Refactoring du code pour respecter l'indentation PHP
 * Merge Fix84 proposé par bertrandgorge : Include all files with absolute paths
