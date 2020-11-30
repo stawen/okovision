@@ -1,5 +1,5 @@
 ##1.8.5
-* Fix #37 : Improved Cron function
+* Fix #37 : Improved Cron function - Get ALL CSV on boiler if not yet imported
 
 ##1.8.4
 * Okovision V2 Foundation : Cleanning Code
