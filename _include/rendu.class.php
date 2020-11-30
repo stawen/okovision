@@ -75,21 +75,37 @@ class rendu extends connectDb
         }
 
         $c = $this->getConsoByday($jour, $timeStart, $timeEnd);
+        $c_ecs = $this->getConsoByday($jour, $timeStart, $timeEnd, 'hotwater');
         $min = $this->getTcMinByDay($jour, $timeStart, $timeEnd);
         $max = $this->getTcMaxByDay($jour, $timeStart, $timeEnd);
 
         $this->sendResponse(
             json_encode(
-                                ['consoPellet' => $c->consoPellet,
-                                    'tcExtMax' => $max->tcExtMax,
-                                    'tcExtMin' => $min->tcExtMin,
-                                ],
-                                JSON_NUMERIC_CHECK
-                            )
+                [
+                    'consoPellet' => $c->consoPellet,
+                    'consoPelletHotwater' => $c_ecs->consoPellet,
+                    'tcExtMax' => $max->tcExtMax,
+                    'tcExtMin' => $min->tcExtMin,
+                ],
+                JSON_NUMERIC_CHECK
+            )
         );
     }
 
-    public function getConsoByday($jour, $timeStart = null, $timeEnd = null)
+    /**
+     * function getConsoByDay
+     * Get pellet consomation.
+     *
+     * @default : all type of consommation
+     * $type :
+     *
+     * @param mixed      $jour
+     * @param null|mixed $timeStart
+     * @param null|mixed $timeEnd
+     * @param mixed      $type
+     *                              Specify type of consommation : default all, or heater (Chauffage) or hotwater (ECS)
+     */
+    public function getConsoByday($jour, $timeStart = null, $timeEnd = null, $type = null)
     {
         $coeff = POIDS_PELLET_PAR_MINUTE / 1000;
         $c = new capteur();
@@ -101,9 +117,16 @@ class rendu extends connectDb
         if (null != $timeStart && null != $timeEnd) {
             $intervalle = 'AND timestamp BETWEEN '.$timeStart.' AND '.$timeEnd;
         }
+        //make filter for calculate heater, hotwater or both, just first circuit not for hotwater2
+        $usage = '';
+        if ('hotwater' == $type) {
+            $capteur_ecs = $c->getByType('hotwater');
+            $usage = ' AND a.col_'.$capteur_ecs['column_oko'].' = 1';
+        }
 
+        // Rejouter le filtre ECS dans la requette
         $q = 'select round (sum((1/(a.col_'.$capteur_vis['column_oko'].' + a.col_'.$capteur_vis_pause['column_oko'].')) * a.col_'.$capteur_vis['column_oko'].')*('.$coeff.'),2) as consoPellet from oko_historique_full as a '
-                ."WHERE a.jour = '".$jour."' ".$intervalle;
+                ."WHERE a.jour = '".$jour."' ".$usage.' '.$intervalle;
 
         $this->log->debug('Class '.__CLASS__.' | '.__FUNCTION__.' | '.$q);
 
@@ -347,9 +370,9 @@ class rendu extends connectDb
         if ($remain <= 0) {
             $this->sendResponse(
                 json_encode(
-                ['emptying_ashtrey' => true,
-                ]
-            )
+                    ['emptying_ashtrey' => true,
+                    ]
+                )
             );
         }
     }

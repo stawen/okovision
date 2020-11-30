@@ -120,6 +120,7 @@
     "lang.text.page.import.table.title": "Fichiers dans _tmp/ pouvant être importés",
     
     "lang.text.page.label.conso": "Conso :",
+    "lang.text.page.label.conso.ecs": "dont ECS :",
     "lang.text.page.label.tcmax": "T°C Max (ext) :",
     "lang.text.page.label.tcmoy": "T°C Moy (ext) :",
     "lang.text.page.label.tcmin": "T°C Min (ext) :",
