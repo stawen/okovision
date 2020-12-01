@@ -101,7 +101,7 @@
     },
     "WW1 Pumpe": {
         "name": "Circulateur ECS",
-        "type": "hotwater",
+        "type": "hotwater[0]",
 		"boiler": "CAPPL:LOCAL.L_ww[0].pumpe"
     },
     "WW2 EinT Ist[°C]": {
@@ -121,7 +121,7 @@
     },
     "WW2 Pumpe": {
         "name": "ECS 2 - Circulateur ECS",
-        "type": "hotwater2",
+        "type": "hotwater[1]",
 		"boiler": "CAPPL:LOCAL.L_ww[1].pumpe"
     },
     "Zubrp1 Pumpe": {

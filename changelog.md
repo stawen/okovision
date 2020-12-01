@@ -1,3 +1,6 @@
+##1.9.0 :
+* Add #85 : Display of domestic hot water consumption for the current day, and into summary reports
+
 ##1.8.5
 * Fix #37 : Improved Cron function - Get ALL CSV on boiler if not yet imported
 

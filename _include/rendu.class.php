@@ -117,10 +117,10 @@ class rendu extends connectDb
         if (null != $timeStart && null != $timeEnd) {
             $intervalle = 'AND timestamp BETWEEN '.$timeStart.' AND '.$timeEnd;
         }
-        //make filter for calculate heater, hotwater or both, just first circuit not for hotwater2
+        //make filter for calculate heater, hotwater or both,
         $usage = '';
-        if ('hotwater' == $type) {
-            $capteur_ecs = $c->getByType('hotwater');
+        if ('hotwater' == $type) { //just first circuit for now
+            $capteur_ecs = $c->getByType('hotwater[0]');
             $usage = ' AND a.col_'.$capteur_ecs['column_oko'].' = 1';
         }
 
@@ -135,6 +135,13 @@ class rendu extends connectDb
         return $result->fetch_object();
     }
 
+    /**
+     * Get maximum Temperature in a specifique day, and in an intervalle.
+     *
+     * @param mixed      $jour
+     * @param null|mixed $timeStart
+     * @param null|mixed $timeEnd
+     */
     public function getTcMaxByDay($jour, $timeStart = null, $timeEnd = null)
     {
         $c = new capteur();

@@ -28,8 +28,8 @@ if (!file_exists('config.php')) {
 		 		<div id="ashtray_noInfo" class="alert alert-warning" role="warning" style="display: none;"> <strong><?php echo session::getInstance()->getLabel('lang.text.page.label.alertAshtrayNoInfo'); ?></strong></div>
 		 		<div id="ashtray_noDate" class="alert alert-warning" role="warning" style="display: none;"> <strong><?php echo session::getInstance()->getLabel('lang.text.page.label.alertAshtrayNoDate'); ?></strong></div>
 		 	</div>
-			<span class="glyphicon glyphicon-hand-right"></span> <?php echo session::getInstance()->getLabel('lang.text.page.label.conso'); ?><span id="consoPellet" class="label label-primary">00,00 Kg</span> &nbsp;&nbsp;
-			<?php echo session::getInstance()->getLabel('lang.text.page.label.conso.ecs'); ?><span id="consoPelletHotwater" class="label label-primary">00,00 Kg</span> &nbsp;&nbsp;
+			<span class="glyphicon glyphicon-hand-right"></span> <?php echo session::getInstance()->getLabel('lang.text.page.label.conso'); ?> <span id="consoPellet" class="label label-primary">00,00 Kg</span> &nbsp;&nbsp;
+																 <?php echo session::getInstance()->getLabel('lang.text.page.label.conso.ecs'); ?> <span id="consoPelletHotwater" class="label label-primary">00,00 Kg</span> &nbsp;&nbsp;
 			<span class="glyphicon glyphicon-arrow-up"></span> <?php echo session::getInstance()->getLabel('lang.text.page.label.tcmax'); ?> <span id="tcmax" class="label label-success">00,0 °C</span> &nbsp;&nbsp;
 			<span class="glyphicon glyphicon-arrow-down"></span> <?php echo session::getInstance()->getLabel('lang.text.page.label.tcmin'); ?> <span id="tcmin" class="label label-warning">00,0 °C</span>
 		</div>
