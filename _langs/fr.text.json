@@ -157,6 +157,7 @@
     "lang.text.graphe.label.tcmax": "T°C Extérieure (Max)",
     "lang.text.graphe.label.tcmin": "T°C Extérieure (Min)",
     "lang.text.graphe.label.conso": "Pellets (Kg)",
+    "lang.text.graphe.label.conso.ecs": "ECS (Kg)",
     "lang.text.graphe.label.dju": "DJU",
     "lang.text.graphe.label.nbcycle": "NB Cycles",
     

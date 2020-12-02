@@ -213,7 +213,7 @@ class rendu extends connectDb
     public function getIndicByMonth($month, $year)
     {
         $q = 'SELECT max(Tc_ext_max) as tcExtMax, min(Tc_ext_min) as tcExtMin, '.
-                'sum(conso_kg) as consoPellet, sum(dju) as dju, sum(nb_cycle) as nbCycle '.
+                'sum(conso_kg) as consoPellet, sum(conso_ecs_kg) as consoEcsPellet, sum(dju) as dju, sum(nb_cycle) as nbCycle '.
                 'FROM oko_resume_day '.
                 'WHERE MONTH(oko_resume_day.jour) = '.$month.' AND '.
                 'YEAR(oko_resume_day.jour) = '.$year;
@@ -226,6 +226,7 @@ class rendu extends connectDb
         $this->sendResponse(json_encode(['tcExtMax' => $r->tcExtMax,
             'tcExtMin' => $r->tcExtMin,
             'consoPellet' => $r->consoPellet,
+            'consoEcsPellet' => $r->consoEcsPellet,
             'dju' => $r->dju,
             'nbCycle' => $r->nbCycle,
         ], JSON_NUMERIC_CHECK));
@@ -389,6 +390,7 @@ class rendu extends connectDb
         $categorie = [session::getInstance()->getLabel('lang.text.graphe.label.tcmax') => 'tc_ext_max',
             session::getInstance()->getLabel('lang.text.graphe.label.tcmin') => 'tc_ext_min',
             session::getInstance()->getLabel('lang.text.graphe.label.conso') => 'conso_kg',
+            // session::getInstance()->getLabel('lang.text.graphe.label.conso.ecs') => 'conso_ecs_kg',
             session::getInstance()->getLabel('lang.text.graphe.label.dju') => 'dju',
             session::getInstance()->getLabel('lang.text.graphe.label.nbcycle') => 'nb_cycle',
         ];
@@ -427,7 +429,7 @@ class rendu extends connectDb
     public function getTotalSaison($idSaison)
     {
         $q = 'SELECT max(Tc_ext_max) as tcExtMax, min(Tc_ext_min) as tcExtMin, '.
-                'sum(conso_kg) as consoPellet, sum(dju) as dju, sum(nb_cycle) as nbCycle '.
+                'sum(conso_kg) as consoPellet, sum(conso_ecs_kg) as consoEcsPellet, sum(dju) as dju, sum(nb_cycle) as nbCycle '.
                 'FROM oko_resume_day, oko_saisons '.
                 'WHERE oko_saisons.id = '.$idSaison.' '.
                 'AND oko_resume_day.jour BETWEEN oko_saisons.date_debut AND oko_saisons.date_fin ;';
@@ -440,6 +442,7 @@ class rendu extends connectDb
         $this->sendResponse(json_encode(['tcExtMax' => $r->tcExtMax,
             'tcExtMin' => $r->tcExtMin,
             'consoPellet' => $r->consoPellet,
+            'consoEcsPellet' => $r->consoEcsPellet,
             'dju' => $r->dju,
             'nbCycle' => $r->nbCycle,
         ], JSON_NUMERIC_CHECK));
@@ -452,6 +455,7 @@ class rendu extends connectDb
             session::getInstance()->getLabel('lang.text.graphe.label.conso') => 'sum(conso_kg)',
             session::getInstance()->getLabel('lang.text.graphe.label.dju') => 'sum(dju)',
             session::getInstance()->getLabel('lang.text.graphe.label.nbcycle') => 'sum(nb_cycle)',
+            session::getInstance()->getLabel('lang.text.graphe.label.conso.ecs') => 'sum(conso_ecs_kg)',
         ];
 
         $where = ", DATE_FORMAT(oko_dateref.jour,'%Y-%m-01 00:00:00') FROM oko_saisons, oko_resume_day ".
@@ -491,6 +495,7 @@ class rendu extends connectDb
         $q = "select DATE_FORMAT(oko_dateref.jour,'%m-%Y') as mois, ".
                     "IFNULL(sum(oko_resume_day.nb_cycle),'-') as nbCycle, ".
                     "IFNULL(sum(oko_resume_day.conso_kg),'-') as conso, ".
+                    "IFNULL(sum(oko_resume_day.conso_ecs_kg),'-') as conso_ecs, ".
                     "IFNULL(sum(oko_resume_day.dju),'-') as dju, ".
                     'IFNULL(round( ((sum(oko_resume_day.conso_kg) * 1000) / sum(oko_resume_day.dju) / '.SURFACE_HOUSE."),2),'-') as g_dju_m ".
                     'FROM oko_saisons, oko_resume_day '.
