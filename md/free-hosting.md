@@ -116,7 +116,7 @@ Cliquez sur `Alter Cron`
 
 ![CPANEL Cron](/wiki/freehosting/160-altercron.png)
 
-Mettre toutes les 2 heures (en dessous cela ne sert a rien car la chaudiere met à jours le fichier csv que toutes les 2 heures)
+Mettre toutes les 59 minutes
 Indiquez le fichier `cron.php`
 
 ![CPANEL Cron](/wiki/freehosting/170-cron-conf.png)
