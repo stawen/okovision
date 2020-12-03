@@ -135,5 +135,10 @@
         "url": "https://github.com/stawen/okovision/archive/1.8.5.zip",
         "date": "30/11/2020",
         "changelog": "<ul><li>Fix #37 : Improved Cron function - Get ALL CSV on boiler if not yet imported (Thank's Contributor Bertrand Gorge)</li></ul>"
+    },
+    "1.9.0": {
+        "url": "https://github.com/stawen/okovision/archive/1.9.0.zip",
+        "date": "03/12/2020",
+        "changelog": "<ul><li>Display of domestic hot water consumption for the current day, and into summary reports</li><li>To more data on the previous days, you must go to the menu Calculation of daily summaries / Calcul des synthèse jouralières and force recalculation</li></ul>"
     }
 }
