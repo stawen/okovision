@@ -310,19 +310,21 @@ class okofen extends connectDb
 
     private function insertSyntheseDay($day)
     {
-        $query = 'INSERT INTO oko_resume_day ( jour, tc_ext_max, tc_ext_min, conso_kg, dju, nb_cycle ) VALUE ';
+        $query = 'INSERT INTO oko_resume_day ( jour, tc_ext_max, tc_ext_min, conso_kg, conso_ecs_kg, dju, nb_cycle ) VALUE ';
 
         $rendu = new rendu();
         $max = $rendu->getTcMaxByDay($day);
         $min = $rendu->getTcMinByDay($day);
         $conso = $rendu->getConsoByday($day);
+        $conso_ecs = $rendu->getConsoByday($day, null, null, 'hotwater');
         $dju = $rendu->getDju($max->tcExtMax, $min->tcExtMin);
         $cycle = $rendu->getNbCycleByDay($day);
 
         $consoPellet = (null == $conso->consoPellet) ? 0 : $conso->consoPellet;
+        $consoEcsPellet = (null == $conso_ecs->consoPellet) ? 0 : $conso_ecs->consoPellet;
         $nbCycle = (null == $cycle->nbCycle) ? 0 : $cycle->nbCycle;
 
-        $query .= "('".$day."', ".$max->tcExtMax.','.$min->tcExtMin.', '.$consoPellet.', '.$dju.', '.$nbCycle.' );';
+        $query .= "('".$day."', ".$max->tcExtMax.', '.$min->tcExtMin.', '.$consoPellet.', '.$consoEcsPellet.', '.$dju.', '.$nbCycle.' );';
 
         $this->log->debug('Class '.__CLASS__.' | '.__FUNCTION__.' | '.$query);
 

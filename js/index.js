@@ -186,6 +186,7 @@ $(document).ready(function() {
 			$("#tcmax").text($.DecSepa(json.tcExtMax + " °C"));
 			$("#tcmin").text($.DecSepa(json.tcExtMin + " °C"));
 			$("#consoPellet").text($.DecSepa(((json.consoPellet === null) ? 0.0 : json.consoPellet) + " Kg"));
+			$("#consoPelletHotwater").text($.DecSepa(((json.consoPelletHotwater === null) ? 0.0 : json.consoPelletHotwater) + " Kg"));
 		});
 	}
 
