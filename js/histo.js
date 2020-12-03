@@ -197,6 +197,7 @@ $(document).ready(function() {
 				$("#tcmin").text(DecSepa(json.tcExtMin + " °C"));
 				$("#tcmoy").text(DecSepa(Math.round((json.tcExtMin + json.tcExtMax) * 100 / 2) / 100 + " °C"));
 				$("#consoPellet").text(DecSepa(((json.consoPellet === null) ? 0.0 : json.consoPellet) + " Kg"));
+				$("#consoEcsPellet").text(DecSepa(((json.consoEcsPellet === null) ? 0.0 : json.consoEcsPellet) + " Kg"));
 				$("#dju").text(DecSepa(json.dju + ""));
 				$("#cycle").text(DecSepa(json.nbCycle + ""));
 
@@ -263,6 +264,7 @@ $(document).ready(function() {
 				$("#tcminSaison").text(DecSepa(json.tcExtMin + " °C"));
 				$("#tcmoySaison").text(DecSepa(Math.round((json.tcExtMin + json.tcExtMax) * 100 / 2) / 100 + " °C"));
 				$("#consoPelletSaison").text(DecSepa(((json.consoPellet === null) ? 0.0 : json.consoPellet) + " Kg"));
+				$("#consoEcsPelletSaison").text(DecSepa(((json.consoEcsPellet === null) ? 0.0 : json.consoEcsPellet) + " Kg"));
 				$("#djuSaison").text(DecSepa(json.dju + ""));
 				$("#cycleSaison").text(DecSepa(json.nbCycle + ""));
 
@@ -274,11 +276,7 @@ $(document).ready(function() {
 		$.api('GET', 'rendu.getSyntheseSaison', {
 				saison: $("#saison").val()
 			}).done(function(saison) {
-
-				//console.log('Synthese success');	
-				//console.log(json);
 				var json = saison.grapheData;
-
 				//Personnalisation des données
 				//T°C max
 				json[0].color = "red";
@@ -330,6 +328,10 @@ $(document).ready(function() {
 							//textShadow: '0 0 5px black'
 					}
 				}
+				// ECS
+				json[5].color = "green";
+				json[5].zIndex = 1;
+				json[5].yAxis = 1;
 
 				var chart = new Highcharts.Chart({
 					chart: {
@@ -426,7 +428,8 @@ $(document).ready(function() {
             											<td>'+ val.mois +' </td> \
         	                                            <td>'+ val.nbCycle +'</td>  \
         	                                            <td>'+ val.dju +'</td> \
-        	                                            <td>'+ val.conso +'</td> \
+														<td>'+ val.conso +'</td> \
+														<td>'+ val.conso_ecs +'</td> \
         	                                            <td>'+ val.g_dju_m+'</td> \
         	                                          </tr>');
                 });
