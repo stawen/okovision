@@ -105,7 +105,7 @@ class AutoUpdate extends connectDb
      *
      * @var array
      */
-    private $_updates;
+    private $_updates = [];
 
     /**
      * Cache for update requests.

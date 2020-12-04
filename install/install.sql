@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS `oko_resume_day` (
   `tc_ext_max` decimal(3,1) DEFAULT NULL,
   `tc_ext_min` decimal(3,1) DEFAULT NULL,
   `conso_kg` decimal(6,2) DEFAULT NULL,
+  `conso_ecs_kg` decimal(6,2) DEFAULT NULL,
   `dju` decimal(6,2) DEFAULT NULL,
   `nb_cycle` int(1) unsigned zerofill DEFAULT '0',
   PRIMARY KEY (`jour`)
