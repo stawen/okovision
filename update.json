@@ -145,5 +145,10 @@
         "url": "https://github.com/stawen/okovision/archive/1.9.1.zip",
         "date": "04/12/2020",
         "changelog": "<ul><li>Fix #107 - Error Message after updating. In this update you still have the error. But not next update</li><li>Fix script install with new data Hot Water</li></ul>"
+    },
+    "1.9.2": {
+        "url": "https://github.com/stawen/okovision/archive/1.9.2.zip",
+        "date": "04/12/2020",
+        "changelog": "<ul><li>Fix #108 - Error Message rendu.getIndicByDay when you don' have pumpe Hot water</li></ul>"
     }
 }
