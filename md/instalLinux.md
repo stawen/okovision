@@ -17,7 +17,7 @@ Installation des prerequis
 
 ```bash
 apt-get update
-apt-get -y install apache2 php7 php-mysql php-curl php-mbstring php-curl php-xml mysql-server
+apt-get -y install apache2 php7 php-mysql php-curl php-mbstring php-curl php-xml mysql-server php-zip
 ```
 
 Installation des sources okovision
