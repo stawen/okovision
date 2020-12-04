@@ -1,11 +1,10 @@
 Unrealised
 ----------
 
-* Fix #107 - Error Message after updating. In this update you still have the error. But not next update
-
-
 1.9.1
 ------
+* Fix #107 - Error Message after updating. In this update you still have the error. But not next update
+* Fix script install with new data Hot Water
 
 1.9.0
 -----
