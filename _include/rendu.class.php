@@ -117,10 +117,14 @@ class rendu extends connectDb
         if (null != $timeStart && null != $timeEnd) {
             $intervalle = 'AND timestamp BETWEEN '.$timeStart.' AND '.$timeEnd;
         }
+
         //make filter for calculate heater, hotwater or both,
         $usage = '';
         if ('hotwater' == $type) { //just first circuit for now
             $capteur_ecs = $c->getByType('hotwater[0]');
+            if (null == $capteur_ecs) {
+                return ['consoPellet' => null];
+            }
             $usage = ' AND a.col_'.$capteur_ecs['column_oko'].' = 1';
         }
 
