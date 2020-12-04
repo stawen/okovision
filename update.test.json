@@ -120,6 +120,11 @@
         "url": "https://github.com/stawen/okovision/archive/1.9.0.zip",
         "date": "03/12/2020",
         "changelog": "<ul><li>Display of domestic hot water consumption for the current day, and into summary reports</li><li>To more data on the previous days, you must go to the menu Calculation of daily summaries / Calcul des synthèse jouralières and force recalculation</li></ul>"
+    },
+    "1.9.1": {
+        "url": "https://github.com/stawen/okovision/archive/1.9.1.zip",
+        "date": "04/12/2020",
+        "changelog": "<ul><li>Fix #107 - Error Message after updating. In this update you still have the error. But not next update</li><li>Fix script install with new data Hot Water</li></ul>"
     }
 }
 
