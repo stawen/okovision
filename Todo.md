@@ -2,11 +2,12 @@ Terminated
 ----------
 
 (x) traduire datepicker.js
+(x) traduire text.json
 
 In progress
 -----------
 
-() traduire text.json
+
 () traduire text.js
 () traduire matrice.json
 () Rajouter la choix de la langue dansla page de config

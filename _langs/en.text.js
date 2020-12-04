@@ -98,33 +98,5 @@ var lang = {
         seasonSummary: "Synthèse Saison",
         loading : 'Loading data from boiler...'
     }
-    /*,
-    sensor:{
-        FA0_L_mittlere_laufzeit:"CAPPL:FA[0].L_mittlere_laufzeit",
-        FA0_L_brennerstarts:"CAPPL:FA[0].L_brennerstarts",
-        FA0_L_brennerlaufzeit_anzeige:"CAPPL:FA[0].L_brennerlaufzeit_anzeige",
-        FA0_L_anzahl_zuendung:"CAPPL:FA[0].L_anzahl_zuendung",
-        touch0_version:"CAPPL:LOCAL.touch[0].version",
-        hk0_raumtemp_heizen:"CAPPL:LOCAL.hk[0].raumtemp_heizen",
-        hk0_raumtemp_absenken:"CAPPL:LOCAL.hk[0].raumtemp_absenken",
-        hk0_heizkurve_steigung:"CAPPL:LOCAL.hk[0].heizkurve_steigung",
-        hk0_heizkurve_fusspunkt:"CAPPL:LOCAL.hk[0].heizkurve_fusspunkt",
-        hk0_heizgrenze_heizen:"CAPPL:LOCAL.hk[0].heizgrenze_heizen",
-        hk0_heizgrenze_absenken:"CAPPL:LOCAL.hk[0].heizgrenze_absenken",
-        hk0_vorlauftemp_max:"CAPPL:LOCAL.hk[0].vorlauftemp_max",
-        hk0_vorlauftemp_min:"CAPPL:LOCAL.hk[0].vorlauftemp_min",
-        hk0_ueberhoehung:"CAPPL:LOCAL.hk[0].ueberhoehung",
-        hk0_mischer_max_auf_zeit:"CAPPL:LOCAL.hk[0].mischer_max_auf_zeit",
-        hk0_mischer_max_aus_zeit:"CAPPL:LOCAL.hk[0].mischer_max_aus_zeit",
-        hk0_mischer_max_zu_zeit:"CAPPL:LOCAL.hk[0].mischer_max_zu_zeit",
-        hk0_mischer_regelbereich_quelle:"CAPPL:LOCAL.hk[0].mischer_regelbereich_quelle",
-        hk0_mischer_regelbereich_vorlauf:"CAPPL:LOCAL.hk[0].mischer_regelbereich_vorlauf",
-        hk0_quellentempverlauf_anstiegstemp:"CAPPL:LOCAL.hk[0].quellentempverlauf_anstiegstemp",
-        hk0_quellentempverlauf_regelbereich:"CAPPL:LOCAL.hk[0].quellentempverlauf_regelbereich",
-        FA0_pe_kesseltemperatur_soll:"CAPPL:FA[0].pe_kesseltemperatur_soll",
-        FA0_pe_abschalttemperatur:"CAPPL:FA[0].pe_abschalttemperatur",
-        FA0_pe_einschalthysterese_smart:"CAPPL:FA[0].pe_einschalthysterese_smart",
-        FA0_pe_kesselleistung:"CAPPL:FA[0].pe_kesselleistung"
-    }*/
 };
     
