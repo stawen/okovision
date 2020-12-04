@@ -1,6 +1,11 @@
 Unrealised
 ----------
 
+* Fix #107 - Error Message after updating. In this update you still have the error. But not next update
+
+
+1.9.1
+------
 
 1.9.0
 -----
