@@ -74,14 +74,14 @@ var lang = {
         addGraphe: "Create new chart",
         updateGraphe: 'Modidy',
         deleteGraphe: 'Do you confirm deletion of ',
-        updateAsso: "Modification de l'association",
-        deleteAsso: "Confirmez-vous la suppresion de l'asso",
-        titreHisto: 'Synthèse mensuelle',
-        estimatedEmptyDate: 'Date estimée de silo vide : {0}',
-        estimationReliability: "Estimation basée sur l'historique des consommations. Fiabilité : {0}%",
-        no_silo_size: 'Pour connaître le statut de remplissage de votre silo, veuillez renseigner sa contenance <a href="adminParam.php">dans les informations générales</a>',
-        no_fill_date_for_silo: 'Pour connaître l\'état de votre stock de pellet, veuillez renseigner <a href="adminEvents.php">les informations du dernier remplissage</a>',
-        updateAvailable: 'Une nouvelle version Okovision est disponible, cliquez ici'
+        updateAsso: "Modify association",
+        deleteAsso: "Do you confirm association deletion",
+        titreHisto: 'Monthly summary',
+        estimatedEmptyDate: 'Estimated date empty storage tank : {0}',
+        estimationReliability: "Estimate based on historical consumption. Reliability : {0}%",
+        no_silo_size: 'To know the filling status of your storagoe tank, please enter its capacity <a href="adminParam.php">in parameters</a>',
+        no_fill_date_for_silo: 'To know you storage tank store state, please define <a href="adminEvents.php">the last filling</a>',
+        updateAvailable: 'A new Okovision version is available ! go to About page !'
     },
     graphic:{
         thousandsSep: ' ',
