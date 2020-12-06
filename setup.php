@@ -1,11 +1,10 @@
 <?php
 
-/*
-* Projet : Okovision - Supervision chaudiere OeKofen
-* Auteur : Stawen Dronek
-* Utilisation commerciale interdite sans mon accord
-*/
-
+    /**
+     * Projet : Okovision - Supervision chaudiere OeKofen
+     * Auteur : Stawen Dronek
+     * Utilisation commerciale interdite sans mon accord.
+     */
     function is_ajax()
     {
         return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && 'xmlhttprequest' == strtolower($_SERVER['HTTP_X_REQUESTED_WITH']);
@@ -42,8 +41,6 @@
             }
 
             $q = 'CREATE DATABASE IF NOT EXISTS `'.$s['db_schema'].'` /*!40100 DEFAULT CHARACTER SET utf8 */;';
-            //echo "Création BDD ::".$q;
-            //exit;
             if (!$mysqli->query($q)) {
                 echo 'Création BDD impossible';
                 exit;
@@ -69,8 +66,6 @@
         }
 
         $query = substr($query, 0, strlen($query) - 1).';';
-
-        //print_r($query);exit;
 
         $mysqli->query($query);
 
@@ -100,6 +95,7 @@
             'get_data_from_chaudiere' => $s['oko_typeconnect'],
             'send_to_web' => '0',
             'has_silo' => '0',
+            'lang' => 'en',
         ];
 
         file_put_contents('config.json', json_encode($param));
@@ -123,7 +119,7 @@
 ?>
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -151,23 +147,21 @@
   	
 <div class="container theme-showcase" role="main">
 		<div class="page-header" align="center">
-			<h2>Installation Okovision</h2> <br>
+			<h2>Okovision installation</h2> <br>
 		</div>
 		<div>
-			<h2><small>Vous allez renseigner les informations necessaires pour le stockage de vos données, ainsi que les premiers elements liés à votre installation</small></h2>
-			<h3><small>Vous pourrez modifier ces informations, après l'installation, via l'écran de parametres</small></h3>
-			<p>(*) Obligatoire </p> 
+			<h3><small>You can modify this information, after installation, through the settings screen</small></h3>
 		</div>
 		
 		
 			<fieldset>
 				<form class="form-horizontal" id="formConnect">
 				<!-- Form Name -->
-					<legend>Connexion à votre base de donnée</legend>
+					<legend>Database Connection</legend>
 					
 					<!-- Text input-->
 					<div class="form-group">
-					  <label class="col-md-4 control-label" for="db_adress">Adresse de la base (*) :</label>  
+					  <label class="col-md-4 control-label" for="db_adress">Address (*) :</label>  
 					  <div class="col-md-3">
 					  <input id="db_adress" name="db_adress" type="text" placeholder="ex : localhost, 192.168.xxx.xxx" class="form-control input-md" required="">
 					  <span class="help-block"></span>  
@@ -176,17 +170,17 @@
 					
 					<!-- Text input-->
 					<div class="form-group">
-					  <label class="col-md-4 control-label" for="db_adress">Nom de la base (*) :</label>  
+					  <label class="col-md-4 control-label" for="db_adress">Name (*) :</label>  
 					  <div class="col-md-3">
 					  <input id="db_schema" name="db_schema" type="text" placeholder="ex : okovision" class="form-control input-md" required="">
 					  <span class="help-block"></span>  
 					  </div>
 					</div>
 					<div class="form-group">
-						<label class="col-md-4 control-label" for="createDb">Créer la base :</label>  
+						<label class="col-md-4 control-label" for="createDb">Create database :</label>  
 					  	<div class="col-md-3 checkbox">
 					    <label>
-					      <input id="createDb" type="checkbox"> Ne pas cocher si elle existe déjà
+					      <input id="createDb" type="checkbox"> don't checked if database already exist
 					    </label>
 					
 					  </div>
@@ -194,7 +188,7 @@
 					
 					<!-- Text input-->
 					<div class="form-group">
-					  <label class="col-md-4 control-label" for="db_user">Utilisateur de connexion (*) :</label>  
+					  <label class="col-md-4 control-label" for="db_user">User (*) :</label>  
 					  <div class="col-md-3">
 					  <input id="db_user" name="db_user" type="text" placeholder="ex: root" class="form-control input-md" required="">
 					  </div>
@@ -202,16 +196,16 @@
 					
 					<!-- Text input-->
 					<div class="form-group">
-					  <label class="col-md-4 control-label" for="db_password">Mot de passe (*) :</label>  
+					  <label class="col-md-4 control-label" for="db_password">Password (*) :</label>  
 					  <div class="col-md-3">
 					  <input id="db_password" name="db_password" type="text" placeholder="ex : toor" class="form-control input-md" required="">
 					  </div>
 					</div>
 					
 					<!-- Button -->
-					<label class="col-md-4 control-label"  for="bt_testConnection">Tester la connexion :</label>
+					<label class="col-md-4 control-label"  for="bt_testConnection">Connection test :</label>
 					  <div class="col-md-3">
-					    <button id="bt_testConnection" name="bt_testConnection" class="btn btn-primary" type="button">Tester</button>
+					    <button id="bt_testConnection" name="bt_testConnection" class="btn btn-primary" type="button">Test</button>
 					  </div>
 					</form>
 			</fieldset>
@@ -221,11 +215,11 @@
 				<fieldset>
 				
 				<!-- Form Name -->
-					<legend>Communication avec votre chaudiere</legend>
+					<legend>Boiler Communication</legend>
 					
 					<!-- Select Basic -->
 					<div class="form-group">
-					  <label class="col-md-4 control-label" for="oko_typeconnect">Mode de récupération du fichier CSV :</label>
+					  <label class="col-md-4 control-label" for="oko_typeconnect">CSV file grab mode :</label>
 					  <div class="col-md-3">
 					    <select id="oko_typeconnect" name="oko_typeconnect" class="form-control">
 					        <option value="0">USB</option>
@@ -236,7 +230,7 @@
 					
 					<!-- Text input-->
 					<div class="form-group" id="form-ip" style="display: none;">
-					  <label class="col-md-4 control-label" for="oko_ip">Adresse IP de votre chaudière :</label>  
+					  <label class="col-md-4 control-label" for="oko_ip">Boiler IP address :</label>  
 					  <div class="col-md-3">
 					    <input id="oko_ip" name="oko_ip" type="text" placeholder="ex : 192.168.0.xx" class="form-control input-md">
 					  </div>
@@ -249,32 +243,32 @@
 				<fieldset>
 				
 				<!-- Form Name -->
-					<legend>Parametrage de l'application</legend>
+					<legend>Application settings</legend>
 					
 					<!-- Text input-->
 					<div class="form-group">
-					  <label class="col-md-4 control-label" for="param_tcref">T°C de reference :</label>  
+					  <label class="col-md-4 control-label" for="param_tcref">Reference °C :</label>  
 					  <div class="col-md-3">
 					  <input id="param_tcref" name="param_tcref" type="text" placeholder="ex : 20" class="form-control input-md" required="" value="20">
-					  <span class="help-block">Si vous avez 2 consignes, réduit à 19 et confort à 21, vous faites la moyenne -&gt; 20. Ceci est pour le calcul du DJU</span>  
+					  <span class="help-block">If you have 2 setpoints, reduced to 19°C and comfort at 21°C, you average -&gt; 20°C. It's for DJU calculation</span>  
 					  </div>
 					</div>
 					
 					<!-- Text input-->
 					<div class="form-group">
-					  <label class="col-md-4 control-label" for="param_poids_pellet">Poids pellet pour 60 secondes de vis : </label>  
+					  <label class="col-md-4 control-label" for="param_poids_pellet">Pellet weight for 60 seconds of work : </label>  
 					  <div class="col-md-3">
 					  <input id="param_poids_pellet" name="param_poids_pellet" type="text" placeholder="ex : 150" class="form-control input-md" required=""  value="150">
-					  <span class="help-block">Poids de pellet mesuré par un fonctionnement de la vis d'alimentation du foyer pendant 60 secondes</span>  
+					  <span class="help-block">Pellet weight in grams measured by operating the furnace feed screw for 60 seconds</span>  
 					  </div>
 					</div>
 					
 					<!-- Text input-->
 					<div class="form-group">
-					  <label class="col-md-4 control-label" for="parap_poids_pellet">Surface de la maison : </label>  
+					  <label class="col-md-4 control-label" for="parap_poids_pellet">House surface : </label>  
 					  <div class="col-md-3">
 					  <input id="surface_maison" name="param_surface" type="text" placeholder="ex : 180" class="form-control input-md" required=""  value="180">
-					  <span class="help-block">en m²</span>  
+					  <span class="help-block">in m²</span>  
 					  </div>
 					</div>
 				
@@ -284,7 +278,7 @@
             	<!-- Button -->
 					
 					  <div class="col-md-12" align="center">
-					    <button id="bt_install" name="bt_install" class="btn btn-primary" type="button">Installer</button>
+					    <button id="bt_install" name="bt_install" class="btn btn-primary" type="button">Install</button>
 					  </div>
 
 	 </div> <!-- /container -->

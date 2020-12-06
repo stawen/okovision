@@ -7,11 +7,7 @@
 $(document).ready(function() {
 
 	$("#bt_testConnection").click(function() {
-		//$('#formConnect').submit(function() {
-		//if ( $('#db_adress').val() !== "" && $('#db_user').val() !== "" && $('#db_password').val() !== "" ){
-
-		//$(this).text("....");
-
+		
 		var tab = {
 			db_adress: $('#db_adress').val(),
 			db_user: $('#db_user').val(),
@@ -25,11 +21,8 @@ $(document).ready(function() {
 			data: $.param(tab),
 			async: false,
 			success: function(a) {
-				//console.log(a.response);
 				if (a.response) {
-
 					$.growlValidate(lang.valid.communication);
-
 				}
 				else {
 					$.growlErreur(lang.error.bddFail);
@@ -53,17 +46,7 @@ $(document).ready(function() {
 	});
 
 	$("#bt_install").click(function() {
-		//$("form-horizontal").validate();
-		//.element("#db_adress");
-		//  $("#db_adress").validate();
-		/*
-		$(".form-horizontal").validate().element("#db_user");
-		$(".form-horizontal").validate().element("#db_password");
-		$(".form-horizontal").validate().element("#oko_ip");
-		$(".form-horizontal").validate().element("#param_tcref");
-		$(".form-horizontal").validate().element("#param_poids_pellet");
-		$(".form-horizontal").validate().element("#surface_maison");
-		*/
+		
 		var tab = {
 			db_adress: $('#db_adress').val(),
 			db_user: $('#db_user').val(),
@@ -84,7 +67,6 @@ $(document).ready(function() {
 			data: $.param(tab),
 			async: false,
 			success: function(a) {
-				//console.log(a);
 				window.location.replace("index.php");
 			}
 		});
