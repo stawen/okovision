@@ -81,7 +81,7 @@ var lang = {
         estimationReliability: "Estimate based on historical consumption. Reliability : {0}%",
         no_silo_size: 'To know the filling status of your storagoe tank, please enter its capacity <a href="adminParam.php">in parameters</a>',
         no_fill_date_for_silo: 'To know you storage tank store state, please define <a href="adminEvents.php">the last filling</a>',
-        updateAvailable: 'A new Okovision version is available ! go to About page !'
+        updateAvailable: 'A new version is available ! go to About page !'
     },
     graphic:{
         thousandsSep: ' ',

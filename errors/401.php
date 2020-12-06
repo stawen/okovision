@@ -43,7 +43,7 @@
 		
 		<div class="page-header" align="center">
 			<br/>
-			<h2><strong>401</strong> - Authorisation obligatoire</h2>
+			<h2><strong>401</strong> - Sorry, you must be logged</h2>
 		</div>
 	
 	 </div> <!-- /container -->
