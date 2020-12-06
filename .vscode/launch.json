@@ -8,6 +8,7 @@
             "name": "Listen for XDebug",
             "type": "php",
             "request": "launch",
+            "stopOnEntry": true,
             "port": 9000
         },
         {
@@ -16,6 +17,7 @@
             "request": "launch",
             "program": "${file}",
             "cwd": "${fileDirname}",
+            "stopOnEntry": true,
             "port": 9000
         }
     ]

@@ -7,6 +7,11 @@ Unrealised
   * For changing Language, go to parameters menu
 * This is the last update for the coming months!  
 
+1.9.2
+------
+* Fix #108 - Error Message rendu.getIndicByDay when you don' have pumpe Hot water
+
+
 1.9.1
 ------
 * Fix #107 - Error Message after updating. In this update you still have the error. But not next update
