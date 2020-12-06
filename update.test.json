@@ -131,8 +131,8 @@
         "date": "04/12/2020",
         "changelog": "<ul><li>Fix #108 - Error Message rendu.getIndicByDay when you don' have pumpe Hot water</li></ul>"
     },
-    "1.9.3": {
-        "url": "https://github.com/stawen/okovision/archive/1.9.3.zip",
+    "1.10.0": {
+        "url": "https://github.com/stawen/okovision/archive/1.10.0.zip",
         "date": "06/12/2020",
         "changelog": "<ul><li>Make Okovision International by adding English language (default)</li><li>For changing Language, go to parameters menu</li><li>This is the last update for the coming months !</li><li>Next version will be Okovision V2</li></ul>"
     }    
