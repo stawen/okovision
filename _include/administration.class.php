@@ -571,7 +571,7 @@ class administration extends connectDb
      */
     public static function getCurrentVersion()
     {
-        return file_get_contents('_include/version.json');
+        return trim(file_get_contents('_include/version.json'));
     }
 
     /**
