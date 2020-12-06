@@ -1,6 +1,12 @@
 Unrealised
 ----------
 
+1.10.0
+------
+* Make Okovision International by adding English language (default).
+  * For changing Language, go to parameters menu
+* This is the last update for the coming months!  
+
 1.9.1
 ------
 * Fix #107 - Error Message after updating. In this update you still have the error. But not next update

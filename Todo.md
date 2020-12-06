@@ -8,12 +8,12 @@ Terminated
 (X) Rajouter la choix de la langue dans la page de config
 (x) Faire le setup en anglais
 (x) traduire matrice.json
-() Modifier la methode de generation de la matrice pour prendre en compte les noms dans la langue choisi
+(x) Modifier la methode de generation de la matrice pour prendre en compte les noms dans la langue choisi
 
 In progress
 -----------
 
-() page import matrix en anglais
+
 
 
 
