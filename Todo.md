@@ -2,13 +2,20 @@ Terminated
 ----------
 
 (x) traduire datepicker.js
+(x) traduire text.json
+(x) traduire text.js
+(x) preciser que la lang est EN par defaut dans session.class
+(X) Rajouter la choix de la langue dans la page de config
+(x) Faire le setup en anglais
+(x) traduire matrice.json
+(x) Modifier la methode de generation de la matrice pour prendre en compte les noms dans la langue choisi
 
 In progress
 -----------
 
-() traduire text.json
-() traduire text.js
-() traduire matrice.json
-() Rajouter la choix de la langue dansla page de config
-() Faire le setup en anglais
-() preciser que la lang est EN par defaut dans session.class
+
+
+
+
+
+

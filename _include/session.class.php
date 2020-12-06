@@ -2,8 +2,7 @@
 
 class session extends connectDb
 {
-    //protected static $lang = 'fr';
-    private $lang = 'fr';
+    private $lang = 'en';
     private $dico;
     private static $_instance;
 
@@ -19,7 +18,8 @@ class session extends connectDb
         $cf = json_decode(file_get_contents('config.json'), true);
 
         $this->setLang(
-            isset($cf['lang']) ? $cf['lang'] : 'fr'
+            // by default English
+            isset($cf['lang']) ? $cf['lang'] : 'en'
         );
 
         $this->dico = $this->getDictionnary($this->getLang());

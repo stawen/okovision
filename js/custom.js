@@ -15,8 +15,8 @@ $(document).ready(function() {
 		$.notify({
 			icon: 'glyphicon glyphicon-thumbs-up',
 			message: lang.text.updateAvailable,
-			url: "about.php",
-			target: "_self"
+			// url: "about.php",
+			// target: "_self"
 		}, {
 			z_index: 9999,
 			type: 'info',

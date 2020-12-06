@@ -71,13 +71,18 @@ $(document).ready(function() {
 			send_to_web: 0,
             has_silo: $('#oko_loadingmode').val(),
             silo_size: $('#oko_silo_size').val(),
-            ashtray : $('#oko_ashtray').val()
+			ashtray : $('#oko_ashtray').val(),
+			lang : $('input[name=oko_language]:checked').val()
 		};
 		
 		$.api('POST', 'admin.saveInfoGe', tab, false).done(function(json) {
 			//console.log(a);
 			if (json.response) {
 				$.growlValidate(lang.valid.configSave);
+				setTimeout(function() {
+					document.location.reload();
+				  }, 1000);
+				
 			}
 			else {
 				$.growlWarning(lang.error.configNotSave);

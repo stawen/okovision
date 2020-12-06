@@ -43,7 +43,7 @@
 		
 		<div class="page-header" align="center">
 			<br/>
-			<h2><strong>404</strong> - Page introuvable</h2>
+			<h2><strong>404</strong> - Page not found :-(</h2>
 		</div>
 	
 	 </div> <!-- /container -->

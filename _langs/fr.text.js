@@ -81,7 +81,7 @@ var lang = {
         estimationReliability: "Estimation basée sur l'historique des consommations. Fiabilité : {0}%",
         no_silo_size: 'Pour connaître le statut de remplissage de votre silo, veuillez renseigner sa contenance <a href="adminParam.php">dans les informations générales</a>',
         no_fill_date_for_silo: 'Pour connaître l\'état de votre stock de pellet, veuillez renseigner <a href="adminEvents.php">les informations du dernier remplissage</a>',
-        updateAvailable: 'Une nouvelle version Okovision est disponible, cliquez ici'
+        updateAvailable: 'Une nouvelle version est disponible, cliquez ici'
     },
     graphic:{
         thousandsSep: ' ',

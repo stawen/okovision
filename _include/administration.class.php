@@ -69,6 +69,7 @@ class administration extends connectDb
             'has_silo' => $s['has_silo'],
             'silo_size' => $s['silo_size'],
             'ashtray' => $s['ashtray'],
+            'lang' => $s['lang'],
         ];
 
         $r = [];
@@ -780,7 +781,7 @@ class administration extends connectDb
     private function initMatriceFromFile()
     {
         //translation
-        $dico = json_decode(file_get_contents('_langs/fr.matrice.json'), true);
+        $dico = json_decode(file_get_contents('_langs/'.session::getInstance()->getLang().'.matrice.json'), true);
         //open matrice file just uploaded, first line
         $line = trim(fgets(fopen('_tmp/matrice.csv', 'r')));
 
@@ -845,7 +846,7 @@ class administration extends connectDb
     private function updateMatriceFromFile()
     {
         //translation
-        $dico = json_decode(file_get_contents('_langs/fr.matrice.json'), true);
+        $dico = json_decode(file_get_contents('_langs/'.session::getInstance()->getLang().'.matrice.json'), true);
         //open matrice file just uploaded, first line
         $line = fgets(fopen('_tmp/matrice.csv', 'r'));
         //on retire le dernier ; de la ligne
