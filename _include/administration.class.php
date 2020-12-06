@@ -69,6 +69,7 @@ class administration extends connectDb
             'has_silo' => $s['has_silo'],
             'silo_size' => $s['silo_size'],
             'ashtray' => $s['ashtray'],
+            'lang' => $s['lang'],
         ];
 
         $r = [];

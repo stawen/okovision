@@ -58,6 +58,8 @@
     "lang.text.page.admin.loading_mode_silo": "Storage tanks",    
     "lang.text.page.admin.loading_mode_bags": "Use of bags",
     "lang.text.page.admin.silo_size": "Storage tank size (kg) :",
+    "lang.text.page.admin.language": "Language",
+    "lang.text.page.admin.language.choice": "Choice :",
     "lang.text.page.season": "To have summary graphics, you must define the seasons. A season is a period of one year. You must specify the first day of your season. It can start on September 1, and will end automatically on August 31 of the following year.",
     "lang.text.page.season.add": "Add season",
     "lang.text.page.season.title": "Season",
