@@ -8,19 +8,39 @@ Je suis aussi sur que vous savez configurer un site sous apache.
 Je vous met le detail pour une configuration type. Cette exemple est pour un raspberry qui ne sera dédié qu'a okovision
 
 
-Passer en root
+## Installation Base de donnée
 
 ```bash
-su -
+sudo apt-get -y install mariadb-server
 ```
-Installation des prerequis
+
+## Configuration BAse de données
+
+Creation de l'utilisateur `okouser` avec le password `okopass`
 
 ```bash
-apt-get update
-apt-get -y install apache2 php7 php-mysql php-curl php-mbstring php-curl php-xml mysql-server php-zip
+sudo mysql -e "CREATE USER 'okouser'@'localhost' IDENTIFIED BY 'okopass';"
+sudo mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'okouser'@'localhost' ;"
 ```
 
-Installation des sources okovision
+## Installation Apache
+
+```bash
+sudo apt-get -y install apache2
+systemctl enable apache2
+```
+
+## Installation PHP
+
+```bash
+sudo apt-get -y install software-properties-common python-software-properties
+sudo add-apt-repository -y ppa:ondrej/php
+sudo apt-get update
+sudo apt-get -y install php7.2 php7.2-cli php7.2-common
+sudo apt-get -y install php7.2-curl php7.2-gd php7.2-json php7.2-mbstring php7.2-intl php7.2-mysql php7.2-xml php7.2-zip
+```
+
+# Installation des sources Okovision
 
 ```bash
 cd /var/www/
@@ -31,7 +51,7 @@ rm master.zip
 chown www-data:www-data -R okovision/
 ```
 
-Configuration apache
+## Configuration apache
 
 ```bash
 cp /var/www/okovision/install/099-okovision.conf /etc/apache2/sites-available/.
@@ -40,7 +60,9 @@ a2dissite 000-default
 service apache2 reload
 ```
 
-Aller sur l'adresse ip du serveur linux et faites le setup okovision
+## Configuration okovision
+
+Aller sur l'adresse ip du serveur linux / rpi et faites le setup okovision
 
 -------------------
 
