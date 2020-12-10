@@ -14,7 +14,7 @@ Je vous met le detail pour une configuration type. Cette exemple est pour un ras
 sudo apt-get -y install mariadb-server
 ```
 
-## Configuration BAse de données
+## Configuration Base de donnée
 
 Creation de l'utilisateur `okouser` avec le password `okopass`
 
