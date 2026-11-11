@@ -1,6 +1,7 @@
 <script lang="ts">
 	import favicon from '#lib/assets/favicon.svg';
 	import { resolve } from '$app/paths';
+	import { Toaster } from 'svelte-sonner';
 	import '../app.css';
 	import type { LayoutProps } from './$types';
 
@@ -13,6 +14,8 @@
 </svelte:head>
 
 <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+<Toaster position="top-right" richColors closeButton closeButtonAriaLabel="Fermer la notification" pauseWhenPageIsHidden />
 
 <header class="site-header">
 	<div class="container header-content">

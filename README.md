@@ -6,7 +6,7 @@ Supervision de chaudière Ökofen, en cours de réécriture en **SvelteKit 3 / S
 
 - L'application historique complète est conservée, sans modification de ses sources, dans [archive/php/](./archive/php/). Elle n'est ni exécutée ni publiée par SvelteKit.
 - Le nouveau socle affiche une page de supervision responsive avec les couleurs historiques : anthracite `#222222`, bleu `#428bca`, vert `#5cb85c`, orange `#f0ad4e` et cyan `#5bc0de`. Aucun ancien framework ou script n'est chargé.
-- Un contrôle explicite de connexion MySQL est disponible, mais aucune lecture des mesures, collecte, authentification ou commande chaudière n'est encore portée. Les indicateurs restent explicitement indisponibles, sans données simulées.
+- L'accueil lit les indicateurs journaliers en lecture seule depuis MySQL. Le graphique, la collecte, l'authentification et les commandes chaudière ne sont pas encore portés.
 - `GET /api/v1/health` contrôle uniquement la vitalité HTTP; `database: "not-configured"` ne reflète pas la configuration ni la disponibilité MySQL.
 
 Ne pas déployer cette réorganisation sur une installation PHP en service. Conserver cette installation sur sa version existante jusqu'à validation de la parité et de la bascule.
@@ -35,9 +35,13 @@ Avec SvelteKit 3, le plugin, les options du compilateur et `adapter-node` sont c
 
 L'archive est exclue du lint, des tests, de TypeScript et du contexte Docker. Les accès directs Vite aux fichiers archivés sont également refusés. Ne jamais exposer le dépôt lui-même comme racine d'un serveur statique.
 
+Les messages du backend sont centralisés dans [messages.ts](./src/lib/server/messages.ts). Définir `APP_LANG=FR` ou `APP_LANG=EN` dans `.env` pour choisir leur langue ; le français est utilisé si la variable est absente. Redémarrer l'application après modification. Ce choix ne traduit pas encore l'interface. Pour les journaux applicatifs, utiliser [logger.ts](./src/lib/server/logger.ts) en précisant le fichier et la fonction d'origine. Les détails d'erreurs provenant de bibliothèques externes restent dans leur langue d'origine.
+
 ## Connexion à la base
 
 Configurer un fichier privé `.env` à partir de [.env.remote.example](./.env.remote.example). `DB_ADRESSE` contient le nom DNS ou l'adresse IP et, facultativement, le port (`3306` par défaut) ; `DB_NAME`, `DB_USER` et `DB_PASSWORD` identifient la base et le compte. Utiliser un compte limité à la lecture. Ne pas partager ni versionner le fichier `.env`.
+
+Créer un fichier privé `config.json` à la racine à partir de [config.example.json](./config.example.json), ou reprendre le fichier JSON historique. Renseigner `poids_pellet` avec le poids réel de granulés en grammes par minute de fonctionnement de la vis et `timezone` avec le fuseau IANA de l'installation. La valeur de l'exemple est indicative, pas une valeur à utiliser sans vérification. Les autres champs historiques sont ignorés. Ce fichier est ignoré par Git et n'est pas publié par l'application.
 
 Le TLS vérifie par défaut le certificat et le nom du serveur. Si nécessaire, `DB_TLS_CA_FILE` indique un fichier PEM d'autorité de certification accessible au processus. `DB_TLS_MODE=disabled` désactive explicitement le chiffrement et la vérification : à réserver à un réseau de confiance lorsque le serveur ne propose pas TLS. Il n'y a jamais de repli automatique non chiffré.
 
@@ -45,11 +49,13 @@ Le TLS vérifie par défaut le certificat et le nom du serveur. Si nécessaire, 
 npm run db:check
 ```
 
-Cette commande charge `.env`, établit une connexion, exécute uniquement `SELECT 1` et la ferme. Les variables déjà présentes dans l'environnement ont priorité. Elle renvoie une erreur si la configuration ou la connexion est invalide. Elle ne modifie aucune donnée ; l'application ne se connecte pas automatiquement et n'affiche pas encore les mesures.
+Cette commande charge `.env`, établit une connexion, exécute uniquement `SELECT 1` et la ferme. Le serveur charge également `.env` s'il existe, y compris si Vite est lancé directement ; les variables déjà présentes dans l'environnement ont priorité. À l'ouverture de l'accueil, l'application lit les capteurs et les relevés du jour sélectionné sans modifier la base. Le changement de date conserve l'URL de l'accueil. Une journée vide, un capteur absent ou une erreur de connexion ne sont pas présentés comme une valeur nulle.
 
 ## Docker
 
 L'image multi-stage s'exécute sans root, avec un seul processus applicatif. Le contrôle de santé appelle `/api/v1/health`. Aucun SQL historique n'est exécuté au démarrage.
+
+Les configurations Docker existantes ne montent pas encore le fichier `config.json` nécessaire aux indicateurs ; leur adaptation reste à faire.
 
 ### Application seule
 
@@ -99,5 +105,6 @@ L'audit initial npm signale 14 alertes dans les dépendances de développement (
 - [Architecture cible](./docs/architecture-cible-svelte-node.md)
 - [Inventaire historique](./docs/inventaire-fonctionnel-actuel.md)
 - [Analyse de faisabilité](./docs/analyse-technique-et-faisabilite-node-svelte.md)
+- [Actions à faire](./docs/actions-a-faire.md)
 
-La prochaine tranche est la lecture seule de la matrice et des mesures journalières, un endpoint `/api/v1/mesures`, puis le graphique et ses tests de parité. Les bibliothèques métier seront ajoutées lors de leur portage, pas préinstallées sans usage.
+La prochaine tranche concerne les séries journalières, le graphique et leurs tests de parité. Les bibliothèques métier seront ajoutées lors de leur portage, pas préinstallées sans usage.

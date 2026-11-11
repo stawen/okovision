@@ -3,13 +3,14 @@ import { mkdtempSync, rmdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-const { createConnection, query, end } = vi.hoisted(() => ({
+const { createConnection, createPool, query, end } = vi.hoisted(() => ({
 	createConnection: vi.fn(),
+	createPool: vi.fn(),
 	query: vi.fn(),
 	end: vi.fn()
 }));
 
-vi.mock('mysql2/promise', () => ({ createConnection }));
+vi.mock('mysql2/promise', () => ({ createConnection, createPool }));
 
 import { checkDatabaseConnection, databaseOptions } from '../../src/lib/server/database';
 
@@ -67,6 +68,38 @@ describe('contrôle de connexion', () => {
 		createConnection.mockResolvedValue({ query, end });
 		query.mockResolvedValue([]);
 		end.mockResolvedValue(undefined);
+	});
+
+	describe('environnement de connexion du serveur', () => {
+		it('ne masque pas une erreur de lecture du fichier .env', async () => {
+			vi.resetModules();
+			const { getDatabasePool } = await import('../../src/lib/server/database');
+			const load = vi.spyOn(process, 'loadEnvFile').mockImplementation(() => {
+				throw new Error('fichier illisible');
+			});
+			try {
+				expect(() => getDatabasePool()).toThrow('fichier illisible');
+			} finally {
+				load.mockRestore();
+			}
+		});
+
+		it('charge .env avant la création du pool, même avec un lancement direct de Vite', async () => {
+			vi.resetModules();
+			const { getDatabasePool } = await import('../../src/lib/server/database');
+			const load = vi.spyOn(process, 'loadEnvFile').mockImplementation(() => {
+				for (const [key, value] of Object.entries(env)) vi.stubEnv(key, value);
+			});
+			createPool.mockReturnValue({});
+			try {
+				getDatabasePool();
+				expect(load).toHaveBeenCalledWith('.env');
+				expect(createPool).toHaveBeenCalledWith(expect.objectContaining({ host: 'db.example.com', port: 3307 }));
+			} finally {
+				load.mockRestore();
+				vi.unstubAllEnvs();
+			}
+		});
 	});
 
 	it('exécute uniquement SELECT 1 et ferme la connexion', async () => {

@@ -12,6 +12,7 @@ COPY .npmrc package.json package-lock.json ./
 RUN npm ci --omit=dev --ignore-scripts
 COPY --from=build --chown=node:node /app/build ./build
 COPY --from=build --chown=node:node /app/src/lib/server/database.ts ./src/lib/server/database.ts
+COPY --from=build --chown=node:node /app/src/lib/server/logger.ts /app/src/lib/server/messages.ts /app/src/lib/server/environment.ts ./src/lib/server/
 COPY --from=build --chown=node:node /app/scripts/check-db.ts ./scripts/check-db.ts
 USER node
 EXPOSE 3000

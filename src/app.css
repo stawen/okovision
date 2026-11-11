@@ -17,7 +17,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 1.5rem; }
 body { margin: 0; line-height: 1.6; }
 a { color: var(--primary-dark); text-underline-offset: 0.2em; }
 a:hover { color: #174e82; }
-a:focus-visible, button:focus-visible { outline: 3px solid #78b9f1; outline-offset: 4px; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid #78b9f1; outline-offset: 4px; }
 h1, h2, h3, p { margin: 0; }
 .container { width: min(1240px, calc(100% - 3.5rem)); margin-inline: auto; }
 .skip-link {
@@ -29,6 +29,7 @@ h1, h2, h3, p { margin: 0; }
 	background: white;
 }
 .skip-link:focus { top: 0.5rem; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
 .site-header {
 	position: relative;
@@ -91,7 +92,9 @@ h1, h2, h3, p { margin: 0; }
 }
 h1 { color: #1d2b3c; font-size: clamp(1.55rem, 3vw, 2rem); font-weight: 650; letter-spacing: -0.04em; line-height: 1.25; }
 .date-control { display: flex; align-items: center; gap: 0.45rem; }
-.date-control button {
+.date-control form > button:not(.date-submit) {
+	display: grid;
+	place-items: center;
 	width: 2.45rem;
 	height: 2.45rem;
 	border: 1px solid var(--border);
@@ -100,8 +103,12 @@ h1 { color: #1d2b3c; font-size: clamp(1.55rem, 3vw, 2rem); font-weight: 650; let
 	color: #52647a;
 	font-size: 1.5rem;
 	line-height: 1;
+	text-decoration: none;
 }
 .date-control button:disabled { color: #b7c1cc; cursor: not-allowed; }
+.date-control form { display: flex; align-items: center; gap: 0.4rem; }
+.date-control .date-submit { border: 1px solid var(--border); border-radius: 9px; background: var(--surface); color: #52647a; padding: 0.55rem 0.7rem; font: inherit; font-size: 0.82rem; cursor: pointer; }
+.date-control input { min-width: 0; border: 0; background: transparent; color: #46566b; font: inherit; }
 .date-label {
 	min-width: 12.75rem;
 	display: inline-flex;
@@ -232,8 +239,9 @@ h1 { color: #1d2b3c; font-size: clamp(1.55rem, 3vw, 2rem); font-weight: 650; let
 	.overview { padding-top: 1.4rem; }
 	.page-heading { align-items: flex-start; flex-direction: column; gap: 0.85rem; }
 	.date-control { width: 100%; }
-	.date-control button { flex: 0 0 2.35rem; }
-	.date-label { flex: 1; }
+	.date-control form > button:not(.date-submit) { flex: 0 0 2.35rem; }
+	.date-control form { flex: 1; min-width: 0; }
+	.date-label { flex: 1; min-width: 0; }
 	.notice { align-items: flex-start; padding: 0.8rem; font-size: 0.78rem; }
 	.indicator-grid { margin-block: 0.75rem 0.9rem; }
 	.indicator { justify-content: space-between; gap: 0.35rem; padding: 0.55rem 0.6rem; }

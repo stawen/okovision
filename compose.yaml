@@ -6,6 +6,7 @@ services:
       ORIGIN: ${ORIGIN:?Set ORIGIN in your environment file}
       HOST: 0.0.0.0
       PORT: "3000"
+      APP_LANG: ${APP_LANG-FR}
       DB_ADRESSE: ${DB_ADRESSE:-}
       DB_NAME: ${DB_NAME:-}
       DB_USER: ${DB_USER:-}

@@ -11,9 +11,9 @@
 		"#lib/*": "./src/lib/*"
 	},
 	"scripts": {
-		"dev": "vite dev",
+		"dev": "node --env-file-if-exists=.env ./node_modules/vite/bin/vite.js dev",
 		"build": "vite build",
-		"start": "node build",
+		"start": "node --env-file-if-exists=.env build",
 		"db:check": "node --env-file-if-exists=.env scripts/check-db.ts",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync",
@@ -24,7 +24,8 @@
 		"test": "npm run test:unit -- --run"
 	},
 	"dependencies": {
-		"mysql2": "3.24.6"
+		"mysql2": "3.24.6",
+		"svelte-sonner": "1.2.3"
 	},
 	"devDependencies": {
 		"@eslint/js": "10.0.1",
