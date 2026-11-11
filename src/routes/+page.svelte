@@ -1,9 +1,16 @@
 <script lang="ts">
 	const indicators = [
-		{ label: 'Consommation de granulés', unit: 'kg', detail: 'Total de la journée', tone: 'primary' },
-		{ label: 'Eau chaude sanitaire', unit: 'kg', detail: 'Consommation ECS', tone: 'info' },
-		{ label: 'Température maximale', unit: '°C', detail: 'Température extérieure', tone: 'success' },
-		{ label: 'Température minimale', unit: '°C', detail: 'Température extérieure', tone: 'warning' }
+		{ label: 'Consommation', detail: 'Granulés · aujourd’hui', unit: 'kg', tone: 'blue' },
+		{ label: 'dont ECS', detail: 'Eau chaude sanitaire', unit: 'kg', tone: 'blue' },
+		{ label: 'T° max extérieure', detail: 'Température extérieure', unit: '°C', tone: 'green' },
+		{ label: 'T° min extérieure', detail: 'Température extérieure', unit: '°C', tone: 'orange' }
+	];
+
+	const series = [
+		{ label: 'T° extérieure', tone: 'sky' },
+		{ label: 'T° ambiante', tone: 'slate' },
+		{ label: 'T° ambiante consigne', tone: 'green' },
+		{ label: 'T° départ', tone: 'orange' }
 	];
 </script>
 
@@ -19,62 +26,102 @@
 	<section id="supervision" class="overview" aria-labelledby="page-title">
 		<div class="page-heading">
 			<div>
-				<p class="eyebrow">TABLEAU DE BORD</p>
-				<h1 id="page-title">Votre chauffage, en un coup d’œil.</h1>
-				<p class="intro">Consommation, températures et suivi de votre chaudière.</p>
+				<p class="eyebrow">SUPERVISION</p>
+				<h1 id="page-title">Vue d’ensemble</h1>
 			</div>
-			<span class="badge">Socle SvelteKit</span>
+			<div class="date-control" aria-label="Sélection de la journée">
+				<button type="button" aria-label="Jour précédent" disabled>‹</button>
+				<span class="date-label">
+					<svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+						<rect x="3" y="5" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.5" />
+						<path d="M6.5 3v4M13.5 3v4M3 9h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+					</svg>
+					Journée indisponible
+				</span>
+				<button type="button" aria-label="Jour suivant" disabled>›</button>
+			</div>
 		</div>
 
-		<div class="notice">
-			<span class="notice-icon" aria-hidden="true">i</span>
+		<div class="notice" role="status">
+			<span class="notice-icon" aria-hidden="true">
+				<svg viewBox="0 0 20 20" fill="none">
+					<path d="M10 6v4m0 3h.01M10 2.5l8 14H2l8-14Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+				</svg>
+			</span>
 			<p>
-				<strong>Migration en cours.</strong> La nouvelle interface est prête à accueillir vos données.
-				Aucune base ni chaudière n’est connectée à ce stade.
+				<strong>Votre tableau de suivi est en attente de connexion.</strong>
+				Les relevés s’afficheront ici dès que la liaison à la chaudière sera disponible.
 			</p>
 		</div>
 
-		<div class="indicator-grid">
+		<section class="indicator-grid" aria-label="Indicateurs de la journée">
 			{#each indicators as indicator (indicator.label)}
-				<article class="indicator {indicator.tone}">
-					<h2>{indicator.label}</h2>
-					<p class="indicator-value">
-						<span aria-label="Non disponible">—</span>
-						<span class="unit">{indicator.unit}</span>
-					</p>
-					<p class="indicator-detail">{indicator.detail} · En attente de données</p>
+				<article class="indicator">
+					<span class="indicator-mark {indicator.tone}" aria-hidden="true"></span>
+					<div class="indicator-content">
+						<h2>{indicator.label}</h2>
+						<p class="indicator-value">
+							<span aria-label="Non disponible">—</span>
+							<span class="unit">{indicator.unit}</span>
+						</p>
+						<p class="indicator-detail">{indicator.detail}</p>
+					</div>
 				</article>
 			{/each}
-		</div>
+		</section>
 
 		<section class="panel" aria-labelledby="measurements-title">
 			<div class="panel-heading">
-				<div>
-					<h2 id="measurements-title">Mesures journalières</h2>
-					<p>Évolution de la consommation et des températures</p>
+				<p class="eyebrow">VOTRE INSTALLATION</p>
+				<h2 id="measurements-title">Températures</h2>
+				<p>Évolution des températures au fil de la journée</p>
+			</div>
+
+			<div
+				class="chart-area"
+				role="img"
+				aria-label="Graphique des températures vide, les données ne sont pas encore disponibles"
+			>
+				<div class="chart-y-axis" aria-hidden="true">
+					<span>50°</span><span>40°</span><span>30°</span><span>20°</span><span>10°</span>
 				</div>
-				<span class="status-label">Non connecté</span>
+				<div class="chart-plot">
+					<div class="chart-gridlines" aria-hidden="true">
+						<span></span><span></span><span></span><span></span><span></span>
+					</div>
+					<div class="chart-empty">
+						<span class="chart-empty-icon" aria-hidden="true">
+							<svg viewBox="0 0 24 24" fill="none">
+								<path d="M4 19V5m0 14h16M7 15l4-4 3 2 5-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+							</svg>
+						</span>
+						<strong>Aucun relevé pour le moment</strong>
+						<span>Les courbes apparaîtront dès la réception des premières mesures.</span>
+					</div>
+					<div class="chart-x-axis" aria-hidden="true">
+						<span>00 h</span><span>04 h</span><span>08 h</span><span>12 h</span><span>16 h</span><span>20 h</span><span>24 h</span>
+					</div>
+				</div>
 			</div>
-			<div class="empty-state">
-				<svg viewBox="0 0 64 64" width="64" height="64" fill="none" aria-hidden="true">
-					<path d="M10 10v44h44" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
-					<path d="m18 39 10-12 10 7 13-16" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-				</svg>
-				<h3>Les mesures arrivent à la prochaine étape</h3>
-				<p>
-					La connexion en lecture seule à MySQL et le portage des graphiques permettront
-					d’afficher ici vos relevés réels.
-				</p>
-				<a class="button" href="#migration">Voir les prochaines étapes <span aria-hidden="true">→</span></a>
-			</div>
-			<div class="panel-footnote">Aucune donnée simulée. Aucun appel à l’ancienne application PHP.</div>
+
+			<ul class="chart-legend" aria-label="Séries du graphique">
+				{#each series as item (item.label)}
+					<li><span class="legend-line {item.tone}" aria-hidden="true"></span>{item.label}</li>
+				{/each}
+			</ul>
+			<div class="panel-footnote">Aucune donnée simulée · Connexion à la chaudière en préparation</div>
 		</section>
 	</section>
 
 	<section id="migration" class="migration-section" aria-labelledby="migration-title">
-		<p class="eyebrow">UNE TRANSITION PROGRESSIVE</p>
-		<h2 id="migration-title">Une nouvelle base, la même identité.</h2>
-		<p class="intro">Les sources historiques sont conservées. Les fonctionnalités seront portées par étapes.</p>
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">UNE TRANSITION PROGRESSIVE</p>
+				<h2 id="migration-title">Une nouvelle base, la même identité.</h2>
+				<p class="intro">Les sources historiques sont conservées. Les fonctionnalités seront portées par étapes.</p>
+			</div>
+			<span class="badge">En construction</span>
+		</div>
 		<ol class="roadmap">
 			<li class="completed">
 				<span class="step-number" aria-hidden="true">1</span>
