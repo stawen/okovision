@@ -1,9 +1,9 @@
 <script lang="ts">
 	const indicators = [
-		{ label: 'Consommation', detail: 'Granulés · aujourd’hui', unit: 'kg', tone: 'blue' },
-		{ label: 'dont ECS', detail: 'Eau chaude sanitaire', unit: 'kg', tone: 'blue' },
-		{ label: 'T° max extérieure', detail: 'Température extérieure', unit: '°C', tone: 'green' },
-		{ label: 'T° min extérieure', detail: 'Température extérieure', unit: '°C', tone: 'orange' }
+		{ label: 'Conso', unit: 'kg', tone: 'blue' },
+		{ label: 'dont ECS', unit: 'kg', tone: 'blue' },
+		{ label: 'T° max ext.', unit: '°C', tone: 'green' },
+		{ label: 'T° min ext.', unit: '°C', tone: 'orange' }
 	];
 
 	const series = [
@@ -56,16 +56,11 @@
 
 		<section class="indicator-grid" aria-label="Indicateurs de la journée">
 			{#each indicators as indicator (indicator.label)}
-				<article class="indicator">
-					<span class="indicator-mark {indicator.tone}" aria-hidden="true"></span>
-					<div class="indicator-content">
-						<h2>{indicator.label}</h2>
-						<p class="indicator-value">
-							<span aria-label="Non disponible">—</span>
-							<span class="unit">{indicator.unit}</span>
-						</p>
-						<p class="indicator-detail">{indicator.detail}</p>
-					</div>
+				<article class="indicator {indicator.tone}">
+					<h2>{indicator.label}</h2>
+					<p class="indicator-value">
+						<span class="indicator-reading" aria-label="Non disponible">— <span>{indicator.unit}</span></span>
+					</p>
 				</article>
 			{/each}
 		</section>

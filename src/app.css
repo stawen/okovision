@@ -137,24 +137,21 @@ h1 { color: #1d2b3c; font-size: clamp(1.55rem, 3vw, 2rem); font-weight: 650; let
 .indicator-grid {
 	display: grid;
 	grid-template-columns: repeat(4, minmax(0, 1fr));
-	margin: 1.1rem 0 1.4rem;
-	padding: 1.05rem 0;
+	margin: 0.9rem 0 1.2rem;
 	background: var(--surface);
 	border: 1px solid var(--border);
-	border-radius: 12px;
-	box-shadow: 0 3px 12px rgb(34 54 78 / 3%);
+	border-radius: 10px;
 }
-.indicator { display: flex; align-items: flex-start; gap: 0.75rem; min-width: 0; padding: 0.25rem 1.25rem; }
+.indicator { display: flex; align-items: center; justify-content: center; gap: 0.55rem; min-width: 0; padding: 0.65rem 0.8rem; }
 .indicator + .indicator { border-left: 1px solid var(--border); }
-.indicator-mark { flex: 0 0 0.5rem; width: 0.5rem; height: 0.5rem; margin-top: 0.42rem; border-radius: 50%; }
-.indicator-mark.blue { background: var(--primary); box-shadow: 0 0 0 4px #eaf4fd; }
-.indicator-mark.green { background: var(--success); box-shadow: 0 0 0 4px #eaf7ef; }
-.indicator-mark.orange { background: var(--warning); box-shadow: 0 0 0 4px #fff5e7; }
-.indicator-content { min-width: 0; }
-.indicator h2 { color: #657388; font-size: 0.78rem; font-weight: 550; }
-.indicator-value { margin: 0.12rem 0; color: #253247; font-size: 1.32rem; line-height: 1.35; font-weight: 650; }
-.unit { padding-left: 0.12rem; color: #7c899a; font-size: 0.78rem; font-weight: 450; }
-.indicator-detail { color: #98a3b1; font-size: 0.68rem; }
+.indicator h2 { overflow: hidden; color: #46566b; font-size: 0.8rem; font-weight: 550; text-overflow: ellipsis; white-space: nowrap; }
+.indicator-value { flex: 0 0 auto; margin: 0; color: #2f78b9; font-size: 0.78rem; line-height: 1.4; font-weight: 650; }
+.indicator-reading { display: inline-block; padding: 0.2rem 0.55rem; border-radius: 6px; background: #eaf3fc; }
+.indicator.green .indicator-value { color: #368952; }
+.indicator.green .indicator-reading { background: #eaf6ed; }
+.indicator.orange .indicator-value { color: #b9761d; }
+.indicator.orange .indicator-reading { background: #fff2df; }
+.indicator-reading > span { font-size: 0.68rem; font-weight: 550; }
 
 .panel {
 	overflow: hidden;
@@ -218,10 +215,9 @@ h1 { color: #1d2b3c; font-size: clamp(1.55rem, 3vw, 2rem); font-weight: 650; let
 .footer-content { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
 
 @media (max-width: 900px) {
-	.indicator { padding-inline: 0.8rem; }
 	.indicator-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 	.indicator:nth-child(3) { border-left: 0; }
-	.indicator:nth-child(n + 3) { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+	.indicator:nth-child(n + 3) { border-top: 1px solid var(--border); }
 	.roadmap { grid-template-columns: 1fr; }
 }
 
@@ -239,11 +235,11 @@ h1 { color: #1d2b3c; font-size: clamp(1.55rem, 3vw, 2rem); font-weight: 650; let
 	.date-control button { flex: 0 0 2.35rem; }
 	.date-label { flex: 1; }
 	.notice { align-items: flex-start; padding: 0.8rem; font-size: 0.78rem; }
-	.indicator-grid { margin-block: 0.85rem 1rem; padding: 0.75rem 0; }
-	.indicator { gap: 0.65rem; padding-inline: 0.7rem; }
-	.indicator h2 { font-size: 0.7rem; }
-	.indicator-value { font-size: 1.15rem; }
-	.indicator-detail { font-size: 0.62rem; }
+	.indicator-grid { margin-block: 0.75rem 0.9rem; }
+	.indicator { justify-content: space-between; gap: 0.35rem; padding: 0.55rem 0.6rem; }
+	.indicator h2 { font-size: 0.68rem; }
+	.indicator-value { font-size: 0.72rem; }
+	.indicator-reading { padding: 0.18rem 0.4rem; }
 	.chart-area { grid-template-columns: 2rem minmax(0, 1fr); gap: 0.35rem; padding: 0.85rem 0.8rem 0.25rem 0.55rem; }
 	.chart-plot { height: 235px; }
 	.chart-x-axis { font-size: 0.58rem; }
