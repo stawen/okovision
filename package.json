@@ -1,0 +1,41 @@
+{
+	"name": "okovision",
+	"version": "0.0.1",
+	"private": true,
+	"type": "module",
+	"engines": {
+		"node": ">=26.10.0 <27"
+	},
+	"imports": {
+		"#lib": "./src/lib/index.js",
+		"#lib/*": "./src/lib/*"
+	},
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"start": "node build",
+		"preview": "vite preview",
+		"prepare": "svelte-kit sync",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"lint": "eslint .",
+		"test:unit": "vitest",
+		"test": "npm run test:unit -- --run"
+	},
+	"devDependencies": {
+		"@eslint/js": "10.0.1",
+		"@sveltejs/adapter-node": "6.0.2",
+		"@sveltejs/kit": "3.2.0",
+		"@sveltejs/vite-plugin-svelte": "7.3.1",
+		"@types/node": "26.6.6",
+		"eslint": "10.14.0",
+		"eslint-plugin-svelte": "3.24.1",
+		"globals": "17.14.0",
+		"svelte": "5.57.3",
+		"svelte-check": "4.7.8",
+		"typescript": "6.0.3",
+		"typescript-eslint": "8.72.2",
+		"vite": "8.3.8",
+		"vitest": "5.1.0"
+	}
+}

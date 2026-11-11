@@ -1,0 +1,18 @@
+# Only application build inputs enter the Docker context.
+**
+!package.json
+!package-lock.json
+!.npmrc
+!tsconfig.json
+!vite.config.ts
+!src/
+!src/**
+!static/
+!static/**
+archive/
+**/.env
+**/.env.*
+**/secrets/
+**/data/
+**/*.log
+**/*.csv

@@ -198,7 +198,7 @@ La [matrice centralisée des versions](./reorganisation-depot-et-demarrage-svelt
 
 Règles de réalisation :
 
-1. Relever le schéma effectivement présent avant connexion en écriture et le comparer aux attentes; ne pas relancer le [SQL d'installation actuel](../install/install.sql) sur une base conservée.
+1. Relever le schéma effectivement présent avant connexion en écriture et le comparer aux attentes; ne pas relancer le [SQL d'installation actuel](../archive/php/install/install.sql) sur une base conservée.
 2. Garder les `DECIMAL` sous forme de chaînes dans les repositories; convertir explicitement à la frontière graphique ou calcul. Lire `DATE`/`TIME` sans conversion automatique en objets `Date`.
 3. Initialiser chaque connexion du pool avec le fuseau et les modes SQL déterminés par les tests de parité. Ne pas dépendre du fuseau local du processus Node.
 4. Les identifiants SQL dynamiques ne sont pas des paramètres `?` : valider `col_n` à partir de la matrice et des colonnes réellement présentes, puis utiliser une construction SQL contrôlée.
@@ -207,7 +207,7 @@ Règles de réalisation :
 7. Un changement de matrice acquiert le même verrou que les imports. Les ajouts de colonnes restent une opération administrative journalisée, précédée d'une sauvegarde.
 8. Les métriques et critères de parité doivent distinguer `null`, zéro, absence de capteur et absence de donnée; ne pas harmoniser arbitrairement ces valeurs.
 
-Source du modèle : [install.sql](../install/install.sql), [mise à jour de matrice](../_include/administration.class.php#L846).
+Source du modèle : [install.sql](../archive/php/install/install.sql), [mise à jour de matrice](../archive/php/_include/administration.class.php#L846).
 
 ## 6. Sessions, permissions et secrets sans changer le schéma
 

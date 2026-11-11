@@ -8,7 +8,16 @@ Il s'agit d'une **réécriture dans le même dépôt**, et non d'une application
 
 **Contrainte de versions : utiliser les dernières versions stables de Svelte et SvelteKit au moment de l'initialisation, avec la version stable de TypeScript la plus récente compatible avec le socle et ses outils**, en mode strict. TypeScript **6.0.3** est retenu pour la matrice actuelle, plutôt que TypeScript 7 dont le support n'est pas déclaré. Exclure les versions alpha, bêta, RC et `next`, sans contournement des dépendances homologues. La matrice figure en section 7.
 
-Ce document décrit des **opérations futures** : il ne déplace aucun fichier et ne crée pas encore le projet SvelteKit, les fichiers Docker ou les commits.
+## État de réalisation
+
+La réorganisation et le socle initial ont été mis en place le **11 novembre 2026** :
+
+- Application historique complète déplacée dans `archive/php/`, y compris les ressources, `_logs/`, `_tmp/`, le README et la configuration XDebug. Sources préservées à l'identique; liens des études adaptés.
+- Squelette officiel `sv` initialisé à la racine : SvelteKit `3.2.0`, Svelte `5.57.3`, TypeScript strict `6.0.3`, `adapter-node`, ESLint et Vitest. Versions directes figées et lockfile npm; registre public sélectionné dans `.npmrc`.
+- Interface initiale avec les couleurs historiques, sans données simulées ni dépendance d'exécution au PHP.
+- Image Docker multi-stage et compositions applicative seule / MariaDB locale préparées. La connexion applicative MySQL et les fonctionnalités métier restent à porter; le healthcheck vérifie uniquement HTTP.
+
+Les étapes ci-dessous restent la référence de migration, pas une affirmation de parité fonctionnelle. Aucun commit n'est créé automatiquement. Les commandes et limites opérationnelles actuelles figurent dans le [README](../README.md). La validation conteneurisée et les modes de connexion DB restent à effectuer avant acceptation de la cible complète.
 
 Documents de référence :
 
@@ -192,9 +201,9 @@ L'archive peut rester dans le dépôt après la bascule, mais reste exclue de la
 
 ### Méthode et règle de sélection
 
-Versions consultées le **11 novembre 2026** sur le registre public npm, via le tag `latest`, les champs `peerDependencies`, `peerDependenciesMeta` et `engines`. La version Node provient de l'[index officiel des versions Node.js](https://nodejs.org/dist/index.json). Le registre npm configuré localement n'ayant pas fourni ces métadonnées, la consultation a explicitement ciblé `https://registry.npmjs.org`, sans modifier la configuration npm.
+Versions consultées le **11 novembre 2026** sur le registre public npm, via le tag `latest`, les champs `peerDependencies`, `peerDependenciesMeta` et `engines`. La version Node provient de l'[index officiel des versions Node.js](https://nodejs.org/dist/index.json). Le fichier `.npmrc` à la racine sélectionne désormais le registre public pour toutes les commandes du projet.
 
-Cette liste est une **photographie des publications et de leurs contraintes déclarées**, pas un lockfile ni une certification d'exécution. Aucun paquet n'a été installé et aucun build SvelteKit n'a été exécuté pour cette étude. Refaire la vérification à l'initialisation : retenir les dernières stables de Svelte et SvelteKit et la dernière stable compatible de TypeScript, pas nécessairement les numéros ci-dessous. La ligne TypeScript indique la version compatible sélectionnée, non le tag `latest`.
+Cette liste est une **photographie des publications et de leurs contraintes déclarées**, pas une certification d'exécution de toutes les bibliothèques envisagées. Le socle effectivement installé est figé dans `package.json` et `package-lock.json`; les bibliothèques métier non encore utilisées ne sont pas installées. Refaire la vérification à chaque mise à jour : retenir les dernières stables de Svelte et SvelteKit et la dernière stable compatible de TypeScript, pas nécessairement les numéros ci-dessous. La ligne TypeScript indique la version compatible sélectionnée, non le tag `latest`.
 
 ### Socle SvelteKit et outils de développement
 

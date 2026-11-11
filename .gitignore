@@ -45,10 +45,27 @@ config.json
 Thumbs.db
 import.csv
 matrice.csv
-test*
-_tmp/*.sql
-_tmp/*.txt
+archive/php/test*
+archive/php/_logs/*
+!archive/php/_logs/readme.md
+archive/php/_tmp/*
+!archive/php/_tmp/readme.md
 php.ini
 .c9/
 
+# SvelteKit / Node
+node_modules/
+.svelte-kit/
+build/
+.output/
+coverage/
+playwright-report/
+test-results/
+vite.config.*.timestamp-*
+.env
+.env.*
+!.env.example
+!.env.*.example
+secrets/
+data/
 

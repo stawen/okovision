@@ -16,23 +16,23 @@ La lecture croise les pages, les scripts navigateur, les routeurs et les traitem
 
 | Écran | Fonction | Accès présenté par l'application |
 |---|---|---|
-| [setup.php](../setup.php) | Installation et test MySQL | Assistant indépendant des pages connectées |
-| [index.php](../index.php) | Tableau de bord journalier et alertes | Public |
-| [histo.php](../histo.php) | Historique mensuel, saisons et stock | Public |
-| [rt.php](../rt.php) | Lecture et configuration chaudière en temps réel | Connecté |
-| [gstrapport.php](../gstrapport.php) | Gestion des graphiques et courbes | Connecté |
-| [amImpBoiler.php](../amImpBoiler.php) | Import de fichiers disponibles sur la chaudière | Connecté; entrée de menu conditionnée au mode IP |
-| [amImpUsb.php](../amImpUsb.php) | Téléversement et import de CSV local | Connecté |
-| [amImportMass.php](../amImportMass.php) | Import en série des fichiers du répertoire temporaire | Connecté |
-| [amSynthese.php](../amSynthese.php) | Calcul et recalcul des synthèses | Connecté |
-| [adminParam.php](../adminParam.php) | Paramètres généraux | Connecté |
-| [adminSeason.php](../adminSeason.php) | Gestion des saisons | Connecté |
-| [adminEvents.php](../adminEvents.php) | Événements de stock et d'entretien | Connecté |
-| [adminMatrix.php](../adminMatrix.php) | Matrice de lecture des CSV | Connecté |
-| [about.php](../about.php) | Informations, version et mise à jour | Connecté |
-| [401.php](../errors/401.php), [404.php](../errors/404.php) | Pages d'erreur dédiées | Pages système |
+| [setup.php](../archive/php/setup.php) | Installation et test MySQL | Assistant indépendant des pages connectées |
+| [index.php](../archive/php/index.php) | Tableau de bord journalier et alertes | Public |
+| [histo.php](../archive/php/histo.php) | Historique mensuel, saisons et stock | Public |
+| [rt.php](../archive/php/rt.php) | Lecture et configuration chaudière en temps réel | Connecté |
+| [gstrapport.php](../archive/php/gstrapport.php) | Gestion des graphiques et courbes | Connecté |
+| [amImpBoiler.php](../archive/php/amImpBoiler.php) | Import de fichiers disponibles sur la chaudière | Connecté; entrée de menu conditionnée au mode IP |
+| [amImpUsb.php](../archive/php/amImpUsb.php) | Téléversement et import de CSV local | Connecté |
+| [amImportMass.php](../archive/php/amImportMass.php) | Import en série des fichiers du répertoire temporaire | Connecté |
+| [amSynthese.php](../archive/php/amSynthese.php) | Calcul et recalcul des synthèses | Connecté |
+| [adminParam.php](../archive/php/adminParam.php) | Paramètres généraux | Connecté |
+| [adminSeason.php](../archive/php/adminSeason.php) | Gestion des saisons | Connecté |
+| [adminEvents.php](../archive/php/adminEvents.php) | Événements de stock et d'entretien | Connecté |
+| [adminMatrix.php](../archive/php/adminMatrix.php) | Matrice de lecture des CSV | Connecté |
+| [about.php](../archive/php/about.php) | Informations, version et mise à jour | Connecté |
+| [401.php](../archive/php/errors/401.php), [404.php](../archive/php/errors/404.php) | Pages d'erreur dédiées | Pages système |
 
-Sources des accès présentés : [menu.php](../_templates/menu.php), [header.php](../_templates/header.php).
+Sources des accès présentés : [menu.php](../archive/php/_templates/menu.php), [header.php](../archive/php/_templates/header.php).
 
 ## 3. Catalogue fonctionnel
 
@@ -47,7 +47,7 @@ Sources des accès présentés : [menu.php](../_templates/menu.php), [header.php
 
 **Limite importante** : ce n'est pas un assistant de reprise non destructif d'une base existante. Le SQL contient des suppressions de tables. Ne pas l'utiliser comme procédure de migration.
 
-Sources : [setup.php](../setup.php), [setup.js](../js/setup.js), [install.sql](../install/install.sql), [config_sample.php](../config_sample.php).
+Sources : [setup.php](../archive/php/setup.php), [setup.js](../archive/php/js/setup.js), [install.sql](../archive/php/install/install.sql), [config_sample.php](../archive/php/config_sample.php).
 
 ### F02 — Connexion et compte utilisateur
 
@@ -59,7 +59,7 @@ Sources : [setup.php](../setup.php), [setup.js](../js/setup.js), [install.sql](.
 
 **Pas de gestion complète des utilisateurs** : aucun parcours d'inscription, récupération de mot de passe, création/suppression de comptes, gestion fine de rôles ou MFA n'est raccordé à l'interface.
 
-Sources : [menu.php](../_templates/menu.php), [custom.js](../js/custom.js), [session.class.php](../_include/session.class.php), [administration.class.php](../_include/administration.class.php#L703).
+Sources : [menu.php](../archive/php/_templates/menu.php), [custom.js](../archive/php/js/custom.js), [session.class.php](../archive/php/_include/session.class.php), [administration.class.php](../archive/php/_include/administration.class.php#L703).
 
 ### F03 — Tableau de bord journalier
 
@@ -72,7 +72,7 @@ Sources : [menu.php](../_templates/menu.php), [custom.js](../js/custom.js), [ses
 - Afficher une alerte stock à 10 % ou moins, les alertes cendrier et une notification de mise à jour disponible.
 - Afficher un chargement et des erreurs de communication.
 
-Sources : [index.php](../index.php), [index.js](../js/index.js), [rendu.class.php](../_include/rendu.class.php).
+Sources : [index.php](../archive/php/index.php), [index.js](../archive/php/js/index.js), [rendu.class.php](../archive/php/_include/rendu.class.php).
 
 ### F04 — Historique mensuel
 
@@ -84,7 +84,7 @@ Sources : [index.php](../index.php), [index.js](../js/index.js), [rendu.class.ph
 
 **Précision** : la consommation ECS existe dans les indicateurs mensuels, mais sa série est commentée dans la production du graphique mensuel actuel.
 
-Sources : [histo.php](../histo.php), [histo.js](../js/histo.js), [rendu.class.php](../_include/rendu.class.php#L392).
+Sources : [histo.php](../archive/php/histo.php), [histo.js](../archive/php/js/histo.js), [rendu.class.php](../archive/php/_include/rendu.class.php#L392).
 
 ### F05 — Synthèse par saison
 
@@ -96,7 +96,7 @@ Sources : [histo.php](../histo.php), [histo.js](../js/histo.js), [rendu.class.ph
 
 **Précision** : la « température moyenne » affichée par le navigateur est la moyenne des deux extrêmes, pas une moyenne pondérée des mesures.
 
-Sources : [histo.js](../js/histo.js#L257), [rendu.class.php](../_include/rendu.class.php#L433).
+Sources : [histo.js](../archive/php/js/histo.js#L257), [rendu.class.php](../archive/php/_include/rendu.class.php#L433).
 
 ### F06 — Stock de granulés et cendrier
 
@@ -109,7 +109,7 @@ Sources : [histo.js](../js/histo.js#L257), [rendu.class.php](../_include/rendu.c
 
 **Limites** : le stock repose sur les synthèses disponibles, pas sur un inventaire physique en temps réel. L'estimation de la date d'épuisement du silo est commentée et n'est pas une fonction active.
 
-Sources : [rendu.class.php](../_include/rendu.class.php#L242), [histo.js](../js/histo.js#L213), [index.js](../js/index.js#L342).
+Sources : [rendu.class.php](../archive/php/_include/rendu.class.php#L242), [histo.js](../archive/php/js/histo.js#L213), [index.js](../archive/php/js/index.js#L342).
 
 ### F07 — Journal des approvisionnements et entretiens
 
@@ -119,7 +119,7 @@ Sources : [rendu.class.php](../_include/rendu.class.php#L242), [histo.js](../js/
 - Présenter les détails des achats, notamment un prix ramené à la tonne ou à un sac de 15 kg.
 - Utiliser les événements de livraison/sacs et de vidage comme entrées des calculs de stock/cendrier.
 
-Sources : [adminEvents.php](../adminEvents.php), [adminEvents.js](../js/adminEvents.js), [administration.class.php](../_include/administration.class.php#L461).
+Sources : [adminEvents.php](../archive/php/adminEvents.php), [adminEvents.js](../archive/php/js/adminEvents.js), [administration.class.php](../archive/php/_include/administration.class.php#L461).
 
 ### F08 — Administration des saisons
 
@@ -128,7 +128,7 @@ Sources : [adminEvents.php](../adminEvents.php), [adminEvents.js](../js/adminEve
 - Tester si une date de début existe déjà.
 - Supprimer une saison après confirmation.
 
-Sources : [adminSeason.js](../js/adminSeason.js), [administration.class.php](../_include/administration.class.php#L345), [calcul des dates](../_include/administration.class.php#L937).
+Sources : [adminSeason.js](../archive/php/js/adminSeason.js), [administration.class.php](../archive/php/_include/administration.class.php#L345), [calcul des dates](../archive/php/_include/administration.class.php#L937).
 
 ### F09 — Configuration des graphiques journaliers
 
@@ -139,7 +139,7 @@ Sources : [adminSeason.js](../js/adminSeason.js), [administration.class.php](../
 - Définir/modifier un coefficient de correction par courbe.
 - Réordonner les courbes et retirer une association.
 
-Sources : [gstrapport.php](../gstrapport.php), [gstrapport.js](../js/gstrapport.js), [gstGraphique.class.php](../_include/gstGraphique.class.php).
+Sources : [gstrapport.php](../archive/php/gstrapport.php), [gstrapport.js](../archive/php/js/gstrapport.js), [gstGraphique.class.php](../archive/php/_include/gstGraphique.class.php).
 
 ### F10 — Matrice CSV et correspondance des capteurs
 
@@ -154,7 +154,7 @@ Sources : [gstrapport.php](../gstrapport.php), [gstrapport.js](../js/gstrapport.
 
 **Attention** : cette suppression détruit les mesures détaillées; l'interface ne propose pas un simple effacement des paramètres.
 
-Sources : [adminMatrix.js](../js/adminMatrix.js), [administration.class.php](../_include/administration.class.php#L237), [initialisation](../_include/administration.class.php#L781), [mise à jour](../_include/administration.class.php#L846).
+Sources : [adminMatrix.js](../archive/php/js/adminMatrix.js), [administration.class.php](../archive/php/_include/administration.class.php#L237), [initialisation](../archive/php/_include/administration.class.php#L781), [mise à jour](../archive/php/_include/administration.class.php#L846).
 
 ### F11 — Imports manuels de mesures
 
@@ -168,7 +168,7 @@ Sources : [adminMatrix.js](../js/adminMatrix.js), [administration.class.php](../
 
 **Limites** : réimporter ne signifie pas mettre à jour une mesure déjà présente; l'import en masse concerne des fichiers préalablement déposés côté serveur. Les fichiers d'import sont actuellement partagés via des noms fixes.
 
-Sources : [amImpBoiler.js](../js/amImpBoiler.js), [amImpUsb.js](../js/amImpUsb.js), [amImportMass.js](../js/amImportMass.js), [okofen.class.php](../_include/okofen.class.php#L96).
+Sources : [amImpBoiler.js](../archive/php/js/amImpBoiler.js), [amImpUsb.js](../archive/php/js/amImpUsb.js), [amImportMass.js](../archive/php/js/amImportMass.js), [okofen.class.php](../archive/php/_include/okofen.class.php#L96).
 
 ### F12 — Calcul et recalcul des synthèses
 
@@ -181,7 +181,7 @@ Sources : [amImpBoiler.js](../js/amImpBoiler.js), [amImpUsb.js](../js/amImpUsb.j
 
 **Limites de la logique actuelle** : le jour courant est explicitement refusé; l'ECS est calculée sur le premier circuit identifié. Absence de capteur, division nulle et données partielles nécessitent des tests de caractérisation, pas des changements implicites de formule.
 
-Sources : [amSynthese.js](../js/amSynthese.js), [okofen.class.php](../_include/okofen.class.php#L179), [calculs](../_include/rendu.class.php#L70).
+Sources : [amSynthese.js](../archive/php/js/amSynthese.js), [okofen.class.php](../archive/php/_include/okofen.class.php#L179), [calculs](../archive/php/_include/rendu.class.php#L70).
 
 ### F13 — Temps réel et configurations chaudière
 
@@ -198,7 +198,7 @@ Sources : [amSynthese.js](../js/amSynthese.js), [okofen.class.php](../_include/o
 
 **Distinction importante** : le service sait recevoir un numéro de circuit pour certains appels, mais l'action AJAX `rt.getIndic` n'en transmet pas et utilise le circuit par défaut. La lecture/changement du mode de chauffage est exposée par l'API distincte, pas par ce routeur AJAX.
 
-Sources : [rt.js](../js/rt.js), [realTime.class.php](../_include/realTime.class.php), [okofen.class.php](../_include/okofen.class.php#L203).
+Sources : [rt.js](../archive/php/js/rt.js), [realTime.class.php](../archive/php/_include/realTime.class.php), [okofen.class.php](../archive/php/_include/okofen.class.php#L203).
 
 ### F14 — Paramètres généraux
 
@@ -210,7 +210,7 @@ Sources : [rt.js](../js/rt.js), [realTime.class.php](../_include/realTime.class.
 
 **Précision** : le formulaire actuel envoie `send_to_web: 0`; ce n'est pas un écran d'activation du transfert FTP.
 
-Sources : [adminParam.php](../adminParam.php), [adminParam.js](../js/adminParam.js), [administration.class.php](../_include/administration.class.php#L29).
+Sources : [adminParam.php](../archive/php/adminParam.php), [adminParam.js](../archive/php/js/adminParam.js), [administration.class.php](../archive/php/_include/administration.class.php#L29).
 
 ### F15 — Accès API pour intégrations
 
@@ -219,7 +219,7 @@ Sources : [adminParam.php](../adminParam.php), [adminParam.js](../js/adminParam.
 - Les deux routeurs ne sont pas interchangeables : actions exposées et noms des paramètres peuvent différer.
 - La liste exhaustive des branches actives est donnée en section 4; la documentation API historique ne suffit pas à définir le contrat réel.
 
-Sources : [ajax.php](../ajax.php), [api.php](../api.php), [api-doc.md](../api-doc.md).
+Sources : [ajax.php](../archive/php/ajax.php), [api.php](../archive/php/api.php), [api-doc.md](../archive/php/api-doc.md).
 
 ### F16 — Collecte et synthèses automatiques
 
@@ -231,7 +231,7 @@ Sources : [ajax.php](../ajax.php), [api.php](../api.php), [api-doc.md](../api-do
 
 **Limites** : la présence de la dernière minute ne garantit pas l'absence de trous dans la journée. La fréquence d'exécution n'est pas définie par ce script; elle dépend de l'ordonnanceur de l'installation.
 
-Sources : [cron.php](../cron.php), [complétude et dates](../_include/okofen.class.php#L56), [synthèses](../_include/okofen.class.php#L179).
+Sources : [cron.php](../archive/php/cron.php), [complétude et dates](../archive/php/_include/okofen.class.php#L56), [synthèses](../archive/php/_include/okofen.class.php#L179).
 
 ### F17 — Langues, présentation et messages
 
@@ -242,7 +242,7 @@ Sources : [cron.php](../cron.php), [complétude et dates](../_include/okofen.cla
 
 **Limite** : certains messages restent écrits en dur en français. Les dictionnaires de correspondance capteurs ne doivent pas être confondus avec de simples traductions : ils servent aussi au protocole chaudière.
 
-Sources : [session.class.php](../_include/session.class.php), [footer.php](../_templates/footer.php), [custom.js](../js/custom.js), [dictionnaires](../_langs/).
+Sources : [session.class.php](../archive/php/_include/session.class.php), [footer.php](../archive/php/_templates/footer.php), [custom.js](../archive/php/js/custom.js), [dictionnaires](../archive/php/_langs/).
 
 ### F18 — Maintenance, version et mise à jour
 
@@ -253,7 +253,7 @@ Sources : [session.class.php](../_include/session.class.php), [footer.php](../_t
 - Produire des journaux et mesurer certaines durées de traitement.
 - Disposer d'un lanceur de simulation d'upgrade; le script d'upgrade fourni ne contient actuellement pas de migration métier entre ses marqueurs de début et de fin.
 
-Sources : [about.php](../about.php), [about.js](../js/about.js), [administration.class.php](../_include/administration.class.php#L562), [AutoUpdate.class.php](../_include/AutoUpdate.class.php), [simu_upgrade.php](../simu_upgrade.php), [_upgrade.php](../_upgrade.php).
+Sources : [about.php](../archive/php/about.php), [about.js](../archive/php/js/about.js), [administration.class.php](../archive/php/_include/administration.class.php#L562), [AutoUpdate.class.php](../archive/php/_include/AutoUpdate.class.php), [simu_upgrade.php](../archive/php/simu_upgrade.php), [_upgrade.php](../archive/php/_upgrade.php).
 
 ## 4. Inventaire des actions serveur actives
 
@@ -263,7 +263,7 @@ Le contrôle de couverture retrouve **62 actions dans le routeur navigateur et 2
 
 ### 4.1 Routeur navigateur
 
-Source : [ajax.php](../ajax.php).
+Source : [ajax.php](../archive/php/ajax.php).
 
 | Domaine | Actions actives | Fonctions |
 |---|---|---|
@@ -286,7 +286,7 @@ Source : [ajax.php](../ajax.php).
 
 ### 4.2 Routeur d'intégration distinct
 
-Source : [api.php](../api.php).
+Source : [api.php](../archive/php/api.php).
 
 | Domaine | Actions actives |
 |---|---|
@@ -306,9 +306,9 @@ Différences à préserver ou à corriger explicitement :
 
 ### 4.3 Autres entrées
 
-- Installation : `setup.connect`, `setup.install`, via le paramètre `type` de l'[assistant](../setup.php).
-- Collecte/synthèses : [cron.php](../cron.php).
-- Outil de simulation : [simu_upgrade.php](../simu_upgrade.php).
+- Installation : `setup.connect`, `setup.install`, via le paramètre `type` de l'[assistant](../archive/php/setup.php).
+- Collecte/synthèses : [cron.php](../archive/php/cron.php).
+- Outil de simulation : [simu_upgrade.php](../archive/php/simu_upgrade.php).
 
 ## 5. Données fonctionnelles existantes
 
@@ -325,15 +325,15 @@ Différences à préserver ou à corriger explicitement :
 | `oko_silo_events` | Journal des livraisons, sacs et entretiens |
 | `oko_boiler` | Configurations chaudière horodatées et descriptions |
 
-Source : [install.sql](../install/install.sql). Les paramètres non métier et secrets d'installation sont également répartis entre les fichiers PHP/JSON, les cookies chaudière et la session PHP.
+Source : [install.sql](../archive/php/install/install.sql). Les paramètres non métier et secrets d'installation sont également répartis entre les fichiers PHP/JSON, les cookies chaudière et la session PHP.
 
 ## 6. Code présent mais non assimilable à une fonctionnalité active
 
 | Capacité | État observé |
 |---|---|
-| Transfert d'un CSV par FTP | Classe [oko2ftp](../_include/oko2ftp.class.php) et constantes présentes, mais aucun appel actif retrouvé; le [formulaire de paramètres](../js/adminParam.js) force la désactivation. |
-| Prédiction de date d'épuisement du silo | Calcul et affichages commentés dans le [rendu stock](../_include/rendu.class.php#L242) et l'[historique](../js/histo.js#L213). |
-| Anciennes actions de migration de données | Branches `getDateForMigrate`, `migrateDataForDate` et `importFileFromUpload` commentées dans le [routeur AJAX](../ajax.php). |
+| Transfert d'un CSV par FTP | Classe [oko2ftp](../archive/php/_include/oko2ftp.class.php) et constantes présentes, mais aucun appel actif retrouvé; le [formulaire de paramètres](../archive/php/js/adminParam.js) force la désactivation. |
+| Prédiction de date d'épuisement du silo | Calcul et affichages commentés dans le [rendu stock](../archive/php/_include/rendu.class.php#L242) et l'[historique](../archive/php/js/histo.js#L213). |
+| Anciennes actions de migration de données | Branches `getDateForMigrate`, `migrateDataForDate` et `importFileFromUpload` commentées dans le [routeur AJAX](../archive/php/ajax.php). |
 | Export PDF/Excel, rapports programmés ou alertes mail | Pas de parcours applicatif raccordé identifié. La présence de modules tiers d'export dans le dépôt ne suffit pas à établir une fonction produit. |
 | Gestion multi-installations, multiutilisateurs avancée ou circuits arbitraires dans l'interface | Non établie; distinguer les paramètres de certaines méthodes d'un parcours réellement disponible. |
 
