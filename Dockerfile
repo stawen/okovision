@@ -11,6 +11,8 @@ ENV NODE_ENV=production HOST=0.0.0.0 PORT=3000
 COPY .npmrc package.json package-lock.json ./
 RUN npm ci --omit=dev --ignore-scripts
 COPY --from=build --chown=node:node /app/build ./build
+COPY --from=build --chown=node:node /app/src/lib/server/database.ts ./src/lib/server/database.ts
+COPY --from=build --chown=node:node /app/scripts/check-db.ts ./scripts/check-db.ts
 USER node
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \

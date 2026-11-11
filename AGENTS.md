@@ -67,6 +67,7 @@
 
 ## Validation
 
+- Ne pas lancer de commandes Docker Compose ; privilégier la validation du code et remettre la partie Docker à plus tard.
 - Pour le code Svelte/TypeScript : `npm run check` et `npm run lint`.
 - Pour l'accueil : `npm run test:unit -- --run tests/unit/home.test.ts`. Adapter les assertions aux comportements réellement changés, sans affaiblir les garanties d'absence de données simulées et d'accès au PHP archivé.
 - Pour une modification affectant le rendu compilé ou les routes : `npm run build`.

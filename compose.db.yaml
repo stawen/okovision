@@ -1,5 +1,9 @@
 services:
   app:
+    environment:
+      DB_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
     depends_on:
       db:
         condition: service_healthy

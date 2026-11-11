@@ -330,7 +330,7 @@ Exécuter les processus applicatifs sans root avec UID/GID cohérents sur les vo
 Le futur livrable comprendra :
 
 - `compose.yaml` : **un seul service applicatif `app`, sans service de base** et sans dépendance à un service `db`. Utilisable tel quel avec une base distante; aucun service worker.
-- `compose.db.yaml` : complément **explicitement sélectionné** qui ajoute MariaDB, son healthcheck et son volume. Il fixe `DB_HOST=db` pour `app` et ajoute uniquement dans ce mode la dépendance à `db` avec condition `service_healthy`.
+- `compose.db.yaml` : complément **explicitement sélectionné** qui ajoute MariaDB, son healthcheck et son volume. Le modèle local configure `DB_ADRESSE=db:3306` et le complément ajoute uniquement dans ce mode la dépendance à `db` avec condition `service_healthy`.
 - `.env.remote.example` et `.env.local.example` : modèles non secrets documentant les variables requises. Les vraies configurations et fichiers secrets restent hors Git.
 - `Dockerfile` et `.dockerignore` : image du serveur SvelteKit unique, incluant ses tâches intégrées.
 
@@ -352,10 +352,9 @@ Le mode distant ne doit créer ni conteneur ni volume de base. La même image ap
 
 | Paramètre cible | Mode local | Mode distant |
 |---|---|---|
-| `DB_HOST` | Nom DNS Compose `db` | Nom DNS ou adresse du serveur distant; jamais `localhost` pour désigner l'hôte depuis le conteneur |
-| `DB_PORT` | 3306 interne au réseau | Port du serveur distant |
+| `DB_ADRESSE` | Nom DNS Compose `db:3306` | Nom DNS ou adresse du serveur distant et port facultatif; jamais `localhost` pour désigner l'hôte depuis le conteneur |
 | `DB_NAME`, `DB_USER` | Base et compte applicatif provisionnés | Base et compte applicatif existants ou provisionnés par l'opérateur |
-| `DB_PASSWORD_FILE` | Secret applicatif monté en lecture seule dans `app` | Secret applicatif monté en lecture seule dans `app` |
+| `DB_PASSWORD` ou `DB_PASSWORD_FILE` | Secret applicatif monté en lecture seule dans `app` | Mot de passe dans l'environnement ou secret monté en lecture seule dans `app` |
 | `DB_TLS_MODE`, `DB_TLS_CA_FILE` | TLS selon les exigences du réseau local | TLS vérifié par défaut; autorité et nom serveur validés |
 
 L'application lit explicitement `DB_PASSWORD_FILE`; cette convention n'est pas une fonction automatique de `mysql2`. Pour l'image MariaDB, utiliser ses propres variables d'initialisation et conventions `_FILE` documentées, sans transmettre le mot de passe root aux conteneurs applicatifs.

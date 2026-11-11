@@ -6,6 +6,12 @@ services:
       ORIGIN: ${ORIGIN:?Set ORIGIN in your environment file}
       HOST: 0.0.0.0
       PORT: "3000"
+      DB_ADRESSE: ${DB_ADRESSE:-}
+      DB_NAME: ${DB_NAME:-}
+      DB_USER: ${DB_USER:-}
+      DB_PASSWORD: ${DB_PASSWORD:-}
+      DB_TLS_MODE: ${DB_TLS_MODE:-verify}
+      DB_TLS_CA_FILE: ${DB_TLS_CA_FILE:-}
     ports:
       - "127.0.0.1:${APP_PORT:-3000}:3000"
     restart: unless-stopped
