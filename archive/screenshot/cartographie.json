@@ -1,0 +1,162 @@
+{
+  "site": "http://nas/okovision/",
+  "date": "2026-11-11",
+  "mode": "Navigation dans les menus et onglets uniquement, sans soumission de formulaire.",
+  "captures_menus": {
+    "administration": "05-menu-connecte.png",
+    "compte": "19-menu-compte.png"
+  },
+  "navigation_principale": [
+    {
+      "libelle": "Accueil",
+      "page": "index.php",
+      "authentification": false,
+      "capture": "01-accueil.png",
+      "contenu": "Consommation du jour, alerte cendrier et graphiques des temperatures, ECS, chauffage et foyer."
+    },
+    {
+      "libelle": "Historique",
+      "page": "histo.php",
+      "authentification": false,
+      "capture": "02-historique.png",
+      "contenu": "Stock de pellets, syntheses mensuelle et saisonniere, tableau des consommations."
+    },
+    {
+      "libelle": "Temps Reel",
+      "page": "rt.php",
+      "authentification": true,
+      "onglets": [
+        {
+          "libelle": "Reglages Chaudiere",
+          "ancre": "#indicateurs",
+          "capture": "06-temps-reel-reglages.png",
+          "contenu": "Indicateurs de fonctionnement, chauffage, gestion de l'eau des radiateurs et parametrage du bruleur."
+        },
+        {
+          "libelle": "Suivi Configuration",
+          "ancre": "#config",
+          "capture": "07-temps-reel-configurations.png",
+          "contenu": "Formulaire de sauvegarde et liste des configurations existantes."
+        },
+        {
+          "libelle": "Graphiques",
+          "ancre": "#graphiques",
+          "capture": "08-temps-reel-graphiques.png",
+          "contenu": "Selection du graphique temps reel.",
+          "limite": "Selection et validation non effectuees pour respecter la navigation seule."
+        }
+      ]
+    }
+  ],
+  "menu_configuration": [
+    {
+      "section": "Graphiques",
+      "pages": [
+        {
+          "libelle": "Gestion rapports journaliers",
+          "page": "gstrapport.php",
+          "capture": "09-gestion-rapports.png",
+          "contenu": "Liste des graphiques journaliers et affectations des capteurs aux graphiques."
+        }
+      ]
+    },
+    {
+      "section": "Actions Manuelles",
+      "pages": [
+        {
+          "libelle": "Mise a jour des donnees (depuis chaudiere)",
+          "page": "amImpBoiler.php",
+          "capture": "10-import-depuis-chaudiere.png",
+          "contenu": "Liste des fichiers CSV disponibles sur la chaudiere, sans import."
+        },
+        {
+          "libelle": "Mise a jour des donnees (import)",
+          "page": "amImpUsb.php",
+          "capture": "11-import-csv.png",
+          "contenu": "Selection d'un fichier CSV local, sans selection ni envoi de fichier."
+        },
+        {
+          "libelle": "Import en masse",
+          "page": "amImportMass.php",
+          "capture": "12-import-en-masse.png",
+          "contenu": "Liste des fichiers du repertoire temporaire, sans lancer l'import."
+        },
+        {
+          "libelle": "Calcul des syntheses journalieres",
+          "page": "amSynthese.php",
+          "capture": "13-syntheses-journalieres.png",
+          "contenu": "Liste des jours a calculer et commandes de recalcul, sans lancer de calcul."
+        }
+      ]
+    },
+    {
+      "section": "Administration",
+      "pages": [
+        {
+          "libelle": "Parametres",
+          "page": "adminParam.php",
+          "capture": "14-parametres.png",
+          "contenu": "Communication chaudiere, fuseau horaire, temperature de reference, calibration pellets, surface, silo, cendrier et langue."
+        },
+        {
+          "libelle": "Saisons",
+          "page": "adminSeason.php",
+          "capture": "15-saisons.png",
+          "contenu": "Liste des saisons avec leurs dates de debut et de fin."
+        },
+        {
+          "libelle": "Gestion des evenements de silo et cendrier",
+          "page": "adminEvents.php",
+          "capture": "16-evenements-silo-cendrier.png",
+          "contenu": "Historique des evenements de maintenance, remplissage et vidage."
+        },
+        {
+          "libelle": "Matrice de lecture du CSV",
+          "page": "adminMatrix.php",
+          "capture": "17-matrice-csv.png",
+          "contenu": "Correspondances entre colonnes CSV, noms Okovision et capteurs temps reel."
+        }
+      ]
+    },
+    {
+      "section": "A propos",
+      "pages": [
+        {
+          "libelle": "A propos",
+          "page": "about.php",
+          "capture": "18-a-propos.png",
+          "contenu": "Presentation de l'application et etat de verification des mises a jour.",
+          "confidentialite": "Jeton API masque dans le navigateur pour les captures, sans modification cote serveur."
+        }
+      ]
+    }
+  ],
+  "menu_compte": [
+    {
+      "libelle": "Mon Compte",
+      "modale": "#password-modal",
+      "capture": "20-mon-compte.png",
+      "contenu": "Formulaire de changement de mot de passe, laisse vide et non soumis."
+    },
+    {
+      "libelle": "Deconnexion",
+      "visite": false,
+      "motif": "Action non declenchee."
+    }
+  ],
+  "autres_captures_publiques": [
+    {
+      "page": "setup.php",
+      "capture": "03-installation.png"
+    },
+    {
+      "modale": "#login-modal",
+      "capture": "04-connexion.png"
+    }
+  ],
+  "limites": [
+    "Les controles d'ajout, modification, suppression, sauvegarde, import, test et mise a jour n'ont pas ete actives.",
+    "Les modales d'edition et de confirmation accessibles par ces controles n'ont pas ete ouvertes.",
+    "Les chargements automatiques de consultation propres aux pages restent ceux de l'application."
+  ]
+}
