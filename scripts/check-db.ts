@@ -1,16 +1,14 @@
 import { checkDatabaseConnection } from '../src/lib/server/database.ts';
 import { logger } from '../src/lib/server/logger.ts';
-import { getMessages } from '../src/lib/server/messages.ts';
+
+const log = logger.child({ component: 'database-check' });
 
 async function main() {
-	const messages = getMessages();
-	const source = { file: 'scripts/check-db.ts', function: 'main' };
 	try {
 		await checkDatabaseConnection(process.env);
-		logger.info(source, 'databaseCheckSucceeded');
+		log.info('databaseCheckSucceeded');
 	} catch (error) {
-		const message = error instanceof Error ? error.message : messages.unknownError;
-		logger.error(source, 'databaseCheckFailed', message);
+		log.error('databaseCheckFailed', error);
 		process.exitCode = 1;
 	}
 }

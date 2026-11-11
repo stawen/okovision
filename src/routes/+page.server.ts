@@ -8,14 +8,15 @@ import { logger } from '#lib/server/logger.js';
 import { getMessages } from '#lib/server/messages.js';
 import type { Actions, PageServerLoad } from './$types';
 
+const log = logger.child({ component: 'dashboard' });
+
 async function dashboard(requestedDay?: string, direction?: string) {
 	const messages = getMessages();
-	const source = { file: 'src/routes/+page.server.ts', function: 'dashboard' };
 	let config;
 	try {
 		config = await readInstallationConfig();
 	} catch (cause) {
-		logger.error(source, 'installationConfigInvalid', cause);
+		log.error('installationConfigInvalid', cause);
 		error(500, messages.installationConfigInvalid);
 	}
 	const today = todayInTimezone(config.timezone);
@@ -30,7 +31,7 @@ async function dashboard(requestedDay?: string, direction?: string) {
 		const indicators = await getDailyIndicators(getDatabasePool(), day, config.poidsPellet);
 		return { day, today, previous, next, indicators, databaseError: false };
 	} catch (cause) {
-		logger.error(source, 'dailyIndicatorsFailed', cause);
+		log.error('dailyIndicatorsFailed', cause, { day });
 		return { day, today, previous, next, indicators: null, databaseError: true };
 	}
 }

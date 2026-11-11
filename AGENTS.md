@@ -28,6 +28,7 @@
 - Les imports internes utilisent `#lib`. La configuration SvelteKit est dans `vite.config.ts`, pas dans un nouveau `svelte.config.js`.
 - Réutiliser les styles, variables CSS et composants existants avant d'ajouter une abstraction ou une dépendance.
 - Ne pas ajouter de bibliothèque métier sans usage concret dans la fonctionnalité portée.
+- Les logs serveur sont des lignes JSON structurées. Créer un logger de module avec `logger.child({ component })`, puis journaliser un événement connu avec ses champs de contexte ; ne pas répéter de chemin/fonction ni déduire la source depuis une stack trace.
 - Ne pas modifier les sorties générées `build/`, `.svelte-kit/` ou `node_modules/`.
 
 ## Identité visuelle à préserver
