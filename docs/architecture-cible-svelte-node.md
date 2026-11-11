@@ -19,7 +19,7 @@ Ce choix précise la possibilité laissée ouverte dans l'[étude initiale](./an
 - Exposer les API par des fichiers `+server.ts` sous `/api/v1`; ne pas reprendre le dispatch `type/action` ni les URLs PHP historiques. Les clients existants devront migrer.
 - Déployer un seul service applicatif `app`, incluant le planificateur et l'exécution des tâches; permettre de choisir la base locale ou distante sans reconstruire son image.
 
-Ce document est une **proposition**, pas une implémentation ni un résultat de benchmark. Les versions exactes des paquets et leur compatibilité croisée seront verrouillées dans le POC, sur un Node.js LTS encore supporté. Rien n'est installé par cette étude.
+Ce document est une **proposition**, pas une implémentation ni un résultat de benchmark. Les dernières versions stables de Svelte et SvelteKit sont exigées à l'initialisation, avec la version stable de TypeScript la plus récente compatible avec le socle et ses outils, en mode strict, et un Node.js LTS supporté. La [matrice de versions](./reorganisation-depot-et-demarrage-sveltekit.md#7-versions-des-bibliothèques-et-compatibilité) retient TypeScript `6.0.3`, plutôt que TypeScript 7 dont le support n'est pas déclaré. Les versions seront verrouillées et validées par le POC. Rien n'est installé par cette étude.
 
 ## 2. Vue logique
 
@@ -179,6 +179,10 @@ Le support réel des versions MySQL/MariaDB déployées doit être testé avec l
 | Contrôle des types | `svelte-check` et TypeScript | Pages, composants et modules serveur, y compris les tâches intégrées, vérifiés dans la CI. |
 
 Installer les dépendances uniquement lors du POC, avec lockfile et commandes de CI reproductibles. Ne pas copier des exigences de version minimales d'un seul paquet pour définir toute la plateforme.
+
+### 4.4 Versions à utiliser
+
+La [matrice centralisée des versions](./reorganisation-depot-et-demarrage-sveltekit.md#7-versions-des-bibliothèques-et-compatibilité) liste les versions exactes observées du socle, des bibliothèques métier et des outils, ainsi que leurs contraintes. Elle fait référence pour préparer l'initialisation. Au 11 novembre 2026, retenir Svelte `5.57.3`, SvelteKit `3.2.0` et **TypeScript `6.0.3`**, qui satisfait les plages déclarées de Kit, svelte-check et typescript-eslint. TypeScript `7.0.2` n'est pas retenu car ces plages l'excluent. Le conflit identifié est levé par ce choix; la compatibilité complète reste à vérifier par installation, contrôle de types, lint, tests et build.
 
 ## 5. Persistance et compatibilité MySQL
 
