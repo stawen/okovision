@@ -153,7 +153,7 @@ describe('accueil journalier', () => {
 				form: { ...day, day: '2026-11-10', indicators, ashtray: 'full' }
 			}
 		});
-		expect(body).toContain('Daily view');
+		expect(body).toContain('Daily charts');
 		expect(body).toContain('aria-label="Previous day"');
 		expect(body).toContain('aria-label="Unavailable"');
 		expect(body).toContain('12.35');

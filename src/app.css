@@ -214,6 +214,10 @@ h1 { color: #1d2b3c; font-size: clamp(1.55rem, 3vw, 2rem); font-weight: 650; let
 .daily-chart-block + .daily-chart-block { border-top: 1px solid #edf1f5; }
 .daily-chart-title { margin: 0.5rem 0 0; color: #46566b; font-size: 0.95rem; font-weight: 600; }
 .chart-status { margin: 0; padding: 1.5rem 1rem; color: #78879a; text-align: center; }
+.range-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem; margin-top: 0.75rem; color: var(--primary-dark); font-size: 0.875rem; font-weight: 600; }
+.range-controls p { margin: 0; }
+.range-controls button { flex-shrink: 0; padding: 0.5rem 0.85rem; border: 1px solid var(--primary-dark); border-radius: 6px; background: var(--primary-dark); color: white; font: inherit; cursor: pointer; }
+.range-controls button:hover { border-color: #174e82; background: #174e82; }
 
 .site-footer { background: #ffffff; border-top: 1px solid var(--border); padding-block: 1.1rem; color: var(--muted); font-size: 0.72rem; }
 .footer-content { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }

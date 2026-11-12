@@ -1,5 +1,8 @@
 import type { Pool, RowDataPacket } from 'mysql2/promise';
 import { getMessages } from '../messages.ts';
+import { isChartRange, type ChartRange, type DailyIndicators } from '../../daily-indicators.ts';
+
+export type { DailyIndicators } from '../../daily-indicators.ts';
 
 interface SensorRow extends RowDataPacket {
 	type: string;
@@ -18,15 +21,6 @@ interface IndicatorRow extends RowDataPacket {
 	min: string | number | null;
 }
 
-export interface DailyIndicators {
-	sampleCount: number;
-	conso: number | null;
-	ecs: number | null;
-	max: number | null;
-	min: number | null;
-	missingSensors: boolean;
-}
-
 function numericValue(value: string | number | null): number | null {
 	const messages = getMessages();
 	if (value === null) return null;
@@ -37,8 +31,9 @@ function numericValue(value: string | number | null): number | null {
 
 export function createMeasurementsRepository(db: Pick<Pool, 'execute' | 'query'>) {
 	return {
-		async getDailyIndicators(day: string, poidsPellet: number): Promise<DailyIndicators> {
+		async getDailyIndicators(day: string, poidsPellet: number, range?: ChartRange): Promise<DailyIndicators> {
 			const messages = getMessages();
+			if (range && !isChartRange(range)) throw new Error(messages.invalidIndicatorRange);
 			const types = ['tc_ext', 'tps_vis', 'tps_vis_pause', 'hotwater[0]'];
 			const [sensors] = await db.execute<SensorRow[]>(
 				'SELECT type, column_oko FROM oko_capteur WHERE type IN (?, ?, ?, ?)',
@@ -70,9 +65,10 @@ export function createMeasurementsRepository(db: Pick<Pool, 'execute' | 'query'>
 			if (ratio) parameters.push(poidsPellet / 1000);
 			if (ratio && hotwater) parameters.push(poidsPellet / 1000);
 			parameters.push(day);
+			if (range) parameters.push(Math.floor(range.min / 1000), Math.floor(range.max / 1000));
 			const [rows] = await db.execute<IndicatorRow[]>(
 				`SELECT COUNT(*) AS sample_count, ${conso} AS conso, ${ecs} AS ecs, ${max} AS max, ${min} AS min
-		 FROM oko_historique_full AS a WHERE a.jour = ?`,
+		 FROM oko_historique_full AS a WHERE a.jour = ?${range ? ' AND a.timestamp BETWEEN ? AND ?' : ''}`,
 				parameters
 			);
 			const row = rows[0];

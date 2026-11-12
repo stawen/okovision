@@ -74,7 +74,7 @@ Sources : [menu.php](../archive/php/_templates/menu.php), [custom.js](../archive
 
 Sources : [index.php](../archive/php/index.php), [index.js](../archive/php/js/index.js), [rendu.class.php](../archive/php/_include/rendu.class.php).
 
-**Portage SvelteKit** : la vue journalière affiche désormais les graphiques configurés en base, avec les capteurs, coefficients, relevés et annotations du jour via Highcharts 13.1.1. Le zoom/panoramique est disponible par graphique; la synchronisation du zoom entre graphiques et le recalcul des indicateurs sur la plage zoomée restent à porter.
+**Portage SvelteKit** : la vue journalière affiche désormais les graphiques configurés en base, avec les capteurs, coefficients, relevés et annotations du jour via Highcharts 13.1.1. Le zoom et le panoramique sont synchronisés entre graphiques; les quatre indicateurs sont recalculés côté serveur sur la plage sélectionnée. La réinitialisation du zoom et le changement de date restaurent la journée complète. Les erreurs et plages sans relevés restent explicitement signalées.
 
 ### F04 — Historique mensuel
 

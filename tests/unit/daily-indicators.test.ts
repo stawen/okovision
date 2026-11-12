@@ -43,6 +43,36 @@ describe('requête des indicateurs', () => {
 		expect(execute.mock.calls[1][1]).toEqual([0.156, '2026-11-11']);
 	});
 
+	it('filtre tous les agrégats sur la plage incluse, convertie de millisecondes en secondes comme le legacy', async () => {
+		const { repository, execute } = database(sensors);
+		const range = { min: 1794355200123, max: 1794358800987 };
+		await repository.getDailyIndicators('2026-11-11', 156, range);
+		const [sql, params] = execute.mock.calls[1];
+		expect(sql).toContain('WHERE a.jour = ? AND a.timestamp BETWEEN ? AND ?');
+		expect(params).toEqual([0.156, 0.156, '2026-11-11', 1794355200, 1794358800]);
+	});
+
+	it('garde les mesures indisponibles si la plage ne contient aucun relevé', async () => {
+		const { repository, execute } = database(sensors);
+		execute.mockReset()
+			.mockResolvedValueOnce([sensors])
+			.mockResolvedValueOnce([[{ sample_count: 0, conso: null, ecs: null, max: null, min: null }]]);
+		await expect(repository.getDailyIndicators('2026-11-11', 156, { min: 1000, max: 2000 })).resolves.toEqual({
+			sampleCount: 0, conso: null, ecs: null, max: null, min: null, missingSensors: false
+		});
+	});
+
+	it.each([
+		{ min: NaN, max: 2000 },
+		{ min: 2000, max: 1000 },
+		{ min: 1000, max: 1000 },
+		{ min: 1000, max: Infinity }
+	])('refuse la plage invalide %j avant toute requête', async (range) => {
+		const { repository, execute } = database(sensors);
+		await expect(repository.getDailyIndicators('2026-11-11', 156, range)).rejects.toThrow('Plage horaire invalide');
+		expect(execute).not.toHaveBeenCalled();
+	});
+
 	it('refuse les doublons et les colonnes non présentes dans le schéma', async () => {
 		const duplicate = database([...sensors, sensors[0]]);
 		await expect(duplicate.repository.getDailyIndicators('2026-11-11', 156)).rejects.toThrow('Plusieurs capteurs');

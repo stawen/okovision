@@ -3,31 +3,88 @@
   import { resolve } from "$app/paths";
   import { enhance } from "$app/forms";
   import DailyChart from "#lib/components/DailyChart.svelte";
+  import { createDailyChartSync } from "#lib/chart-sync.js";
+  import { isDailyIndicators, type ChartRange, type DailyIndicators } from "#lib/daily-indicators.js";
   import { numberLocale, uiMessages } from "#lib/i18n.js";
   import type { PageProps } from "./$types";
 
   let { data, form }: PageProps = $props();
   let current = $derived(form ?? data);
+  let zoom = $state.raw<{ source: typeof current; range: ChartRange } | null>(null);
+  let chartSync = $derived.by(() => {
+    const source = current;
+    return createDailyChartSync((range) => {
+      zoom = range ? { source, range } : null;
+    });
+  });
+  let selectedRange = $derived(zoom?.source === current ? zoom.range : null);
+  let rangeResult = $state.raw<{
+    source: typeof current;
+    range: ChartRange;
+    indicators: DailyIndicators | null;
+    error: boolean;
+  } | null>(null);
+  let rangeMatches = $derived(rangeResult?.source === current && rangeResult?.range === selectedRange);
+  let displayedIndicators = $derived(selectedRange ? (rangeMatches ? rangeResult?.indicators : null) : current.indicators);
+  let indicatorError = $derived(selectedRange ? rangeMatches && rangeResult?.error : current.databaseError);
+  let indicatorsLoading = $derived(Boolean(selectedRange && !rangeMatches));
   let pending = $state(false);
   let text = $derived(uiMessages(data.language));
   let numberFormat = $derived(
     new Intl.NumberFormat(numberLocale(data.language), { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
   );
+  let timeFormat = $derived(
+    new Intl.DateTimeFormat(numberLocale(data.language), {
+      timeZone: "UTC", hour: "2-digit", minute: "2-digit", hourCycle: "h23",
+    }),
+  );
   let indicators = $derived([
-    { id: "consumption", label: text.consumption, unit: "kg", tone: "blue", value: current.indicators?.conso ?? null },
+    { id: "consumption", label: text.consumption, unit: "kg", tone: "blue", value: displayedIndicators?.conso ?? null },
     {
       id: "hotWater",
       label: text.hotWaterConsumption,
       unit: "kg",
       tone: "blue",
-      value: current.indicators?.ecs ?? null,
+      value: displayedIndicators?.ecs ?? null,
     },
-    { id: "maxOutside", label: text.maxOutside, unit: "°C", tone: "green", value: current.indicators?.max ?? null },
-    { id: "minOutside", label: text.minOutside, unit: "°C", tone: "orange", value: current.indicators?.min ?? null },
+    { id: "maxOutside", label: text.maxOutside, unit: "°C", tone: "green", value: displayedIndicators?.max ?? null },
+    { id: "minOutside", label: text.minOutside, unit: "°C", tone: "orange", value: displayedIndicators?.min ?? null },
   ]);
 
   $effect(() => {
-    if (current.databaseError) {
+    const range = selectedRange;
+    const source = current;
+    const failureMessage = text.indicatorsError;
+    if (!range) return;
+    const controller = new AbortController();
+    const timer = setTimeout(async () => {
+      try {
+        const parameters = new URLSearchParams({
+          jour: source.day, min: String(range.min), max: String(range.max),
+        });
+        const response = await fetch(`${resolve("/api/v1/indicators")}?${parameters}`, {
+          signal: controller.signal,
+        });
+        if (!response.ok) throw new Error(failureMessage);
+        const result: unknown = await response.json();
+        if (!isDailyIndicators(result)) throw new Error(failureMessage);
+        if (!controller.signal.aborted) {
+          rangeResult = { source, range, indicators: result, error: false };
+        }
+      } catch (cause) {
+        if (controller.signal.aborted) return;
+        console.error(failureMessage, cause);
+        rangeResult = { source, range, indicators: null, error: true };
+      }
+    }, 150);
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
+  });
+
+  $effect(() => {
+    if (indicatorError) {
       toast.error(text.indicatorsError, { id: `indicateurs-${current.day}` });
     }
   });
@@ -117,8 +174,8 @@
       </div>
     {/if}
 
-    {#if current.databaseError || current.indicators?.sampleCount === 0 || current.indicators?.missingSensors}
-      <div class="notice" role={current.databaseError ? "alert" : "status"}>
+    {#if indicatorError || displayedIndicators?.sampleCount === 0 || displayedIndicators?.missingSensors}
+      <div class="notice" role={indicatorError ? "alert" : "status"}>
         <span class="notice-icon" aria-hidden="true">
           <svg viewBox="0 0 20 20" fill="none">
             <path
@@ -131,10 +188,10 @@
           </svg>
         </span>
         <p>
-          {#if current.databaseError}
+          {#if indicatorError}
             <strong>{text.indicatorsError}</strong> {text.databaseAdvice}
-          {:else if current.indicators?.sampleCount === 0}
-            <strong>{text.noReadings}</strong> {text.indicatorsUnavailable}
+          {:else if displayedIndicators?.sampleCount === 0}
+            <strong>{selectedRange ? text.noRangeReadings : text.noReadings}</strong> {text.indicatorsUnavailable}
           {:else}
             <strong>{text.missingIndicators}</strong> {text.missingSensors}
           {/if}
@@ -142,7 +199,16 @@
       </div>
     {/if}
 
-    <section class="indicator-grid" aria-label={text.dailyIndicators}>
+    {#if selectedRange}
+      <div class="range-controls">
+        <p role="status">
+          {indicatorsLoading ? text.indicatorsLoading : text.rangeIndicators}
+          : {timeFormat.format(selectedRange.min)} – {timeFormat.format(selectedRange.max)}
+        </p>
+        <button type="button" onclick={() => chartSync.reset()}>{text.resetChartRange}</button>
+      </div>
+    {/if}
+    <section class="indicator-grid" aria-label={selectedRange ? text.rangeIndicators : text.dailyIndicators} aria-busy={indicatorsLoading}>
       {#each indicators as indicator (indicator.id)}
         <article class="indicator {indicator.tone}">
           <h2>{indicator.label}</h2>
@@ -186,6 +252,7 @@
                 accessibleLabel={`${text.chartAccessible}: ${graph.name}`}
                 renderErrorText={text.chartRenderError}
                 locale={data.language === "fr" ? "fr-FR" : "en-US"}
+                sync={chartSync}
               />
             {/if}
           </section>

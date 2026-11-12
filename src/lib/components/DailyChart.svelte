@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import type * as Highcharts from "highcharts/highstock";
+  import type { DailyChartSync } from "#lib/chart-sync.js";
 
   interface ChartSeries {
     name: string;
@@ -19,9 +20,10 @@
     accessibleLabel: string;
     renderErrorText: string;
     locale: string;
+    sync: DailyChartSync;
   }
 
-  let { series, annotations, axisTitle, accessibleLabel, renderErrorText, locale }: Props = $props();
+  let { series, annotations, axisTitle, accessibleLabel, renderErrorText, locale, sync }: Props = $props();
   let container: HTMLDivElement | undefined = $state();
   let highcharts: typeof import("highcharts/highstock") | undefined = $state();
   let renderError = $state(false);
@@ -46,6 +48,7 @@
     const library = highcharts;
     const target = container;
     if (!library || !target) return;
+    const coordinator = sync;
 
     const chartSeries: Highcharts.SeriesOptionsType[] = series.map((item) => ({
       type: "spline",
@@ -70,11 +73,22 @@
     }
 
     const options: Highcharts.Options = {
-      chart: { type: "spline", zoomType: "x", panning: { enabled: true, type: "x" }, panKey: "shift" },
+      chart: {
+        type: "spline",
+        zooming: { type: "x", resetButton: { theme: { style: { display: "none" } } } },
+        panning: { enabled: true, type: "x" },
+        panKey: "shift"
+      },
       title: { text: "" },
       colors: ["#75b7f4", "#596579", "#65cf68", "#ff9a4c"],
       xAxis: {
         type: "datetime",
+        minRange: 0,
+        events: {
+          afterSetExtremes(event) {
+            coordinator.afterSetExtremes(this, event);
+          }
+        },
         title: { text: axisTitle },
         plotLines: annotations.map((annotation) => ({
           value: annotation.timestamp,
@@ -96,8 +110,12 @@
 
     try {
       const instance = library.chart(target, options);
+      const unregister = coordinator.register(instance.xAxis[0]);
       renderError = false;
-      return () => instance.destroy();
+      return () => {
+        unregister();
+        instance.destroy();
+      };
     } catch (cause) {
       console.error("Unable to render a daily Highcharts chart.", cause);
       renderError = true;
