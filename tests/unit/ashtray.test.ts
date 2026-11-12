@@ -4,7 +4,7 @@ import { createMaintenanceRepository } from '../../src/lib/server/repositories/m
 
 function database(lastEmptying: string | null, consumption: string | number | null) {
 	const execute = vi.fn()
-		.mockResolvedValueOnce([[{ last_emptying: lastEmptying }]])
+		.mockResolvedValueOnce([[{ lastEmptying }]])
 		.mockResolvedValueOnce([[{ consumption }]]);
 	const db = { execute } as Pick<Pool, 'execute'>;
 	return { repository: createMaintenanceRepository(db), execute };
@@ -19,7 +19,7 @@ describe('suivi du cendrier', () => {
 	] as const)('compare la consommation %s au seuil : %s', async (consumption, status) => {
 		const { repository, execute } = database('2026-10-01', consumption);
 		await expect(repository.getAshtrayStatus(1000)).resolves.toBe(status);
-		expect(execute.mock.calls[0][0]).toContain("MAX(event_date) AS last_emptying");
+		expect(execute.mock.calls[0][0]).toContain("MAX(event_date) AS lastEmptying");
 		expect(execute.mock.calls[0][0]).toContain("event_type = 'ASHES'");
 		expect(execute.mock.calls[1][0]).toContain('SUM(conso_kg)');
 		expect(execute.mock.calls[1][0]).toContain('WHERE jour > ?');

@@ -9,12 +9,12 @@ function database() {
 			{ id: 3, name: 'Températures' }
 		]])
 		.mockResolvedValueOnce([[
-			{ graphId: 3, sensorId: 4, name: 'T° extérieure', column_oko: 5, correctionEffect: '1' },
-			{ graphId: 8, sensorId: 9, name: 'T° départ', column_oko: 10, correctionEffect: '-0.5' }
+			{ graphId: 3, sensorId: 4, name: 'T° extérieure', columnOko: 5, correctionEffect: '1' },
+			{ graphId: 8, sensorId: 9, name: 'T° départ', columnOko: 10, correctionEffect: '-0.5' }
 		]])
 		.mockResolvedValueOnce([[
-			{ timestamp: 1794355200000, series_0: '7.50', series_1: null },
-			{ timestamp: 1794355260000, series_0: null, series_1: '12.25' }
+			{ timestamp: 1794355200000, series0: '7.50', series1: null },
+			{ timestamp: 1794355260000, series0: null, series1: '12.25' }
 		]])
 		.mockResolvedValueOnce([[
 			{ timestamp: 1794355200000, description: 'Réglage chauffage' }
@@ -49,7 +49,7 @@ describe('requête des graphiques journaliers', () => {
 		expect(execute.mock.calls[0][0]).toContain('ORDER BY position, id');
 		expect(execute.mock.calls[1][1]).toEqual([8, 3]);
 		expect(query).toHaveBeenCalledOnce();
-		expect(execute.mock.calls[2][0]).toContain('ROUND(`col_5` * ?, 2) AS `series_0`');
+		expect(execute.mock.calls[2][0]).toContain('ROUND(`col_5` * ?, 2) AS `series0`');
 		expect(execute.mock.calls[2][0]).toContain('WHERE jour = ? ORDER BY timestamp');
 		expect(execute.mock.calls[2][1]).toEqual([1, -0.5, '2026-11-11']);
 		expect(execute.mock.calls[3][0]).toContain('FROM_UNIXTIME(timestamp)');
@@ -94,7 +94,7 @@ describe('requête des graphiques journaliers', () => {
 		const execute = vi.fn()
 			.mockResolvedValueOnce([[{ id: 1, name: 'Températures' }]])
 			.mockResolvedValueOnce([[
-				{ graphId: 1, sensorId: 4, name: 'T° extérieure', column_oko: 99, correctionEffect: '1' }
+				{ graphId: 1, sensorId: 4, name: 'T° extérieure', columnOko: 99, correctionEffect: '1' }
 			]]);
 		const query = vi.fn().mockResolvedValue([[{ Field: 'col_4' }]]);
 		const db = { execute, query } as Pick<Pool, 'execute' | 'query'>;

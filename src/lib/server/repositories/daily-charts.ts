@@ -10,7 +10,7 @@ interface AssociationRow extends RowDataPacket {
 	graphId: number;
 	sensorId: number;
 	name: string;
-	column_oko: number;
+	columnOko: number;
 	correctionEffect: string | null;
 }
 
@@ -65,7 +65,7 @@ export function createDailyChartsRepository(db: Pick<Pool, 'execute' | 'query'>)
 			const graphById = new Map(graphs.map((graph) => [graph.id, graph]));
 			const placeholders = graphs.map(() => '?').join(', ');
 			const [associations] = await db.execute<AssociationRow[]>(
-				`SELECT association.oko_graphe_id AS graphId, sensor.id AS sensorId, sensor.name, sensor.column_oko, association.correction_effect AS correctionEffect
+				`SELECT association.oko_graphe_id AS graphId, sensor.id AS sensorId, sensor.name, sensor.column_oko AS columnOko, association.correction_effect AS correctionEffect
 				 FROM oko_asso_capteur_graphe AS association
 				 INNER JOIN oko_capteur AS sensor ON sensor.id = association.oko_capteur_id
 				 WHERE association.oko_graphe_id IN (${placeholders})
@@ -82,10 +82,10 @@ export function createDailyChartsRepository(db: Pick<Pool, 'execute' | 'query'>)
 				const seriesByAlias = new Map<string, DailyChartSeries>();
 
 				for (const [index, association] of associations.entries()) {
-					if (!Number.isSafeInteger(association.column_oko) || association.column_oko < 0) {
+					if (!Number.isSafeInteger(association.columnOko) || association.columnOko < 0) {
 						throw new Error(messages.invalidSensorColumn(association.name));
 					}
-					const column = `col_${association.column_oko}`;
+					const column = `col_${association.columnOko}`;
 					if (!existingColumns.has(column)) {
 						throw new Error(messages.missingSensorColumn(association.name));
 					}
@@ -97,7 +97,7 @@ export function createDailyChartsRepository(db: Pick<Pool, 'execute' | 'query'>)
 
 					const graph = graphById.get(association.graphId);
 					if (!graph) throw new Error(messages.invalidIndicator);
-					const alias = `series_${index}`;
+					const alias = `series${index}`;
 					const series = { name: association.name, data: [] as [number, number][] };
 					graph.series.push(series);
 					seriesByAlias.set(alias, series);

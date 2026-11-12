@@ -6,7 +6,7 @@ export type { DailyIndicators } from '../../daily-indicators.ts';
 
 interface SensorRow extends RowDataPacket {
 	type: string;
-	column_oko: number;
+	columnOko: number;
 }
 
 interface ColumnRow extends RowDataPacket {
@@ -14,7 +14,7 @@ interface ColumnRow extends RowDataPacket {
 }
 
 interface IndicatorRow extends RowDataPacket {
-	sample_count: number;
+	sampleCount: number;
 	conso: string | number | null;
 	ecs: string | number | null;
 	max: string | number | null;
@@ -36,7 +36,7 @@ export function createMeasurementsRepository(db: Pick<Pool, 'execute' | 'query'>
 			if (range && !isChartRange(range)) throw new Error(messages.invalidIndicatorRange);
 			const types = ['tc_ext', 'tps_vis', 'tps_vis_pause', 'hotwater[0]'];
 			const [sensors] = await db.execute<SensorRow[]>(
-				'SELECT type, column_oko FROM oko_capteur WHERE type IN (?, ?, ?, ?)',
+				'SELECT type, column_oko AS columnOko FROM oko_capteur WHERE type IN (?, ?, ?, ?)',
 				types
 			);
 			const [columns] = await db.query<ColumnRow[]>('SHOW COLUMNS FROM oko_historique_full');
@@ -44,10 +44,10 @@ export function createMeasurementsRepository(db: Pick<Pool, 'execute' | 'query'>
 			const selected = new Map<string, string>();
 			for (const sensor of sensors) {
 				if (selected.has(sensor.type)) throw new Error(messages.duplicateSensor(sensor.type));
-				if (!Number.isSafeInteger(sensor.column_oko) || sensor.column_oko < 0) {
+				if (!Number.isSafeInteger(sensor.columnOko) || sensor.columnOko < 0) {
 					throw new Error(messages.invalidSensorColumn(sensor.type));
 				}
-				const column = `col_${sensor.column_oko}`;
+				const column = `col_${sensor.columnOko}`;
 				if (!existingColumns.has(column)) throw new Error(messages.missingSensorColumn(sensor.type));
 				selected.set(sensor.type, `a.\`${column}\``);
 			}
@@ -67,14 +67,14 @@ export function createMeasurementsRepository(db: Pick<Pool, 'execute' | 'query'>
 			parameters.push(day);
 			if (range) parameters.push(Math.floor(range.min / 1000), Math.floor(range.max / 1000));
 			const [rows] = await db.execute<IndicatorRow[]>(
-				`SELECT COUNT(*) AS sample_count, ${conso} AS conso, ${ecs} AS ecs, ${max} AS max, ${min} AS min
+				`SELECT COUNT(*) AS sampleCount, ${conso} AS conso, ${ecs} AS ecs, ${max} AS max, ${min} AS min
 		 FROM oko_historique_full AS a WHERE a.jour = ?${range ? ' AND a.timestamp BETWEEN ? AND ?' : ''}`,
 				parameters
 			);
 			const row = rows[0];
 			if (!row) throw new Error(messages.indicatorsNoResult);
 			return {
-				sampleCount: row.sample_count,
+				sampleCount: row.sampleCount,
 				conso: numericValue(row.conso),
 				ecs: numericValue(row.ecs),
 				max: numericValue(row.max),

@@ -17,7 +17,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 1.5rem; }
 body { margin: 0; line-height: 1.6; }
 a { color: var(--primary-dark); text-underline-offset: 0.2em; }
 a:hover { color: #174e82; }
-a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid #78b9f1; outline-offset: 4px; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline: 3px solid #78b9f1; outline-offset: 4px; }
 h1, h2, h3, p { margin: 0; }
 .container { width: min(1240px, calc(100% - 3.5rem)); margin-inline: auto; }
 .skip-link {

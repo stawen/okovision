@@ -27,8 +27,8 @@ describe('câblage des accès aux données', () => {
 
 		execute
 			.mockResolvedValueOnce([[]])
-			.mockResolvedValueOnce([[{ sample_count: 0, conso: null, ecs: null, max: null, min: null }]])
-			.mockResolvedValueOnce([[{ last_emptying: null }]]);
+			.mockResolvedValueOnce([[{ sampleCount: 0, conso: null, ecs: null, max: null, min: null }]])
+			.mockResolvedValueOnce([[{ lastEmptying: null }]]);
 		query.mockResolvedValueOnce([[]]);
 		await expect(dataAccess.measurements.getDailyIndicators('2026-11-11', 156)).resolves.toEqual({
 			sampleCount: 0, conso: null, ecs: null, max: null, min: null, missingSensors: true

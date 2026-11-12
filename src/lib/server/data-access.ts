@@ -2,6 +2,7 @@ import { getDatabasePool } from './database.ts';
 import { createDailyChartsRepository } from './repositories/daily-charts.ts';
 import { createMeasurementsRepository } from './repositories/measurements.ts';
 import { createMaintenanceRepository } from './repositories/maintenance.ts';
+import { createHistoryRepository } from './repositories/history.ts';
 import { createUsersRepository } from './repositories/users.ts';
 
 function createDataAccess() {
@@ -9,6 +10,7 @@ function createDataAccess() {
 	return {
 		charts: createDailyChartsRepository(db),
 		measurements: createMeasurementsRepository(db),
+		history: createHistoryRepository(db),
 		maintenance: createMaintenanceRepository(db),
 		users: createUsersRepository(db)
 	};

@@ -4,6 +4,7 @@ const fr = {
 	installationConfigInvalid: 'Configuration de l’installation invalide ou inaccessible.',
 	dailyIndicatorsFailed: 'Impossible de charger les indicateurs journaliers.',
 	dailyChartsFailed: 'Impossible de charger les graphiques journaliers.',
+	historyFailed: 'Impossible de charger les données historiques.',
 	ashtrayStatusFailed: 'Impossible de charger le suivi du cendrier.',
 	loginFailed: 'Impossible de traiter la connexion membre.',
 	loginRejected: 'Identifiants de connexion refusés.',
@@ -12,8 +13,14 @@ const fr = {
 	databaseCheckSucceeded: 'Connexion à la base réussie (SELECT 1).',
 	databaseCheckFailed: 'Échec de la connexion à la base.',
 	invalidInstallationConfig: 'La configuration de l’installation doit être un objet JSON.',
-	invalidPelletWeight: 'poids_pellet doit être un nombre positif en grammes par minute.',
+	invalidConfigKeys: (keys: string) => `Les clés de configuration doivent être en camelCase : ${keys}.`,
+	invalidPelletWeight: 'poidsPellet doit être un nombre positif en grammes par minute.',
 	invalidAshtray: 'ashtray doit être un nombre positif en kilogrammes.',
+	invalidSurface: 'surfaceMaison doit être un nombre positif en mètres carrés.',
+	invalidSilo: 'hasSilo doit valoir 0 ou 1.',
+	invalidSiloSize: 'siloSize doit être un nombre positif en kilogrammes.',
+	stockStatusFailed: 'Impossible de charger le stock de pellets.',
+	stockNoResult: 'La requête de stock n’a pas renvoyé de résultat.',
 	invalidAshtrayConsumption: 'Consommation du cendrier invalide dans la base.',
 	ashtrayNoResult: 'La requête de suivi du cendrier n’a pas renvoyé de résultat.',
 	invalidTimezone: 'timezone doit être un fuseau horaire IANA.',
@@ -44,6 +51,7 @@ const en: Translations = {
 	installationConfigInvalid: 'Installation configuration is invalid or inaccessible.',
 	dailyIndicatorsFailed: 'Unable to load daily indicators.',
 	dailyChartsFailed: 'Unable to load daily charts.',
+	historyFailed: 'Unable to load historical data.',
 	ashtrayStatusFailed: 'Unable to load ashtray tracking.',
 	loginFailed: 'Unable to process member sign-in.',
 	loginRejected: 'Sign-in credentials rejected.',
@@ -52,8 +60,14 @@ const en: Translations = {
 	databaseCheckSucceeded: 'Database connection successful (SELECT 1).',
 	databaseCheckFailed: 'Database connection failed.',
 	invalidInstallationConfig: 'The installation configuration must be a JSON object.',
-	invalidPelletWeight: 'poids_pellet must be a positive number in grams per minute.',
+	invalidConfigKeys: (keys) => `Configuration keys must be camelCase: ${keys}.`,
+	invalidPelletWeight: 'poidsPellet must be a positive number in grams per minute.',
 	invalidAshtray: 'ashtray must be a positive number in kilograms.',
+	invalidSurface: 'surfaceMaison must be a positive number in square metres.',
+	invalidSilo: 'hasSilo must be 0 or 1.',
+	invalidSiloSize: 'siloSize must be a positive number in kilograms.',
+	stockStatusFailed: 'Unable to load pellet stock.',
+	stockNoResult: 'The stock query returned no result.',
 	invalidAshtrayConsumption: 'Invalid ashtray consumption in the database.',
 	ashtrayNoResult: 'The ashtray tracking query returned no result.',
 	invalidTimezone: 'timezone must be an IANA time zone.',
@@ -84,6 +98,8 @@ export type LogMessageKey =
 	| 'installationConfigInvalid'
 	| 'dailyIndicatorsFailed'
 	| 'dailyChartsFailed'
+	| 'historyFailed'
+	| 'stockStatusFailed'
 	| 'ashtrayStatusFailed'
 	| 'databaseCheckSucceeded'
 	| 'databaseCheckFailed';

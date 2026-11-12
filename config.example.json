@@ -1,6 +1,4 @@
 {
-	"poids_pellet": "150",
+	"poidsPellet": "150",
 	"timezone": "Europe/Paris"
 }
-
-//{"chaudiere":"192.168.79.23","tc_ref":"20","poids_pellet":"156","surface_maison":"280","get_data_from_chaudiere":"1","timezone":"Europe\/Paris","send_to_web":"0","has_silo":"1","silo_size":"6200","ashtray":"1000","lang":"fr"}

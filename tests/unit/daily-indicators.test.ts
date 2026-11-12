@@ -2,20 +2,20 @@ import { describe, expect, it, vi } from 'vitest';
 import type { Pool } from 'mysql2/promise';
 import { createMeasurementsRepository } from '../../src/lib/server/repositories/measurements';
 
-function database(sensors: { type: string; column_oko: number }[]) {
+function database(sensors: { type: string; columnOko: number }[]) {
 	const execute = vi.fn()
 		.mockResolvedValueOnce([sensors])
-		.mockResolvedValueOnce([[{ sample_count: 2, conso: '1.56', ecs: '0.00', max: '7.50', min: '-2.00' }]]);
+		.mockResolvedValueOnce([[{ sampleCount: 2, conso: '1.56', ecs: '0.00', max: '7.50', min: '-2.00' }]]);
 	const query = vi.fn().mockResolvedValue([[{ Field: 'col_1' }, { Field: 'col_2' }, { Field: 'col_3' }, { Field: 'col_4' }]]);
 	const db = { execute, query } as Pick<Pool, 'execute' | 'query'>;
 	return { repository: createMeasurementsRepository(db), execute, query };
 }
 
 const sensors = [
-	{ type: 'tc_ext', column_oko: 1 },
-	{ type: 'tps_vis', column_oko: 2 },
-	{ type: 'tps_vis_pause', column_oko: 3 },
-	{ type: 'hotwater[0]', column_oko: 4 }
+	{ type: 'tc_ext', columnOko: 1 },
+	{ type: 'tps_vis', columnOko: 2 },
+	{ type: 'tps_vis_pause', columnOko: 3 },
+	{ type: 'hotwater[0]', columnOko: 4 }
 ];
 
 describe('requête des indicateurs', () => {
@@ -35,7 +35,7 @@ describe('requête des indicateurs', () => {
 		const { repository, execute } = database(sensors.slice(0, 3));
 		execute.mockReset()
 			.mockResolvedValueOnce([sensors.slice(0, 3)])
-			.mockResolvedValueOnce([[{ sample_count: 2, conso: '1.56', ecs: null, max: '7.50', min: '-2.00' }]]);
+			.mockResolvedValueOnce([[{ sampleCount: 2, conso: '1.56', ecs: null, max: '7.50', min: '-2.00' }]]);
 		const result = await repository.getDailyIndicators('2026-11-11', 156);
 		expect(result.ecs).toBeNull();
 		expect(result.missingSensors).toBe(true);
@@ -56,7 +56,7 @@ describe('requête des indicateurs', () => {
 		const { repository, execute } = database(sensors);
 		execute.mockReset()
 			.mockResolvedValueOnce([sensors])
-			.mockResolvedValueOnce([[{ sample_count: 0, conso: null, ecs: null, max: null, min: null }]]);
+			.mockResolvedValueOnce([[{ sampleCount: 0, conso: null, ecs: null, max: null, min: null }]]);
 		await expect(repository.getDailyIndicators('2026-11-11', 156, { min: 1000, max: 2000 })).resolves.toEqual({
 			sampleCount: 0, conso: null, ecs: null, max: null, min: null, missingSensors: false
 		});
@@ -76,7 +76,7 @@ describe('requête des indicateurs', () => {
 	it('refuse les doublons et les colonnes non présentes dans le schéma', async () => {
 		const duplicate = database([...sensors, sensors[0]]);
 		await expect(duplicate.repository.getDailyIndicators('2026-11-11', 156)).rejects.toThrow('Plusieurs capteurs');
-		const invalid = database([{ type: 'tc_ext', column_oko: 999 }]);
+		const invalid = database([{ type: 'tc_ext', columnOko: 999 }]);
 		await expect(invalid.repository.getDailyIndicators('2026-11-11', 156)).rejects.toThrow('Colonne absente');
 		expect(invalid.execute).toHaveBeenCalledOnce();
 	});
