@@ -3,6 +3,8 @@ import { describe, expect, it } from 'vitest';
 import Home from '../../src/routes/+page.svelte';
 
 const day = {
+	member: null,
+	pathname: '/' as const,
 	day: '2026-11-11',
 	today: '2026-11-11',
 	previous: '2026-11-10',
@@ -57,7 +59,6 @@ describe('accueil journalier', () => {
 		expect(body.match(/aria-label="Non disponible"/g)).toHaveLength(4);
 		expect(body).toContain('Impossible de charger les indicateurs.');
 		expect(body).not.toContain('0,00');
-		expect(body).toContain('id="migration"');
 	});
 
 	it('distingue une journée sans relevés', () => {

@@ -48,8 +48,7 @@ async function dashboard(language: Language, requestedDay?: string, direction?: 
 	return { day, today, previous, next, indicators, databaseError, ashtray };
 }
 
-export const load: PageServerLoad = async ({ url, setHeaders, locals }) => {
-	setHeaders({ 'cache-control': 'no-store' });
+export const load: PageServerLoad = async ({ url, locals }) => {
 	if (url.searchParams.has('jour')) redirect(303, resolve('/'));
 	return dashboard(locals.language);
 };

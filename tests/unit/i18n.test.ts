@@ -13,7 +13,12 @@ describe('langue de l’interface', () => {
 		['en', 'en']
 	] as const)('transmet %s au layout et au HTML initial', async (configured, expected) => {
 		vi.stubEnv('APP_LANG', configured);
-		const event = { locals: {} } as RequestEvent;
+		const partialEvent: Pick<RequestEvent, 'locals' | 'cookies' | 'setHeaders' | 'url' | 'route'> = {
+			locals: { language: 'fr', member: null },
+			cookies: { get: () => undefined, getAll: () => [], set: vi.fn(), delete: vi.fn(), serialize: vi.fn(), parse: vi.fn() },
+			setHeaders: vi.fn(), url: new URL('http://localhost/'), route: { id: '/' }
+		};
+		const event = partialEvent as RequestEvent;
 		const response = await handle({
 			event,
 			resolve: async (_event, options) => {
@@ -36,7 +41,7 @@ describe('langue de l’interface', () => {
 		['en', 'Skip to content', 'Main navigation']
 	] as const)('traduit le layout en %s', (language, skip, navigation) => {
 		const children = createRawSnippet(() => ({ render: () => '<div></div>' }));
-		const { body } = render(Layout, { props: { params: {}, data: { language }, children } });
+		const { body } = render(Layout, { props: { params: {}, data: { language, member: null, pathname: '/' }, children } });
 		expect(body).toContain(skip);
 		expect(body).toContain(`aria-label="${navigation}"`);
 	});

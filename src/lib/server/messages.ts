@@ -4,6 +4,10 @@ const fr = {
 	installationConfigInvalid: 'Configuration de l’installation invalide ou inaccessible.',
 	dailyIndicatorsFailed: 'Impossible de charger les indicateurs journaliers.',
 	ashtrayStatusFailed: 'Impossible de charger le suivi du cendrier.',
+	loginFailed: 'Impossible de traiter la connexion membre.',
+	loginRejected: 'Identifiants de connexion refusés.',
+	loginRateLimited: 'Limite de tentatives de connexion atteinte.',
+	sessionCapacityExceeded: 'Capacité maximale des sessions atteinte.',
 	databaseCheckSucceeded: 'Connexion à la base réussie (SELECT 1).',
 	databaseCheckFailed: 'Échec de la connexion à la base.',
 	invalidInstallationConfig: 'La configuration de l’installation doit être un objet JSON.',
@@ -38,6 +42,10 @@ const en: Translations = {
 	installationConfigInvalid: 'Installation configuration is invalid or inaccessible.',
 	dailyIndicatorsFailed: 'Unable to load daily indicators.',
 	ashtrayStatusFailed: 'Unable to load ashtray tracking.',
+	loginFailed: 'Unable to process member sign-in.',
+	loginRejected: 'Sign-in credentials rejected.',
+	loginRateLimited: 'Sign-in attempt limit reached.',
+	sessionCapacityExceeded: 'Session capacity exceeded.',
 	databaseCheckSucceeded: 'Database connection successful (SELECT 1).',
 	databaseCheckFailed: 'Database connection failed.',
 	invalidInstallationConfig: 'The installation configuration must be a JSON object.',
@@ -66,6 +74,9 @@ export function getMessages(): Translations {
 	return getAppLanguage() === 'fr' ? fr : en;
 }
 export type LogMessageKey =
+	| 'loginFailed'
+	| 'loginRejected'
+	| 'loginRateLimited'
 	| 'installationConfigInvalid'
 	| 'dailyIndicatorsFailed'
 	| 'ashtrayStatusFailed'

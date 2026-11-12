@@ -5,6 +5,7 @@ declare global {
 		// interface Error {}
 		interface Locals {
 			language: import('#lib/i18n.js').Language;
+			member: import('#lib/server/repositories/users.js').Member | null;
 		}
 		// interface PageData {}
 		// interface PageState {}

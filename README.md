@@ -6,7 +6,9 @@ Supervision de chaudière Ökofen, en cours de réécriture en **SvelteKit 3 / S
 
 - L'application historique complète est conservée, sans modification de ses sources, dans [archive/php/](./archive/php/). Elle n'est ni exécutée ni publiée par SvelteKit.
 - Le nouveau socle affiche une page de supervision responsive avec les couleurs historiques : anthracite `#222222`, bleu `#428bca`, vert `#5cb85c`, orange `#f0ad4e` et cyan `#5bc0de`. Aucun ancien framework ou script n'est chargé.
-- L'accueil lit les indicateurs journaliers en lecture seule depuis MySQL. Le graphique, la collecte, l'authentification et les commandes chaudière ne sont pas encore portés.
+- L'accueil lit les indicateurs journaliers en lecture seule depuis MySQL. Le graphique, la collecte et les commandes chaudière ne sont pas encore portés.
+- Les menus et pages de la [cartographie](./archive/screenshot/cartographie.json) sont préparés : historique public, temps réel et ses trois onglets, configuration, administration, à propos et compte membre. Les nouvelles pages décrivent uniquement leur périmètre et leur indisponibilité, sans action métier. L'installation dispose aussi d'une page descriptive.
+- Chaque page possède son propre dossier et son fichier `+page.svelte` dans [src/routes/](./src/routes/). Les URL et noms de dossiers sont en anglais (`/history`, `/login`, `/setup`, `/private/realtime/settings`, etc.), indépendamment de la langue de l'interface. Toutes les pages et actions privées sont regroupées sous [src/routes/private/](./src/routes/private/), avec des URL préfixées par `/private`. Aucune route générique ne remplace cette arborescence.
 - `GET /api/v1/health` contrôle uniquement la vitalité HTTP; `database: "not-configured"` ne reflète pas la configuration ni la disponibilité MySQL.
 
 Ne pas déployer cette réorganisation sur une installation PHP en service. Conserver cette installation sur sa version existante jusqu'à validation de la parité et de la bascule.
@@ -35,7 +37,7 @@ Avec SvelteKit 3, le plugin, les options du compilateur et `adapter-node` sont c
 
 L'archive est exclue du lint, des tests, de TypeScript et du contexte Docker. Les accès directs Vite aux fichiers archivés sont également refusés. Ne jamais exposer le dépôt lui-même comme racine d'un serveur statique.
 
-Définir `APP_LANG=FR` ou `APP_LANG=EN` dans `.env` pour choisir la langue de l'interface et des messages applicatifs ; le français est utilisé si la variable est absente, et une valeur vide ou inconnue est signalée comme erreur. Redémarrer l'application après modification. La langue est commune à toute l'installation, sans sélection par utilisateur. Les textes de l'interface sont centralisés et typés dans [i18n.ts](./src/lib/i18n.ts), les messages techniques dans [messages.ts](./src/lib/server/messages.ts). Les nombres sont formatés en `fr-FR` ou `en-GB` ; le fuseau des dates reste celui de l'installation. Pour les journaux applicatifs, utiliser [logger.ts](./src/lib/server/logger.ts) : leurs codes d'événement restent stables quelle que soit la langue. Les détails d'erreurs provenant de bibliothèques externes restent dans leur langue d'origine et ne sont pas exposés à l'utilisateur.
+Définir `APP_LANG=FR` ou `APP_LANG=EN` dans `.env` pour choisir la langue de l'interface et des messages applicatifs ; le français est utilisé si la variable est absente, et une valeur vide ou inconnue est signalée comme erreur. Redémarrer l'application après modification. La langue est commune à toute l'installation, sans sélection par utilisateur. Tous les textes de l'interface, y compris les titres et périmètres des pages, sont centralisés et typés dans [i18n.ts](./src/lib/i18n.ts). [navigation.ts](./src/lib/navigation.ts) contient uniquement les métadonnées de navigation et leurs clés de traduction ; les messages techniques sont dans [messages.ts](./src/lib/server/messages.ts). Les nombres sont formatés en `fr-FR` ou `en-GB` ; le fuseau des dates reste celui de l'installation. Pour les journaux applicatifs, utiliser [logger.ts](./src/lib/server/logger.ts) : leurs codes d'événement restent stables quelle que soit la langue. Les détails d'erreurs provenant de bibliothèques externes restent dans leur langue d'origine et ne sont pas exposés à l'utilisateur.
 
 ## Connexion à la base
 
@@ -60,6 +62,16 @@ Le suivi du cendrier reprend la règle historique : somme de `oko_resume_day.con
 Les [repositories](./src/lib/server/repositories/) regroupent les accès SQL par domaine et reçoivent leur client à leur création, limité aux méthodes nécessaires (`execute`, `query`). Ils ne récupèrent ni ne ferment le pool et laissent remonter les erreurs. Les tests injectent un faux client, sans connexion réelle. Une connexion dédiée peut également être injectée lorsqu'une opération l'exige ; cela ne rend pas les tables MyISAM transactionnelles.
 
 Pour les prochains modules, ajouter les repositories et leur câblage au même endroit. Ajouter des services métier uniquement pour des règles ou coordinations concrètes, puis les partager entre routes, API et tâches planifiées sans dépendance au contexte HTTP. L'assemblage partagé ne doit conserver aucune donnée propre à une requête ou un utilisateur. Aucun ORM ni conteneur d'injection n'est nécessaire.
+
+### Connexion membre
+
+L'accès membre est placé à droite du bandeau. `/login` vérifie les comptes existants de `oko_user` en lecture seule, via le même câblage de repositories. Le compte MySQL doit pouvoir lire cette table. Aucun compte n'est créé et aucun mot de passe n'est modifié. La vérification reproduit le SHA-1 historique, y compris l'échappement PHP avant hachage : il s'agit d'une compatibilité transitoire, pas d'un format recommandé pour de nouveaux comptes.
+
+Les menus privés ne sont affichés qu'après connexion ; le hook serveur protège chaque requête vers une route sous `/private`, y compris les navigations internes. Comme dans les menus historiques, tous les membres connectés y ont accès, sans nouveau modèle de rôles. La page « Mon compte » reste descriptive : le changement de mot de passe n'est pas porté.
+
+La nouvelle application utilise une session indépendante de PHP, valable huit heures, stockée en mémoire serveur avec un cookie HttpOnly et SameSite=Lax (Secure en HTTPS). Le POST `/private/logout` révoque la session et supprime le cookie ; un GET ne déconnecte pas. Un redémarrage invalide les sessions. Rester sur un seul processus, sans réplica. Les réponses ne sont pas mises en cache. Les formulaires conservent la protection d'origine de SvelteKit.
+
+La connexion est limitée à dix tentatives par adresse sur quinze minutes, réussies ou non. Les compteurs sont en mémoire et réinitialisés au redémarrage. Derrière un reverse proxy, configurer `ORIGIN` et l'adresse client selon la documentation d'`adapter-node` (`ADDRESS_HEADER` et `XFF_DEPTH` uniquement si le proxy de confiance remplace les en-têtes). Sans cette configuration, les clients peuvent partager la limite du proxy. Utiliser HTTPS en exploitation ; aucun identifiant, mot de passe ou jeton de session n'est journalisé.
 
 ## Docker
 
