@@ -3,9 +3,8 @@ import { resolve } from '$app/paths';
 import { isValidDay, shiftDay, todayInTimezone } from '#lib/dates.js';
 import { uiMessages, type Language } from '#lib/i18n.js';
 import { readInstallationConfig } from '#lib/server/config.js';
-import { getDatabasePool } from '#lib/server/database.js';
-import { getDailyIndicators } from '#lib/server/queries/daily-indicators.js';
-import { getAshtrayStatus, type AshtrayStatus } from '#lib/server/queries/ashtray.js';
+import { getDataAccess } from '#lib/server/data-access.js';
+import type { AshtrayStatus } from '#lib/server/repositories/maintenance.js';
 import { logger } from '#lib/server/logger.js';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -31,7 +30,7 @@ async function dashboard(language: Language, requestedDay?: string, direction?: 
 	let indicators;
 	let databaseError = false;
 	try {
-		indicators = await getDailyIndicators(getDatabasePool(), day, config.poidsPellet);
+		indicators = await getDataAccess().measurements.getDailyIndicators(day, config.poidsPellet);
 	} catch (cause) {
 		log.error('dailyIndicatorsFailed', cause, { day });
 		indicators = null;
@@ -40,7 +39,7 @@ async function dashboard(language: Language, requestedDay?: string, direction?: 
 	let ashtray: AshtrayStatus | 'missing-capacity' | 'error' = 'missing-capacity';
 	if (config.ashtray !== null) {
 		try {
-			ashtray = await getAshtrayStatus(getDatabasePool(), config.ashtray);
+			ashtray = await getDataAccess().maintenance.getAshtrayStatus(config.ashtray);
 		} catch (cause) {
 			log.error('ashtrayStatusFailed', cause);
 			ashtray = 'error';

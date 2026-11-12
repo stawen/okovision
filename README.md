@@ -53,6 +53,14 @@ Cette commande charge `.env`, établit une connexion, exécute uniquement `SELEC
 
 Le suivi du cendrier reprend la règle historique : somme de `oko_resume_day.conso_kg` pour les jours strictement postérieurs au dernier événement `ASHES` dans `oko_silo_events`, comparée à `ashtray`. Il ne dépend pas de la journée sélectionnée. Sans seuil, vidage ou consommation disponible, son état est signalé comme indisponible ; la saisie des événements n'est pas encore portée.
 
+### Organisation des accès aux données
+
+[data-access.ts](./src/lib/server/data-access.ts) est le point de câblage serveur : `getDataAccess()` assemble les repositories au premier besoin puis réutilise cet assemblage et le pool partagé. Les routes utilisent `getDataAccess().measurements` ou `getDataAccess().maintenance`, sans importer le gestionnaire du pool. L'import du module ne crée pas de pool et l'assemblage n'exécute aucune requête.
+
+Les [repositories](./src/lib/server/repositories/) regroupent les accès SQL par domaine et reçoivent leur client à leur création, limité aux méthodes nécessaires (`execute`, `query`). Ils ne récupèrent ni ne ferment le pool et laissent remonter les erreurs. Les tests injectent un faux client, sans connexion réelle. Une connexion dédiée peut également être injectée lorsqu'une opération l'exige ; cela ne rend pas les tables MyISAM transactionnelles.
+
+Pour les prochains modules, ajouter les repositories et leur câblage au même endroit. Ajouter des services métier uniquement pour des règles ou coordinations concrètes, puis les partager entre routes, API et tâches planifiées sans dépendance au contexte HTTP. L'assemblage partagé ne doit conserver aucune donnée propre à une requête ou un utilisateur. Aucun ORM ni conteneur d'injection n'est nécessaire.
+
 ## Docker
 
 L'image multi-stage s'exécute sans root, avec un seul processus applicatif. Le contrôle de santé appelle `/api/v1/health`. Aucun SQL historique n'est exécuté au démarrage.
