@@ -40,4 +40,35 @@ describe('authentification MySQL historique en lecture seule', () => {
 		const execute = vi.fn().mockRejectedValue(new Error('database unavailable'));
 		await expect(createUsersRepository({ execute }).authenticate('member', 'test')).rejects.toThrow('database unavailable');
 	});
+
+	it('lit les identifiants chaudière encodés de la ligne admin sans les modifier', async () => {
+		const execute = vi.fn().mockResolvedValue([[
+			{ login: 'boiler-user', pass: Buffer.from('boiler-password').toString('base64') }
+		]]);
+		const users = createUsersRepository({ execute });
+		await expect(users.getAdminBoilerCredentials()).resolves.toEqual({
+			username: 'boiler-user',
+			password: 'boiler-password'
+		});
+		expect(execute).toHaveBeenCalledWith(
+			'SELECT login_boiler AS login, pass_boiler AS pass FROM oko_user WHERE user = ? LIMIT 2',
+			['admin']
+		);
+	});
+
+	it.each([
+		{ rows: [] },
+		{ rows: [{ login: null, pass: null }] },
+		{ rows: [{ login: 'boiler-user', pass: 'not-base64' }] },
+		{ rows: [{ login: 'boiler-user', pass: Buffer.from('').toString('base64') }] }
+	])('retourne null si les identifiants admin sont absents ou invalides', async ({ rows }) => {
+		const execute = vi.fn().mockResolvedValue([rows]);
+		await expect(createUsersRepository({ execute }).getAdminBoilerCredentials()).resolves.toBeNull();
+	});
+
+	it('refuse plusieurs lignes admin', async () => {
+		const row = { login: 'boiler-user', pass: Buffer.from('boiler-password').toString('base64') };
+		const execute = vi.fn().mockResolvedValue([[row, row]]);
+		await expect(createUsersRepository({ execute }).getAdminBoilerCredentials()).resolves.toBeNull();
+	});
 });

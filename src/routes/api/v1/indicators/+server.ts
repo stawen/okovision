@@ -1,4 +1,4 @@
-import { error, json } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 import { isValidDay, todayInTimezone } from '#lib/dates.js';
 import { isChartRange, type ChartRange } from '#lib/daily-indicators.js';
 import { uiMessages } from '#lib/i18n.js';
@@ -31,7 +31,7 @@ export const GET: RequestHandler = async ({ url, locals }) => {
 	if (day > todayInTimezone(config.timezone)) error(400, messages.invalidOrFutureDay);
 	try {
 		const indicators = await getDataAccess().measurements.getDailyIndicators(day, config.poidsPellet, range);
-		return json(indicators, { headers: { 'cache-control': 'no-store' } });
+		return Response.json(indicators, { headers: { 'cache-control': 'no-store' } });
 	} catch (cause) {
 		log.error('dailyIndicatorsFailed', cause, { day, range });
 		error(503, messages.indicatorsError);

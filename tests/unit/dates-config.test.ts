@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { isValidDay, shiftDay, todayInTimezone } from '../../src/lib/dates';
-import { parseHistorySettings, parseInstallationConfig } from '../../src/lib/server/config';
+import { parseBoilerAddress, parseHistorySettings, parseInstallationConfig } from '../../src/lib/server/config';
 
 describe('dates de l’installation', () => {
 	it('valide les dates calendaires et les années bissextiles', () => {
@@ -50,5 +50,13 @@ describe('configuration JSON', () => {
 		expect(() => parseInstallationConfig({
 			poidsPellet: 156, timezone: 'Europe/Paris', send_to_web: '0'
 		})).toThrow('send_to_web');
+	});
+
+	it('valide l’adresse de chaudière historique sans imposer sa présence aux autres pages', () => {
+		expect(parseBoilerAddress({ chaudiere: '192.168.1.23' })).toBe('http://192.168.1.23');
+		expect(parseBoilerAddress({ chaudiere: 'chaudiere.local:8180' })).toBe('http://chaudiere.local:8180');
+		expect(() => parseBoilerAddress({})).toThrow('chaudiere');
+		expect(() => parseBoilerAddress({ chaudiere: 'http://example.test/path' })).toThrow('chaudiere');
+		expect(() => parseBoilerAddress({ chaudiere: 'example.test:99999' })).toThrow('chaudiere');
 	});
 });

@@ -5,6 +5,7 @@ const fr = {
 	dailyIndicatorsFailed: 'Impossible de charger les indicateurs journaliers.',
 	dailyChartsFailed: 'Impossible de charger les graphiques journaliers.',
 	historyFailed: 'Impossible de charger les données historiques.',
+	boilerReadFailed: 'Impossible de récupérer les mesures chaudière.',
 	ashtrayStatusFailed: 'Impossible de charger le suivi du cendrier.',
 	loginFailed: 'Impossible de traiter la connexion membre.',
 	loginRejected: 'Identifiants de connexion refusés.',
@@ -24,6 +25,12 @@ const fr = {
 	invalidAshtrayConsumption: 'Consommation du cendrier invalide dans la base.',
 	ashtrayNoResult: 'La requête de suivi du cendrier n’a pas renvoyé de résultat.',
 	invalidTimezone: 'timezone doit être un fuseau horaire IANA.',
+	boilerAddressInvalid: 'chaudiere doit être un hôte ou un hôte suivi d’un port valide.',
+	boilerConfigInvalid: 'Adresse de chaudière absente ou invalide dans config.json.',
+	boilerCredentialsUnavailable: 'Identifiants chaudière absents ou invalides dans la ligne admin.',
+	boilerCredentialsLoadFailed: 'Impossible de lire les identifiants chaudière en base.',
+	boilerConnectionFailed: 'Chaudière injoignable ou authentification refusée.',
+	boilerResponseInvalid: 'Réponse de la chaudière invalide.',
 	dbAddressRequired: 'DB_ADRESSE est obligatoire.',
 	dbAddressInvalid: 'DB_ADRESSE doit contenir un hôte et, éventuellement, un port valide.',
 	dbAddressHostOnly: 'DB_ADRESSE doit contenir uniquement un hôte et, éventuellement, un port.',
@@ -52,6 +59,7 @@ const en: Translations = {
 	dailyIndicatorsFailed: 'Unable to load daily indicators.',
 	dailyChartsFailed: 'Unable to load daily charts.',
 	historyFailed: 'Unable to load historical data.',
+	boilerReadFailed: 'Unable to retrieve boiler readings.',
 	ashtrayStatusFailed: 'Unable to load ashtray tracking.',
 	loginFailed: 'Unable to process member sign-in.',
 	loginRejected: 'Sign-in credentials rejected.',
@@ -71,6 +79,12 @@ const en: Translations = {
 	invalidAshtrayConsumption: 'Invalid ashtray consumption in the database.',
 	ashtrayNoResult: 'The ashtray tracking query returned no result.',
 	invalidTimezone: 'timezone must be an IANA time zone.',
+	boilerAddressInvalid: 'chaudiere must be a host or a host with a valid port.',
+	boilerConfigInvalid: 'Boiler address is missing or invalid in config.json.',
+	boilerCredentialsUnavailable: 'Boiler credentials are missing or invalid in the admin row.',
+	boilerCredentialsLoadFailed: 'Unable to read boiler credentials from the database.',
+	boilerConnectionFailed: 'Boiler is unreachable or authentication was rejected.',
+	boilerResponseInvalid: 'Invalid response from the boiler.',
 	dbAddressRequired: 'DB_ADRESSE is required.',
 	dbAddressInvalid: 'DB_ADRESSE must contain a host and, optionally, a valid port.',
 	dbAddressHostOnly: 'DB_ADRESSE must contain only a host and, optionally, a port.',
@@ -99,6 +113,7 @@ export type LogMessageKey =
 	| 'dailyIndicatorsFailed'
 	| 'dailyChartsFailed'
 	| 'historyFailed'
+	| 'boilerReadFailed'
 	| 'stockStatusFailed'
 	| 'ashtrayStatusFailed'
 	| 'databaseCheckSucceeded'

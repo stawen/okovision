@@ -13,6 +13,11 @@ export interface HistorySettings {
 	siloSize: number | null;
 }
 
+async function readConfigFile(): Promise<unknown> {
+	const contents = await readFile('config.json', 'utf8');
+	return JSON.parse(contents) as unknown;
+}
+
 function configurationObject(value: unknown): Record<string, unknown> {
 	const messages = getMessages();
 	if (!value || typeof value !== 'object' || Array.isArray(value)) {
@@ -22,6 +27,26 @@ function configurationObject(value: unknown): Record<string, unknown> {
 	const invalidKeys = Object.keys(config).filter((key) => key.includes('_'));
 	if (invalidKeys.length > 0) throw new Error(messages.invalidConfigKeys(invalidKeys.join(', ')));
 	return config;
+}
+
+export function parseBoilerAddress(value: unknown): string {
+	const messages = getMessages();
+	const rawAddress = configurationObject(value).chaudiere;
+	if (typeof rawAddress !== 'string' || !rawAddress.trim() || /[/\\?#@]/.test(rawAddress)) {
+		throw new Error(messages.boilerAddressInvalid);
+	}
+	let address: URL;
+	try {
+		address = new URL(`http://${rawAddress.trim()}`);
+	} catch (cause) {
+		if (cause instanceof TypeError) throw new Error(messages.boilerAddressInvalid, { cause });
+		throw cause;
+	}
+	if (!address.hostname || address.username || address.password || address.pathname !== '/'
+		|| address.search || address.hash) {
+		throw new Error(messages.boilerAddressInvalid);
+	}
+	return address.origin;
 }
 
 export function parseInstallationConfig(value: unknown): InstallationConfig {
@@ -92,12 +117,14 @@ export function parseHistorySettings(value: unknown): HistorySettings {
 }
 
 export async function readInstallationConfig(): Promise<InstallationConfig> {
-	const contents = await readFile('config.json', 'utf8');
-	return parseInstallationConfig(JSON.parse(contents));
+	return parseInstallationConfig(await readConfigFile());
 }
 
 export async function readHistoryConfig(): Promise<{ installation: InstallationConfig; settings: HistorySettings }> {
-	const contents = await readFile('config.json', 'utf8');
-	const value: unknown = JSON.parse(contents);
+	const value = await readConfigFile();
 	return { installation: parseInstallationConfig(value), settings: parseHistorySettings(value) };
+}
+
+export async function readBoilerAddress(): Promise<string> {
+	return parseBoilerAddress(await readConfigFile());
 }
