@@ -1,4 +1,5 @@
 import { getMessages, type LogMessageKey } from './messages.ts';
+import { InvalidLanguageError } from './language.ts';
 
 type LogContext = Readonly<{ component: string }>;
 type LogFields = Readonly<Record<string, unknown>>;
@@ -21,13 +22,29 @@ function write(
 	fields: LogFields,
 	cause?: unknown
 ): void {
+	let message: string;
+	try {
+		message = getMessages()[event];
+	} catch (error) {
+		if (!(error instanceof InvalidLanguageError)) throw error;
+		console.error(JSON.stringify({
+			...fields,
+			timestamp: new Date().toISOString(),
+			level: 'error',
+			component: context.component,
+			event,
+			message: error.message,
+			...(level === 'error' ? { err: serializeCause(cause) } : {})
+		}));
+		return;
+	}
 	const entry = {
 		...fields,
 		timestamp: new Date().toISOString(),
 		level,
 		component: context.component,
 		event,
-		message: getMessages()[event],
+		message,
 		...(level === 'error' ? { err: serializeCause(cause) } : {})
 	};
 	console[level](JSON.stringify(entry));

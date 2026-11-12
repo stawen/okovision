@@ -2,38 +2,40 @@
   import { toast } from "svelte-sonner";
   import { resolve } from "$app/paths";
   import { enhance } from "$app/forms";
+  import { numberLocale, uiMessages } from "#lib/i18n.js";
   import type { PageProps } from "./$types";
 
   let { data, form }: PageProps = $props();
   let current = $derived(form ?? data);
   let pending = $state(false);
-  const numberFormat = new Intl.NumberFormat("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  let text = $derived(uiMessages(data.language));
+  let numberFormat = $derived(new Intl.NumberFormat(numberLocale(data.language), { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
   let indicators = $derived([
-    { label: "Conso", unit: "kg", tone: "blue", value: current.indicators?.conso ?? null },
-    { label: "dont ECS", unit: "kg", tone: "blue", value: current.indicators?.ecs ?? null },
-    { label: "T° max ext.", unit: "°C", tone: "green", value: current.indicators?.max ?? null },
-    { label: "T° min ext.", unit: "°C", tone: "orange", value: current.indicators?.min ?? null },
+    { id: "consumption", label: text.consumption, unit: "kg", tone: "blue", value: current.indicators?.conso ?? null },
+    { id: "hotWater", label: text.hotWaterConsumption, unit: "kg", tone: "blue", value: current.indicators?.ecs ?? null },
+    { id: "maxOutside", label: text.maxOutside, unit: "°C", tone: "green", value: current.indicators?.max ?? null },
+    { id: "minOutside", label: text.minOutside, unit: "°C", tone: "orange", value: current.indicators?.min ?? null },
   ]);
 
   $effect(() => {
     if (current.databaseError) {
-      toast.error("Impossible de charger les indicateurs.", { id: `indicateurs-${current.day}` });
+      toast.error(text.indicatorsError, { id: `indicateurs-${current.day}` });
     }
   });
 
-  const series = [
-    { label: "T° extérieure", tone: "sky" },
-    { label: "T° ambiante", tone: "slate" },
-    { label: "T° ambiante consigne", tone: "green" },
-    { label: "T° départ", tone: "orange" },
-  ];
+  let series = $derived([
+    { id: "outside", label: text.outsideTemperature, tone: "sky" },
+    { id: "room", label: text.roomTemperature, tone: "slate" },
+    { id: "setpoint", label: text.roomSetpoint, tone: "green" },
+    { id: "flow", label: text.flowTemperature, tone: "orange" },
+  ]);
 </script>
 
 <svelte:head>
-  <title>OkoVision — Supervision de votre chaudière</title>
+  <title>{text.pageTitle}</title>
   <meta
     name="description"
-    content="Le nouveau socle OkoVision pour la supervision de votre chaudière Ökofen. Migration vers SvelteKit en cours."
+    content={text.pageDescription}
   />
 </svelte:head>
 
@@ -41,9 +43,9 @@
   <section id="supervision" class="overview" aria-labelledby="page-title">
     <div class="page-heading">
       <div>
-        <h1 id="page-title">Vue journalière</h1>
+        <h1 id="page-title">{text.dailyView}</h1>
       </div>
-      <div class="date-control" aria-label="Sélection de la journée">
+      <div class="date-control" aria-label={text.daySelection}>
         <form
           method="POST"
           action={resolve("/")}
@@ -62,11 +64,11 @@
             type="submit"
             name="direction"
             value="-1"
-            aria-label="Jour précédent"
+            aria-label={text.previousDay}
             disabled={pending || !current.previous}>‹</button
           >
           <label class="date-label">
-            <span class="visually-hidden">Choisir une journée</span>
+            <span class="visually-hidden">{text.selectDay}</span>
             <input
               type="date"
               name="jour"
@@ -79,7 +81,7 @@
             />
           </label>
 
-          <button type="submit" name="direction" value="1" aria-label="Jour suivant" disabled={pending || !current.next}
+          <button type="submit" name="direction" value="1" aria-label={text.nextDay} disabled={pending || !current.next}
             >›</button
           >
         </form>
@@ -95,15 +97,15 @@
         </span>
         <p>
           {#if current.ashtray === "full"}
-            <strong>Votre cendrier est plein.</strong> Videz-le et mettez à jour le tableau de suivi. La gestion du suivi n’est pas encore disponible.
+            <strong>{text.ashtrayFull}</strong> {text.ashtrayFullDetails}
           {:else if current.ashtray === "missing-capacity"}
-            <strong>Suivi du cendrier indisponible.</strong> Renseignez le seuil de granulés dans la configuration.
+            <strong>{text.ashtrayUnavailable}</strong> {text.ashtrayMissingCapacity}
           {:else if current.ashtray === "no-emptying"}
-            <strong>Suivi du cendrier indisponible.</strong> Aucun vidage n’est enregistré. La gestion du suivi n’est pas encore disponible.
+            <strong>{text.ashtrayUnavailable}</strong> {text.ashtrayNoEmptying}
           {:else if current.ashtray === "no-consumption"}
-            <strong>Suivi du cendrier indisponible.</strong> Aucune consommation n’est disponible depuis le dernier vidage.
+            <strong>{text.ashtrayUnavailable}</strong> {text.ashtrayNoConsumption}
           {:else}
-            <strong>Impossible de charger le suivi du cendrier.</strong> Vérifiez la connexion et la configuration de la base.
+            <strong>{text.ashtrayError}</strong> {text.databaseAdvice}
           {/if}
         </p>
       </div>
@@ -124,23 +126,23 @@
         </span>
         <p>
           {#if current.databaseError}
-            <strong>Impossible de charger les indicateurs.</strong> Vérifiez la connexion et la configuration de la base.
+            <strong>{text.indicatorsError}</strong> {text.databaseAdvice}
           {:else if current.indicators?.sampleCount === 0}
-            <strong>Aucun relevé pour cette journée.</strong> Les indicateurs ne sont pas disponibles.
+            <strong>{text.noReadings}</strong> {text.indicatorsUnavailable}
           {:else}
-            <strong>Certains indicateurs sont indisponibles.</strong> Un ou plusieurs capteurs nécessaires sont absents.
+            <strong>{text.missingIndicators}</strong> {text.missingSensors}
           {/if}
         </p>
       </div>
     {/if}
 
-    <section class="indicator-grid" aria-label="Indicateurs de la journée">
-      {#each indicators as indicator (indicator.label)}
+    <section class="indicator-grid" aria-label={text.dailyIndicators}>
+      {#each indicators as indicator (indicator.id)}
         <article class="indicator {indicator.tone}">
           <h2>{indicator.label}</h2>
           <p class="indicator-value">
             {#if indicator.value === null}
-              <span class="indicator-reading" aria-label="Non disponible">— <span>{indicator.unit}</span></span>
+              <span class="indicator-reading" aria-label={text.unavailable}>— <span>{indicator.unit}</span></span>
             {:else}
               <span class="indicator-reading">{numberFormat.format(indicator.value)} <span>{indicator.unit}</span></span
               >
@@ -152,15 +154,15 @@
 
     <section class="panel" aria-labelledby="measurements-title">
       <div class="panel-heading">
-        <p class="eyebrow">VOTRE INSTALLATION</p>
-        <h2 id="measurements-title">Températures</h2>
-        <p>Évolution des températures au fil de la journée</p>
+        <p class="eyebrow">{text.yourInstallation}</p>
+        <h2 id="measurements-title">{text.temperatures}</h2>
+        <p>{text.temperatureEvolution}</p>
       </div>
 
       <div
         class="chart-area"
         role="img"
-        aria-label="Graphique des températures indisponible, fonctionnalité en cours de migration"
+        aria-label={text.chartAccessible}
       >
         <div class="chart-y-axis" aria-hidden="true">
           <span>50°</span><span>40°</span><span>30°</span><span>20°</span><span>10°</span>
@@ -181,23 +183,21 @@
                 />
               </svg>
             </span>
-            <strong>Graphique en cours de migration</strong>
-            <span>Les courbes ne sont pas encore disponibles.</span>
+            <strong>{text.chartInProgress}</strong>
+            <span>{text.chartUnavailable}</span>
           </div>
           <div class="chart-x-axis" aria-hidden="true">
-            <span>00 h</span><span>04 h</span><span>08 h</span><span>12 h</span><span>16 h</span><span>20 h</span><span
-              >24 h</span
-            >
+            {#each text.chartHours as hour (hour)}<span>{hour}</span>{/each}
           </div>
         </div>
       </div>
 
-      <ul class="chart-legend" aria-label="Séries du graphique">
-        {#each series as item (item.label)}
+      <ul class="chart-legend" aria-label={text.chartSeries}>
+        {#each series as item (item.id)}
           <li><span class="legend-line {item.tone}" aria-hidden="true"></span>{item.label}</li>
         {/each}
       </ul>
-      <div class="panel-footnote">Graphique en cours de migration</div>
+      <div class="panel-footnote">{text.chartInProgress}</div>
     </section>
   </section>
 </main>

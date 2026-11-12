@@ -8,6 +8,7 @@ const day = {
 	previous: '2026-11-10',
 	next: null,
 	databaseError: false,
+	language: 'fr' as const,
 	ashtray: 'ok' as const
 };
 
@@ -110,5 +111,23 @@ describe('accueil journalier', () => {
 		expect(body).not.toContain('Votre cendrier est plein.');
 		if (message) expect(body).toContain(message);
 		else expect(body).not.toContain('Suivi du cendrier indisponible.');
+	});
+
+	it('traduit les textes accessibles et formate les nombres en anglais, même après soumission', () => {
+		const indicators = { sampleCount: 2, conso: 12.35, ecs: 0, max: 8, min: null, missingSensors: false };
+		const { body, head } = render(Home, {
+			props: {
+				params: {},
+				data: { ...day, language: 'en', indicators },
+				form: { ...day, day: '2026-11-10', indicators, ashtray: 'full' }
+			}
+		});
+		expect(body).toContain('Daily view');
+		expect(body).toContain('aria-label="Previous day"');
+		expect(body).toContain('aria-label="Unavailable"');
+		expect(body).toContain('12.35');
+		expect(body).toContain('Your ashtray is full.');
+		expect(body).not.toContain('Votre cendrier est plein.');
+		expect(head).toContain('Boiler monitoring');
 	});
 });

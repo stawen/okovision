@@ -65,13 +65,19 @@ describe('journalisation serveur', () => {
 	});
 
 	it('signale une langue invalide sans utiliser silencieusement le français', () => {
+		const output = vi.spyOn(console, 'error').mockImplementation(() => {});
 		try {
 			vi.stubEnv('APP_LANG', 'DE');
-			expect(() =>
-				logger.child({ component: 'test' }).info('databaseCheckSucceeded')
-			).toThrow('APP_LANG');
+			logger.child({ component: 'test' }).error('databaseCheckFailed', new Error('original'));
+			expect(JSON.parse(output.mock.calls[0][0] as string)).toMatchObject({
+				level: 'error',
+				event: 'databaseCheckFailed',
+				message: 'APP_LANG doit être FR ou EN / APP_LANG must be FR or EN.',
+				err: { message: 'original' }
+			});
 		} finally {
 			vi.unstubAllEnvs();
+			output.mockRestore();
 		}
 	});
 });

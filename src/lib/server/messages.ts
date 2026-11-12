@@ -1,4 +1,4 @@
-import { loadServerEnvironment } from './environment.ts';
+import { getAppLanguage } from './language.ts';
 
 const fr = {
 	installationConfigInvalid: 'Configuration de l’installation invalide ou inaccessible.',
@@ -6,9 +6,6 @@ const fr = {
 	ashtrayStatusFailed: 'Impossible de charger le suivi du cendrier.',
 	databaseCheckSucceeded: 'Connexion à la base réussie (SELECT 1).',
 	databaseCheckFailed: 'Échec de la connexion à la base.',
-	invalidDay: 'La date demandée est invalide.',
-	invalidOrFutureDay: 'La date demandée est invalide ou future.',
-	invalidDirection: 'Direction invalide.',
 	invalidInstallationConfig: 'La configuration de l’installation doit être un objet JSON.',
 	invalidPelletWeight: 'poids_pellet doit être un nombre positif en grammes par minute.',
 	invalidAshtray: 'ashtray doit être un nombre positif en kilogrammes.',
@@ -43,9 +40,6 @@ const en: Translations = {
 	ashtrayStatusFailed: 'Unable to load ashtray tracking.',
 	databaseCheckSucceeded: 'Database connection successful (SELECT 1).',
 	databaseCheckFailed: 'Database connection failed.',
-	invalidDay: 'The requested date is invalid.',
-	invalidOrFutureDay: 'The requested date is invalid or in the future.',
-	invalidDirection: 'Invalid direction.',
 	invalidInstallationConfig: 'The installation configuration must be a JSON object.',
 	invalidPelletWeight: 'poids_pellet must be a positive number in grams per minute.',
 	invalidAshtray: 'ashtray must be a positive number in kilograms.',
@@ -69,12 +63,11 @@ const en: Translations = {
 };
 
 export function getMessages(): Translations {
-	loadServerEnvironment();
-	const language = process.env.APP_LANG?.trim().toUpperCase() ?? 'FR';
-	if (language === 'FR') return fr;
-	if (language === 'EN') return en;
-	throw new Error('APP_LANG doit être FR ou EN / APP_LANG must be FR or EN.');
+	return getAppLanguage() === 'fr' ? fr : en;
 }
-export type LogMessageKey = {
-	[K in keyof typeof fr]: (typeof fr)[K] extends string ? K : never
-}[keyof typeof fr];
+export type LogMessageKey =
+	| 'installationConfigInvalid'
+	| 'dailyIndicatorsFailed'
+	| 'ashtrayStatusFailed'
+	| 'databaseCheckSucceeded'
+	| 'databaseCheckFailed';

@@ -1,0 +1,138 @@
+export type Language = 'fr' | 'en';
+
+const fr = {
+	skipLink: 'Aller au contenu',
+	closeNotification: 'Fermer la notification',
+	notifications: 'Notifications',
+	homeBrand: 'OkoVision, accueil',
+	mainNavigation: 'Navigation principale',
+	home: 'Accueil',
+	history: 'Historique',
+	historyUnavailable: 'L’historique sera disponible prochainement',
+	migration: 'Migration',
+	newApplication: 'Nouvelle application',
+	boilerSupervision: 'Supervision de chaudière Ökofen',
+	applicationInProgress: 'Application en construction',
+	pageTitle: 'OkoVision — Supervision de votre chaudière',
+	pageDescription: 'Le nouveau socle OkoVision pour la supervision de votre chaudière Ökofen. Migration vers SvelteKit en cours.',
+	dailyView: 'Vue journalière',
+	daySelection: 'Sélection de la journée',
+	previousDay: 'Jour précédent',
+	selectDay: 'Choisir une journée',
+	nextDay: 'Jour suivant',
+	consumption: 'Conso',
+	hotWaterConsumption: 'dont ECS',
+	maxOutside: 'T° max ext.',
+	minOutside: 'T° min ext.',
+	outsideTemperature: 'T° extérieure',
+	roomTemperature: 'T° ambiante',
+	roomSetpoint: 'T° ambiante consigne',
+	flowTemperature: 'T° départ',
+	ashtrayFull: 'Votre cendrier est plein.',
+	ashtrayFullDetails: 'Videz-le et mettez à jour le tableau de suivi. La gestion du suivi n’est pas encore disponible.',
+	ashtrayUnavailable: 'Suivi du cendrier indisponible.',
+	ashtrayMissingCapacity: 'Renseignez le seuil de granulés dans la configuration.',
+	ashtrayNoEmptying: 'Aucun vidage n’est enregistré. La gestion du suivi n’est pas encore disponible.',
+	ashtrayNoConsumption: 'Aucune consommation n’est disponible depuis le dernier vidage.',
+	ashtrayError: 'Impossible de charger le suivi du cendrier.',
+	databaseAdvice: 'Vérifiez la connexion et la configuration de la base.',
+	indicatorsError: 'Impossible de charger les indicateurs.',
+	noReadings: 'Aucun relevé pour cette journée.',
+	indicatorsUnavailable: 'Les indicateurs ne sont pas disponibles.',
+	missingIndicators: 'Certains indicateurs sont indisponibles.',
+	missingSensors: 'Un ou plusieurs capteurs nécessaires sont absents.',
+	dailyIndicators: 'Indicateurs de la journée',
+	unavailable: 'Non disponible',
+	yourInstallation: 'VOTRE INSTALLATION',
+	temperatures: 'Températures',
+	temperatureEvolution: 'Évolution des températures au fil de la journée',
+	chartAccessible: 'Graphique des températures indisponible, fonctionnalité en cours de migration',
+	chartInProgress: 'Graphique en cours de migration',
+	chartUnavailable: 'Les courbes ne sont pas encore disponibles.',
+	chartSeries: 'Séries du graphique',
+	chartHours: ['00 h', '04 h', '08 h', '12 h', '16 h', '20 h', '24 h'],
+	installationConfigInvalid: 'Configuration de l’installation invalide ou inaccessible.',
+	invalidDay: 'La date demandée est invalide.',
+	invalidOrFutureDay: 'La date demandée est invalide ou future.',
+	invalidDirection: 'Direction invalide.',
+	notFound: 'Page introuvable.',
+	requestError: 'La requête ne peut pas être traitée.',
+	serverError: 'Une erreur interne est survenue.'
+} as const;
+
+type Catalog = { [K in keyof typeof fr]: (typeof fr)[K] extends readonly string[] ? readonly string[] : string };
+
+const en: Catalog = {
+	skipLink: 'Skip to content',
+	closeNotification: 'Close notification',
+	notifications: 'Notifications',
+	homeBrand: 'OkoVision, home',
+	mainNavigation: 'Main navigation',
+	home: 'Home',
+	history: 'History',
+	historyUnavailable: 'History will be available soon',
+	migration: 'Migration',
+	newApplication: 'New application',
+	boilerSupervision: 'Ökofen boiler monitoring',
+	applicationInProgress: 'Application under construction',
+	pageTitle: 'OkoVision — Boiler monitoring',
+	pageDescription: 'The new OkoVision platform for monitoring your Ökofen boiler. Migration to SvelteKit is in progress.',
+	dailyView: 'Daily view',
+	daySelection: 'Day selection',
+	previousDay: 'Previous day',
+	selectDay: 'Choose a day',
+	nextDay: 'Next day',
+	consumption: 'Consumption',
+	hotWaterConsumption: 'incl. hot water',
+	maxOutside: 'Max. outside temp.',
+	minOutside: 'Min. outside temp.',
+	outsideTemperature: 'Outside temperature',
+	roomTemperature: 'Room temperature',
+	roomSetpoint: 'Room temperature setpoint',
+	flowTemperature: 'Flow temperature',
+	ashtrayFull: 'Your ashtray is full.',
+	ashtrayFullDetails: 'Empty it and update the tracking table. Tracking management is not yet available.',
+	ashtrayUnavailable: 'Ashtray tracking unavailable.',
+	ashtrayMissingCapacity: 'Set the pellet threshold in the configuration.',
+	ashtrayNoEmptying: 'No emptying is recorded. Tracking management is not yet available.',
+	ashtrayNoConsumption: 'No consumption is available since the last emptying.',
+	ashtrayError: 'Unable to load ashtray tracking.',
+	databaseAdvice: 'Check the database connection and configuration.',
+	indicatorsError: 'Unable to load the indicators.',
+	noReadings: 'No readings for this day.',
+	indicatorsUnavailable: 'The indicators are unavailable.',
+	missingIndicators: 'Some indicators are unavailable.',
+	missingSensors: 'One or more required sensors are missing.',
+	dailyIndicators: 'Daily indicators',
+	unavailable: 'Unavailable',
+	yourInstallation: 'YOUR INSTALLATION',
+	temperatures: 'Temperatures',
+	temperatureEvolution: 'Temperature changes throughout the day',
+	chartAccessible: 'Temperature chart unavailable, migration in progress',
+	chartInProgress: 'Chart migration in progress',
+	chartUnavailable: 'The curves are not yet available.',
+	chartSeries: 'Chart series',
+	chartHours: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
+	installationConfigInvalid: 'Installation configuration is invalid or inaccessible.',
+	invalidDay: 'The requested date is invalid.',
+	invalidOrFutureDay: 'The requested date is invalid or in the future.',
+	invalidDirection: 'Invalid direction.',
+	notFound: 'Page not found.',
+	requestError: 'The request could not be processed.',
+	serverError: 'An internal error occurred.'
+};
+
+const catalogs: Record<Language, Catalog> = { fr, en };
+
+export function uiMessages(language: Language): Catalog {
+	return catalogs[language];
+}
+
+export function numberLocale(language: Language): string {
+	return language === 'fr' ? 'fr-FR' : 'en-GB';
+}
+
+export function publicErrorMessage(language: Language, status: number): string {
+	const text = uiMessages(language);
+	return status === 404 ? text.notFound : status >= 500 ? text.serverError : text.requestError;
+}

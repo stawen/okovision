@@ -1,18 +1,18 @@
 import { error, redirect } from '@sveltejs/kit';
 import { resolve } from '$app/paths';
 import { isValidDay, shiftDay, todayInTimezone } from '#lib/dates.js';
+import { uiMessages, type Language } from '#lib/i18n.js';
 import { readInstallationConfig } from '#lib/server/config.js';
 import { getDatabasePool } from '#lib/server/database.js';
 import { getDailyIndicators } from '#lib/server/queries/daily-indicators.js';
 import { getAshtrayStatus, type AshtrayStatus } from '#lib/server/queries/ashtray.js';
 import { logger } from '#lib/server/logger.js';
-import { getMessages } from '#lib/server/messages.js';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = logger.child({ component: 'dashboard' });
 
-async function dashboard(requestedDay?: string, direction?: string) {
-	const messages = getMessages();
+async function dashboard(language: Language, requestedDay?: string, direction?: string) {
+	const messages = uiMessages(language);
 	let config;
 	try {
 		config = await readInstallationConfig();
@@ -49,20 +49,20 @@ async function dashboard(requestedDay?: string, direction?: string) {
 	return { day, today, previous, next, indicators, databaseError, ashtray };
 }
 
-export const load: PageServerLoad = async ({ url, setHeaders }) => {
+export const load: PageServerLoad = async ({ url, setHeaders, locals }) => {
 	setHeaders({ 'cache-control': 'no-store' });
 	if (url.searchParams.has('jour')) redirect(303, resolve('/'));
-	return dashboard();
+	return dashboard(locals.language);
 };
 
 export const actions: Actions = {
-	default: async ({ request }) => {
+	default: async ({ request, locals }) => {
 		const form = await request.formData();
 		const day = form.get('jour');
 		const direction = form.get('direction');
 		if (typeof day !== 'string' || (direction !== null && typeof direction !== 'string')) {
-			error(400, getMessages().invalidDay);
+			error(400, uiMessages(locals.language).invalidDay);
 		}
-		return dashboard(day, direction ?? undefined);
+		return dashboard(locals.language, day, direction ?? undefined);
 	}
 };

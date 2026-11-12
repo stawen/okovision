@@ -35,7 +35,7 @@ Avec SvelteKit 3, le plugin, les options du compilateur et `adapter-node` sont c
 
 L'archive est exclue du lint, des tests, de TypeScript et du contexte Docker. Les accès directs Vite aux fichiers archivés sont également refusés. Ne jamais exposer le dépôt lui-même comme racine d'un serveur statique.
 
-Les messages du backend sont centralisés dans [messages.ts](./src/lib/server/messages.ts). Définir `APP_LANG=FR` ou `APP_LANG=EN` dans `.env` pour choisir leur langue ; le français est utilisé si la variable est absente. Redémarrer l'application après modification. Ce choix ne traduit pas encore l'interface. Pour les journaux applicatifs, utiliser [logger.ts](./src/lib/server/logger.ts) en précisant le fichier et la fonction d'origine. Les détails d'erreurs provenant de bibliothèques externes restent dans leur langue d'origine.
+Définir `APP_LANG=FR` ou `APP_LANG=EN` dans `.env` pour choisir la langue de l'interface et des messages applicatifs ; le français est utilisé si la variable est absente, et une valeur vide ou inconnue est signalée comme erreur. Redémarrer l'application après modification. La langue est commune à toute l'installation, sans sélection par utilisateur. Les textes de l'interface sont centralisés et typés dans [i18n.ts](./src/lib/i18n.ts), les messages techniques dans [messages.ts](./src/lib/server/messages.ts). Les nombres sont formatés en `fr-FR` ou `en-GB` ; le fuseau des dates reste celui de l'installation. Pour les journaux applicatifs, utiliser [logger.ts](./src/lib/server/logger.ts) : leurs codes d'événement restent stables quelle que soit la langue. Les détails d'erreurs provenant de bibliothèques externes restent dans leur langue d'origine et ne sont pas exposés à l'utilisateur.
 
 ## Connexion à la base
 
