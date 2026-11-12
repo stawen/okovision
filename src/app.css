@@ -140,6 +140,7 @@ h1 { color: #1d2b3c; font-size: clamp(1.55rem, 3vw, 2rem); font-weight: 650; let
 .notice-icon { flex: 0 0 1.35rem; width: 1.35rem; height: 1.35rem; }
 .notice-icon svg { display: block; width: 100%; height: 100%; }
 .notice strong { font-weight: 700; }
+.notice + .notice { margin-top: 0.75rem; }
 
 .indicator-grid {
 	display: grid;

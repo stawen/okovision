@@ -7,7 +7,8 @@ const day = {
 	today: '2026-11-11',
 	previous: '2026-11-10',
 	next: null,
-	databaseError: false
+	databaseError: false,
+	ashtray: 'ok' as const
 };
 
 describe('accueil journalier', () => {
@@ -70,5 +71,44 @@ describe('accueil journalier', () => {
 			}
 		});
 		expect(body).toContain('Aucun relevé pour cette journée.');
+	});
+
+	it('affiche l’alerte de remplissage sans lien vers le suivi non porté', () => {
+		const indicators = { sampleCount: 2, conso: 1, ecs: 0, max: 8, min: 2, missingSensors: false };
+		const { body } = render(Home, {
+			props: { params: {}, form: null, data: { ...day, indicators, ashtray: 'full' } }
+		});
+		expect(body).toContain('Votre cendrier est plein.');
+		expect(body).toContain('mettez à jour le tableau de suivi');
+		expect(body).toContain('La gestion du suivi n’est pas encore disponible.');
+		expect(body).not.toMatch(/(?:href|src)="[^"]*(?:archive\/|\.php)/);
+	});
+
+	it('actualise le suivi après un changement de journée', () => {
+		const indicators = { sampleCount: 2, conso: 1, ecs: 0, max: 8, min: 2, missingSensors: false };
+		const { body } = render(Home, {
+			props: {
+				params: {},
+				data: { ...day, indicators },
+				form: { ...day, day: '2026-11-10', indicators, ashtray: 'full' }
+			}
+		});
+		expect(body).toContain('value="2026-11-10"');
+		expect(body).toContain('Votre cendrier est plein.');
+	});
+
+	it.each([
+		['missing-capacity', 'Renseignez le seuil de granulés'],
+		['no-emptying', 'Aucun vidage n’est enregistré'],
+		['no-consumption', 'Aucune consommation n’est disponible'],
+		['error', 'Impossible de charger le suivi du cendrier.'],
+		['ok', null]
+	] as const)('affiche l’état %s sans annoncer un cendrier plein', (ashtray, message) => {
+		const { body } = render(Home, {
+			props: { params: {}, form: null, data: { ...day, indicators: null, ashtray } }
+		});
+		expect(body).not.toContain('Votre cendrier est plein.');
+		if (message) expect(body).toContain(message);
+		else expect(body).not.toContain('Suivi du cendrier indisponible.');
 	});
 });

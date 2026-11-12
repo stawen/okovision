@@ -41,7 +41,7 @@ Les messages du backend sont centralisés dans [messages.ts](./src/lib/server/me
 
 Configurer un fichier privé `.env` à partir de [.env.remote.example](./.env.remote.example). `DB_ADRESSE` contient le nom DNS ou l'adresse IP et, facultativement, le port (`3306` par défaut) ; `DB_NAME`, `DB_USER` et `DB_PASSWORD` identifient la base et le compte. Utiliser un compte limité à la lecture. Ne pas partager ni versionner le fichier `.env`.
 
-Créer un fichier privé `config.json` à la racine à partir de [config.example.json](./config.example.json), ou reprendre le fichier JSON historique. Renseigner `poids_pellet` avec le poids réel de granulés en grammes par minute de fonctionnement de la vis et `timezone` avec le fuseau IANA de l'installation. La valeur de l'exemple est indicative, pas une valeur à utiliser sans vérification. Les autres champs historiques sont ignorés. Ce fichier est ignoré par Git et n'est pas publié par l'application.
+Créer un fichier privé `config.json` à la racine à partir de [config.example.json](./config.example.json), ou reprendre le fichier JSON historique. Renseigner `poids_pellet` avec le poids réel de granulés en grammes par minute de fonctionnement de la vis et `timezone` avec le fuseau IANA de l'installation. Pour le suivi du cendrier, renseigner aussi `ashtray` : quantité positive de granulés brûlés en kg correspondant à son remplissage. La valeur de l'exemple est indicative, pas une valeur à utiliser sans vérification. Les autres champs historiques sont ignorés. Ce fichier est ignoré par Git et n'est pas publié par l'application.
 
 Le TLS vérifie par défaut le certificat et le nom du serveur. Si nécessaire, `DB_TLS_CA_FILE` indique un fichier PEM d'autorité de certification accessible au processus. `DB_TLS_MODE=disabled` désactive explicitement le chiffrement et la vérification : à réserver à un réseau de confiance lorsque le serveur ne propose pas TLS. Il n'y a jamais de repli automatique non chiffré.
 
@@ -50,6 +50,8 @@ npm run db:check
 ```
 
 Cette commande charge `.env`, établit une connexion, exécute uniquement `SELECT 1` et la ferme. Le serveur charge également `.env` s'il existe, y compris si Vite est lancé directement ; les variables déjà présentes dans l'environnement ont priorité. À l'ouverture de l'accueil, l'application lit les capteurs et les relevés du jour sélectionné sans modifier la base. Le changement de date conserve l'URL de l'accueil. Une journée vide, un capteur absent ou une erreur de connexion ne sont pas présentés comme une valeur nulle.
+
+Le suivi du cendrier reprend la règle historique : somme de `oko_resume_day.conso_kg` pour les jours strictement postérieurs au dernier événement `ASHES` dans `oko_silo_events`, comparée à `ashtray`. Il ne dépend pas de la journée sélectionnée. Sans seuil, vidage ou consommation disponible, son état est signalé comme indisponible ; la saisie des événements n'est pas encore portée.
 
 ## Docker
 

@@ -20,10 +20,15 @@ describe('dates de l’installation', () => {
 describe('configuration historique JSON', () => {
 	it('lit le coefficient et le fuseau sans dépendre des autres champs', () => {
 		expect(parseInstallationConfig({ poids_pellet: '156', timezone: 'Europe/Paris', lang: 'fr' }))
-			.toEqual({ poidsPellet: 156, timezone: 'Europe/Paris' });
+			.toEqual({ poidsPellet: 156, timezone: 'Europe/Paris', ashtray: null });
+		expect(parseInstallationConfig({ poids_pellet: 156, timezone: 'Europe/Paris', ashtray: '1000' }).ashtray)
+			.toBe(1000);
 	});
 	it('refuse un coefficient ou un fuseau invalide', () => {
 		expect(() => parseInstallationConfig({ poids_pellet: '', timezone: 'Europe/Paris' })).toThrow('poids_pellet');
 		expect(() => parseInstallationConfig({ poids_pellet: 156, timezone: 'invalide' })).toThrow('timezone');
+		for (const ashtray of [0, -1, 'invalide', ' ']) {
+			expect(() => parseInstallationConfig({ poids_pellet: 156, timezone: 'Europe/Paris', ashtray })).toThrow('ashtray');
+		}
 	});
 });

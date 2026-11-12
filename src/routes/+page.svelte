@@ -86,6 +86,29 @@
       </div>
     </div>
 
+    {#if current.ashtray !== "ok"}
+      <div class="notice" role={current.ashtray === "full" || current.ashtray === "error" ? "alert" : "status"}>
+        <span class="notice-icon" aria-hidden="true">
+          <svg viewBox="0 0 20 20" fill="none">
+            <path d="M10 6v4m0 3h.01M10 2.5l8 14H2l8-14Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
+        <p>
+          {#if current.ashtray === "full"}
+            <strong>Votre cendrier est plein.</strong> Videz-le et mettez à jour le tableau de suivi. La gestion du suivi n’est pas encore disponible.
+          {:else if current.ashtray === "missing-capacity"}
+            <strong>Suivi du cendrier indisponible.</strong> Renseignez le seuil de granulés dans la configuration.
+          {:else if current.ashtray === "no-emptying"}
+            <strong>Suivi du cendrier indisponible.</strong> Aucun vidage n’est enregistré. La gestion du suivi n’est pas encore disponible.
+          {:else if current.ashtray === "no-consumption"}
+            <strong>Suivi du cendrier indisponible.</strong> Aucune consommation n’est disponible depuis le dernier vidage.
+          {:else}
+            <strong>Impossible de charger le suivi du cendrier.</strong> Vérifiez la connexion et la configuration de la base.
+          {/if}
+        </p>
+      </div>
+    {/if}
+
     {#if current.databaseError || current.indicators?.sampleCount === 0 || current.indicators?.missingSensors}
       <div class="notice" role={current.databaseError ? "alert" : "status"}>
         <span class="notice-icon" aria-hidden="true">
@@ -176,42 +199,5 @@
       </ul>
       <div class="panel-footnote">Graphique en cours de migration</div>
     </section>
-  </section>
-
-  <section id="migration" class="migration-section" aria-labelledby="migration-title">
-    <div class="section-heading">
-      <div>
-        <p class="eyebrow">UNE TRANSITION PROGRESSIVE</p>
-        <h2 id="migration-title">Une nouvelle base, la même identité.</h2>
-        <p class="intro">Les sources historiques sont conservées. Les fonctionnalités seront portées par étapes.</p>
-      </div>
-      <span class="badge">En construction</span>
-    </div>
-    <ol class="roadmap">
-      <li class="completed">
-        <span class="step-number" aria-hidden="true">1</span>
-        <div>
-          <span class="step-status">Socle initialisé</span>
-          <h3>Archive et nouvelle interface</h3>
-          <p>Sources PHP isolées, SvelteKit et TypeScript strict, couleurs historiques préservées.</p>
-        </div>
-      </li>
-      <li>
-        <span class="step-number" aria-hidden="true">2</span>
-        <div>
-          <span class="step-status">Prochaine étape</span>
-          <h3>Retrouver vos mesures</h3>
-          <p>Connexion MySQL en lecture seule, capteurs, journée et graphiques comparés à l’historique.</p>
-        </div>
-      </li>
-      <li>
-        <span class="step-number" aria-hidden="true">3</span>
-        <div>
-          <span class="step-status">À porter ensuite</span>
-          <h3>Compléter la supervision</h3>
-          <p>Authentification, historique, administration, imports et interactions avec la chaudière.</p>
-        </div>
-      </li>
-    </ol>
   </section>
 </main>

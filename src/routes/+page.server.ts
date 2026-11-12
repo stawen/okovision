@@ -4,6 +4,7 @@ import { isValidDay, shiftDay, todayInTimezone } from '#lib/dates.js';
 import { readInstallationConfig } from '#lib/server/config.js';
 import { getDatabasePool } from '#lib/server/database.js';
 import { getDailyIndicators } from '#lib/server/queries/daily-indicators.js';
+import { getAshtrayStatus, type AshtrayStatus } from '#lib/server/queries/ashtray.js';
 import { logger } from '#lib/server/logger.js';
 import { getMessages } from '#lib/server/messages.js';
 import type { Actions, PageServerLoad } from './$types';
@@ -27,13 +28,25 @@ async function dashboard(requestedDay?: string, direction?: string) {
 	if (direction === '1' && day < today) day = shiftDay(day, 1);
 	const previous = day === '1000-01-01' ? null : shiftDay(day, -1);
 	const next = day === today ? null : shiftDay(day, 1);
+	let indicators;
+	let databaseError = false;
 	try {
-		const indicators = await getDailyIndicators(getDatabasePool(), day, config.poidsPellet);
-		return { day, today, previous, next, indicators, databaseError: false };
+		indicators = await getDailyIndicators(getDatabasePool(), day, config.poidsPellet);
 	} catch (cause) {
 		log.error('dailyIndicatorsFailed', cause, { day });
-		return { day, today, previous, next, indicators: null, databaseError: true };
+		indicators = null;
+		databaseError = true;
 	}
+	let ashtray: AshtrayStatus | 'missing-capacity' | 'error' = 'missing-capacity';
+	if (config.ashtray !== null) {
+		try {
+			ashtray = await getAshtrayStatus(getDatabasePool(), config.ashtray);
+		} catch (cause) {
+			log.error('ashtrayStatusFailed', cause);
+			ashtray = 'error';
+		}
+	}
+	return { day, today, previous, next, indicators, databaseError, ashtray };
 }
 
 export const load: PageServerLoad = async ({ url, setHeaders }) => {
