@@ -1,6 +1,8 @@
 <script lang="ts">
   import { numberLocale, uiMessages } from "#lib/i18n.js";
   import { resolve } from "$app/paths";
+  import { enhance, type SubmitFunction } from "$app/forms";
+  import { tick } from "svelte";
   import type { PageProps } from "./$types";
   import HistoryChart from "#lib/components/HistoryChart.svelte";
 
@@ -11,7 +13,12 @@
     items: { id: string; key: IndicatorKey; label: string; unit: string; tone: string; digits: number }[];
   };
 
-  let { data }: PageProps = $props();
+  let { data, form }: PageProps = $props();
+  let current = $derived(form ?? data);
+  let pending = $state(false);
+  let selectedMonth = $derived(current.month);
+  let selectedYear = $derived(current.year);
+  let selectedSeason = $derived(current.selectedSeasonId);
   let text = $derived(uiMessages(data.language));
   let locale = $derived(numberLocale(data.language));
   let monthNames = $derived(
@@ -64,11 +71,29 @@
   }
 
   function adjacentMonth(direction: -1 | 1): { month: number; year: number } | null {
-    const month = data.month + direction;
-    const year = data.year + (month < 1 ? -1 : month > 12 ? 1 : 0);
-    if (!data.years.includes(year)) return null;
+    const month = current.month + direction;
+    const year = current.year + (month < 1 ? -1 : month > 12 ? 1 : 0);
+    if (!current.years.includes(year)) return null;
     return { month: month < 1 ? 12 : month > 12 ? 1 : month, year };
   }
+
+  const enhanceHistory: SubmitFunction = ({ cancel }) => {
+    if (pending) {
+      cancel();
+      return;
+    }
+    const focused = document.activeElement;
+    pending = true;
+    return async ({ update }) => {
+      try {
+        await update({ reset: false, refreshAll: false, navigate: false });
+      } finally {
+        pending = false;
+        await tick();
+        if (focused instanceof HTMLElement && focused.isConnected) focused.focus({ preventScroll: true });
+      }
+    };
+  };
 
   let previousMonth = $derived(adjacentMonth(-1));
   let nextMonth = $derived(adjacentMonth(1));
@@ -94,9 +119,9 @@
       </svg>
       {text.historyStockTitle}
     </h2>
-    {#if data.stock.status === "available"}
-      {@const boundedPercent = Math.max(0, Math.min(100, data.stock.percent))}
-      {@const stockValue = `${format(data.stock.percent, 0)} % (${format(data.stock.remains, 0)} kg)`}
+    {#if current.stock.status === "available"}
+      {@const boundedPercent = Math.max(0, Math.min(100, current.stock.percent))}
+      {@const stockValue = `${format(current.stock.percent, 0)} % (${format(current.stock.remains, 0)} kg)`}
       <div
         class="stock-progress"
         role="progressbar"
@@ -108,24 +133,24 @@
       >
         <div
           class="stock-fill"
-          class:warning={data.stock.percent >= 25 && data.stock.percent <= 50}
-          class:danger={data.stock.percent < 25}
+          class:warning={current.stock.percent >= 25 && current.stock.percent <= 50}
+          class:danger={current.stock.percent < 25}
           style={`width: ${boundedPercent}%`}
         ></div>
         <span class="stock-value" aria-hidden="true">{stockValue}</span>
       </div>
-    {:else if data.stock.status === "no-fill"}
+    {:else if current.stock.status === "no-fill"}
       <p>{text.historyStockNoFill}</p>
-    {:else if data.stock.status === "no-consumption"}
+    {:else if current.stock.status === "no-consumption"}
       <p>{text.historyStockNoConsumption}</p>
-    {:else if data.stock.status === "error"}
+    {:else if current.stock.status === "error"}
       <p role="alert">{text.historyStockError}</p>
     {:else}
       <p>{text.historyStockUnavailable}</p>
     {/if}
   </section>
 
-  {#if data.databaseError}
+  {#if current.databaseError}
     <p class="history-notice" role="alert">
       <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
         <path
@@ -145,45 +170,36 @@
       <div>
         <h2 id="monthly-title">{text.historyMonthlyTitle}</h2>
       </div>
-      <form method="GET" action={resolve("/history")} class="period-controls" aria-label={text.historyMonthlyTitle}>
-        {#if data.selectedSeasonId !== null}
-          <input type="hidden" name="season" value={data.selectedSeasonId} />
+      <form method="POST" action={resolve("/history")} use:enhance={enhanceHistory}
+        class="period-controls" aria-label={text.historyMonthlyTitle} aria-busy={pending}>
+        {#if current.selectedSeasonId !== null}
+          <input type="hidden" name="season" value={current.selectedSeasonId} />
         {/if}
-        {#if previousMonth}
-          <a class="month-navigation"
-            href="{resolve('/history')}?month={previousMonth.month}&year={previousMonth.year}{data.selectedSeasonId !== null ? `&season=${data.selectedSeasonId}` : ''}"
-            aria-label={text.historyPreviousMonth}>‹</a>
-        {:else}
-          <span class="month-navigation disabled" aria-label={text.historyPreviousMonth} aria-disabled="true">‹</span>
-        {/if}
+        <button class="month-navigation" type="submit" name="direction" value="-1"
+          disabled={pending || !previousMonth} aria-label={text.historyPreviousMonth}>‹</button>
         <label>
           <span class="visually-hidden">{text.historyMonth}</span>
-          <select name="month" aria-label={text.historyMonth} disabled={data.years.length === 0}
+          <select name="month" aria-label={text.historyMonth} bind:value={selectedMonth} disabled={pending || current.years.length === 0}
             onchange={(event) => event.currentTarget.form?.requestSubmit()}>
             {#each monthNames as name, index (index)}
-              <option value={index + 1} selected={data.month === index + 1}>{name}</option>
+              <option value={index + 1}>{name}</option>
             {/each}
           </select>
         </label>
         <label>
           <span class="visually-hidden">{text.historyYear}</span>
-          <select name="year" aria-label={text.historyYear} disabled={data.years.length === 0}
+          <select name="year" aria-label={text.historyYear} bind:value={selectedYear} disabled={pending || current.years.length === 0}
             onchange={(event) => event.currentTarget.form?.requestSubmit()}>
-            {#each data.years as year (year)}
-              <option value={year} selected={data.year === year}>{year}</option>
+            {#each current.years as year (year)}
+              <option value={year}>{year}</option>
             {:else}
               <option selected>{text.historySelectionUnavailable}</option>
             {/each}
           </select>
         </label>
-        {#if nextMonth}
-          <a class="month-navigation"
-            href="{resolve('/history')}?month={nextMonth.month}&year={nextMonth.year}{data.selectedSeasonId !== null ? `&season=${data.selectedSeasonId}` : ''}"
-            aria-label={text.historyNextMonth}>›</a>
-        {:else}
-          <span class="month-navigation disabled" aria-label={text.historyNextMonth} aria-disabled="true">›</span>
-        {/if}
-        <noscript><button type="submit" disabled={data.years.length === 0}>{text.historyApply}</button></noscript>
+        <button class="month-navigation" type="submit" name="direction" value="1"
+          disabled={pending || !nextMonth} aria-label={text.historyNextMonth}>›</button>
+        <noscript><button type="submit" disabled={current.years.length === 0}>{text.historyApply}</button></noscript>
       </form>
     </div>
 
@@ -191,7 +207,7 @@
       groups: indicatorGroups,
       label: text.historyMonthlyTitle,
       unavailable: text.unavailable,
-      indicators: data.monthly?.indicators ?? null,
+      indicators: current.monthly?.indicators ?? null,
       format,
     })}
 
@@ -199,10 +215,10 @@
       <HistoryChart
         kind="monthly"
         language={data.language}
-        today={data.today}
-        monthlyData={data.monthly?.chart ?? null}
+        today={current.today}
+        monthlyData={current.monthly?.chart ?? null}
         seasonalData={null}
-        hasData={Object.values(data.monthly?.chart ?? {}).some((series) => series.some((value) => value !== null))}
+        hasData={Object.values(current.monthly?.chart ?? {}).some((series) => series.some((value) => value !== null))}
       />
     </div>
   </section>
@@ -212,21 +228,22 @@
       <div>
         <h2 id="season-title">{text.historySeasonTitle}</h2>
       </div>
-      <form method="GET" action={resolve("/history")} class="season-control" data-sveltekit-reset="false">
-        <input type="hidden" name="month" value={data.month} />
-        <input type="hidden" name="year" value={data.year} />
+      <form method="POST" action={resolve("/history")} use:enhance={enhanceHistory}
+        class="season-control" aria-busy={pending}>
+        <input type="hidden" name="month" value={current.month} />
+        <input type="hidden" name="year" value={current.year} />
         <label>
           <span class="visually-hidden">{text.historySeason}</span>
-          <select name="season" aria-label={text.historySeason} disabled={data.seasons.length === 0}
+          <select name="season" aria-label={text.historySeason} bind:value={selectedSeason} disabled={pending || current.seasons.length === 0}
             onchange={(event) => event.currentTarget.form?.requestSubmit()}>
-            {#each data.seasons as season (season.id)}
-              <option value={season.id} selected={data.selectedSeasonId === season.id}>{season.name}</option>
+            {#each current.seasons as season (season.id)}
+              <option value={season.id}>{season.name}</option>
             {:else}
               <option selected>{text.historySelectionUnavailable}</option>
             {/each}
           </select>
         </label>
-        <noscript><button type="submit" disabled={data.seasons.length === 0}>{text.historyApply}</button></noscript>
+        <noscript><button type="submit" disabled={current.seasons.length === 0}>{text.historyApply}</button></noscript>
       </form>
     </div>
 
@@ -234,7 +251,7 @@
       groups: indicatorGroups,
       label: text.historySeasonTitle,
       unavailable: text.unavailable,
-      indicators: data.seasonal?.indicators ?? null,
+      indicators: current.seasonal?.indicators ?? null,
       format,
     })}
 
@@ -242,11 +259,11 @@
       <HistoryChart
         kind="season"
         language={data.language}
-        today={data.today}
+        today={current.today}
         monthlyData={null}
-        seasonalData={data.seasonal}
-        hasData={data.seasonal?.months.some((month) =>
-          `${month.year}-${String(month.month).padStart(2, "0")}` !== data.today.slice(0, 7)
+        seasonalData={current.seasonal}
+        hasData={current.seasonal?.months.some((month) =>
+          `${month.year}-${String(month.month).padStart(2, "0")}` !== current.today.slice(0, 7)
           && [month.max, month.min, month.consumption, month.dju, month.cycles, month.ecs].some((value) => value !== null),
         ) ?? false}
       />
@@ -270,8 +287,8 @@
             </tr>
           </thead>
           <tbody>
-            {#if data.seasonal?.months.length}
-              {#each data.seasonal.months as month (`${month.year}-${month.month}`)}
+            {#if current.seasonal?.months.length}
+              {#each current.seasonal.months as month (`${month.year}-${month.month}`)}
                 <tr>
                   <td>{formatMonth(month.year, month.month)}</td>
                   <td>{@render TableValue(month.cycles, 0)}</td>
@@ -480,7 +497,7 @@
   }
   .period-controls button,
   .season-control button,
-  .month-navigation {
+  .period-controls .month-navigation {
     padding: 0.55rem 0.75rem;
     border: 1px solid #aebdd0;
     border-radius: 7px;
@@ -490,19 +507,20 @@
     font-size: 0.78rem;
     cursor: pointer;
   }
-  .month-navigation {
+  .period-controls .month-navigation {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     min-width: 2rem;
     padding: 0.25rem 0.5rem;
-    font-size: 1.2rem;
-    line-height: 1.3;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
     text-decoration: none;
   }
   .period-controls :disabled,
   .season-control :disabled,
-  .month-navigation.disabled {
+  .period-controls .month-navigation:disabled {
     color: #778398;
     cursor: not-allowed;
   }

@@ -108,17 +108,20 @@ describe('historique', () => {
 	});
 
 	it.each([
-		{ month: 1, year: 2026, previous: 'month=12&amp;year=2025', next: 'month=2&amp;year=2026' },
-		{ month: 12, year: 2025, previous: 'month=11&amp;year=2025', next: 'month=1&amp;year=2026' }
-	])('navigue de mois en mois avec le changement d’année et conserve la saison', ({ month, year, previous, next }) => {
+		{ month: 1, year: 2026 },
+		{ month: 12, year: 2025 }
+	])('propose une navigation par formulaire sans paramètres dans l’URL', ({ month, year }) => {
 		const season = { id: 2, name: 'Saison', startDate: '2025-09-01', endDate: '2026-08-31' };
 		const indicators = { sampleCount: 0, conso: null, ecs: null, max: null, mean: null, min: null, dju: null, cycles: null };
 		const monthly = { indicators, chart: { max: [], min: [], consumption: [], dju: [], cycles: [] } };
 		const { body } = render(History, {
 			props: { params: {}, form: null, data: { ...emptyData, month, year, monthly, seasons: [season], selectedSeasonId: 2 } }
 		});
-		expect(body).toContain(`href="/history?${previous}&amp;season=2"`);
-		expect(body).toContain(`href="/history?${next}&amp;season=2"`);
+		expect(body).toContain('method="POST"');
+		expect(body).toContain('name="season" value="2"');
+		expect(body).toContain('name="direction" value="-1"');
+		expect(body).toContain('name="direction" value="1"');
+		expect(body).not.toContain('/history?');
 		expect(body).toContain('aria-label="Mois précédent"');
 		expect(body).toContain('aria-label="Mois suivant"');
 	});
@@ -127,8 +130,8 @@ describe('historique', () => {
 		const { body } = render(History, {
 			props: { params: {}, form: null, data: { ...emptyData, month: 1, year: 2025, years: [2026, 2025] } }
 		});
-		expect(body).toMatch(/aria-label="Mois précédent" aria-disabled="true"/);
-		expect(body).toContain('href="/history?month=2&amp;year=2025"');
+		expect(body).toMatch(/name="direction" value="-1" disabled(?:="")? aria-label="Mois précédent"/);
+		expect(body).toMatch(/name="direction" value="1" aria-label="Mois suivant"/);
 	});
 
 	it('désactive les filtres mensuels en l’absence d’années', () => {
@@ -138,7 +141,16 @@ describe('historique', () => {
 		expect(body).toMatch(/name="year" aria-label="Année" disabled/);
 		expect(body).toMatch(/name="month" aria-label="Mois" disabled/);
 		expect(body).toContain('Indisponible');
-		expect(body).toMatch(/aria-label="Mois suivant" aria-disabled="true"/);
+		expect(body).toMatch(/name="direction" value="1" disabled(?:="")? aria-label="Mois suivant"/);
+	});
+
+	it('affiche la sélection issue du formulaire sans modifier l’URL', () => {
+		const { body } = render(History, {
+			props: { params: {}, data: emptyData, form: { ...emptyData, month: 2, year: 2025 } }
+		});
+		expect(body).toMatch(/value="2"[^>]* selected[^>]*>février/);
+		expect(body).toMatch(/value="2025"[^>]* selected[^>]*>2025/);
+		expect(body).not.toContain('/history?');
 	});
 
 	it('signale une erreur de base et conserve les libellés anglais', () => {

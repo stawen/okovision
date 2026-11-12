@@ -63,6 +63,8 @@ L'historique reprend les synthèses existantes de `oko_resume_day` : extrêmes, 
 
 La liste des années contient celles présentes dans les synthèses quotidiennes, et non les années futures du calendrier technique. Les flèches permettent de parcourir les mois tant que l'année cible est disponible ; les sélections sont appliquées immédiatement, ou avec le bouton « Afficher » lorsque JavaScript est désactivé.
 
+Les sélections sont transmises par formulaire sans paramètres dans l'URL. Un rechargement de la page revient aux périodes par défaut ; les anciennes URL avec paramètres sont redirigées vers l'historique.
+
 Pour faciliter les comparaisons, le graphique mensuel utilise des axes fixes : −10 à 50 °C, 0 à 80 pour les kg et DJU, et 0 à 60 cycles. Les maxima du graphique saisonnier sont fixés à 50 °C, 2 000 kg/DJU et 400 cycles. Les valeurs hors limites sont signalées ; elles ne sont pas entièrement visibles sur les graphiques.
 
 ### Organisation des accès aux données
