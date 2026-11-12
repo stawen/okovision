@@ -212,7 +212,7 @@ h1 { color: #1d2b3c; font-size: clamp(1.55rem, 3vw, 2rem); font-weight: 650; let
 .panel-heading > p:last-child { margin-top: 0.15rem; color: var(--muted); font-size: 0.78rem; }
 .daily-chart-block { padding: 0.3rem 1.25rem 0.75rem; }
 .daily-chart-block + .daily-chart-block { border-top: 1px solid #edf1f5; }
-.daily-chart-title { margin: 0.5rem 0 0; color: #46566b; font-size: 0.95rem; font-weight: 600; }
+.daily-chart-title { margin: 0.5rem 0 0; color: #46566b; font-size: 0.95rem; font-weight: 600; text-align: center; }
 .chart-status { margin: 0; padding: 1.5rem 1rem; color: #78879a; text-align: center; }
 .range-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem; margin-top: 0.75rem; color: var(--primary-dark); font-size: 0.875rem; font-weight: 600; }
 .range-controls p { margin: 0; }
