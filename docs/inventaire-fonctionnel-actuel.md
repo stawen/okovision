@@ -74,6 +74,8 @@ Sources : [menu.php](../archive/php/_templates/menu.php), [custom.js](../archive
 
 Sources : [index.php](../archive/php/index.php), [index.js](../archive/php/js/index.js), [rendu.class.php](../archive/php/_include/rendu.class.php).
 
+**Portage SvelteKit** : la vue journalière affiche désormais les graphiques configurés en base, avec les capteurs, coefficients, relevés et annotations du jour via Highcharts 13.1.1. Le zoom/panoramique est disponible par graphique; la synchronisation du zoom entre graphiques et le recalcul des indicateurs sur la plage zoomée restent à porter.
+
 ### F04 — Historique mensuel
 
 - Choisir un mois et une année, ou naviguer au mois précédent/suivant.

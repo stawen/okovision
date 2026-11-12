@@ -2,6 +2,7 @@
   import { toast } from "svelte-sonner";
   import { resolve } from "$app/paths";
   import { enhance } from "$app/forms";
+  import DailyChart from "#lib/components/DailyChart.svelte";
   import { numberLocale, uiMessages } from "#lib/i18n.js";
   import type { PageProps } from "./$types";
 
@@ -9,10 +10,18 @@
   let current = $derived(form ?? data);
   let pending = $state(false);
   let text = $derived(uiMessages(data.language));
-  let numberFormat = $derived(new Intl.NumberFormat(numberLocale(data.language), { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+  let numberFormat = $derived(
+    new Intl.NumberFormat(numberLocale(data.language), { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+  );
   let indicators = $derived([
     { id: "consumption", label: text.consumption, unit: "kg", tone: "blue", value: current.indicators?.conso ?? null },
-    { id: "hotWater", label: text.hotWaterConsumption, unit: "kg", tone: "blue", value: current.indicators?.ecs ?? null },
+    {
+      id: "hotWater",
+      label: text.hotWaterConsumption,
+      unit: "kg",
+      tone: "blue",
+      value: current.indicators?.ecs ?? null,
+    },
     { id: "maxOutside", label: text.maxOutside, unit: "°C", tone: "green", value: current.indicators?.max ?? null },
     { id: "minOutside", label: text.minOutside, unit: "°C", tone: "orange", value: current.indicators?.min ?? null },
   ]);
@@ -22,28 +31,19 @@
       toast.error(text.indicatorsError, { id: `indicateurs-${current.day}` });
     }
   });
-
-  let series = $derived([
-    { id: "outside", label: text.outsideTemperature, tone: "sky" },
-    { id: "room", label: text.roomTemperature, tone: "slate" },
-    { id: "setpoint", label: text.roomSetpoint, tone: "green" },
-    { id: "flow", label: text.flowTemperature, tone: "orange" },
-  ]);
 </script>
 
 <svelte:head>
   <title>{text.pageTitle}</title>
-  <meta
-    name="description"
-    content={text.pageDescription}
-  />
+  <meta name="description" content={text.pageDescription} />
 </svelte:head>
 
 <main id="contenu" class="container">
   <section id="supervision" class="overview" aria-labelledby="page-title">
     <div class="page-heading">
       <div>
-        <h1 id="page-title">{text.dailyView}</h1>
+        <h2 id="daily-charts-title">{text.dailyCharts}</h2>
+        <p class="eyebrow">{text.yourInstallation}</p>
       </div>
       <div class="date-control" aria-label={text.daySelection}>
         <form
@@ -92,7 +92,13 @@
       <div class="notice" role={current.ashtray === "full" || current.ashtray === "error" ? "alert" : "status"}>
         <span class="notice-icon" aria-hidden="true">
           <svg viewBox="0 0 20 20" fill="none">
-            <path d="M10 6v4m0 3h.01M10 2.5l8 14H2l8-14Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+              d="M10 6v4m0 3h.01M10 2.5l8 14H2l8-14Z"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
           </svg>
         </span>
         <p>
@@ -152,52 +158,39 @@
       {/each}
     </section>
 
-    <section class="panel" aria-labelledby="measurements-title">
-      <div class="panel-heading">
+    <section class="panel" aria-labelledby="daily-charts-title">
+      <!-- <div class="panel-heading">
         <p class="eyebrow">{text.yourInstallation}</p>
-        <h2 id="measurements-title">{text.temperatures}</h2>
-        <p>{text.temperatureEvolution}</p>
-      </div>
-
-      <div
-        class="chart-area"
-        role="img"
-        aria-label={text.chartAccessible}
-      >
-        <div class="chart-y-axis" aria-hidden="true">
-          <span>50°</span><span>40°</span><span>30°</span><span>20°</span><span>10°</span>
-        </div>
-        <div class="chart-plot">
-          <div class="chart-gridlines" aria-hidden="true">
-            <span></span><span></span><span></span><span></span><span></span>
-          </div>
-          <div class="chart-empty">
-            <span class="chart-empty-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M4 19V5m0 14h16M7 15l4-4 3 2 5-6"
-                  stroke="currentColor"
-                  stroke-width="1.7"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </span>
-            <strong>{text.chartInProgress}</strong>
-            <span>{text.chartUnavailable}</span>
-          </div>
-          <div class="chart-x-axis" aria-hidden="true">
-            {#each text.chartHours as hour (hour)}<span>{hour}</span>{/each}
-          </div>
-        </div>
-      </div>
-
-      <ul class="chart-legend" aria-label={text.chartSeries}>
-        {#each series as item (item.id)}
-          <li><span class="legend-line {item.tone}" aria-hidden="true"></span>{item.label}</li>
+        <h2 id="daily-charts-title">{text.dailyCharts}</h2>
+        <p>{text.dailyChartsDescription}</p>
+      </div> -->
+      {#if current.chartError}
+        <p class="chart-status" role="alert">{text.chartDataError} {text.databaseAdvice}</p>
+      {:else if current.chartData.graphs.length === 0}
+        <p class="chart-status" role="status">{text.chartConfigurationMissing}</p>
+      {:else if current.chartData.sampleCount === 0}
+        <p class="chart-status" role="status">{text.noReadings}</p>
+      {:else}
+        {#each current.chartData.graphs as graph (graph.id)}
+          <section class="daily-chart-block" aria-label={`${text.dailyCharts}: ${graph.name}`}>
+            <h3 class="daily-chart-title">{graph.name}</h3>
+            {#if graph.series.length === 0}
+              <p class="chart-status" role="status">{text.chartNoSeries}</p>
+            {:else if !graph.series.some((item) => item.data.length > 0)}
+              <p class="chart-status" role="status">{text.chartNoSeriesReadings}</p>
+            {:else}
+              <DailyChart
+                series={graph.series}
+                annotations={current.chartData.annotations}
+                axisTitle={text.chartHour}
+                accessibleLabel={`${text.chartAccessible}: ${graph.name}`}
+                renderErrorText={text.chartRenderError}
+                locale={data.language === "fr" ? "fr-FR" : "en-US"}
+              />
+            {/if}
+          </section>
         {/each}
-      </ul>
-      <div class="panel-footnote">{text.chartInProgress}</div>
+      {/if}
     </section>
   </section>
 </main>

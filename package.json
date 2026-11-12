@@ -24,6 +24,7 @@
 		"test": "npm run test:unit -- --run"
 	},
 	"dependencies": {
+		"highcharts": "13.1.1",
 		"mysql2": "3.24.6",
 		"svelte-sonner": "1.2.3"
 	},

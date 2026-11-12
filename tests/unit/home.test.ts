@@ -10,6 +10,8 @@ const day = {
 	previous: '2026-11-10',
 	next: null,
 	databaseError: false,
+	chartData: { graphs: [], annotations: [], sampleCount: 0 },
+	chartError: false,
 	language: 'fr' as const,
 	ashtray: 'ok' as const
 };
@@ -34,8 +36,36 @@ describe('accueil journalier', () => {
 		expect(body).toContain('method="POST"');
 		expect(body).toContain('name="direction"');
 		expect(body).not.toContain('?jour=');
-		expect(body).toContain('Graphique en cours de migration');
+		expect(body).toContain('Aucun graphique n’est configuré');
 		expect(body).not.toMatch(/(?:href|src)="[^"]*(?:archive\/|\.php)/);
+	});
+
+	it('affiche les graphiques et capteurs configurés par le legacy', () => {
+		const { body } = render(Home, {
+			props: {
+				params: {},
+				form: null,
+				data: {
+					...day,
+					indicators: null,
+					chartData: {
+						graphs: [
+							{
+								id: 1,
+								name: 'Températures',
+								series: [{ name: 'T° extérieure', data: [[1794355200000, 7.5] as [number, number]] }]
+							}
+						],
+						annotations: [{ timestamp: 1794355200000, description: 'Réglage chauffage' }],
+						sampleCount: 1
+					}
+				}
+			}
+		});
+		expect(body).toContain('Graphiques de la journée');
+		expect(body).toContain('Températures');
+		expect(body).toContain('Graphique journalier: Températures');
+		expect(body).not.toContain('T° ambiante consigne');
 	});
 
 	it('affiche la journée retournée par le formulaire sans modifier l’URL', () => {

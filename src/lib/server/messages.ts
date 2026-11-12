@@ -3,6 +3,7 @@ import { getAppLanguage } from './language.ts';
 const fr = {
 	installationConfigInvalid: 'Configuration de l’installation invalide ou inaccessible.',
 	dailyIndicatorsFailed: 'Impossible de charger les indicateurs journaliers.',
+	dailyChartsFailed: 'Impossible de charger les graphiques journaliers.',
 	ashtrayStatusFailed: 'Impossible de charger le suivi du cendrier.',
 	loginFailed: 'Impossible de traiter la connexion membre.',
 	loginRejected: 'Identifiants de connexion refusés.',
@@ -41,6 +42,7 @@ type Translations = {
 const en: Translations = {
 	installationConfigInvalid: 'Installation configuration is invalid or inaccessible.',
 	dailyIndicatorsFailed: 'Unable to load daily indicators.',
+	dailyChartsFailed: 'Unable to load daily charts.',
 	ashtrayStatusFailed: 'Unable to load ashtray tracking.',
 	loginFailed: 'Unable to process member sign-in.',
 	loginRejected: 'Sign-in credentials rejected.',
@@ -79,6 +81,7 @@ export type LogMessageKey =
 	| 'loginRateLimited'
 	| 'installationConfigInvalid'
 	| 'dailyIndicatorsFailed'
+	| 'dailyChartsFailed'
 	| 'ashtrayStatusFailed'
 	| 'databaseCheckSucceeded'
 	| 'databaseCheckFailed';

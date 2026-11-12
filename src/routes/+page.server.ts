@@ -4,6 +4,7 @@ import { isValidDay, shiftDay, todayInTimezone } from '#lib/dates.js';
 import { uiMessages, type Language } from '#lib/i18n.js';
 import { readInstallationConfig } from '#lib/server/config.js';
 import { getDataAccess } from '#lib/server/data-access.js';
+import type { DailyChartsResult } from '#lib/server/repositories/daily-charts.js';
 import type { AshtrayStatus } from '#lib/server/repositories/maintenance.js';
 import { logger } from '#lib/server/logger.js';
 import type { Actions, PageServerLoad } from './$types';
@@ -36,6 +37,14 @@ async function dashboard(language: Language, requestedDay?: string, direction?: 
 		indicators = null;
 		databaseError = true;
 	}
+	let chartData: DailyChartsResult = { graphs: [], annotations: [], sampleCount: 0 };
+	let chartError = false;
+	try {
+		chartData = await getDataAccess().charts.getDailyCharts(day);
+	} catch (cause) {
+		log.error('dailyChartsFailed', cause, { day });
+		chartError = true;
+	}
 	let ashtray: AshtrayStatus | 'missing-capacity' | 'error' = 'missing-capacity';
 	if (config.ashtray !== null) {
 		try {
@@ -45,7 +54,7 @@ async function dashboard(language: Language, requestedDay?: string, direction?: 
 			ashtray = 'error';
 		}
 	}
-	return { day, today, previous, next, indicators, databaseError, ashtray };
+	return { day, today, previous, next, indicators, databaseError, chartData, chartError, ashtray };
 }
 
 export const load: PageServerLoad = async ({ url, locals }) => {

@@ -210,38 +210,10 @@ h1 { color: #1d2b3c; font-size: clamp(1.55rem, 3vw, 2rem); font-weight: 650; let
 .panel-heading .eyebrow { margin-bottom: 0.2rem; }
 .panel-heading h2 { color: #253247; font-size: 1.25rem; font-weight: 650; letter-spacing: -0.02em; }
 .panel-heading > p:last-child { margin-top: 0.15rem; color: var(--muted); font-size: 0.78rem; }
-.chart-area { display: grid; grid-template-columns: 2.5rem minmax(0, 1fr); gap: 0.65rem; padding: 1.1rem 1.7rem 0.4rem 1.25rem; }
-.chart-y-axis { display: flex; flex-direction: column; justify-content: space-between; padding: 0 0 1.75rem; color: #8c98a7; font-size: 0.68rem; text-align: right; }
-.chart-plot { position: relative; min-width: 0; height: 275px; }
-.chart-gridlines { position: absolute; inset: 0 0 1.65rem; display: flex; flex-direction: column; justify-content: space-between; }
-.chart-gridlines span { border-top: 1px solid #edf1f5; }
-.chart-gridlines span:first-child { border-color: #e1e7ee; }
-.chart-empty {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	display: flex;
-	width: min(100% - 1rem, 23rem);
-	transform: translate(-50%, -50%);
-	flex-direction: column;
-	align-items: center;
-	padding: 1rem;
-	color: #78879a;
-	text-align: center;
-}
-.chart-empty-icon { display: grid; width: 2.5rem; height: 2.5rem; place-items: center; margin-bottom: 0.55rem; border-radius: 12px; background: #edf5fc; color: var(--primary); }
-.chart-empty-icon svg { width: 1.4rem; height: 1.4rem; }
-.chart-empty strong { color: #46566b; font-size: 0.88rem; font-weight: 600; }
-.chart-empty > span:last-child { margin-top: 0.2rem; font-size: 0.73rem; }
-.chart-x-axis { position: absolute; right: 0; bottom: 0; left: 0; display: flex; justify-content: space-between; color: #8c98a7; font-size: 0.67rem; }
-.chart-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.7rem 1.65rem; list-style: none; margin: 0.25rem 1rem 1rem; padding: 0; }
-.chart-legend li { display: flex; align-items: center; gap: 0.45rem; color: #4a586b; font-size: 0.76rem; font-weight: 550; }
-.legend-line { width: 1.1rem; height: 2px; border-radius: 2px; }
-.legend-line.sky { background: #75b7f4; }
-.legend-line.slate { background: #596579; }
-.legend-line.green { background: #65cf68; }
-.legend-line.orange { background: #ff9a4c; }
-.panel-footnote { padding: 0.55rem 1rem; border-top: 1px solid #edf1f5; background: #fbfcfe; color: #8a96a5; font-size: 0.68rem; text-align: center; }
+.daily-chart-block { padding: 0.3rem 1.25rem 0.75rem; }
+.daily-chart-block + .daily-chart-block { border-top: 1px solid #edf1f5; }
+.daily-chart-title { margin: 0.5rem 0 0; color: #46566b; font-size: 0.95rem; font-weight: 600; }
+.chart-status { margin: 0; padding: 1.5rem 1rem; color: #78879a; text-align: center; }
 
 .site-footer { background: #ffffff; border-top: 1px solid var(--border); padding-block: 1.1rem; color: var(--muted); font-size: 0.72rem; }
 .footer-content { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
@@ -280,12 +252,7 @@ h1 { color: #1d2b3c; font-size: clamp(1.55rem, 3vw, 2rem); font-weight: 650; let
 	.indicator h2 { font-size: 0.68rem; }
 	.indicator-value { font-size: 0.72rem; }
 	.indicator-reading { padding: 0.18rem 0.4rem; }
-	.chart-area { grid-template-columns: 2rem minmax(0, 1fr); gap: 0.35rem; padding: 0.85rem 0.8rem 0.25rem 0.55rem; }
-	.chart-plot { height: 235px; }
-	.chart-x-axis { font-size: 0.58rem; }
-	.chart-y-axis { font-size: 0.6rem; }
-	.chart-legend { gap: 0.55rem 0.9rem; margin-inline: 0.7rem; }
-	.chart-legend li { font-size: 0.68rem; }
+	.daily-chart-block { padding-inline: 0.65rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
