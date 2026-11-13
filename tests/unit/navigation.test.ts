@@ -9,6 +9,9 @@ import ScopePage from '../../src/lib/components/FunctionalScope.svelte';
 import { handle } from '../../src/hooks.server';
 import { createSession, revokeSession } from '../../src/lib/server/auth';
 
+vi.mock('../../src/lib/server/setup', () => ({ getSetupStatus: async () => 'ready' }));
+vi.mock('../../src/lib/server/scheduler', () => ({ initializeJobs: vi.fn() }));
+
 const member = { id: 1, name: 'member', type: 'admin' };
 const children = createRawSnippet(() => ({ render: () => '<div></div>' }));
 function event(path: ScopePath, token?: string) {

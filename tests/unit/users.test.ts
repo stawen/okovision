@@ -1,11 +1,20 @@
 import { createHash } from 'node:crypto';
 import { describe, expect, it, vi } from 'vitest';
-import { createUsersRepository } from '../../src/lib/server/repositories/users';
+import { createUsersRepository, hashNewPassword } from '../../src/lib/server/repositories/users';
 
 const hash = (value: string) => createHash('sha1').update(value).digest('hex');
 const row = { id: 7, user: 'member', type: 'admin', pass: hash('test-password') };
 
 describe('authentification MySQL historique en lecture seule', () => {
+	it('authentifie le mot de passe choisi au setup sans accepter celui de démonstration', async () => {
+		const pass = await hashNewPassword('installation-private-password');
+		const execute = vi.fn().mockResolvedValue([[{ ...row, pass }]]);
+		const users = createUsersRepository({ execute });
+		await expect(users.authenticate('member', 'installation-private-password')).resolves.toEqual({
+			id: 7, name: 'member', type: 'admin'
+		});
+		await expect(users.authenticate('member', 'okouser')).resolves.toBeNull();
+	});
 	it('utilise une requête paramétrée et ne retourne jamais le mot de passe', async () => {
 		const execute = vi.fn().mockResolvedValue([[row]]);
 		const users = createUsersRepository({ execute });

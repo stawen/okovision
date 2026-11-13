@@ -1,0 +1,12 @@
+/** @param {import('knex').Knex} knex */
+export async function up(knex) {
+	throw new Error('Migration up non implementee.');
+}
+
+/** @param {import('knex').Knex} knex */
+export async function down(knex) {
+	throw new Error('Migration down non implementee.');
+}
+
+// MySQL/MariaDB DDL may commit implicitly; rollback is not an atomic recovery.
+export const config = { transaction: false };

@@ -27,7 +27,7 @@ services:
       - /var/lib/mysql
     volumes:
       - ./setup/install.sql:/docker-entrypoint-initdb.d/10-schema.sql:ro
-      - ./tests/sql/okovision-dataset.sql:/docker-entrypoint-initdb.d/20-fixtures.sql:ro
+      - ./tests/sql/okovision-dataset-v2.sql:/docker-entrypoint-initdb.d/20-fixtures.sql:ro
   db-setup:
     <<: *database
     profiles: ["setup"]
@@ -44,7 +44,14 @@ services:
       - /var/lib/mysql
     volumes:
       - ./setup/install.sql:/docker-entrypoint-initdb.d/10-schema.sql:ro
-      - ./tests/sql/okovision-dataset.sql:/docker-entrypoint-initdb.d/20-fixtures.sql:ro
+      - ./tests/sql/okovision-dataset-v1.sql:/docker-entrypoint-initdb.d/20-fixtures.sql:ro
+  db-setup-test:
+    <<: *database
+    profiles: ["test"]
+    ports:
+      - "127.0.0.1:${DEV_SETUP_TEST_DB_PORT:-3310}:3306"
+    tmpfs:
+      - /var/lib/mysql
 
 secrets:
   db_password:

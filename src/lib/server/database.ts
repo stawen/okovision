@@ -6,7 +6,7 @@ import { getMessages } from './messages.ts';
 let pool: Pool | undefined;
 
 /** Validates host-only DB_ADRESSE and builds a verified-TLS connection config by default. */
-export function databaseOptions(env: NodeJS.ProcessEnv): ConnectionOptions {
+export function databaseOptions(env: NodeJS.ProcessEnv) {
 	const messages = getMessages();
 	const address = env.DB_ADRESSE?.trim();
 	if (!address) throw new Error(messages.dbAddressRequired);
@@ -58,7 +58,7 @@ export function databaseOptions(env: NodeJS.ProcessEnv): ConnectionOptions {
 					}
 				}
 			: {})
-	};
+	} satisfies ConnectionOptions;
 }
 
 /** Creates the short-lived connection used by startup checks and always closes it. */

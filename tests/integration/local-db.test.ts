@@ -4,7 +4,7 @@ import { test } from 'node:test';
 import { createConnection, type RowDataPacket } from 'mysql2/promise';
 import { createUsersRepository } from '../../src/lib/server/repositories/users.ts';
 
-const fixture = readFileSync(new URL('../sql/okovision-dataset.sql', import.meta.url), 'utf8');
+const fixture = readFileSync(new URL('../sql/okovision-dataset-v1.sql', import.meta.url), 'utf8');
 const dayMs = 86400000;
 const shiftDate = (date: string, days: number) =>
 	new Date(Date.parse(`${date}T00:00:00Z`) + days * dayMs).toISOString().slice(0, 10);

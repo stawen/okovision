@@ -5,6 +5,11 @@
 !.npmrc
 !tsconfig.json
 !vite.config.ts
+!knexfile.js
+!migrations/
+!migrations/**
+!setup/
+!setup/install.sql
 !src/
 !src/**
 !scripts/

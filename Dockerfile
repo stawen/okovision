@@ -12,8 +12,13 @@ COPY .npmrc package.json package-lock.json ./
 RUN npm ci --omit=dev --ignore-scripts
 COPY --from=build --chown=node:node /app/build ./build
 COPY --from=build --chown=node:node /app/src/lib/server/database.ts ./src/lib/server/database.ts
-COPY --from=build --chown=node:node /app/src/lib/server/logger.ts /app/src/lib/server/messages.ts /app/src/lib/server/environment.ts ./src/lib/server/
+COPY --from=build --chown=node:node /app/src/lib/server/logger.ts /app/src/lib/server/messages.ts /app/src/lib/server/environment.ts /app/src/lib/server/language.ts ./src/lib/server/
 COPY --from=build --chown=node:node /app/scripts/check-db.ts ./scripts/check-db.ts
+COPY --from=build --chown=node:node /app/scripts/migration.stub ./scripts/migration.stub
+COPY --from=build --chown=node:node /app/knexfile.js ./knexfile.js
+COPY --from=build --chown=node:node /app/migrations ./migrations
+COPY --from=build --chown=node:node /app/src/lib/configuration.ts ./src/lib/configuration.ts
+COPY --from=build --chown=node:node /app/setup/install.sql ./setup/install.sql
 USER node
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \

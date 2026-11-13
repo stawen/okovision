@@ -1,4 +1,5 @@
-import { readFile } from 'node:fs/promises';
+import type { RowDataPacket } from 'mysql2/promise';
+import { getDatabasePool } from './database.ts';
 import { getMessages } from './messages.ts';
 
 export interface InstallationConfig {
@@ -18,9 +19,11 @@ export interface CollectionConfig extends InstallationConfig {
 	tcRef: number;
 }
 
-async function readConfigFile(): Promise<unknown> {
-	const contents = await readFile('config.json', 'utf8');
-	return JSON.parse(contents) as unknown;
+export async function readConfiguration(): Promise<Record<string, string | null>> {
+	const [rows] = await getDatabasePool().execute<(RowDataPacket & { param: string; value: string | null })[]>(
+		'SELECT param, value FROM oko_configuration'
+	);
+	return Object.fromEntries(rows.map((row) => [row.param, row.value]));
 }
 
 function configurationObject(value: unknown): Record<string, unknown> {
@@ -122,16 +125,16 @@ export function parseHistorySettings(value: unknown): HistorySettings {
 }
 
 export async function readInstallationConfig(): Promise<InstallationConfig> {
-	return parseInstallationConfig(await readConfigFile());
+	return parseInstallationConfig(await readConfiguration());
 }
 
 export async function readHistoryConfig(): Promise<{ installation: InstallationConfig; settings: HistorySettings }> {
-	const value = await readConfigFile();
+	const value = await readConfiguration();
 	return { installation: parseInstallationConfig(value), settings: parseHistorySettings(value) };
 }
 
 export async function readBoilerAddress(): Promise<string> {
-	return parseBoilerAddress(await readConfigFile());
+	return parseBoilerAddress(await readConfiguration());
 }
 
 export function parseCollectionConfig(value: unknown): CollectionConfig {
@@ -149,19 +152,12 @@ export function parseCollectionConfig(value: unknown): CollectionConfig {
 }
 
 export async function readCollectionConfig(): Promise<CollectionConfig> {
-	return parseCollectionConfig(await readConfigFile());
+	return parseCollectionConfig(await readConfiguration());
 }
 
-/** Treats a missing config file or missing tcRef as disabled collection; other errors remain visible. */
+/** Collection requires explicit opt-in; missing or invalid database access is not hidden. */
 export async function readOptionalCollectionConfig(): Promise<CollectionConfig | null> {
-	let value: unknown;
-	try {
-		value = await readConfigFile();
-	} catch (error) {
-		if (error instanceof Error && 'code' in error && error.code === 'ENOENT') return null;
-		throw error;
-	}
-	const config = configurationObject(value);
-	if (config.tcRef === undefined) return null;
-	return parseCollectionConfig(value);
+	const config = await readConfiguration();
+	if (config.getDataFromChaudiere !== '1') return null;
+	return parseCollectionConfig(config);
 }

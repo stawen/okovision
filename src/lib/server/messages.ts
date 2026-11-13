@@ -13,6 +13,8 @@ const fr = {
 	updateFeedFailed: 'Impossible de charger le flux des mises à jour.',
 	ashtrayStatusFailed: 'Impossible de charger le suivi du cendrier.',
 	loginFailed: 'Impossible de traiter la connexion membre.',
+	setupFailed: 'Impossible de vérifier ou terminer la post-installation.',
+	setupInvalid: 'Paramètres de post-installation refusés.',
 	loginRejected: 'Identifiants de connexion refusés.',
 	loginRateLimited: 'Limite de tentatives de connexion atteinte.',
 	sessionCapacityExceeded: 'Capacité maximale des sessions atteinte.',
@@ -36,7 +38,7 @@ const fr = {
 	collectionDisabled: 'Collecte automatique non configurée.',
 	jobCompleted: 'Tâche terminée.',
 	boilerAddressInvalid: 'chaudiere doit être un hôte ou un hôte suivi d’un port valide.',
-	boilerConfigInvalid: 'Adresse de chaudière absente ou invalide dans config.json.',
+	boilerConfigInvalid: 'Adresse de chaudière absente ou invalide dans oko_configuration.',
 	boilerCredentialsUnavailable: 'Identifiants chaudière absents ou invalides dans la ligne admin.',
 	boilerCredentialsLoadFailed: 'Impossible de lire les identifiants chaudière en base.',
 	boilerConnectionFailed: 'Chaudière injoignable ou authentification refusée.',
@@ -77,6 +79,8 @@ const en: Translations = {
 	updateFeedFailed: 'Unable to load the update feed.',
 	ashtrayStatusFailed: 'Unable to load ashtray tracking.',
 	loginFailed: 'Unable to process member sign-in.',
+	setupFailed: 'Unable to check or complete post-installation.',
+	setupInvalid: 'Post-installation parameters rejected.',
 	loginRejected: 'Sign-in credentials rejected.',
 	loginRateLimited: 'Sign-in attempt limit reached.',
 	sessionCapacityExceeded: 'Session capacity exceeded.',
@@ -100,7 +104,7 @@ const en: Translations = {
 	collectionDisabled: 'Automatic collection is not configured.',
 	jobCompleted: 'Job completed.',
 	boilerAddressInvalid: 'chaudiere must be a host or a host with a valid port.',
-	boilerConfigInvalid: 'Boiler address is missing or invalid in config.json.',
+	boilerConfigInvalid: 'Boiler address is missing or invalid in oko_configuration.',
 	boilerCredentialsUnavailable: 'Boiler credentials are missing or invalid in the admin row.',
 	boilerCredentialsLoadFailed: 'Unable to read boiler credentials from the database.',
 	boilerConnectionFailed: 'Boiler is unreachable or authentication was rejected.',
@@ -126,6 +130,8 @@ export function getMessages(): Translations {
 	return getAppLanguage() === 'fr' ? fr : en;
 }
 export type LogMessageKey =
+	| 'setupFailed'
+	| 'setupInvalid'
 	| 'loginFailed'
 	| 'loginRejected'
 	| 'loginRateLimited'

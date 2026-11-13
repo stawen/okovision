@@ -6,22 +6,40 @@
   l'application contre une base locale sans tables ni données. Ce mode est
   distinct du développement avec fixtures et ne doit jamais réinitialiser une
   base existante. Voir le [guide local](./installation-et-exploitation.md#tester-le-premier-lancement-avec-une-base-vierge).
-- Porter le provisioning initial dans le setup : vérifier la connexion définie
-  par les variables d'environnement, détecter une base vierge, créer le schéma
-  et les seules données de référence nécessaires, puis initialiser le compte
-  administrateur sans mot de passe public ni mesures de démonstration.
-- Prévoir dès ce provisioning des migrations versionnées et un registre
-  persistant des migrations appliquées (identifiant, date et résultat), afin de
-  suivre aussi les futures mises à jour. Séparer installation, mise à niveau
-  d'un schéma reconnu et refus d'un schéma inconnu ou incompatible.
+- Réalisé : détection de `oko_capteur`, formulaire `/setup` sans jeton ni connexion
+  préalable tant que l'installation est incomplète, installation de `setup/install.sql` après
+  validation et mot de passe admin choisi (sans compte de démonstration).
+  Une base partielle impose un avertissement et une confirmation forcée.
+- Réalisé : `oko_configuration(param, value)` remplace la lecture de
+  `config.json`, avec les onze paramètres du fichier historique. Une surface
+  absente/vide déclenche le formulaire sans réinstaller les tables existantes.
+  Les tâches et la collecte attendent la fin de la configuration.
+- Compléter le provisioning métier : calendrier de référence, saisons
+  pertinentes et matrice des capteurs. Le SQL initial conserve ses limites
+  historiques; il ne suffit pas à rendre une chaudière opérationnelle.
+- [Knex.js](https://knexjs.org/guide/migrations.html) est intégré avec le pilote
+  `mysql2`, sans changer les repositories existants. Les commandes de création,
+  de statut et d'application sont décrites dans le
+  [guide des migrations](./installation-et-exploitation.md#migrations-de-structure-avec-knex).
+  Elles réutilisent les variables `DB_*`, les secrets par fichier et les options
+  TLS. La première migration ajoute uniquement `oko_configuration`; le setup
+  l'applique avant d'enregistrer les valeurs.
+- Prévoir le contrôle des migrations futures en attente et leur écran de mise
+  à niveau, distinct du setup initial. Ajouter un suivi
+  explicite des échecs si nécessaire : la table standard de Knex suit les
+  migrations appliquées, pas un journal complet des tentatives.
+- Pour une base legacy existante, vérifier le schéma avant d'enregistrer un état
+  initial de référence; ne pas relancer la migration de création ni marquer
+  arbitrairement toutes les migrations comme appliquées. Les changements manuels
+  hors migrations ne sont pas automatiquement détectés par Knex.
 - Sérialiser les migrations et prévoir sauvegarde, erreurs explicites et reprise
   après échec, en tenant compte des DDL non transactionnelles de MySQL/MariaDB.
   Ne pas marquer une migration échouée comme appliquée; ne jamais réutiliser le
   SQL historique destructif comme mécanisme de mise à jour.
-- Tester sur bases jetables : installation vierge, second lancement sans
+- Tests sur bases jetables en place : installation vierge, second lancement sans
   réinitialisation, mise à niveau préservant les données, échec/reprise et suivi
-  des versions. La page setup actuelle reste descriptive tant que ce parcours
-  n'est pas implémenté.
+  des versions. Compléter les scénarios de reprise après échec des DDL du SQL
+  initial et le refus détaillé de schémas incompatibles.
 
 ## Écarts avec le site de référence
 

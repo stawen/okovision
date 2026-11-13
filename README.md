@@ -21,9 +21,10 @@ Elle est indépendante des compositions d'exploitation et ne remplace pas votre 
 
 Pour préparer les essais du tout premier lancement, `npm run appsetup` utilise
 une [base locale sans tables](./docs/installation-et-exploitation.md#tester-le-premier-lancement-avec-une-base-vierge),
-avec connexion définie dans `.env.appsetup`. Le provisioning du setup reste à porter.
+avec connexion définie dans `.env.appsetup`. Le formulaire `/setup` installe le
+schéma et enregistre la configuration après validation du formulaire.
 
-1. Préparer les fichiers privés `.env` et `config.json` en suivant le
+1. Préparer le fichier privé `.env` en suivant le
    [guide d'installation et d'exploitation](./docs/installation-et-exploitation.md).
 2. Installer et lancer le serveur :
 
@@ -33,10 +34,15 @@ avec connexion définie dans `.env.appsetup`. Le provisioning du setup reste à 
    npm run dev -- --host 127.0.0.1
    ```
 
-3. Ouvrir <http://localhost:5173>.
+3. Ouvrir <http://localhost:5173> et compléter la post-installation si demandée.
 
 La vérification de connexion à la base peut être lancée avec
 `npm run db:check` (elle exécute seulement `SELECT 1`).
+
+Les évolutions de structure utilisent [Knex et ses commandes npm](./docs/installation-et-exploitation.md#migrations-de-structure-avec-knex).
+Elles sont exécutées explicitement par la CLI ou par validation du setup, jamais
+implicitement au démarrage. La configuration métier est lue dans
+`oko_configuration`; `config.json` n'est plus utilisé par l'application Node.
 
 ## Build et contrôles
 

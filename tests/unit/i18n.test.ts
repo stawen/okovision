@@ -5,6 +5,9 @@ import { render } from 'svelte/server';
 import Layout from '../../src/routes/+layout.svelte';
 import { handle, handleError } from '../../src/hooks.server';
 
+vi.mock('../../src/lib/server/setup', () => ({ getSetupStatus: async () => 'ready' }));
+vi.mock('../../src/lib/server/scheduler', () => ({ initializeJobs: vi.fn() }));
+
 describe('langue de l’interface', () => {
 	afterEach(() => vi.unstubAllEnvs());
 

@@ -21,10 +21,13 @@
 		"start": "node --env-file-if-exists=.env build",
 		"db:check": "node --env-file-if-exists=.env scripts/check-db.ts",
 		"db:check:local": "node --env-file=.env.dev scripts/check-db.ts",
+		"db:migrate": "node --env-file-if-exists=.env ./node_modules/knex/bin/cli.js --knexfile knexfile.js",
+		"db:migrate:local": "node --env-file=.env.dev ./node_modules/knex/bin/cli.js --knexfile knexfile.js",
+		"db:migrate:setup": "node --env-file=.env.appsetup ./node_modules/knex/bin/cli.js --knexfile knexfile.js",
 		"db:up": "docker compose --env-file .env.dev -f compose.dev.yaml up -d --wait db",
 		"db:down": "docker compose --env-file .env.dev -f compose.dev.yaml --profile test down",
-		"db:test:up": "docker compose --env-file .env.dev -f compose.dev.yaml --profile test up -d --wait --force-recreate db-test",
-		"test:db": "npm run db:test:up && node --env-file=.env.dev --test tests/integration/local-db.test.ts",
+		"db:test:up": "docker compose --env-file .env.dev -f compose.dev.yaml --profile test up -d --wait --force-recreate db-test db-setup-test",
+		"test:db": "npm run db:test:up && node --env-file=.env.dev --test tests/integration/local-db.test.ts tests/integration/migrations.test.ts tests/integration/setup.test.ts",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -35,6 +38,7 @@
 	},
 	"dependencies": {
 		"highcharts": "13.1.1",
+		"knex": "3.3.0",
 		"mysql2": "3.24.6",
 		"node-cron": "4.6.0",
 		"svelte-sonner": "1.2.3"

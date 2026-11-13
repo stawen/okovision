@@ -11,11 +11,11 @@ const globalScheduler = globalThis as typeof globalThis & { __okovisionScheduler
 export function initializeJobs(schedule: boolean): Promise<void> {
 	globalScheduler.__okovisionScheduler ??= (async () => {
 		loadServerEnvironment();
-		const manager = await getJobManager(schedule);
+		const config = schedule ? await readOptionalCollectionConfig() : null;
+		const manager = await getJobManager(config !== null);
 		let task: ReturnType<typeof cron.schedule> | undefined;
 		if (schedule) {
 			try {
-				const config = await readOptionalCollectionConfig();
 				if (config) {
 					task = cron.schedule('2 */2 * * *', async () => {
 						try {

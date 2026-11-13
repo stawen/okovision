@@ -1,5 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { createBoilerConnector } from '../../src/lib/server/boiler';
+import { createBoilerConnector, getBoilerIndicators } from '../../src/lib/server/boiler';
+
+const mocks = vi.hoisted(() => ({ readBoilerAddress: vi.fn(), getDataAccess: vi.fn() }));
+vi.mock('../../src/lib/server/config', () => ({ readBoilerAddress: mocks.readBoilerAddress }));
+vi.mock('../../src/lib/server/data-access', () => ({ getDataAccess: mocks.getDataAccess }));
 
 const credentials = { username: 'boiler-user', password: 'boiler-password' };
 const address = 'http://boiler.local:8180';
@@ -9,6 +13,30 @@ describe('connecteur chaudière Ökofen en lecture seule', () => {
 
 	beforeEach(() => {
 		fetcher = vi.fn<typeof fetch>();
+		mocks.readBoilerAddress.mockResolvedValue(address);
+		mocks.getDataAccess.mockClear();
+	});
+
+	it('utilise le compte chaudière standard sans lire les identifiants du compte admin en base', async () => {
+		fetcher
+			.mockResolvedValueOnce(new Response(null, {
+				status: 303,
+				headers: { 'set-cookie': 'sid=standard-account; Path=/' }
+			}))
+			.mockResolvedValueOnce(new Response(JSON.stringify([
+				{ name: 'CAPPL:FA[0].L_brennerstarts', value: '3', unitText: '', formatTexts: '' }
+			]), { status: 200 }));
+		vi.stubGlobal('fetch', fetcher);
+		try {
+			const result = await getBoilerIndicators(1);
+			const login = new URLSearchParams(String(fetcher.mock.calls[0][1]?.body));
+			expect(login.get('username')).toBe('oekofen');
+			expect(login.get('password')).toBe('oekofen');
+			expect(result.readings.burnerStarts).toEqual({ value: 3, unit: '' });
+			expect(mocks.getDataAccess).not.toHaveBeenCalled();
+		} finally {
+			vi.unstubAllGlobals();
+		}
 	});
 
 	it('ouvre une session, demande les capteurs et normalise les valeurs comme le legacy', async () => {

@@ -82,7 +82,7 @@ il faut relancer l'audit avant une livraison.
 
 | Réf. | État au 13 novembre 2026 | Reste principal |
 |---|---|---|
-| F01 — Installation | Page descriptive seulement. | Procédure sûre d'installation neuve; contrôle et verrouillage de l'assistant; validation de configuration. Ne jamais réexécuter le SQL historique destructif sur une base existante. |
+| F01 — Installation | Setup sans jeton ni connexion préalable, disponible uniquement tant que l'installation est incomplète; détection du schéma, formulaire de configuration en base et compte admin avec mot de passe choisi. Une base partielle exige une confirmation de réinstallation destructive. | Compléter calendrier et matrice des capteurs; reprise après DDL interrompue et contrôle complet des schémas incompatibles. Réserver les essais aux bases isolées sauvegardées. |
 | F02 — Connexion et compte | Connexion et routes privées portées en partie. | Changement/réinitialisation de mot de passe, gestion plus complète des comptes et décision sur la persistance des sessions; tests de sécurité et parcours de récupération. |
 | F03 — Journalier | Portage fonctionnel des lectures et graphiques. | Comparaison systématique des valeurs et cas limites avec des références PHP représentatives; validation sur plusieurs capteurs et firmwares. |
 | F04 — Historique mensuel | Lecture portée. | Parité détaillée des agrégats, bornes de périodes, années et jours sans relevés. |
@@ -95,7 +95,7 @@ il faut relancer l'audit avant une livraison.
 | F11 — Imports | Import depuis les fichiers chaudière porté en partie. | Import manuel de CSV local/USB, imports en masse, validation de plusieurs dialectes/firmwares et scénario d'erreur/reprise. Les imports restent limités à 16 Mio et chargés en mémoire. |
 | F12 — Synthèses | Calcul automatique déclenché par la collecte porté en partie. | Parcours privé de calcul/recalcul manuel et par période; tests d'équivalence des formules, des valeurs nulles/zéro et de l'ECS. |
 | F13 — Temps réel | Début de portage de la lecture des valeurs chaudière. | Parité complète des lectures, circuit, graphiques temps réel, configurations datées et commandes. Les commandes chaudière ne sont pas portées et ne doivent pas être activées implicitement. |
-| F14 — Paramètres généraux | Paramètres serveur lus depuis `config.json`; pages d'administration non assimilables à un écran complet de configuration opérationnelle. | Formaliser les paramètres, leur validation et leur édition, ainsi que la procédure opérateur pour les secrets chaudière. |
+| F14 — Paramètres généraux | Paramètres lus dans `oko_configuration(param, value)` et saisis lors du setup; `config.json` n'est plus lu par Node. | Porter l'édition après installation et la procédure opérateur pour les secrets chaudière. |
 | F15 — API d'intégration | Quelques endpoints natifs existent; les anciens routeurs ne sont pas repris. | Identifier les consommateurs de `ajax.php` et `api.php`, spécifier les contrats nécessaires, migrer les clients et valider les permissions avant bascule. |
 | F16 — Collecte automatique | Collecte IP et gestionnaire de tâches intégrés présents. | Porter le mode sans IP si requis; tester les interruptions, la reprise, le mono-écrivain et MyISAM; monter et sauvegarder le stockage des jobs dans les déploiements. |
 | F17 — Langues et présentation | Langues FR/EN centralisées dans les parties portées. | Étendre et vérifier la couverture des pages restantes, l'accessibilité clavier, les messages d'erreur et l'affichage mobile. |
