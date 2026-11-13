@@ -111,8 +111,7 @@ describe('accueil journalier', () => {
 			props: { params: {}, form: null, data: { ...day, indicators, ashtray: 'full' } }
 		});
 		expect(body).toContain('Votre cendrier est plein.');
-		expect(body).toContain('mettez à jour le tableau de suivi');
-		expect(body).toContain('La gestion du suivi n’est pas encore disponible.');
+		expect(body).toContain('enregistrez ce vidage dans les événements de maintenance.');
 		expect(body).not.toMatch(/(?:href|src)="[^"]*(?:archive\/|\.php)/);
 	});
 
@@ -129,20 +128,17 @@ describe('accueil journalier', () => {
 		expect(body).toContain('Votre cendrier est plein.');
 	});
 
-	it.each([
-		['missing-capacity', 'Renseignez le seuil de granulés'],
-		['no-emptying', 'Aucun vidage n’est enregistré'],
-		['no-consumption', 'Aucune consommation n’est disponible'],
-		['error', 'Impossible de charger le suivi du cendrier.'],
-		['ok', null]
-	] as const)('affiche l’état %s sans annoncer un cendrier plein', (ashtray, message) => {
+	it.each(['missing-capacity', 'no-emptying', 'no-consumption', 'error', 'ok'] as const)(
+		'masque la bannière tant que l’estimation du cendrier est %s',
+		(ashtray) => {
 		const { body } = render(Home, {
 			props: { params: {}, form: null, data: { ...day, indicators: null, ashtray } }
 		});
-		expect(body).not.toContain('Votre cendrier est plein.');
-		if (message) expect(body).toContain(message);
-		else expect(body).not.toContain('Suivi du cendrier indisponible.');
-	});
+			expect(body).not.toContain('class="notice"');
+			expect(body).not.toContain('Suivi du cendrier indisponible.');
+			expect(body).not.toContain('Aucune consommation n’est disponible');
+		}
+	);
 
 	it('traduit les textes accessibles et formate les nombres en anglais, même après soumission', () => {
 		const indicators = { sampleCount: 2, conso: 12.35, ecs: 0, max: 8, min: null, missingSensors: false };

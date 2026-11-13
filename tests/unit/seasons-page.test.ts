@@ -31,6 +31,16 @@ describe('gestion des saisons', () => {
 		expect(body).not.toMatch(/(?:href|src)="[^"]*(?:archive\/|\.php)/);
 	});
 
+	it('garde les en-têtes du tableau visibles sans saisons enregistrées', () => {
+		const { body } = render(Seasons, {
+			props: { params: {}, form: null, data: { ...data, seasons: [] } }
+		});
+
+		expect(body).toContain('<th scope="col">Saison</th>');
+		expect(body).toContain('<th scope="col">Date de début</th>');
+		expect(body).toContain('Aucune saison n’est définie.');
+	});
+
 	it('affiche les erreurs et empêche les écritures si la base est indisponible', () => {
 		const { body } = render(Seasons, {
 			props: {

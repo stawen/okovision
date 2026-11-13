@@ -6,6 +6,7 @@ const fr = {
 	dailyChartsFailed: 'Impossible de charger les graphiques journaliers.',
 	dailyReportsFailed: 'Impossible de gérer les rapports journaliers.',
 	seasonsFailed: 'Impossible de gérer les saisons.',
+	siloEventsFailed: 'Impossible de gérer les événements de silo.',
 	historyFailed: 'Impossible de charger les données historiques.',
 	boilerReadFailed: 'Impossible de récupérer les mesures chaudière.',
 	ashtrayStatusFailed: 'Impossible de charger le suivi du cendrier.',
@@ -62,6 +63,7 @@ const en: Translations = {
 	dailyChartsFailed: 'Unable to load daily charts.',
 	dailyReportsFailed: 'Unable to manage daily reports.',
 	seasonsFailed: 'Unable to manage seasons.',
+	siloEventsFailed: 'Unable to manage silo events.',
 	historyFailed: 'Unable to load historical data.',
 	boilerReadFailed: 'Unable to retrieve boiler readings.',
 	ashtrayStatusFailed: 'Unable to load ashtray tracking.',
@@ -118,6 +120,7 @@ export type LogMessageKey =
 	| 'dailyChartsFailed'
 	| 'dailyReportsFailed'
 	| 'seasonsFailed'
+	| 'siloEventsFailed'
 	| 'historyFailed'
 	| 'boilerReadFailed'
 	| 'stockStatusFailed'

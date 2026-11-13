@@ -80,7 +80,7 @@
 		</button>
 	</div>
 
-	{#if viewData.seasons.length}
+	{#if !viewData.databaseError}
 		<div class="reports-table-scroll">
 			<table class="reports-table seasons-table">
 				<thead>
@@ -141,11 +141,14 @@
 							</td>
 						</tr>
 					{/each}
+					{#if !viewData.seasons.length}
+						<tr>
+							<td class="seasons-empty-cell" colspan="4">{text.seasonsEmpty}</td>
+						</tr>
+					{/if}
 				</tbody>
 			</table>
 		</div>
-	{:else if !viewData.databaseError}
-		<p class="reports-empty">{text.seasonsEmpty}</p>
 	{/if}
 
 	<dialog bind:this={seasonDialog} class="reports-dialog" aria-labelledby="season-dialog-title">

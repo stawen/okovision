@@ -6,6 +6,7 @@ import { createHistoryRepository } from './repositories/history.ts';
 import { createUsersRepository } from './repositories/users.ts';
 import { createDailyReportsRepository } from './repositories/daily-reports.ts';
 import { createSeasonsRepository } from './repositories/seasons.ts';
+import { createSiloEventsRepository } from './repositories/silo-events.ts';
 
 function createDataAccess() {
 	const db = getDatabasePool();
@@ -16,7 +17,8 @@ function createDataAccess() {
 		maintenance: createMaintenanceRepository(db),
 		users: createUsersRepository(db),
 		dailyReports: createDailyReportsRepository(db),
-		seasons: createSeasonsRepository(db)
+		seasons: createSeasonsRepository(db),
+		siloEvents: createSiloEventsRepository(db)
 	};
 }
 

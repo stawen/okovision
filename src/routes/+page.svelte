@@ -145,8 +145,8 @@
       </div>
     </div>
 
-    {#if current.ashtray !== "ok"}
-      <div class="notice" role={current.ashtray === "full" || current.ashtray === "error" ? "alert" : "status"}>
+    {#if current.ashtray === "full"}
+      <div class="notice" role="alert">
         <span class="notice-icon" aria-hidden="true">
           <svg viewBox="0 0 20 20" fill="none">
             <path
@@ -159,17 +159,7 @@
           </svg>
         </span>
         <p>
-          {#if current.ashtray === "full"}
-            <strong>{text.ashtrayFull}</strong> {text.ashtrayFullDetails}
-          {:else if current.ashtray === "missing-capacity"}
-            <strong>{text.ashtrayUnavailable}</strong> {text.ashtrayMissingCapacity}
-          {:else if current.ashtray === "no-emptying"}
-            <strong>{text.ashtrayUnavailable}</strong> {text.ashtrayNoEmptying}
-          {:else if current.ashtray === "no-consumption"}
-            <strong>{text.ashtrayUnavailable}</strong> {text.ashtrayNoConsumption}
-          {:else}
-            <strong>{text.ashtrayError}</strong> {text.databaseAdvice}
-          {/if}
+          <strong>{text.ashtrayFull}</strong> {text.ashtrayFullDetails}
         </p>
       </div>
     {/if}
