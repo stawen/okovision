@@ -251,6 +251,7 @@ h1 { color: #1d2b3c; font-size: clamp(1.55rem, 3vw, 2rem); font-weight: 650; let
 
 .reports-page { min-height: 65vh; padding-block: 2rem 3rem; }
 .reports-description { max-width: 48rem; margin-top: 0.5rem; color: #536274; }
+.seasons-page .reports-description { max-width: none; }
 .reports-alert { margin-top: 1rem; padding: 0.75rem 1rem; border: 1px solid #e8caca; border-radius: 7px; background: #fff5f4; color: #8e3535; font-size: 0.85rem; }
 .reports-panel { margin-top: 1.5rem; padding: 1.2rem; border: 1px solid var(--border); border-radius: 9px; background: var(--surface); }
 .reports-section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
@@ -308,6 +309,15 @@ h1 { color: #1d2b3c; font-size: clamp(1.55rem, 3vw, 2rem); font-weight: 650; let
 .reports-association-actions svg { width: 1rem; height: 1rem; }
 .reports-filter { grid-template-columns: auto minmax(8rem, 1fr); align-items: center; gap: 0.5rem; }
 .reports-selected-graph { margin-bottom: 0.8rem; color: #46566b; font-size: 0.9rem; font-weight: 650; }
+.seasons-add { display: flex; justify-content: flex-start; margin-block: 1.2rem 0.4rem; }
+.seasons-table td:first-child { width: auto; }
+.seasons-table th { padding-block: 0.45rem; border-top: 0; border-bottom: 2px solid #c8d3df; background: #f2f5f9; color: #34445a; font-size: 0.75rem; }
+.seasons-table td { padding-block: 0.35rem; border-top: 0; border-bottom: 1px solid #d9e1e9; }
+.seasons-table td:first-child { color: #253247; font-weight: 600; }
+.seasons-table tbody tr:nth-child(even) { background: #f8fafc; }
+.seasons-table tbody tr:hover { background: #edf3f9; }
+.seasons-table .reports-row-actions { gap: 0.35rem; }
+.seasons-table .reports-action-button { width: 1.9rem; height: 1.9rem; border-radius: 5px; }
 
 @media (max-width: 900px) {
 	.header-content { flex-wrap: wrap; gap: 0; padding-block: 0.55rem; }
