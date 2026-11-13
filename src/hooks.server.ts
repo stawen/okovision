@@ -4,6 +4,12 @@ import { getAppLanguage } from '#lib/server/language.js';
 import { getSession, sessionCookie } from '#lib/server/auth.js';
 import { redirect } from '@sveltejs/kit';
 import { resolve as resolvePath } from '$app/paths';
+import { building, dev } from '$app/env';
+import { initializeJobs } from '#lib/server/scheduler.js';
+
+export const init = async () => {
+	if (!building) await initializeJobs(!dev);
+};
 
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.language = getAppLanguage();

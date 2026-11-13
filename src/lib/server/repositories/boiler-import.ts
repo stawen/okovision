@@ -49,7 +49,7 @@ function parseValue(value: string): number | null {
 	return result;
 }
 
-function parseCsv(contents: string, positions: number[], statusPosition: number): CsvRecord[] {
+function parseCsv(contents: string, positions: number[], statusPosition: number, expectedDay?: string): CsvRecord[] {
 	const lines = contents.replace(/^\uFEFF/, '').split(/\r\n|\n|\r/);
 	if (lines.length < 2) throw new BoilerImportError('response');
 	const records: CsvRecord[] = [];
@@ -62,6 +62,7 @@ function parseCsv(contents: string, positions: number[], statusPosition: number)
 		}
 		const values = positions.map((position) => parseValue(fields[position]));
 		const date = parseDate(fields[0]);
+		if (expectedDay && date !== expectedDay) throw new BoilerImportError('response');
 		const time = parseTime(fields[1]);
 		// The legacy connection forces UTC: CSV wall-clock times are stored as UTC.
 		const timestamp = Date.parse(`${date}T${time}Z`) / 1000;
@@ -87,7 +88,7 @@ function quoteColumn(column: string): string {
 
 export function createBoilerImportRepository(db: Pick<Pool, 'execute' | 'query'>) {
 	return {
-		async importCsv(contents: string): Promise<number> {
+		async importCsv(contents: string, expectedDay?: string, signal?: AbortSignal): Promise<number> {
 			try {
 				const [sensorRows] = await db.execute<SensorRow[]>(
 					`SELECT position_column_csv AS position, column_oko AS columnOko, type
@@ -140,12 +141,18 @@ export function createBoilerImportRepository(db: Pick<Pool, 'execute' | 'query'>
 				const records = parseCsv(
 					contents,
 					orderedSensors.map(([position]) => position),
-					statusSensor.position
+					statusSensor.position,
+					expectedDay
 				);
 				let previousStatus = 0;
 				let imported = 0;
 
-				for (const record of records) {
+				for (const [index, record] of records.entries()) {
+					signal?.throwIfAborted();
+					if (index > 0 && index % 100 === 0) {
+						await new Promise<void>((resolve) => setImmediate(resolve));
+						signal?.throwIfAborted();
+					}
 					const startsCycle = record.status === 4 && record.status !== previousStatus;
 					const insertColumns = [...columnsByPosition];
 					const values = [...record.values];

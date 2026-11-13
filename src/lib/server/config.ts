@@ -13,6 +13,11 @@ export interface HistorySettings {
 	siloSize: number | null;
 }
 
+export interface CollectionConfig extends InstallationConfig {
+	boilerAddress: string;
+	tcRef: number;
+}
+
 async function readConfigFile(): Promise<unknown> {
 	const contents = await readFile('config.json', 'utf8');
 	return JSON.parse(contents) as unknown;
@@ -127,4 +132,35 @@ export async function readHistoryConfig(): Promise<{ installation: InstallationC
 
 export async function readBoilerAddress(): Promise<string> {
 	return parseBoilerAddress(await readConfigFile());
+}
+
+export function parseCollectionConfig(value: unknown): CollectionConfig {
+	const config = configurationObject(value);
+	const rawTcRef = config.tcRef;
+	const tcRef = typeof rawTcRef === 'number' || (typeof rawTcRef === 'string' && rawTcRef.trim() !== '')
+		? Number(rawTcRef)
+		: NaN;
+	if (!Number.isFinite(tcRef)) throw new Error(getMessages().invalidReferenceTemperature);
+	return {
+		...parseInstallationConfig(value),
+		boilerAddress: parseBoilerAddress(value),
+		tcRef
+	};
+}
+
+export async function readCollectionConfig(): Promise<CollectionConfig> {
+	return parseCollectionConfig(await readConfigFile());
+}
+
+export async function readOptionalCollectionConfig(): Promise<CollectionConfig | null> {
+	let value: unknown;
+	try {
+		value = await readConfigFile();
+	} catch (error) {
+		if (error instanceof Error && 'code' in error && error.code === 'ENOENT') return null;
+		throw error;
+	}
+	const config = configurationObject(value);
+	if (config.tcRef === undefined) return null;
+	return parseCollectionConfig(value);
 }

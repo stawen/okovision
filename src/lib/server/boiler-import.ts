@@ -1,5 +1,4 @@
 import { readBoilerAddress } from './config.ts';
-import { getDataAccess } from './data-access.ts';
 import { BoilerImportError } from './boiler-import-error.ts';
 
 const directoryPath = '/logfiles/pelletronic/';
@@ -13,7 +12,7 @@ export interface BoilerCsvFile {
 	url: string;
 }
 
-function isBoilerCsvFilename(value: string): boolean {
+export function isBoilerCsvFilename(value: string): boolean {
 	const match = filenamePattern.exec(value);
 	if (!match) return false;
 	const [, year, month, day] = match;
@@ -21,6 +20,11 @@ function isBoilerCsvFilename(value: string): boolean {
 	return date.getUTCFullYear() === Number(year)
 		&& date.getUTCMonth() === Number(month) - 1
 		&& date.getUTCDate() === Number(day);
+}
+
+export function boilerCsvDay(filename: string): string {
+	if (!isBoilerCsvFilename(filename)) throw new BoilerImportError('response');
+	return `${filename.slice(6, 10)}-${filename.slice(10, 12)}-${filename.slice(12, 14)}`;
 }
 
 async function responseText(response: Response, maxBytes: number): Promise<string> {
@@ -77,14 +81,14 @@ function anchorHrefs(html: string): string[] {
 }
 
 export function createBoilerCsvConnector(fetcher: typeof fetch = fetch) {
-	async function getText(url: URL, maxBytes: number): Promise<string> {
+	async function getText(url: URL, maxBytes: number, signal?: AbortSignal): Promise<string> {
 		let response: Response;
 		try {
 			response = await fetcher(url, {
 				headers: { accept: 'text/html,text/csv;q=0.9,*/*;q=0.8' },
 				redirect: 'error',
 				cache: 'no-store',
-				signal: AbortSignal.timeout(8000)
+				signal: signal ? AbortSignal.any([signal, AbortSignal.timeout(8000)]) : AbortSignal.timeout(8000)
 			});
 		} catch (cause) {
 			throw new BoilerImportError('connection', cause);
@@ -95,10 +99,10 @@ export function createBoilerCsvConnector(fetcher: typeof fetch = fetch) {
 	}
 
 	return {
-		async getFiles(address: string): Promise<BoilerCsvFile[]> {
+		async getFiles(address: string, signal?: AbortSignal): Promise<BoilerCsvFile[]> {
 			const origin = new URL(address).origin;
 			const directory = new URL(directoryPath, origin);
-			const html = await getText(directory, listingLimit);
+			const html = await getText(directory, listingLimit, signal);
 			const files = new Map<string, BoilerCsvFile>();
 			for (const href of anchorHrefs(html)) {
 				try {
@@ -118,11 +122,11 @@ export function createBoilerCsvConnector(fetcher: typeof fetch = fetch) {
 			return [...files.values()].sort((left, right) => left.name.localeCompare(right.name));
 		},
 
-		async importFile(address: string, filename: string): Promise<string> {
+		async importFile(address: string, filename: string, signal?: AbortSignal): Promise<string> {
 			if (!isBoilerCsvFilename(filename)) throw new BoilerImportError('response');
 			const origin = new URL(address).origin;
 			const url = new URL(filename, new URL(directoryPath, origin));
-			return getText(url, csvLimit);
+			return getText(url, csvLimit, signal);
 		}
 	};
 }
@@ -139,15 +143,4 @@ async function getAddress(): Promise<string> {
 
 export async function getBoilerCsvFiles(): Promise<BoilerCsvFile[]> {
 	return connector.getFiles(await getAddress());
-}
-
-export async function importBoilerCsvFile(filename: string): Promise<number> {
-	const address = await getAddress();
-	const csv = await connector.importFile(address, filename);
-	try {
-		return await getDataAccess().boilerImport.importCsv(csv);
-	} catch (cause) {
-		if (cause instanceof BoilerImportError) throw cause;
-		throw new BoilerImportError('database', cause);
-	}
 }

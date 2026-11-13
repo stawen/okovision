@@ -1,23 +1,19 @@
 import { describe, expect, it, vi } from 'vitest';
 
-const { importBoilerCsvFile } = vi.hoisted(() => ({
-	importBoilerCsvFile: vi.fn()
+const { enqueue } = vi.hoisted(() => ({
+	enqueue: vi.fn()
 }));
 
-vi.mock('../../src/lib/server/boiler-import', () => ({
-	importBoilerCsvFile,
-	getBoilerCsvFiles: vi.fn()
+vi.mock('../../src/lib/server/jobs', () => ({
+	getJobManager: async () => ({ enqueue })
 }));
 
 import { actions } from '../../src/routes/private/configuration/import-boiler/+page.server';
 
-describe('notification de fin d’import chaudière', () => {
-	it.each([
-		{ count: 0, label: '0 ligne' },
-		{ count: 1, label: '1 ligne' },
-		{ count: 2, label: '2 lignes' }
-	])('affiche $label', async ({ count, label }) => {
-		importBoilerCsvFile.mockResolvedValueOnce(count);
+describe('retour de la demande d’import chaudière', () => {
+	it('ne présente pas une tâche enregistrée comme un import terminé', async () => {
+		const id = 'a4e7f416-01f3-4f37-90d4-bde93a899310';
+		enqueue.mockResolvedValueOnce({ id });
 		const action = actions.import;
 		if (!action) throw new Error('Missing import action');
 		type Event = Parameters<typeof action>[0];
@@ -31,9 +27,24 @@ describe('notification de fin d’import chaudière', () => {
 			locals: { language: 'fr', member: { id: 1, name: 'admin', type: 'admin' } }
 		};
 
-		expect(await action(event as Event)).toEqual({
-			successCount: count,
-			successMessage: `Importantion terminé du fichier du 13/11/2026 de ${label}`
+		expect(await action(event as Event)).toEqual({ jobId: id });
+	});
+
+	it('signale une erreur de persistance plutôt qu’un faux succès', async () => {
+		enqueue.mockRejectedValueOnce(new Error('simulated persistence failure'));
+		const action = actions.import;
+		if (!action) throw new Error('Missing import action');
+		type Event = Parameters<typeof action>[0];
+		const form = new FormData();
+		form.set('file', 'touch_20261113.csv');
+		const event: Pick<Event, 'request' | 'locals'> = {
+			request: new Request('http://localhost/private/configuration/import-boiler?/import', {
+				method: 'POST', body: form
+			}),
+			locals: { language: 'fr', member: { id: 1, name: 'admin', type: 'admin' } }
+		};
+		expect(await action(event as Event)).toMatchObject({
+			status: 500, data: { error: 'Impossible d’enregistrer les relevés dans l’historique.' }
 		});
 	});
 });

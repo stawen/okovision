@@ -29,6 +29,27 @@ describe('import chaudière', () => {
 		expect(body).not.toContain('>Importer les relevés</button>');
 	});
 
+	it('conserve le tableau après soumission et réserve le lien de suivi au mode sans JavaScript', () => {
+		const id = 'a4e7f416-01f3-4f37-90d4-bde93a899310';
+		const { body } = render(BoilerImportPage, {
+			props: {
+				params: {},
+				form: { jobId: id },
+				data: {
+					language: 'fr',
+					member: null,
+					pathname: '/private/configuration/import-boiler',
+					files: [{ name: 'touch_20261113.csv', url: 'http://boiler.local/logfiles/pelletronic/touch_20261113.csv' }],
+					loadError: false
+				}
+			}
+		});
+		expect(body).toContain('class="boiler-import-table-scroll"');
+		expect(body).toContain('aria-label="Importer les relevés"');
+		expect(body).toMatch(new RegExp(`<noscript>[\\s\\S]*href="/private/jobs/${id}"[\\s\\S]*</noscript>`));
+		expect(body).not.toContain('Importantion terminé');
+	});
+
 	it('ne liste que les fichiers journaliers CSV du répertoire chaudière configuré', async () => {
 		const fetcher = vi.fn(async () => new Response(`
 			<a href="touch_20260203.csv">valid</a>

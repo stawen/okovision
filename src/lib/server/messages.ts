@@ -30,6 +30,11 @@ const fr = {
 	invalidAshtrayConsumption: 'Consommation du cendrier invalide dans la base.',
 	ashtrayNoResult: 'La requête de suivi du cendrier n’a pas renvoyé de résultat.',
 	invalidTimezone: 'timezone doit être un fuseau horaire IANA.',
+	invalidReferenceTemperature: 'tcRef doit être un nombre valide en degrés Celsius.',
+	collectionFailed: 'Échec de la collecte ou du traitement des tâches.',
+	collectionStarted: 'Collecte et gestionnaire de tâches initialisés.',
+	collectionDisabled: 'Collecte automatique non configurée.',
+	jobCompleted: 'Tâche terminée.',
 	boilerAddressInvalid: 'chaudiere doit être un hôte ou un hôte suivi d’un port valide.',
 	boilerConfigInvalid: 'Adresse de chaudière absente ou invalide dans config.json.',
 	boilerCredentialsUnavailable: 'Identifiants chaudière absents ou invalides dans la ligne admin.',
@@ -89,6 +94,11 @@ const en: Translations = {
 	invalidAshtrayConsumption: 'Invalid ashtray consumption in the database.',
 	ashtrayNoResult: 'The ashtray tracking query returned no result.',
 	invalidTimezone: 'timezone must be an IANA time zone.',
+	invalidReferenceTemperature: 'tcRef must be a valid number in degrees Celsius.',
+	collectionFailed: 'Collection or job processing failed.',
+	collectionStarted: 'Collection and job manager initialized.',
+	collectionDisabled: 'Automatic collection is not configured.',
+	jobCompleted: 'Job completed.',
 	boilerAddressInvalid: 'chaudiere must be a host or a host with a valid port.',
 	boilerConfigInvalid: 'Boiler address is missing or invalid in config.json.',
 	boilerCredentialsUnavailable: 'Boiler credentials are missing or invalid in the admin row.',
@@ -128,6 +138,10 @@ export type LogMessageKey =
 	| 'historyFailed'
 	| 'boilerReadFailed'
 	| 'boilerImportFailed'
+	| 'collectionFailed'
+	| 'collectionStarted'
+	| 'collectionDisabled'
+	| 'jobCompleted'
 	| 'updateFeedFailed'
 	| 'stockStatusFailed'
 	| 'ashtrayStatusFailed'
