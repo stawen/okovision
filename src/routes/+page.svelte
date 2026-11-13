@@ -51,6 +51,7 @@
     { id: "minOutside", label: text.minOutside, unit: "°C", tone: "orange", value: displayedIndicators?.min ?? null },
   ]);
 
+  // Debounce range queries and abort stale requests when the selected day or chart range changes.
   $effect(() => {
     const range = selectedRange;
     const source = current;

@@ -221,6 +221,7 @@ export const realtimeIndicators = [
 	...supportingIndicators
 ];
 
+/** Produces the controller sensor identifiers for one-based heating circuit numbers. */
 export function realtimeSensorNames(circuit: number): string[] {
 	return realtimeIndicators.map((indicator) => indicator.sensorName(circuit));
 }

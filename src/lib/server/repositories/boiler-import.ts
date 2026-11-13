@@ -49,6 +49,7 @@ function parseValue(value: string): number | null {
 	return result;
 }
 
+/** Validates the controller CSV structure and rejects rows that do not match the requested day. */
 function parseCsv(contents: string, positions: number[], statusPosition: number, expectedDay?: string): CsvRecord[] {
 	const lines = contents.replace(/^\uFEFF/, '').split(/\r\n|\n|\r/);
 	if (lines.length < 2) throw new BoilerImportError('response');
@@ -88,6 +89,7 @@ function quoteColumn(column: string): string {
 
 export function createBoilerImportRepository(db: Pick<Pool, 'execute' | 'query'>) {
 	return {
+		/** Maps CSV columns through the database sensor mapping and inserts rows idempotently. */
 		async importCsv(contents: string, expectedDay?: string, signal?: AbortSignal): Promise<number> {
 			try {
 				const [sensorRows] = await db.execute<SensorRow[]>(

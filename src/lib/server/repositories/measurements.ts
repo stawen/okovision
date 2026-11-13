@@ -31,6 +31,7 @@ function numericValue(value: string | number | null): number | null {
 
 export function createMeasurementsRepository(db: Pick<Pool, 'execute' | 'query'>) {
 	return {
+		/** Resolves legacy sensor columns from the database before building the daily aggregates. */
 		async getDailyIndicators(day: string, poidsPellet: number, range?: ChartRange): Promise<DailyIndicators> {
 			const messages = getMessages();
 			if (range && !isChartRange(range)) throw new Error(messages.invalidIndicatorRange);

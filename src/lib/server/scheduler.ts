@@ -7,6 +7,7 @@ import { loadServerEnvironment } from './environment.ts';
 const log = logger.child({ component: 'scheduler' });
 const globalScheduler = globalThis as typeof globalThis & { __okovisionScheduler?: Promise<void> };
 
+/** Initializes the process-wide job manager once; scheduled collection is opt-in. */
 export function initializeJobs(schedule: boolean): Promise<void> {
 	globalScheduler.__okovisionScheduler ??= (async () => {
 		loadServerEnvironment();

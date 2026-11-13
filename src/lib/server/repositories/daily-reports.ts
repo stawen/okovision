@@ -99,6 +99,7 @@ function moveId(
 	return ids;
 }
 
+/** Applies the requested ordering in one SQL statement instead of updating each position separately. */
 function orderUpdateSql(column: string, ids: number[], scopeColumn?: string) {
 	const choices = ids.map(() => 'WHEN ? THEN ?').join(' ');
 	const scopedWhere = scopeColumn ? ` AND ${scopeColumn} = ?` : '';

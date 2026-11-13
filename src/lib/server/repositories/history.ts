@@ -152,6 +152,7 @@ export function createHistoryRepository(db: Pick<Pool, 'execute'>) {
 			}));
 		},
 
+		/** Uses the date reference table so calendar days without measurements stay visible as chart gaps. */
 		async getMonthlyHistory(month: number, year: number): Promise<MonthlyHistory> {
 			const firstDay = `${year}-${String(month).padStart(2, '0')}-01`;
 			const lastDay = new Date(Date.UTC(year, month, 0)).getUTCDate();

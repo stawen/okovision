@@ -15,6 +15,7 @@ export const load: PageServerLoad = ({ locals }) => {
 export const actions: Actions = {
 	default: async ({ request, locals, cookies, url, getClientAddress }) => {
 		const text = uiMessages(locals.language);
+		// Apply the address-based limit before parsing credentials to bound repeated login work.
 		if (!allowLogin(getClientAddress())) {
 			log.info('loginRateLimited');
 			return fail(429, { message: text.loginRateLimited });

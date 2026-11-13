@@ -53,6 +53,7 @@ function decodeEntity(entity: string): string {
 }
 
 function changelogText(value: string): string {
+	// The feed contains HTML, but the page renders plain text; strip markup before decoding entities.
 	return value
 		.slice(0, 20_000)
 		.replace(/<\s*li(?:\s[^>]*)?>/gi, '\n• ')

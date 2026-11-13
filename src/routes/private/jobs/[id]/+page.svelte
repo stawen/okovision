@@ -20,6 +20,7 @@
 	onMount(() => {
 		let timer: ReturnType<typeof setTimeout>;
 		const controller = new AbortController();
+		// Poll only while the job is active and stop the outstanding request when the page unmounts.
 		const poll = async () => {
 			try {
 				const response = await fetch(resolve('/private/api/jobs/[id]', { id: job.id }), {

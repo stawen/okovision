@@ -21,6 +21,7 @@ export type StockStatus =
 
 export function createMaintenanceRepository(db: Pick<Pool, 'execute'>) {
 	return {
+		/** Estimates remaining pellets from the latest fill and later daily consumption; missing inputs stay unavailable. */
 		async getStockStatus(hasSilo: boolean | null, siloSize: number | null): Promise<StockStatus> {
 			if (hasSilo === null || (hasSilo && siloSize === null)) return { status: 'unavailable' };
 			const [events] = await db.execute<FillRow[]>(
@@ -46,6 +47,7 @@ export function createMaintenanceRepository(db: Pick<Pool, 'execute'>) {
 			return { status: 'available', remains, percent: Math.round(100 * remains / capacity) };
 		},
 
+		/** Estimates ashtray fullness only from consumption recorded since the latest emptying event. */
 		async getAshtrayStatus(capacity: number): Promise<AshtrayStatus> {
 			const [events] = await db.execute<EmptyingRow[]>(
 				"SELECT MAX(event_date) AS lastEmptying FROM oko_silo_events WHERE event_type = 'ASHES'"

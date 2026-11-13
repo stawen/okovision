@@ -58,6 +58,7 @@
 	}
 
 	function todayDate(): string {
+		// Format the user's local calendar day rather than UTC's day, which may differ around midnight.
 		const now = new Date();
 		return new Date(now.getTime() - now.getTimezoneOffset() * 60_000).toISOString().slice(0, 10);
 	}
@@ -71,6 +72,7 @@
 	}
 
 	function eventDetails(event: ManagedSiloEvent): string {
+		// Pellet and bag prices are normalized to their usual display units; other events show the total only.
 		switch (event.eventType) {
 			case 'PELLET': {
 				const pricePerTonne = event.quantity > 0

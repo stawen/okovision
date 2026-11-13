@@ -90,6 +90,7 @@
 			];
 		}
 		const months = seasonalData?.months ?? [];
+		// The current month is incomplete, so omit it from the seasonal comparison.
 		const points = (key: 'max' | 'min' | 'consumption' | 'dju' | 'cycles' | 'ecs') =>
 			months.map((month) =>
 				`${month.year}-${String(month.month).padStart(2, '0')}` === today.slice(0, 7)
@@ -121,6 +122,7 @@
 		chart.redraw(false);
 	});
 
+	// Load Highcharts only in the browser; destroy the instance when its owning component unmounts.
 	onMount(() => {
 		let active = true;
 

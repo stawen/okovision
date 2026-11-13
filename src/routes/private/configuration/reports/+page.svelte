@@ -47,6 +47,7 @@
   const closeAssociationDialogOnSuccess = closeDialogOnSuccess(() => associationDialog);
   const closeDeleteAssociationDialogOnSuccess = closeDialogOnSuccess(() => deleteAssociationDialog);
 
+  /** Keeps validation failures visible in the dialog while closing it after a successful action. */
   function closeDialogOnSuccess(getDialog: () => HTMLDialogElement | undefined): SubmitFunction {
     return () =>
       async ({ result, update }) => {
@@ -96,6 +97,7 @@
     deleteAssociationDialog?.showModal();
   }
 
+  /** Uses the pointer's position within a row to distinguish dropping before from dropping after it. */
   function getDropPlacement(event: DragEvent): DropPlacement {
     const row = event.currentTarget as HTMLTableRowElement;
     return event.clientY < row.getBoundingClientRect().top + row.offsetHeight / 2 ? "before" : "after";
@@ -121,6 +123,7 @@
     if (event.dataTransfer) event.dataTransfer.dropEffect = "move";
   }
 
+  /** Copies the drag result into the hidden action form after Svelte updates its bound fields. */
   async function dropGraph(event: DragEvent, targetGraphId: number) {
     const graphId = draggedGraphId;
     if (graphId === null) return;
@@ -156,6 +159,7 @@
     if (event.dataTransfer) event.dataTransfer.dropEffect = "move";
   }
 
+  /** Submits the association reorder through the same form path as the graph reorder. */
   async function dropAssociation(event: DragEvent, targetSensorId: number) {
     const sensorId = draggedSensorId;
     if (sensorId === null) return;

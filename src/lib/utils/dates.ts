@@ -1,3 +1,4 @@
+/** Rejects impossible calendar dates instead of accepting JavaScript's date normalization. */
 export function isValidDay(day: string): boolean {
 	if (!/^\d{4}-\d{2}-\d{2}$/.test(day)) return false;
 	const year = Number(day.slice(0, 4));
@@ -8,6 +9,7 @@ export function isValidDay(day: string): boolean {
 	return parsed.getUTCFullYear() === year && parsed.getUTCMonth() === month - 1 && parsed.getUTCDate() === date;
 }
 
+/** Builds a YYYY-MM-DD calendar date in the requested zone, independent of the server's local zone. */
 export function todayInTimezone(timezone: string, now = new Date()): string {
 	const parts = new Intl.DateTimeFormat('en-CA', {
 		timeZone: timezone,
@@ -19,6 +21,7 @@ export function todayInTimezone(timezone: string, now = new Date()): string {
 	return `${get('year')}-${get('month')}-${get('day')}`;
 }
 
+/** Shifts calendar days in UTC so daylight-saving transitions cannot change the result. */
 export function shiftDay(day: string, days: number): string {
 	const date = new Date(`${day}T00:00:00Z`);
 	date.setUTCDate(date.getUTCDate() + days);

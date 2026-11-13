@@ -39,6 +39,7 @@ export class JobManager {
 		return job.status === 'queued' && (job.kind !== 'collection' || this.allowCollections);
 	}
 
+	/** Persists atomically with private permissions before publishing the new in-memory state. */
 	private async save(job: Job): Promise<void> {
 		const target = join(this.directory, `${job.id}.json`);
 		const temporary = join(this.directory, `.${job.id}.${randomUUID()}.tmp`);
@@ -87,6 +88,7 @@ export class JobManager {
 			}
 			const job = value as Job;
 			if (job.status === 'running') {
+				// A running job cannot survive a process restart, so persist it as interrupted.
 				await this.save({ ...job, status: 'interrupted', updatedAt: new Date().toISOString() });
 			} else {
 				this.jobs.set(id, job);
@@ -117,6 +119,7 @@ export class JobManager {
 			if (this.stopping) throw new Error('Job manager stopping');
 			if (kind === 'import' && (!filename || !isBoilerCsvFilename(filename))) throw new Error('Invalid filename');
 			if (kind === 'collection') {
+				// Only one automatic collection may be queued or running at a time.
 				const existing = [...this.jobs.values()].find((job) =>
 					job.kind === 'collection' && (job.status === 'queued' || job.status === 'running'));
 				if (existing) return structuredClone(existing);

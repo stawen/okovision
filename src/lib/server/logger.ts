@@ -26,6 +26,7 @@ function write(
 	try {
 		message = getMessages()[event];
 	} catch (error) {
+		// Logging must still work when the configured UI language is invalid.
 		if (!(error instanceof InvalidLanguageError)) throw error;
 		console.error(JSON.stringify({
 			...fields,

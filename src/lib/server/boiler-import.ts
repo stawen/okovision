@@ -27,6 +27,7 @@ export function boilerCsvDay(filename: string): string {
 	return `${filename.slice(6, 10)}-${filename.slice(10, 12)}-${filename.slice(12, 14)}`;
 }
 
+/** Enforces the byte limit while streaming and decodes only the controller's supported CSV charsets. */
 async function responseText(response: Response, maxBytes: number): Promise<string> {
 	const length = response.headers.get('content-length');
 	if (length && Number(length) > maxBytes) throw new BoilerImportError('response');
@@ -99,6 +100,7 @@ export function createBoilerCsvConnector(fetcher: typeof fetch = fetch) {
 	}
 
 	return {
+		/** Keeps only valid CSV links from the controller's own logfile directory. */
 		async getFiles(address: string, signal?: AbortSignal): Promise<BoilerCsvFile[]> {
 			const origin = new URL(address).origin;
 			const directory = new URL(directoryPath, origin);

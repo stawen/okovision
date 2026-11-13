@@ -11,6 +11,7 @@ interface LockRow extends RowDataPacket {
 	acquired: number | null;
 }
 
+/** Holds a database-wide advisory lock for the whole write operation and aborts its connection together. */
 export async function withWriteLock<T>(signal: AbortSignal, run: (connection: Connection, signal: AbortSignal) => Promise<T>): Promise<T> {
 	loadServerEnvironment();
 	const options = databaseOptions(process.env);
@@ -54,6 +55,7 @@ export async function importManualFile(filename: string, signal: AbortSignal): P
 		createBoilerImportRepository(db).importCsv(csv, day, lockedSignal));
 }
 
+/** Imports available days under one lock, skipping complete summaries and retrying explicitly dirty days. */
 export async function collectBoiler(
 	signal: AbortSignal,
 	progress: (completed: number, total: number, day: string, dirty: boolean) => Promise<void>,

@@ -22,6 +22,7 @@
 	const current = (path: ScopePath) => data.pathname === path;
 </script>
 
+<!-- Restore focus to the menu trigger when Escape closes an open navigation menu. -->
 <svelte:window onkeydown={(event) => {
 	if (event.key === 'Escape') {
 		if (event.target instanceof HTMLElement) {

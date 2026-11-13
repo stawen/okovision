@@ -11,6 +11,7 @@ export const init = async () => {
 	if (!building) await initializeJobs(!dev);
 };
 
+/** Sets request context before routes run, protects private URLs, and injects the selected UI language. */
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.language = getAppLanguage();
 	event.locals.member = getSession(event.cookies.get(sessionCookie));

@@ -18,6 +18,7 @@ function prune() {
 	for (const [key, attempt] of attempts) if (attempt.expires <= now) attempts.delete(key);
 }
 
+/** Resolves only well-formed, unexpired tokens and returns a copy of the stored member. */
 export function getSession(token: string | undefined): Member | null {
 	if (!token || !/^[a-f0-9]{64}$/.test(token)) return null;
 	const key = digest(token);
@@ -30,6 +31,7 @@ export function getSession(token: string | undefined): Member | null {
 	return { ...session.member };
 }
 
+/** Creates a random bearer token while keeping only its digest in the process-local session store. */
 export function createSession(member: Member): string {
 	prune();
 	if (sessions.size >= capacity) throw new Error(getMessages().sessionCapacityExceeded);
@@ -38,10 +40,12 @@ export function createSession(member: Member): string {
 	return token;
 }
 
+/** Removes a token from the process-local session store; absent tokens are harmless. */
 export function revokeSession(token: string | undefined): void {
 	if (token) sessions.delete(digest(token));
 }
 
+/** Limits each client address to ten login attempts per in-memory fifteen-minute window. */
 export function allowLogin(address: string): boolean {
 	prune();
 	const key = digest(address);

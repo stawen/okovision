@@ -31,6 +31,7 @@ function legacyPasswordHash(password: string): Buffer {
 
 export function createUsersRepository(db: Pick<Pool, 'execute'>) {
 	return {
+		/** Verifies legacy SHA-1 credentials with a fixed-length constant-time comparison. */
 		async authenticate(name: string, password: string): Promise<Member | null> {
 			const [rows] = await db.execute<UserRow[]>(
 				'SELECT id, user, pass, type FROM oko_user WHERE user = ? LIMIT 2', [name]
@@ -41,6 +42,7 @@ export function createUsersRepository(db: Pick<Pool, 'execute'>) {
 			const matches = timingSafeEqual(hash, stored);
 			return row && matches ? { id: row.id, name: row.user, type: row.type } : null;
 		},
+		/** Decodes the legacy admin boiler password only when its base64 representation is canonical. */
 		async getAdminBoilerCredentials(): Promise<BoilerCredentials | null> {
 			const [rows] = await db.execute<BoilerCredentialsRow[]>(
 				'SELECT login_boiler AS login, pass_boiler AS pass FROM oko_user WHERE user = ? LIMIT 2',

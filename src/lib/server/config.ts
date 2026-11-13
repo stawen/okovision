@@ -152,6 +152,7 @@ export async function readCollectionConfig(): Promise<CollectionConfig> {
 	return parseCollectionConfig(await readConfigFile());
 }
 
+/** Treats a missing config file or missing tcRef as disabled collection; other errors remain visible. */
 export async function readOptionalCollectionConfig(): Promise<CollectionConfig | null> {
 	let value: unknown;
 	try {

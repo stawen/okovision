@@ -5,6 +5,7 @@ import { getMessages } from './messages.ts';
 
 let pool: Pool | undefined;
 
+/** Validates host-only DB_ADRESSE and builds a verified-TLS connection config by default. */
 export function databaseOptions(env: NodeJS.ProcessEnv): ConnectionOptions {
 	const messages = getMessages();
 	const address = env.DB_ADRESSE?.trim();
@@ -60,6 +61,7 @@ export function databaseOptions(env: NodeJS.ProcessEnv): ConnectionOptions {
 	};
 }
 
+/** Creates the short-lived connection used by startup checks and always closes it. */
 export async function checkDatabaseConnection(env: NodeJS.ProcessEnv): Promise<void> {
 	const connection = await createConnection(databaseOptions(env));
 	try {
@@ -69,6 +71,7 @@ export async function checkDatabaseConnection(env: NodeJS.ProcessEnv): Promise<v
 	}
 }
 
+/** Lazily creates one shared pool after loading the server environment. */
 export function getDatabasePool(): Pool {
 	if (!pool) loadServerEnvironment();
 	pool ??= createPool({

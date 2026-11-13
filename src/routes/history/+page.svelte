@@ -90,6 +90,7 @@
       } finally {
         pending = false;
         await tick();
+        // Keep keyboard users on the same control after SvelteKit replaces the form result.
         if (focused instanceof HTMLElement && focused.isConnected) focused.focus({ preventScroll: true });
       }
     };

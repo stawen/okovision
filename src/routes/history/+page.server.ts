@@ -23,6 +23,7 @@ async function history(language: Language, selection: {
 	season?: string;
 	direction?: string;
 } = {}) {
+	// Selection and each data source are handled separately so a stock failure does not hide history.
 	const text = uiMessages(language);
 	let config;
 	let settings;

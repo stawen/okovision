@@ -7,6 +7,7 @@ type ChartAxis = {
 };
 const syncTrigger = 'daily-chart-sync';
 
+/** Keeps all daily charts on the same user-selected time range without reprocessing its own updates. */
 export function createDailyChartSync(onChange: (range: ChartRange | null) => void) {
 	const axes = new Set<ChartAxis>();
 	let range: ChartRange | null = null;

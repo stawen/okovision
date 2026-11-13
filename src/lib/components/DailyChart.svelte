@@ -28,6 +28,7 @@
   let highcharts: typeof import("highcharts/highstock") | undefined = $state();
   let renderError = $state(false);
 
+  // Load Highcharts only in the browser so server rendering never evaluates the chart library.
   onMount(() => {
     let active = true;
     void (async () => {

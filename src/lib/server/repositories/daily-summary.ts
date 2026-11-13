@@ -28,6 +28,7 @@ export function createDailySummaryRepository(db: Pick<Pool, 'execute' | 'query'>
 			return Number(rows[0]?.count) === 1;
 		},
 
+		/** Skips today and incomplete measurements; DJU uses the configured reference temperature. */
 		async save(day: string, today: string, force: boolean, weight: number, tcRef: number): Promise<'saved' | 'skipped'> {
 			if (day === today) return 'skipped';
 			const [existing] = await db.execute<CountRow[]>(

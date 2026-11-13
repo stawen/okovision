@@ -12,11 +12,13 @@ export interface DailyIndicators {
 	missingSensors: boolean;
 }
 
+/** Accepts only finite, ordered timestamps within JavaScript's supported date range. */
 export function isChartRange(range: ChartRange): boolean {
 	return Number.isFinite(range.min) && Number.isFinite(range.max)
 		&& range.min >= 0 && range.max <= 8640000000000000 && range.min < range.max;
 }
 
+/** Validates the JSON shape returned by the daily-indicators endpoint before it reaches the UI. */
 export function isDailyIndicators(value: unknown): value is DailyIndicators {
 	if (!value || typeof value !== 'object') return false;
 	return 'sampleCount' in value && Number.isSafeInteger(value.sampleCount)

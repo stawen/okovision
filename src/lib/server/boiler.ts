@@ -48,6 +48,7 @@ function boilerError(code: BoilerErrorCode): BoilerError {
 	return new BoilerError(code, message);
 }
 
+/** Normalizes controller sentinels, enumerated values, units and optional divisors for display. */
 function normalizeReading(sensor: BoilerSensor): RealtimeReading {
 	const messages = getMessages();
 	const rawValue = sensor.value;
@@ -193,6 +194,7 @@ export function createBoilerConnector(fetcher: typeof fetch = fetch) {
 	}
 
 	return {
+		/** Serializes access to the controller's shared login cookie and reconnects after stale sessions. */
 		async getIndicators(
 			addressValue: string,
 			credentials: BoilerCredentials,
@@ -235,6 +237,7 @@ export function createBoilerConnector(fetcher: typeof fetch = fetch) {
 
 let connector: ReturnType<typeof createBoilerConnector> | undefined;
 
+/** Loads the read-only controller credentials and reuses the process-wide connector. */
 export async function getBoilerIndicators(circuit: number): Promise<RealtimeData> {
 	let address: string;
 	try {

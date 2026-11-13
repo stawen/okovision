@@ -39,6 +39,7 @@ function getSeasonDates(value: string) {
 	if (start.getUTCFullYear() !== year || start.getUTCMonth() !== month - 1 || start.getUTCDate() !== day) {
 		throw new SeasonError('invalid-input');
 	}
+	// A season ends the day before the next anniversary, including across leap years.
 	const end = new Date(Date.UTC(year + 1, month - 1, day));
 	end.setUTCDate(end.getUTCDate() - 1);
 	const endDate = end.toISOString().slice(0, 10);

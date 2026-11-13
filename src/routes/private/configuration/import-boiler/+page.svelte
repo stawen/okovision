@@ -16,6 +16,7 @@
 
 	onDestroy(() => controller?.abort());
 
+	/** Polls the background import until a terminal state, while allowing component teardown to cancel it. */
 	async function waitForImport(id: string, filename: string, signal: AbortSignal): Promise<void> {
 		while (!signal.aborted) {
 			const response = await fetch(resolve('/private/api/jobs/[id]', { id }), {

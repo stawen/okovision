@@ -11,6 +11,7 @@ import type { Actions, PageServerLoad } from './$types';
 
 const log = logger.child({ component: 'dashboard' });
 
+/** Loads one validated day while keeping indicators, charts and ashtray status independently available. */
 async function dashboard(language: Language, requestedDay?: string, direction?: string) {
 	const messages = uiMessages(language);
 	let config;
