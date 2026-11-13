@@ -52,7 +52,7 @@ describe('navigation de la cartographie', () => {
 		expect(resolve).not.toHaveBeenCalled();
 	});
 
-	it.each(pages)('rend uniquement le périmètre de $path, sans formulaire métier', (page) => {
+	it.each(pages.filter((page) => page.path !== '/private/about'))('rend uniquement le périmètre de $path, sans formulaire métier', (page) => {
 		const { body } = render(ScopePage, {
 			props: {
 				path: page.path,

@@ -9,6 +9,7 @@ const fr = {
 	siloEventsFailed: 'Impossible de gérer les événements de silo.',
 	historyFailed: 'Impossible de charger les données historiques.',
 	boilerReadFailed: 'Impossible de récupérer les mesures chaudière.',
+	updateFeedFailed: 'Impossible de charger le flux des mises à jour.',
 	ashtrayStatusFailed: 'Impossible de charger le suivi du cendrier.',
 	loginFailed: 'Impossible de traiter la connexion membre.',
 	loginRejected: 'Identifiants de connexion refusés.',
@@ -66,6 +67,7 @@ const en: Translations = {
 	siloEventsFailed: 'Unable to manage silo events.',
 	historyFailed: 'Unable to load historical data.',
 	boilerReadFailed: 'Unable to retrieve boiler readings.',
+	updateFeedFailed: 'Unable to load the update feed.',
 	ashtrayStatusFailed: 'Unable to load ashtray tracking.',
 	loginFailed: 'Unable to process member sign-in.',
 	loginRejected: 'Sign-in credentials rejected.',
@@ -123,6 +125,7 @@ export type LogMessageKey =
 	| 'siloEventsFailed'
 	| 'historyFailed'
 	| 'boilerReadFailed'
+	| 'updateFeedFailed'
 	| 'stockStatusFailed'
 	| 'ashtrayStatusFailed'
 	| 'databaseCheckSucceeded'

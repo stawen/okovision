@@ -95,6 +95,25 @@ h1, h2, h3, p { margin: 0; }
 .account-panel { width: 14rem; }
 .member-name { overflow-wrap: anywhere; padding: 0.4rem 0.65rem 0.7rem; margin-bottom: 0.35rem; border-bottom: 1px solid var(--border); color: var(--muted); font-size: 0.78rem; }
 .placeholder-page { min-height: 65vh; padding-block: 2.5rem; }
+.about-page { min-height: 65vh; padding-block: 2.5rem 3.5rem; }
+.about-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem; margin-bottom: 2rem; }
+.about-intro { max-width: 46rem; margin-top: 0.65rem; color: #536274; }
+.about-version { display: grid; gap: 0.1rem; flex: 0 0 auto; padding: 0.65rem 0.9rem; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
+.about-version span, .about-section-heading p { color: var(--muted); font-size: 0.78rem; }
+.about-version strong { color: #263d54; font-size: 1rem; }
+.about-section { padding: 1.25rem; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+.about-section-heading { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+.about-section-heading h2 { color: #263d54; font-size: 1.15rem; font-weight: 600; }
+.about-section-heading p { margin-top: 0.2rem; }
+.about-count { display: grid; place-items: center; min-width: 2rem; height: 2rem; padding-inline: 0.5rem; border-radius: 999px; background: #edf5fc; color: var(--primary-dark); font-size: 0.8rem; font-weight: 650; }
+.about-update-note, .about-empty { margin-bottom: 1rem; color: #536274; font-size: 0.82rem; }
+.about-update-error { padding: 0.85rem 1rem; border: 1px solid #efd1d1; border-radius: 7px; background: #fff7f6; color: #8e3535; font-size: 0.85rem; }
+.about-release-list { display: grid; gap: 0.7rem; padding: 0; margin: 0; list-style: none; }
+.about-release { padding: 0.85rem 1rem; border: 1px solid var(--border); border-radius: 8px; background: #fcfdff; }
+.about-release header { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 0.4rem; }
+.about-release h3 { color: #263d54; font-size: 0.9rem; font-weight: 650; }
+.about-release header > span { flex: 0 0 auto; color: var(--muted); font-size: 0.75rem; }
+.about-release p { color: #46566b; font-size: 0.82rem; white-space: pre-line; }
 .scope-description { max-width: 48rem; margin-top: 1rem; color: #46566b; }
 .scope-status { margin-top: 1rem; color: var(--muted); font-size: 0.85rem; }
 .page-tabs { display: flex; flex-wrap: wrap; gap: 0.5rem; padding-bottom: 0.8rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border); }
@@ -373,6 +392,10 @@ h1 { color: #1d2b3c; font-size: clamp(1.55rem, 3vw, 2rem); font-weight: 650; let
 	.reports-add-form > input { flex-basis: 100%; }
 	.reports-inline-form { flex-wrap: wrap; }
 	.reports-table { min-width: 38rem; }
+	.about-heading { align-items: flex-start; flex-direction: column; gap: 0.85rem; }
+	.about-section { padding: 0.9rem; }
+	.about-release { padding: 0.75rem; }
+	.about-release header { align-items: flex-start; flex-direction: column; gap: 0.1rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
