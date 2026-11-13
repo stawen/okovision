@@ -15,6 +15,10 @@ plan de bascule.**
 
 Prérequis : Node.js 26 (voir [`.nvmrc`](./.nvmrc)) et npm.
 
+Pour développer sans base existante, utiliser la
+[base Docker locale avec fixtures](./docs/installation-et-exploitation.md#base-docker-pour-le-développement-et-les-tests).
+Elle est indépendante des compositions d'exploitation et ne remplace pas votre `.env`.
+
 1. Préparer les fichiers privés `.env` et `config.json` en suivant le
    [guide d'installation et d'exploitation](./docs/installation-et-exploitation.md).
 2. Installer et lancer le serveur :

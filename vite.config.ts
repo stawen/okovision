@@ -15,7 +15,7 @@ export default defineConfig({
 	],
 	server: {
 		fs: {
-			deny: ['.env', '.env.*', '**/config.json', '**/.svelte-kit/generated/**/env/config.js', '**/.git/**', '**/archive/**', '**/secrets/**', '**/data/**']
+			deny: ['.env', '.env.*', '**/config.json', '**/.svelte-kit/generated/**/env/config.js', '**/.git/**', '**/archive/**', '**/secrets/**', '**/data/**', '**/setup/**', '**/tests/sql/**']
 		}
 	},
 	test: {
