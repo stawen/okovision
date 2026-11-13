@@ -143,6 +143,8 @@ Sources : [adminSeason.js](../archive/php/js/adminSeason.js), [administration.cl
 
 Sources : [gstrapport.php](../archive/php/gstrapport.php), [gstrapport.js](../archive/php/js/gstrapport.js), [gstGraphique.class.php](../archive/php/_include/gstGraphique.class.php).
 
+**Portage SvelteKit** : la page privée de gestion permet de créer, renommer, supprimer et réordonner les graphiques, puis d'ajouter, modifier, retirer et réordonner leurs capteurs associés. Les coefficients sont validés côté serveur; la suppression d'un graphique supprime également ses affectations. Le réordonnancement utilise des commandes haut/bas accessibles au clavier plutôt que le glisser-déposer du legacy.
+
 ### F10 — Matrice CSV et correspondance des capteurs
 
 - Détecter si une matrice est initialisée.

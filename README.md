@@ -7,7 +7,7 @@ Supervision de chaudière Ökofen, en cours de réécriture en **SvelteKit 3 / S
 - L'application historique complète est conservée, sans modification de ses sources, dans [archive/php/](./archive/php/). Elle n'est ni exécutée ni publiée par SvelteKit.
 - Le nouveau socle affiche une page de supervision responsive avec les couleurs historiques : anthracite `#222222`, bleu `#428bca`, vert `#5cb85c`, orange `#f0ad4e` et cyan `#5bc0de`. Aucun ancien framework ou script n'est chargé.
 - L'accueil lit les indicateurs et graphiques journaliers configurés en lecture seule depuis MySQL. Le zoom et le déplacement temporel sont synchronisés entre graphiques; les quatre indicateurs sont recalculés sur la plage sélectionnée. La collecte et les commandes chaudière ne sont pas encore portées.
-- La page Historique lit les synthèses mensuelles et saisonnières et le stock estimé en lecture seule. Les autres pages de la [cartographie](./archive/screenshot/cartographie.json) décrivent leur périmètre et leur indisponibilité, sans action métier. L'installation dispose aussi d'une page descriptive.
+- La page Historique lit les synthèses mensuelles et saisonnières et le stock estimé en lecture seule. La gestion des rapports journaliers permet de créer, renommer, supprimer et réordonner les graphiques, ainsi que d'affecter des capteurs et régler leurs coefficients. Les autres pages de la [cartographie](./archive/screenshot/cartographie.json) décrivent leur périmètre et leur indisponibilité, sans action métier. L'installation dispose aussi d'une page descriptive.
 - Chaque page possède son propre dossier et son fichier `+page.svelte` dans [src/routes/](./src/routes/). Les URL et noms de dossiers sont en anglais (`/history`, `/login`, `/setup`, `/private/realtime/settings`, etc.), indépendamment de la langue de l'interface. Toutes les pages et actions privées sont regroupées sous [src/routes/private/](./src/routes/private/), avec des URL préfixées par `/private`. Aucune route générique ne remplace cette arborescence.
 - `GET /api/v1/health` contrôle uniquement la vitalité HTTP; `database: "not-configured"` ne reflète pas la configuration ni la disponibilité MySQL.
 
@@ -141,4 +141,4 @@ L'audit initial npm signale 14 alertes dans les dépendances de développement (
 - [Analyse de faisabilité](./docs/analyse-technique-et-faisabilite-node-svelte.md)
 - [Actions à faire](./docs/actions-a-faire.md)
 
-La prochaine tranche concerne les séries journalières, le graphique et leurs tests de parité. Les bibliothèques métier seront ajoutées lors de leur portage, pas préinstallées sans usage.
+La suite de la migration porte sur les fonctionnalités restantes de la cartographie historique. Les bibliothèques métier seront ajoutées lors de leur portage, pas préinstallées sans usage.

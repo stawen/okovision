@@ -4,6 +4,7 @@ import { createMeasurementsRepository } from './repositories/measurements.ts';
 import { createMaintenanceRepository } from './repositories/maintenance.ts';
 import { createHistoryRepository } from './repositories/history.ts';
 import { createUsersRepository } from './repositories/users.ts';
+import { createDailyReportsRepository } from './repositories/daily-reports.ts';
 
 function createDataAccess() {
 	const db = getDatabasePool();
@@ -12,7 +13,8 @@ function createDataAccess() {
 		measurements: createMeasurementsRepository(db),
 		history: createHistoryRepository(db),
 		maintenance: createMaintenanceRepository(db),
-		users: createUsersRepository(db)
+		users: createUsersRepository(db),
+		dailyReports: createDailyReportsRepository(db)
 	};
 }
 
