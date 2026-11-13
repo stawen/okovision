@@ -34,14 +34,6 @@ export const pages = [
 		titleKey: 'boilerImportTitle', descriptionKey: 'boilerImportDescription'
 	},
 	{
-		path: '/private/configuration/import-csv', group: 'manual', private: true,
-		titleKey: 'csvImportTitle', descriptionKey: 'csvImportDescription'
-	},
-	{
-		path: '/private/configuration/bulk-import', group: 'manual', private: true,
-		titleKey: 'bulkImportTitle', descriptionKey: 'bulkImportDescription'
-	},
-	{
 		path: '/private/configuration/daily-summaries', group: 'manual', private: true,
 		titleKey: 'dailySummariesTitle', descriptionKey: 'dailySummariesDescription'
 	},
