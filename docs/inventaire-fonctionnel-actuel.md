@@ -174,6 +174,10 @@ Sources : [adminMatrix.js](../archive/php/js/adminMatrix.js), [administration.cl
 
 Sources : [amImpBoiler.js](../archive/php/js/amImpBoiler.js), [amImpUsb.js](../archive/php/js/amImpUsb.js), [amImportMass.js](../archive/php/js/amImportMass.js), [okofen.class.php](../archive/php/_include/okofen.class.php#L96).
 
+**Portage SvelteKit** : l'écran privé `import-boiler` liste les fichiers journaliers `touch_YYYYMMDD.csv` du répertoire chaudière configuré et permet leur import dans `oko_historique_full`. Il conserve le mapping `oko_capteur`, la conversion des décimales, l'arrondi à la minute, l'idempotence `(jour, heure)` et le marqueur de début de cycle. Les imports locaux/USB et en masse ne sont pas inclus dans ce portage.
+
+Le capteur `startCycle` est calculé, jamais lu dans un champ CSV : sa colonne vaut `1` lors du passage au statut `4` et reste à sa valeur par défaut sinon. Les timestamps reprennent la convention legacy : date et heure du CSV interprétées en UTC, sans conversion selon le fuseau de l'installation ou de la session MySQL. Un réimport ne corrige pas les lignes déjà présentes.
+
 ### F12 — Calcul et recalcul des synthèses
 
 - Détecter les jours disposant de mesures détaillées sans synthèse, hors journée courante.

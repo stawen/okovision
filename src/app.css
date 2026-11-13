@@ -121,6 +121,26 @@ h1, h2, h3, p { margin: 0; }
 .about-pagination span { color: #536274; font-size: 0.8rem; }
 .scope-description { max-width: 48rem; margin-top: 1rem; color: #46566b; }
 .scope-status { margin-top: 1rem; color: var(--muted); font-size: 0.85rem; }
+.boiler-import-page { min-height: 65vh; padding-block: 2.5rem; }
+.boiler-import-feedback, .boiler-import-empty { margin-top: 1rem; color: #536274; font-size: 0.85rem; }
+.boiler-import-feedback { padding: 0.8rem 1rem; border: 1px solid #cfe7d7; border-radius: 7px; background: #f3faf5; color: #315d3b; }
+.boiler-import-error { border-color: #efd1d1; background: #fff7f6; color: #8e3535; }
+.boiler-import-table-scroll { width: 100%; margin-top: 1.5rem; overflow-x: auto; border: 1px solid #cbd6e2; border-radius: 9px; background: var(--surface); box-shadow: 0 2px 8px rgb(34 54 78 / 6%); }
+.boiler-import-table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; }
+.boiler-import-table th, .boiler-import-table td { padding: 0.8rem 1rem; border-bottom: 1px solid #dfe6ee; vertical-align: middle; }
+.boiler-import-table th { background: #edf3f9; color: #34445a; font-size: 0.76rem; font-weight: 650; }
+.boiler-import-table td { color: #34445a; font-size: 0.9rem; }
+.boiler-import-table tbody tr:nth-child(even) td { background: #f8fafc; }
+.boiler-import-table tbody tr:hover td { background: #eef5fb; }
+.boiler-import-table tbody tr:last-child td { border-bottom: 0; }
+.boiler-import-table th:last-child, .boiler-import-table td:last-child { width: 6rem; text-align: right; }
+.boiler-import-table a { color: var(--primary-dark); font-weight: 550; overflow-wrap: anywhere; }
+.boiler-import-button { display: inline-grid; place-items: center; width: 2.5rem; height: 2.5rem; padding: 0; border: 1px solid #cbd6e2; border-radius: 7px; background: #fff; color: var(--primary-dark); cursor: pointer; }
+.boiler-import-button svg { width: 1.25rem; height: 1.25rem; }
+.boiler-import-button:hover { border-color: var(--primary-dark); background: #e9f2fb; }
+.boiler-import-button:focus-visible { outline: 3px solid rgb(21 150 220 / 45%); outline-offset: 2px; }
+.boiler-import-spinner { width: 1.2rem; height: 1.2rem; border: 2px solid #cbd6e2; border-top-color: var(--primary-dark); border-radius: 50%; animation: boiler-import-spin 0.75s linear infinite; }
+@keyframes boiler-import-spin { to { transform: rotate(360deg); } }
 .page-tabs { display: flex; flex-wrap: wrap; gap: 0.5rem; padding-bottom: 0.8rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border); }
 .page-tabs a { padding: 0.5rem 0.85rem; border-radius: 6px; color: #52647a; font-size: 0.85rem; text-decoration: none; }
 .page-tabs a[aria-current="page"] { color: var(--primary-dark); background: #e5f0fa; }
