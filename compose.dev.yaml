@@ -28,6 +28,13 @@ services:
     volumes:
       - ./setup/install.sql:/docker-entrypoint-initdb.d/10-schema.sql:ro
       - ./tests/sql/okovision-dataset.sql:/docker-entrypoint-initdb.d/20-fixtures.sql:ro
+  db-setup:
+    <<: *database
+    profiles: ["setup"]
+    ports:
+      - "127.0.0.1:${DEV_SETUP_DB_PORT:-3309}:3306"
+    tmpfs:
+      - /var/lib/mysql
   db-test:
     <<: *database
     profiles: ["test"]

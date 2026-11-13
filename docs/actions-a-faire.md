@@ -1,5 +1,28 @@
 # Actions à faire
 
+## Premier lancement et suivi des mises à jour de la base
+
+- Utiliser `npm run appsetup` avec le fichier privé `.env.appsetup` pour démarrer
+  l'application contre une base locale sans tables ni données. Ce mode est
+  distinct du développement avec fixtures et ne doit jamais réinitialiser une
+  base existante. Voir le [guide local](./installation-et-exploitation.md#tester-le-premier-lancement-avec-une-base-vierge).
+- Porter le provisioning initial dans le setup : vérifier la connexion définie
+  par les variables d'environnement, détecter une base vierge, créer le schéma
+  et les seules données de référence nécessaires, puis initialiser le compte
+  administrateur sans mot de passe public ni mesures de démonstration.
+- Prévoir dès ce provisioning des migrations versionnées et un registre
+  persistant des migrations appliquées (identifiant, date et résultat), afin de
+  suivre aussi les futures mises à jour. Séparer installation, mise à niveau
+  d'un schéma reconnu et refus d'un schéma inconnu ou incompatible.
+- Sérialiser les migrations et prévoir sauvegarde, erreurs explicites et reprise
+  après échec, en tenant compte des DDL non transactionnelles de MySQL/MariaDB.
+  Ne pas marquer une migration échouée comme appliquée; ne jamais réutiliser le
+  SQL historique destructif comme mécanisme de mise à jour.
+- Tester sur bases jetables : installation vierge, second lancement sans
+  réinitialisation, mise à niveau préservant les données, échec/reprise et suivi
+  des versions. La page setup actuelle reste descriptive tant que ce parcours
+  n'est pas implémenté.
+
 ## Écarts avec le site de référence
 
 Le [site de présentation d'Okovision](https://bertrandgorge.github.io/okovision/)

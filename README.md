@@ -19,6 +19,10 @@ Pour développer sans base existante, utiliser la
 [base Docker locale avec fixtures](./docs/installation-et-exploitation.md#base-docker-pour-le-développement-et-les-tests).
 Elle est indépendante des compositions d'exploitation et ne remplace pas votre `.env`.
 
+Pour préparer les essais du tout premier lancement, `npm run appsetup` utilise
+une [base locale sans tables](./docs/installation-et-exploitation.md#tester-le-premier-lancement-avec-une-base-vierge),
+avec connexion définie dans `.env.appsetup`. Le provisioning du setup reste à porter.
+
 1. Préparer les fichiers privés `.env` et `config.json` en suivant le
    [guide d'installation et d'exploitation](./docs/installation-et-exploitation.md).
 2. Installer et lancer le serveur :
