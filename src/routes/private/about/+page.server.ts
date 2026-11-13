@@ -4,7 +4,7 @@ import type { PageServerLoad } from './$types';
 import packageJson from '../../../../package.json' with { type: 'json' };
 
 const log = logger.child({ component: 'about' });
-const updateFeedUrl = 'https://okovision.dronek.com/update.json';
+const updateFeedUrl = 'https://okovision.dronek.com/update.test.json';
 
 type Release = {
 	version: string;

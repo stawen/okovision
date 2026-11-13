@@ -114,6 +114,11 @@ h1, h2, h3, p { margin: 0; }
 .about-release h3 { color: #263d54; font-size: 0.9rem; font-weight: 650; }
 .about-release header > span { flex: 0 0 auto; color: var(--muted); font-size: 0.75rem; }
 .about-release p { color: #46566b; font-size: 0.82rem; white-space: pre-line; }
+.about-pagination { display: flex; align-items: center; justify-content: center; gap: 1rem; padding-top: 1rem; margin-top: 1rem; border-top: 1px solid var(--border); }
+.about-pagination button { padding: 0.45rem 0.7rem; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--primary-dark); font: inherit; font-size: 0.8rem; cursor: pointer; }
+.about-pagination button:hover:not(:disabled) { background: #edf5fc; }
+.about-pagination button:disabled { color: #9aa6b5; cursor: not-allowed; }
+.about-pagination span { color: #536274; font-size: 0.8rem; }
 .scope-description { max-width: 48rem; margin-top: 1rem; color: #46566b; }
 .scope-status { margin-top: 1rem; color: var(--muted); font-size: 0.85rem; }
 .page-tabs { display: flex; flex-wrap: wrap; gap: 0.5rem; padding-bottom: 0.8rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border); }

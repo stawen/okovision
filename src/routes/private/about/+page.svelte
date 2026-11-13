@@ -2,8 +2,13 @@
   import { uiMessages } from "#lib/i18n.js";
   import type { PageProps } from "./$types";
 
+  const pageSize = 10;
   let { data }: PageProps = $props();
   let text = $derived(uiMessages(data.language));
+  let currentPage = $state(1);
+  let pageCount = $derived(Math.max(1, Math.ceil(data.releases.length / pageSize)));
+  let visiblePage = $derived(Math.min(currentPage, pageCount));
+  let visibleReleases = $derived(data.releases.slice((visiblePage - 1) * pageSize, visiblePage * pageSize));
 </script>
 
 <svelte:head>
@@ -35,12 +40,11 @@
     {#if data.updateFeedError}
       <p class="about-update-error" role="alert">{text.aboutUpdatesUnavailable}</p>
     {:else}
-      <p class="about-update-note">{text.aboutUpdatesNote}</p>
       {#if data.releases.length === 0}
         <p class="about-empty">{text.aboutUpdatesEmpty}</p>
       {:else}
         <ol class="about-release-list">
-          {#each data.releases as release (release.version)}
+          {#each visibleReleases as release (release.version)}
             <li>
               <article class="about-release">
                 <header>
@@ -56,6 +60,13 @@
             </li>
           {/each}
         </ol>
+        {#if pageCount > 1}
+          <nav class="about-pagination" aria-label={text.aboutPagination}>
+            <button type="button" disabled={visiblePage === 1} onclick={() => currentPage = visiblePage - 1}>{text.aboutPreviousPage}</button>
+            <span aria-live="polite">{text.aboutPage} {visiblePage} {text.aboutPageOf} {pageCount}</span>
+            <button type="button" disabled={visiblePage === pageCount} onclick={() => currentPage = visiblePage + 1}>{text.aboutNextPage}</button>
+          </nav>
+        {/if}
       {/if}
     {/if}
   </section>

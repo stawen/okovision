@@ -15,20 +15,26 @@ describe('page À propos et notes de mise à jour', () => {
 					language: 'fr',
 					applicationVersion: '0.0.1',
 					updateFeedError: false,
-					releases: [
-						{ version: '1.10.1', date: '06/12/2020', changelog: '• Première version\n• <script>alert(1)</script>' }
-					]
+					releases: Array.from({ length: 12 }, (_, index) => ({
+						version: `2.${index}.0`,
+						date: index === 0 ? '06/12/2020' : null,
+						changelog: index === 0 ? '• Première version\n• <script>alert(1)</script>' : `Note ${index + 1}`
+					}))
 				}
 			}
 		});
 
 		expect(head).toContain('À propos — OkoVision');
 		expect(body).toContain('0.0.1');
-		expect(body).toContain('Notes des versions publiées de l’application historique.');
+		expect(body).toContain('Version installée');
+		expect(body).toContain('Notes des versions publiées et disponibles.');
 		expect(body).toContain('&lt;script>alert(1)&lt;/script>');
 		expect(body).not.toContain('<script>alert(1)');
 		expect(body).not.toContain('href=');
 		expect(body).not.toContain('Télécharger');
+		expect(body.match(/class="about-release"/g)).toHaveLength(10);
+		expect(body).toContain('Page 1 sur 2');
+		expect(body).not.toContain('Version 2.10.0');
 	});
 
 	it('lit le flux en lecture seule, trie ses versions et convertit le changelog HTML en texte', async () => {
