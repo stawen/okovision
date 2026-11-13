@@ -10,14 +10,18 @@
 	let feedback = $derived(form && 'error' in form ? form.error : null);
 	let failed = $derived(Boolean(form && 'error' in form));
 
-	const enhanceBoilerImport: SubmitFunction = ({ formData }) => {
+	const enhanceBoilerImport: SubmitFunction = ({ formData, cancel }) => {
+		if (processingFile !== null) {
+			cancel();
+			return;
+		}
 		const file = formData.get('file');
 		processingFile = typeof file === 'string' ? file : null;
 		return async ({ result, update }) => {
 			try {
 				await update();
-				if (result.type === 'success' && result.data && 'successCount' in result.data) {
-					toast.success(`${text.boilerImportSuccess} ${result.data.successCount}`);
+				if (result.type === 'success' && result.data && typeof result.data.successMessage === 'string') {
+					toast.success(result.data.successMessage);
 				}
 			} finally {
 				processingFile = null;

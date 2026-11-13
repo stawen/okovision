@@ -38,7 +38,14 @@ export const actions: Actions = {
 
 		try {
 			const imported = await importBoilerCsvFile(filename);
-			return { successCount: imported };
+			const date = `${filename.slice(12, 14)}/${filename.slice(10, 12)}/${filename.slice(6, 10)}`;
+			return {
+				successCount: imported,
+				successMessage: text.boilerImportSuccess
+					.replace('{date}', date)
+					.replace('{count}', String(imported))
+					.replace('{plural}', imported > 1 ? 's' : '')
+			};
 		} catch (cause) {
 			const code = cause instanceof BoilerImportError ? cause.code : 'database';
 			log.error('boilerImportFailed', cause, { operation: 'import', failure: code });
