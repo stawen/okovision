@@ -183,7 +183,6 @@ INSERT INTO `oko_configuration` (`param`, `value`) VALUES
 ('tcRef', '20'),
 ('poidsPellet', '156'),
 ('surfaceMaison', '280'),
-('getDataFromChaudiere', '1'),
 ('timezone', 'Europe/Paris'),
 ('hasSilo', '1'),
 ('siloSize', '6200'),

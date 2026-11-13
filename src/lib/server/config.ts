@@ -154,10 +154,3 @@ export function parseCollectionConfig(value: unknown): CollectionConfig {
 export async function readCollectionConfig(): Promise<CollectionConfig> {
 	return parseCollectionConfig(await readConfiguration());
 }
-
-/** Collection requires explicit opt-in; missing or invalid database access is not hidden. */
-export async function readOptionalCollectionConfig(): Promise<CollectionConfig | null> {
-	const config = await readConfiguration();
-	if (config.getDataFromChaudiere !== '1') return null;
-	return parseCollectionConfig(config);
-}

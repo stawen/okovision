@@ -14,9 +14,8 @@ vi.mock('../../src/lib/server/setup', async (importOriginal) => ({
 function event(type?: string) {
 	const form = new FormData();
 	for (const [param, value] of Object.entries({
-		chaudiere: '', tcRef: '', poidsPellet: '150', surfaceMaison: '120',
-		getDataFromChaudiere: '0', timezone: 'Europe/Paris', sendToWeb: '0',
-		hasSilo: '0', siloSize: '', ashtray: '', lang: 'fr',
+		chaudiere: '192.168.1.23', tcRef: '20', poidsPellet: '150', surfaceMaison: '120',
+		timezone: 'Europe/Paris', hasSilo: '0', siloSize: '', ashtray: '',
 		adminPassword: 'setup-test-password', confirmPassword: 'setup-test-password'
 	})) form.set(param, value);
 	return {
@@ -46,6 +45,22 @@ describe('setup sans jeton', () => {
 		});
 		expect(body).toContain('name="adminPassword"');
 		expect(body).not.toContain('name="setupToken"');
+		expect(body).toContain('placeholder="192.168.1.23"');
+		expect(body).not.toContain('getDataFromChaudiere');
+		expect(body).not.toContain('sendToWeb');
+		expect(body).not.toContain('name="lang"');
+	});
+
+	it('n’affiche ni le lien de connexion admin ni l’introduction supprimée', () => {
+		const { body } = render(SetupPage, {
+			props: {
+				params: {}, form: null,
+				data: { language: 'fr', member: null, pathname: '/setup', status: 'configure', admin: false, values: {} }
+			}
+		});
+		expect(body).not.toContain('Connexion administrateur existant');
+		expect(body).not.toContain('href="/login"');
+		expect(body).not.toContain('Configurez votre installation.');
 	});
 
 	it.each([undefined, 'admin'])('accepte le formulaire sans jeton, avec ou sans session (%s)', async (type) => {

@@ -10,9 +10,8 @@ test('post-installation sur la base Docker vierge dédiée', async (t) => {
 	process.env.DB_ADRESSE = `127.0.0.1:${process.env.DEV_SETUP_TEST_DB_PORT || 3310}`;
 	const connection = await createConnection(databaseOptions(process.env));
 	const values: ConfigurationValues = {
-		chaudiere: '', tcRef: '', poidsPellet: '150', surfaceMaison: '120',
-		getDataFromChaudiere: '0', timezone: 'Europe/Paris', sendToWeb: '0',
-		hasSilo: '0', siloSize: '', ashtray: '', lang: 'fr'
+		chaudiere: '192.168.1.23', tcRef: '20', poidsPellet: '150', surfaceMaison: '120',
+		timezone: 'Europe/Paris', hasSilo: '0', siloSize: '', ashtray: ''
 	};
 	const password = 'setup-test-private-password';
 	try {
@@ -83,7 +82,7 @@ test('post-installation sur la base Docker vierge dédiée', async (t) => {
 			assert.equal(await getSetupStatus(connection), 'configure');
 			await completeSetup(values, '', false);
 			assert.equal(await getSetupStatus(connection), 'ready');
-			assert.equal((await connection.query<RowDataPacket[]>('SELECT COUNT(*) AS count FROM oko_configuration'))[0][0].count, 11);
+			assert.equal((await connection.query<RowDataPacket[]>('SELECT COUNT(*) AS count FROM oko_configuration'))[0][0].count, 8);
 			assert.equal((await connection.query<RowDataPacket[]>('SELECT conso_kg FROM oko_resume_day'))[0][0].conso_kg, '10.00');
 		});
 	} finally {

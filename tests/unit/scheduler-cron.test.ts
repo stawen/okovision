@@ -13,7 +13,7 @@ vi.mock('../../src/lib/server/jobs', () => ({
 	getJobManager: mocks.getManager
 }));
 vi.mock('../../src/lib/server/config', () => ({
-	readOptionalCollectionConfig: mocks.config
+	readInstallationConfig: mocks.config
 }));
 
 import { initializeJobs } from '../../src/lib/server/scheduler';
@@ -49,7 +49,7 @@ describe('ordonnanceur intégré', () => {
 		}
 	});
 
-	it('ne reprend pas de collectes persistées si la configuration les désactive', async () => {
+	it('ne planifie pas la collecte en développement', async () => {
 		const previousTerm = new Set(process.listeners('SIGTERM'));
 		const previousInt = new Set(process.listeners('SIGINT'));
 		const state = globalThis as typeof globalThis & { __okovisionScheduler?: Promise<void> };
@@ -57,12 +57,12 @@ describe('ordonnanceur intégré', () => {
 		mocks.getManager.mockClear();
 		mocks.schedule.mockClear();
 		mocks.enqueue.mockClear();
-		mocks.config.mockResolvedValue(null);
 		try {
-			await initializeJobs(true);
+			await initializeJobs(false);
 			expect(mocks.getManager).toHaveBeenCalledExactlyOnceWith(false);
 			expect(mocks.schedule).not.toHaveBeenCalled();
 			expect(mocks.enqueue).not.toHaveBeenCalled();
+			expect(mocks.config).not.toHaveBeenCalled();
 		} finally {
 			for (const listener of process.listeners('SIGTERM')) {
 				if (!previousTerm.has(listener)) process.removeListener('SIGTERM', listener as () => void);

@@ -35,7 +35,6 @@ const fr = {
 	invalidReferenceTemperature: 'tcRef doit être un nombre valide en degrés Celsius.',
 	collectionFailed: 'Échec de la collecte ou du traitement des tâches.',
 	collectionStarted: 'Collecte et gestionnaire de tâches initialisés.',
-	collectionDisabled: 'Collecte automatique non configurée.',
 	jobCompleted: 'Tâche terminée.',
 	boilerAddressInvalid: 'chaudiere doit être un hôte ou un hôte suivi d’un port valide.',
 	boilerConfigInvalid: 'Adresse de chaudière absente ou invalide dans oko_configuration.',
@@ -101,7 +100,6 @@ const en: Translations = {
 	invalidReferenceTemperature: 'tcRef must be a valid number in degrees Celsius.',
 	collectionFailed: 'Collection or job processing failed.',
 	collectionStarted: 'Collection and job manager initialized.',
-	collectionDisabled: 'Automatic collection is not configured.',
 	jobCompleted: 'Job completed.',
 	boilerAddressInvalid: 'chaudiere must be a host or a host with a valid port.',
 	boilerConfigInvalid: 'Boiler address is missing or invalid in oko_configuration.',
@@ -146,7 +144,6 @@ export type LogMessageKey =
 	| 'boilerImportFailed'
 	| 'collectionFailed'
 	| 'collectionStarted'
-	| 'collectionDisabled'
 	| 'jobCompleted'
 	| 'updateFeedFailed'
 	| 'stockStatusFailed'

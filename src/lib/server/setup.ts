@@ -38,7 +38,13 @@ export async function getSetupState(db: Database = getDatabasePool()): Promise<{
 	);
 	const values = Object.fromEntries(rows.map((row) => [row.param, row.value]));
 	const surface = Number(values.surfaceMaison?.trim());
-	return { status: Number.isFinite(surface) && surface > 0 ? 'ready' : 'configure', values };
+	const referenceTemperature = values.tcRef?.trim() ?? '';
+	const collectionConfigured = Boolean(values.chaudiere?.trim()) && referenceTemperature !== ''
+		&& Number.isFinite(Number(referenceTemperature));
+	return {
+		status: Number.isFinite(surface) && surface > 0 && collectionConfigured ? 'ready' : 'configure',
+		values
+	};
 }
 
 export async function getSetupStatus(db: Database = getDatabasePool()): Promise<SetupStatus> {
@@ -55,12 +61,9 @@ export function parseSetupValues(form: FormData): ConfigurationValues {
 	const values = Object.fromEntries(entries) as ConfigurationValues;
 	parseInstallationConfig(values);
 	if (parseHistorySettings(values).surfaceMaison === null) throw new SetupError('invalid');
-	for (const name of ['getDataFromChaudiere', 'sendToWeb', 'hasSilo'] as const) {
-		if (!['0', '1'].includes(values[name])) throw new SetupError('invalid');
-	}
-	if (!['fr', 'en'].includes(values.lang)) throw new SetupError('invalid');
+	if (!['0', '1'].includes(values.hasSilo)) throw new SetupError('invalid');
 	if (values.hasSilo === '1' && parseHistorySettings(values).siloSize === null) throw new SetupError('invalid');
-	if (values.getDataFromChaudiere === '1') parseCollectionConfig(values);
+	parseCollectionConfig(values);
 	return values;
 }
 

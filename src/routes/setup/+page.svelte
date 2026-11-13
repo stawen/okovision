@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
 	import { configurationParameters } from '#lib/configuration.js';
 	import { setupMessages } from '#lib/ui/setup.js';
 	import type { PageProps } from './$types';
@@ -14,36 +13,31 @@
 
 <main id="contenu" class="container setup-page" aria-labelledby="setup-title">
 	<h1 id="setup-title">{text.title}</h1>
-	<p>{text.intro}</p>
 	<p class:warning={data.status === 'partial'}>{text[data.status === 'partial' ? 'partial' : installing ? 'install' : 'configure']}</p>
-	{#if !data.admin && data.status !== 'install'}<p><a href={resolve('/login')}>{text.login}</a></p>{/if}
 	{#if form?.message}<p class="warning" role="alert">{form.message}</p>{/if}
 	<form method="POST">
 		{#each configurationParameters as param (param)}
 			<label>{text.fields[param]}
-				{#if ['getDataFromChaudiere', 'sendToWeb', 'hasSilo'].includes(param)}
+				{#if param === 'hasSilo'}
 					<select name={param} value={values[param] || '0'}>
 						<option value="0">{text.no}</option><option value="1">{text.yes}</option>
 					</select>
-				{:else if param === 'lang'}
-					<select name={param} value={values[param] || data.language}>
-						<option value="fr">Français</option><option value="en">English</option>
-					</select>
 				{:else}
 					<input name={param} value={values[param] || (param === 'timezone' ? 'Europe/Paris' : '')}
-						required={['poidsPellet', 'surfaceMaison', 'timezone'].includes(param)} maxlength="255" />
+						placeholder={text.examples[param]}
+						required={['chaudiere', 'tcRef', 'poidsPellet', 'surfaceMaison', 'timezone'].includes(param)}
+						maxlength="255" />
 				{/if}
 			</label>
 		{/each}
 		{#if installing}
-			<label>{text.password}<input type="password" name="adminPassword" autocomplete="new-password" minlength="12" maxlength="1024" required /></label>
-			<label>{text.confirm}<input type="password" name="confirmPassword" autocomplete="new-password" minlength="12" maxlength="1024" required /></label>
+			<label>{text.password}<input type="password" name="adminPassword" placeholder={text.passwordPlaceholder} autocomplete="new-password" minlength="12" maxlength="1024" required /></label>
+			<label>{text.confirm}<input type="password" name="confirmPassword" placeholder={text.confirmPlaceholder} autocomplete="new-password" minlength="12" maxlength="1024" required /></label>
 		{/if}
 		{#if data.status === 'partial'}
 			<label class="wide confirmation"><input type="checkbox" name="force" value="yes" required /> {text.force}</label>
-			<label class="wide">{text.forceWord}<input name="forceConfirmation" autocomplete="off" required pattern="INSTALLER" /></label>
+			<label class="wide">{text.forceWord}<input name="forceConfirmation" placeholder={text.forceWordPlaceholder} autocomplete="off" required pattern="INSTALLER" /></label>
 		{/if}
-		<p class="wide">{text.note}</p>
 		<button class="wide" type="submit">{installing ? text.save : text.saveConfig}</button>
 	</form>
 </main>

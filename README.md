@@ -19,6 +19,10 @@ Pour développer sans base existante, utiliser la
 [base Docker locale avec fixtures](./docs/installation-et-exploitation.md#base-docker-pour-le-développement-et-les-tests).
 Elle est indépendante des compositions d'exploitation et ne remplace pas votre `.env`.
 
+Pour lancer l'application sur le jeu historique V1 et tester la
+post-installation, utiliser `npm run dev:v1 -- --host 127.0.0.1`. Cette commande
+recrée la base temporaire V1 à chaque lancement.
+
 Pour préparer les essais du tout premier lancement, `npm run appsetup` utilise
 une [base locale sans tables](./docs/installation-et-exploitation.md#tester-le-premier-lancement-avec-une-base-vierge),
 avec connexion définie dans `.env.appsetup`. Le formulaire `/setup` installe le

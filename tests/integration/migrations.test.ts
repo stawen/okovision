@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 import { promisify } from 'node:util';
 import { createConnection, type RowDataPacket } from 'mysql2/promise';
+import { configurationParameters } from '../../src/lib/configuration.ts';
 import { databaseOptions } from '../../src/lib/server/database.ts';
 import { getSetupStatus, completeSetup } from '../../src/lib/server/setup.ts';
 
@@ -82,21 +83,30 @@ export const config = { transaction: false };
 			assert.equal(applied.length, 0);
 			assert.deepEqual((await businessTotals())[0], before);
 		});
-		await t.test('ajoute la configuration sur V1 sans toucher aux comptes ni aux synthèses', async () => {
+		await t.test('supprime les options historiques sans toucher aux comptes ni aux synthèses', async () => {
 			process.env.DB_ADRESSE = env.DB_ADRESSE;
 			assert.equal(await getSetupStatus(connection), 'configure');
 			const [users] = await connection.query<RowDataPacket[]>('SELECT * FROM oko_user ORDER BY id');
+			await connection.query(
+				'CREATE TABLE oko_configuration (param varchar(100) NOT NULL PRIMARY KEY, value text DEFAULT NULL) ENGINE=InnoDB'
+			);
+			await connection.execute(
+				'INSERT INTO oko_configuration (param, value) VALUES (?, ?), (?, ?), (?, ?)',
+				['getDataFromChaudiere', '1', 'sendToWeb', '0', 'lang', 'fr']
+			);
 			await completeSetup({
-				chaudiere: '', tcRef: '', poidsPellet: '150', surfaceMaison: '120',
-				getDataFromChaudiere: '0', timezone: 'Europe/Paris', sendToWeb: '0',
-				hasSilo: '0', siloSize: '', ashtray: '', lang: 'fr'
+				chaudiere: '192.168.1.23', tcRef: '20', poidsPellet: '150', surfaceMaison: '120',
+				timezone: 'Europe/Paris', hasSilo: '0', siloSize: '', ashtray: ''
 			}, '', false);
 			assert.equal(await getSetupStatus(connection), 'ready');
 			assert.deepEqual((await businessTotals())[0], before);
 			assert.deepEqual((await connection.query<RowDataPacket[]>('SELECT * FROM oko_user ORDER BY id'))[0], users);
 			const [applied] = await connection.query<RowDataPacket[]>('SELECT name FROM knex_migrations');
-			assert.equal(applied.length, 1);
-			assert.match(applied[0].name, /create_oko_configuration\.mjs$/);
+			assert.equal(applied.length, 2);
+			assert.ok(applied.some((row) => /create_oko_configuration\.mjs$/.test(row.name)));
+			assert.ok(applied.some((row) => /remove_obsolete_setup_settings\.mjs$/.test(row.name)));
+			const [parameters] = await connection.query<RowDataPacket[]>('SELECT param FROM oko_configuration');
+			assert.deepEqual(parameters.map((row) => row.param).sort(), [...configurationParameters].sort());
 		});
 	} finally {
 		await connection.end();

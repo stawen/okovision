@@ -20,11 +20,19 @@ function event(path: NonNullable<RequestEvent['route']['id']>) {
 describe('protection pendant la post-installation', () => {
 	afterEach(() => vi.clearAllMocks());
 
+	it.each(['install', 'partial', 'configure'] as const)(
+		'redirige l’accueil vers /setup si l’installation est %s',
+		async (status) => {
+			vi.mocked(getSetupStatus).mockResolvedValue(status);
+			await expect(handle({ event: event('/'), resolve: vi.fn() }))
+				.rejects.toMatchObject({ status: 303, location: '/setup' });
+			expect(initializeJobs).not.toHaveBeenCalled();
+		}
+	);
+
 	it('ne démarre ni les tâches persistées ni le collecteur avant configuration', async () => {
 		vi.mocked(getSetupStatus).mockResolvedValue('configure');
 		await init();
-		await expect(handle({ event: event('/'), resolve: vi.fn() }))
-			.rejects.toMatchObject({ status: 303, location: '/setup' });
 		expect(initializeJobs).not.toHaveBeenCalled();
 	});
 
