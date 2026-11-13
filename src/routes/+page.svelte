@@ -3,9 +3,9 @@
   import { resolve } from "$app/paths";
   import { enhance } from "$app/forms";
   import DailyChart from "#lib/components/DailyChart.svelte";
-  import { createDailyChartSync } from "#lib/chart-sync.js";
-  import { isDailyIndicators, type ChartRange, type DailyIndicators } from "#lib/daily-indicators.js";
-  import { numberLocale, uiMessages } from "#lib/i18n.js";
+  import { createDailyChartSync } from "#lib/charts/chart-sync.js";
+  import { isDailyIndicators, type ChartRange, type DailyIndicators } from "#lib/indicators/daily.js";
+  import { numberLocale, uiMessages } from "#lib/ui/i18n.js";
   import type { PageProps } from "./$types";
 
   let { data, form }: PageProps = $props();

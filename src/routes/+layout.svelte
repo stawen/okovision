@@ -2,8 +2,8 @@
 	import favicon from '#lib/assets/favicon.svg';
 	import { resolve } from '$app/paths';
 	import { Toaster } from 'svelte-sonner';
-	import { uiMessages } from '#lib/i18n.js';
-	import { navigationPages, type ScopePath } from '#lib/navigation.js';
+	import { uiMessages } from '#lib/ui/i18n.js';
+	import { navigationPages, type ScopePath } from '#lib/ui/navigation.js';
 	import '../app.css';
 	import type { LayoutProps } from './$types';
 

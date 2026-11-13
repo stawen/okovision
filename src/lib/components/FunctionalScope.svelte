@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { findPage, navigationPages, type ScopePath } from '#lib/navigation.js';
-	import { uiMessages, type Language } from '#lib/i18n.js';
+	import { findPage, navigationPages, type ScopePath } from '#lib/ui/navigation.js';
+	import { uiMessages, type Language } from '#lib/ui/i18n.js';
 
 	let { path, language }: { path: ScopePath; language: Language } = $props();
 	let page = $derived(findPage(path));

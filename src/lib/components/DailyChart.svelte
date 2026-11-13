@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import type * as Highcharts from "highcharts/highstock";
-  import type { DailyChartSync } from "#lib/chart-sync.js";
+  import type { DailyChartSync } from "#lib/charts/chart-sync.js";
 
   interface ChartSeries {
     name: string;

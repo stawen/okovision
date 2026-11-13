@@ -1,8 +1,8 @@
 import type { Pool, RowDataPacket } from 'mysql2/promise';
 import { getMessages } from '../messages.ts';
-import { isChartRange, type ChartRange, type DailyIndicators } from '../../daily-indicators.ts';
+import { isChartRange, type ChartRange, type DailyIndicators } from '../../indicators/daily.ts';
 
-export type { DailyIndicators } from '../../daily-indicators.ts';
+export type { DailyIndicators } from '../../indicators/daily.ts';
 
 interface SensorRow extends RowDataPacket {
 	type: string;

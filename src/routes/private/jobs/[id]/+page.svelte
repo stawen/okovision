@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { resolve } from '$app/paths';
-	import { uiMessages } from '#lib/i18n.js';
+	import { uiMessages } from '#lib/ui/i18n.js';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();

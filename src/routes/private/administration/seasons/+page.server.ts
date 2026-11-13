@@ -1,5 +1,5 @@
 import { fail } from '@sveltejs/kit';
-import { uiMessages } from '#lib/i18n.js';
+import { uiMessages } from '#lib/ui/i18n.js';
 import { getDataAccess } from '#lib/server/data-access.js';
 import { logger } from '#lib/server/logger.js';
 import { SeasonError, type SeasonErrorCode } from '#lib/server/repositories/seasons.js';

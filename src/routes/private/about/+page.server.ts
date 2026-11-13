@@ -1,5 +1,5 @@
 import { logger } from '#lib/server/logger.js';
-import type { Language } from '#lib/i18n.js';
+import type { Language } from '#lib/ui/i18n.js';
 import type { PageServerLoad } from './$types';
 import packageJson from '../../../../package.json' with { type: 'json' };
 

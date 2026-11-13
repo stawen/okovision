@@ -1,7 +1,7 @@
 import { error, redirect } from '@sveltejs/kit';
 import { resolve } from '$app/paths';
-import { isValidDay, shiftDay, todayInTimezone } from '#lib/dates.js';
-import { uiMessages, type Language } from '#lib/i18n.js';
+import { isValidDay, shiftDay, todayInTimezone } from '#lib/utils/dates.js';
+import { uiMessages, type Language } from '#lib/ui/i18n.js';
 import { readInstallationConfig } from '#lib/server/config.js';
 import { getDataAccess } from '#lib/server/data-access.js';
 import type { DailyChartsResult } from '#lib/server/repositories/daily-charts.js';

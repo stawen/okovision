@@ -1,8 +1,8 @@
 <script lang="ts">
   import { resolve } from "$app/paths";
-  import { navigationPages } from "#lib/navigation.js";
-  import { numberLocale, uiMessages } from "#lib/i18n.js";
-  import { realtimeSections, type RealtimeReading } from "#lib/realtime-indicators.js";
+  import { navigationPages } from "#lib/ui/navigation.js";
+  import { numberLocale, uiMessages } from "#lib/ui/i18n.js";
+  import { realtimeSections, type RealtimeReading } from "#lib/indicators/realtime.js";
   import type { PageProps } from "./$types";
 
   let { data }: PageProps = $props();

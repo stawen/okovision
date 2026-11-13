@@ -1,5 +1,5 @@
 import type { Handle, HandleServerError } from '@sveltejs/kit/hooks';
-import { publicErrorMessage } from '#lib/i18n.js';
+import { publicErrorMessage } from '#lib/ui/i18n.js';
 import { getAppLanguage } from '#lib/server/language.js';
 import { getSession, sessionCookie } from '#lib/server/auth.js';
 import { redirect } from '@sveltejs/kit';

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { createDailyChartSync } from '../../src/lib/chart-sync';
+import { createDailyChartSync } from '../../src/lib/charts/chart-sync';
 
 function axis() {
 	return {

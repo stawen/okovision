@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type * as Highcharts from 'highcharts/highstock';
-	import { uiMessages, numberLocale, type Language } from '#lib/i18n.js';
+	import { uiMessages, numberLocale, type Language } from '#lib/ui/i18n.js';
 
 	interface Props {
 		kind: 'monthly' | 'season';

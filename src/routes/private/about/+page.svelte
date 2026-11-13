@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { uiMessages } from "#lib/i18n.js";
+  import { uiMessages } from "#lib/ui/i18n.js";
   import type { PageProps } from "./$types";
 
   const pageSize = 10;

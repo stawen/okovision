@@ -1,4 +1,4 @@
-import { uiMessages } from '#lib/i18n.js';
+import { uiMessages } from '#lib/ui/i18n.js';
 import { boilerErrorCode, getBoilerIndicators } from '#lib/server/boiler.js';
 import { logger } from '#lib/server/logger.js';
 import type { RequestHandler } from './$types';

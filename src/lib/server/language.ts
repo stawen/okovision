@@ -1,4 +1,4 @@
-import type { Language } from '../i18n.ts';
+import type { Language } from '../ui/i18n.ts';
 import { loadServerEnvironment } from './environment.ts';
 
 export class InvalidLanguageError extends Error {

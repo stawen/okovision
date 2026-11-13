@@ -1,4 +1,4 @@
-import type { UiTextKey } from './i18n.js';
+import type { UiTextKey } from '../ui/i18n.js';
 
 export interface RealtimeReading {
 	value: string | number | null;

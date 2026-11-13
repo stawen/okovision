@@ -1,5 +1,5 @@
 import type { HandleClientError } from '@sveltejs/kit/hooks';
-import { publicErrorMessage } from '#lib/i18n.js';
+import { publicErrorMessage } from '#lib/ui/i18n.js';
 
 export const handleError: HandleClientError = ({ kind, error }) => {
 	if (kind === 'unknown') console.error(error);

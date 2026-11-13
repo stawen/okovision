@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { numberLocale, uiMessages } from "#lib/i18n.js";
+  import { numberLocale, uiMessages } from "#lib/ui/i18n.js";
   import { resolve } from "$app/paths";
   import { enhance, type SubmitFunction } from "$app/forms";
   import { tick } from "svelte";

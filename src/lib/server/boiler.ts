@@ -7,7 +7,7 @@ import {
 	realtimeSensorNames,
 	type RealtimeData,
 	type RealtimeReading
-} from '../realtime-indicators.ts';
+} from '../indicators/realtime.ts';
 
 export type BoilerErrorCode = 'configuration' | 'credentials' | 'database' | 'connection' | 'response' | 'unavailable';
 

@@ -1,7 +1,7 @@
 import { error, isHttpError, redirect } from '@sveltejs/kit';
 import { resolve } from '$app/paths';
-import { todayInTimezone } from '#lib/dates.js';
-import { uiMessages, type Language } from '#lib/i18n.js';
+import { todayInTimezone } from '#lib/utils/dates.js';
+import { uiMessages, type Language } from '#lib/ui/i18n.js';
 import { readHistoryConfig } from '#lib/server/config.js';
 import { getDataAccess } from '#lib/server/data-access.js';
 import { logger } from '#lib/server/logger.js';

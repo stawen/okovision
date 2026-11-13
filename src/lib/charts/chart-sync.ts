@@ -1,5 +1,5 @@
 import type { Axis, AxisSetExtremesEventObject } from 'highcharts';
-import { isChartRange, type ChartRange } from './daily-indicators.ts';
+import { isChartRange, type ChartRange } from '../indicators/daily.ts';
 
 type ChartAxis = {
 	setExtremes: Axis['setExtremes'];

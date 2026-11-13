@@ -1,5 +1,5 @@
 import { fail } from '@sveltejs/kit';
-import { uiMessages } from '#lib/i18n.js';
+import { uiMessages } from '#lib/ui/i18n.js';
 import { getBoilerCsvFiles, isBoilerCsvFilename } from '#lib/server/boiler-import.js';
 import { getJobManager } from '#lib/server/jobs.js';
 import { logger } from '#lib/server/logger.js';

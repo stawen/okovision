@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
-import { isValidDay, todayInTimezone } from '#lib/dates.js';
-import { isChartRange, type ChartRange } from '#lib/daily-indicators.js';
-import { uiMessages } from '#lib/i18n.js';
+import { isValidDay, todayInTimezone } from '#lib/utils/dates.js';
+import { isChartRange, type ChartRange } from '#lib/indicators/daily.js';
+import { uiMessages } from '#lib/ui/i18n.js';
 import { readInstallationConfig } from '#lib/server/config.js';
 import { getDataAccess } from '#lib/server/data-access.js';
 import { logger } from '#lib/server/logger.js';

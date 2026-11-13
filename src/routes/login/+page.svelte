@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { uiMessages } from '#lib/i18n.js';
+	import { uiMessages } from '#lib/ui/i18n.js';
 	import type { PageProps } from './$types';
 
 	let { data, form }: PageProps = $props();

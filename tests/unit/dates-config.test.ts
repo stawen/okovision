@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isValidDay, shiftDay, todayInTimezone } from '../../src/lib/dates';
+import { isValidDay, shiftDay, todayInTimezone } from '../../src/lib/utils/dates';
 import { parseBoilerAddress, parseHistorySettings, parseInstallationConfig } from '../../src/lib/server/config';
 
 describe('dates de l’installation', () => {
