@@ -54,6 +54,9 @@ CREATE TABLE IF NOT EXISTS `oko_user` (
   PRIMARY KEY (`id`)
 ) ENGINE=MYISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
+insert into oko_user set user="admin", pass="97f108bdeaad841227830678c7ecec6dc541bab3" , type="admin", login_boiler='oekofen', pass_boiler='dGlzb2U0cmU=';
+
+
 -- Export de la structure de table okovision. oko_user
 DROP TABLE IF EXISTS `oko_boiler`;
 CREATE TABLE IF NOT EXISTS `oko_boiler` (

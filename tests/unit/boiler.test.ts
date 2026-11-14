@@ -1,9 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createBoilerConnector, getBoilerIndicators } from '../../src/lib/server/boiler';
 
-const mocks = vi.hoisted(() => ({ readBoilerAddress: vi.fn(), getDataAccess: vi.fn() }));
+const mocks = vi.hoisted(() => ({ readBoilerAddress: vi.fn(), getAdminBoilerCredentials: vi.fn() }));
 vi.mock('../../src/lib/server/config', () => ({ readBoilerAddress: mocks.readBoilerAddress }));
-vi.mock('../../src/lib/server/data-access', () => ({ getDataAccess: mocks.getDataAccess }));
+vi.mock('../../src/lib/server/data-access', () => ({
+	getDataAccess: () => ({ users: { getAdminBoilerCredentials: mocks.getAdminBoilerCredentials } })
+}));
 
 const credentials = { username: 'boiler-user', password: 'boiler-password' };
 const address = 'http://boiler.local:8180';
@@ -14,10 +16,11 @@ describe('connecteur chaudière Ökofen en lecture seule', () => {
 	beforeEach(() => {
 		fetcher = vi.fn<typeof fetch>();
 		mocks.readBoilerAddress.mockResolvedValue(address);
-		mocks.getDataAccess.mockClear();
+		mocks.getAdminBoilerCredentials.mockReset();
+		mocks.getAdminBoilerCredentials.mockResolvedValue(credentials);
 	});
 
-	it('utilise le compte chaudière standard sans lire les identifiants du compte admin en base', async () => {
+	it('utilise les identifiants chaudière décodés par le dépôt du compte admin', async () => {
 		fetcher
 			.mockResolvedValueOnce(new Response(null, {
 				status: 303,
@@ -30,13 +33,24 @@ describe('connecteur chaudière Ökofen en lecture seule', () => {
 		try {
 			const result = await getBoilerIndicators(1);
 			const login = new URLSearchParams(String(fetcher.mock.calls[0][1]?.body));
-			expect(login.get('username')).toBe('oekofen');
-			expect(login.get('password')).toBe('oekofen');
+			expect(login.get('username')).toBe(credentials.username);
+			expect(login.get('password')).toBe(credentials.password);
 			expect(result.readings.burnerStarts).toEqual({ value: 3, unit: '' });
-			expect(mocks.getDataAccess).not.toHaveBeenCalled();
+			expect(mocks.getAdminBoilerCredentials).toHaveBeenCalledExactlyOnceWith();
 		} finally {
 			vi.unstubAllGlobals();
 		}
+	});
+
+	it('signale les identifiants absents sans tenter un compte par défaut', async () => {
+		mocks.getAdminBoilerCredentials.mockResolvedValue(null);
+		await expect(getBoilerIndicators(1)).rejects.toMatchObject({ code: 'credentials' });
+	});
+
+	it('distingue une erreur de chargement des identifiants d’une erreur réseau chaudière', async () => {
+		const cause = new Error('database unavailable');
+		mocks.getAdminBoilerCredentials.mockRejectedValue(cause);
+		await expect(getBoilerIndicators(1)).rejects.toMatchObject({ code: 'database', cause });
 	});
 
 	it('ouvre une session, demande les capteurs et normalise les valeurs comme le legacy', async () => {

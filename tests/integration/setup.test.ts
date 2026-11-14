@@ -28,7 +28,14 @@ test('post-installation sur la base Docker vierge dédiée', async (t) => {
 		await t.test('installe une base réellement vierge sans confirmation forcée', async () => {
 			await completeSetup(values, password, false);
 			assert.equal(await getSetupStatus(connection), 'ready');
-			assert.equal((await createUsersRepository(connection).authenticate('admin', password))?.type, 'admin');
+			const users = createUsersRepository(connection);
+			assert.equal((await users.authenticate('admin', password))?.type, 'admin');
+			assert.ok(await users.getAdminBoilerCredentials());
+			const [admins] = await connection.execute<RowDataPacket[]>(
+				'SELECT pass FROM oko_user WHERE user = ?', ['admin']
+			);
+			assert.equal(admins.length, 1);
+			assert.match(admins[0].pass, /^scrypt\$/);
 		});
 
 		await t.test('protège une base partielle sans confirmation destructive', async () => {
@@ -51,7 +58,7 @@ test('post-installation sur la base Docker vierge dédiée', async (t) => {
 			const users = createUsersRepository(connection);
 			assert.equal((await users.authenticate('admin', password))?.type, 'admin');
 			assert.equal(await users.authenticate('admin', 'okouser'), null);
-			assert.equal(await users.getAdminBoilerCredentials(), null);
+			assert.ok(await users.getAdminBoilerCredentials());
 			for (const table of ['oko_resume_day', 'oko_historique_full']) {
 				assert.equal((await connection.query<RowDataPacket[]>(`SELECT COUNT(*) AS count FROM ${table}`))[0][0].count, 0);
 			}
@@ -65,6 +72,11 @@ test('post-installation sur la base Docker vierge dédiée', async (t) => {
 		});
 
 		await t.test('complète une surface vide sans réinstaller et respecte le verrou concurrent', async () => {
+			const boilerCredentials = { username: 'setup-boiler-user', password: 'setup-boiler-password' };
+			await connection.execute(
+				'UPDATE oko_user SET login_boiler = ?, pass_boiler = ? WHERE user = ?',
+				[boilerCredentials.username, Buffer.from(boilerCredentials.password).toString('base64'), 'admin']
+			);
 			await connection.execute("UPDATE oko_configuration SET value = '' WHERE param = 'surfaceMaison'");
 			assert.equal(await getSetupStatus(connection), 'configure');
 			await connection.query("SELECT GET_LOCK(CONCAT(DATABASE(), ':setup'), 0)");
@@ -84,6 +96,7 @@ test('post-installation sur la base Docker vierge dédiée', async (t) => {
 			assert.equal(await getSetupStatus(connection), 'ready');
 			assert.equal((await connection.query<RowDataPacket[]>('SELECT COUNT(*) AS count FROM oko_configuration'))[0][0].count, 8);
 			assert.equal((await connection.query<RowDataPacket[]>('SELECT conso_kg FROM oko_resume_day'))[0][0].conso_kg, '10.00');
+			assert.deepEqual(await createUsersRepository(connection).getAdminBoilerCredentials(), boilerCredentials);
 		});
 	} finally {
 		await connection.end();

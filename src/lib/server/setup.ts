@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import createKnex from 'knex';
-import { createConnection, type Pool, type RowDataPacket } from 'mysql2/promise';
+import { createConnection, type Pool, type ResultSetHeader, type RowDataPacket } from 'mysql2/promise';
 import knexConfig from '../../../knexfile.js';
 import { configurationParameters, type ConfigurationValues } from '../configuration.ts';
 import { databaseOptions, getDatabasePool } from './database.ts';
@@ -83,9 +83,10 @@ export async function completeSetup(values: ConfigurationValues, password: strin
 			if (password.length < 12 || password.length > 1024) throw new SetupError('invalid');
 			const hash = await hashNewPassword(password);
 			await connection.query(await readFile('setup/install.sql', 'utf8'));
-			await connection.execute(
-				'INSERT INTO oko_user (user, pass, type) VALUES (?, ?, ?)', ['admin', hash, 'admin']
+			const [result] = await connection.execute<ResultSetHeader>(
+				'UPDATE oko_user SET pass = ?, type = ? WHERE user = ?', [hash, 'admin', 'admin']
 			);
+			if (result.affectedRows !== 1) throw new SetupError('invalid');
 		}
 		const migrations = createKnex(knexConfig);
 		try {

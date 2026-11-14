@@ -1,5 +1,6 @@
 import { getMessages } from './messages.ts';
 import { readBoilerAddress } from './config.ts';
+import { getDataAccess } from './data-access.ts';
 import type { BoilerCredentials } from './repositories/users.ts';
 import {
 	realtimeIndicators,
@@ -236,7 +237,7 @@ export function createBoilerConnector(fetcher: typeof fetch = fetch) {
 
 let connector: ReturnType<typeof createBoilerConnector> | undefined;
 
-/** Uses the standard controller account and reuses the process-wide connector. */
+/** Uses the stored controller credentials and reuses the process-wide connector. */
 export async function getBoilerIndicators(circuit: number): Promise<RealtimeData> {
 	let address: string;
 	try {
@@ -245,6 +246,14 @@ export async function getBoilerIndicators(circuit: number): Promise<RealtimeData
 		throw new BoilerError('configuration', getMessages().boilerConfigInvalid, cause);
 	}
 
+	let credentials: BoilerCredentials | null;
+	try {
+		credentials = await getDataAccess().users.getAdminBoilerCredentials();
+	} catch (cause) {
+		throw new BoilerError('database', getMessages().boilerCredentialsLoadFailed, cause);
+	}
+	if (!credentials) throw boilerError('credentials');
+
 	connector ??= createBoilerConnector();
-	return connector.getIndicators(address, { username: 'oekofen', password: 'oekofen' }, circuit);
+	return connector.getIndicators(address, credentials, circuit);
 }
