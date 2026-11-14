@@ -35,6 +35,16 @@ services:
       - "127.0.0.1:${DEV_SETUP_DB_PORT:-3309}:3306"
     tmpfs:
       - /var/lib/mysql
+  db-v1:
+    <<: *database
+    profiles: ["v1"]
+    ports:
+      - "127.0.0.1:${DEV_V1_DB_PORT:-3311}:3306"
+    tmpfs:
+      - /var/lib/mysql
+    volumes:
+      - ./setup/install.sql:/docker-entrypoint-initdb.d/10-schema.sql:ro
+      - ./tests/sql/okovision-dataset-v1.sql:/docker-entrypoint-initdb.d/20-fixtures.sql:ro
   db-test:
     <<: *database
     profiles: ["test"]

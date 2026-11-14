@@ -2,10 +2,10 @@
 
 ## Premier lancement et suivi des mises à jour de la base
 
-- Utiliser `npm run appsetup` avec le fichier privé `.env.appsetup` pour démarrer
+- Utiliser `npm run dev:setup` avec le fichier privé `.env.appsetup` pour démarrer
   l'application contre une base locale sans tables ni données. Ce mode est
-  distinct du développement avec fixtures et ne doit jamais réinitialiser une
-  base existante. Voir le [guide local](./installation-et-exploitation.md#tester-le-premier-lancement-avec-une-base-vierge).
+  distinct du développement avec fixtures et recrée uniquement sa base jetable.
+  Voir le [guide local](./installation-et-exploitation.md#tester-le-premier-lancement-avec-une-base-vierge).
 - Réalisé : détection de `oko_capteur`, formulaire `/setup` sans jeton ni connexion
   préalable tant que l'installation est incomplète, installation de `setup/install.sql` après
   validation et mot de passe admin choisi (sans compte de démonstration).

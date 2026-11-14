@@ -15,18 +15,17 @@ plan de bascule.**
 
 Prérequis : Node.js 26 (voir [`.nvmrc`](./.nvmrc)) et npm.
 
-Pour développer sans base existante, utiliser la
-[base Docker locale avec fixtures](./docs/installation-et-exploitation.md#base-docker-pour-le-développement-et-les-tests).
-Elle est indépendante des compositions d'exploitation et ne remplace pas votre `.env`.
+Pour développer avec une base Docker temporaire, suivre les
+[instructions locales](./docs/installation-et-exploitation.md#base-docker-pour-le-développement-et-les-tests),
+puis choisir :
 
-Pour lancer l'application sur le jeu historique V1 et tester la
-post-installation, utiliser `npm run dev:v1 -- --host 127.0.0.1`. Cette commande
-recrée la base temporaire V1 à chaque lancement.
+- `npm run dev:local` : jeu V2 et migrations à jour.
+- `npm run dev:setup` : base vide, sans tables, pour tester `/setup`.
+- `npm run dev:v1` : jeu historique V1, pour tester la post-installation.
 
-Pour préparer les essais du tout premier lancement, `npm run appsetup` utilise
-une [base locale sans tables](./docs/installation-et-exploitation.md#tester-le-premier-lancement-avec-une-base-vierge),
-avec connexion définie dans `.env.appsetup`. Le formulaire `/setup` installe le
-schéma et enregistre la configuration après validation du formulaire.
+Chaque commande recrée sa propre base en mémoire : ses modifications sont
+perdues au prochain lancement ou à l'arrêt du conteneur. Ces bases sont
+indépendantes des compositions d'exploitation et ne remplacent pas votre `.env`.
 
 1. Préparer le fichier privé `.env` en suivant le
    [guide d'installation et d'exploitation](./docs/installation-et-exploitation.md).
@@ -44,9 +43,10 @@ La vérification de connexion à la base peut être lancée avec
 `npm run db:check` (elle exécute seulement `SELECT 1`).
 
 Les évolutions de structure utilisent [Knex et ses commandes npm](./docs/installation-et-exploitation.md#migrations-de-structure-avec-knex).
-Elles sont exécutées explicitement par la CLI ou par validation du setup, jamais
-implicitement au démarrage. La configuration métier est lue dans
-`oko_configuration`; `config.json` n'est plus utilisé par l'application Node.
+Elles sont exécutées explicitement par la CLI ou par validation du setup, et
+automatiquement uniquement pour la base jetable `dev:local`. La configuration
+métier est lue dans `oko_configuration`; `config.json` n'est plus utilisé par
+l'application Node.
 
 ## Build et contrôles
 
