@@ -46,6 +46,10 @@ describe('setup sans jeton', () => {
 		expect(body).toContain('name="adminPassword"');
 		expect(body).not.toContain('name="setupToken"');
 		expect(body).toContain('placeholder="192.168.1.23"');
+		expect(body).toContain('>Tester</button>');
+		expect(body).toContain('aria-describedby="tcRef-help"');
+		expect(body).toContain('aria-describedby="poidsPellet-help"');
+		expect(body).not.toContain('Visualiser les fichiers CSV sur la chaudière');
 		expect(body).not.toContain('getDataFromChaudiere');
 		expect(body).not.toContain('sendToWeb');
 		expect(body).not.toContain('name="lang"');

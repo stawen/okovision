@@ -79,6 +79,11 @@ describe('paramètres d’administration', () => {
 		});
 		for (const param of configurationParameters) expect(body).toContain(`name="${param}"`);
 		expect(body).toContain('Enregistrer la configuration');
+		expect(body).not.toContain('Configuration de la communication chaudière');
+		expect(body).toContain('>Tester</button>');
+		expect(body).toContain('aria-describedby="tcRef-help"');
+		expect(body).toContain('aria-describedby="ashtray-help"');
+		expect(body).not.toContain('Visualiser les fichiers CSV sur la chaudière');
 		expect(body).not.toContain('adminPassword');
 		expect(body).not.toContain('forceConfirmation');
 	});

@@ -2,6 +2,7 @@ import type { Connection, RowDataPacket } from 'mysql2/promise';
 import { getDatabasePool } from './database.ts';
 import { getMessages } from './messages.ts';
 import { configurationParameters, type ConfigurationValues } from '../configuration.ts';
+import { normalizeBoilerAddress } from '../boiler-address.ts';
 
 export interface InstallationConfig {
 	poidsPellet: number;
@@ -57,21 +58,9 @@ function configurationObject(value: unknown): Record<string, unknown> {
 export function parseBoilerAddress(value: unknown): string {
 	const messages = getMessages();
 	const rawAddress = configurationObject(value).chaudiere;
-	if (typeof rawAddress !== 'string' || !rawAddress.trim() || /[/\\?#@]/.test(rawAddress)) {
-		throw new Error(messages.boilerAddressInvalid);
-	}
-	let address: URL;
-	try {
-		address = new URL(`http://${rawAddress.trim()}`);
-	} catch (cause) {
-		if (cause instanceof TypeError) throw new Error(messages.boilerAddressInvalid, { cause });
-		throw cause;
-	}
-	if (!address.hostname || address.username || address.password || address.pathname !== '/'
-		|| address.search || address.hash) {
-		throw new Error(messages.boilerAddressInvalid);
-	}
-	return address.origin;
+	const address = normalizeBoilerAddress(rawAddress);
+	if (!address) throw new Error(messages.boilerAddressInvalid);
+	return address;
 }
 
 export function parseInstallationConfig(value: unknown): InstallationConfig {

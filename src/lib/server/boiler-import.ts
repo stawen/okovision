@@ -1,7 +1,8 @@
 import { readBoilerAddress } from './config.ts';
 import { BoilerImportError } from './boiler-import-error.ts';
+import { boilerCsvDirectory } from '../boiler-address.ts';
 
-const directoryPath = '/logfiles/pelletronic/';
+const directoryPath = boilerCsvDirectory;
 const listingLimit = 1024 * 1024;
 const csvLimit = 16 * 1024 * 1024;
 const filenamePattern = /^touch_(\d{4})(\d{2})(\d{2})\.csv$/;
