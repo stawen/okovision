@@ -1,6 +1,7 @@
-import type { RowDataPacket } from 'mysql2/promise';
+import type { Connection, RowDataPacket } from 'mysql2/promise';
 import { getDatabasePool } from './database.ts';
 import { getMessages } from './messages.ts';
+import { configurationParameters, type ConfigurationValues } from '../configuration.ts';
 
 export interface InstallationConfig {
 	poidsPellet: number;
@@ -24,6 +25,22 @@ export async function readConfiguration(): Promise<Record<string, string | null>
 		'SELECT param, value FROM oko_configuration'
 	);
 	return Object.fromEntries(rows.map((row) => [row.param, row.value]));
+}
+
+export async function saveConfiguration(connection: Connection, values: ConfigurationValues): Promise<void> {
+	await connection.beginTransaction();
+	try {
+		for (const param of configurationParameters) {
+			await connection.execute(
+				'INSERT INTO oko_configuration (param, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE value = VALUES(value)',
+				[param, values[param]]
+			);
+		}
+		await connection.commit();
+	} catch (cause) {
+		await connection.rollback();
+		throw cause;
+	}
 }
 
 function configurationObject(value: unknown): Record<string, unknown> {

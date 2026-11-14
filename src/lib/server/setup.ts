@@ -1,10 +1,10 @@
 import { readFile } from 'node:fs/promises';
 import createKnex from 'knex';
-import { createConnection, type Connection, type Pool, type RowDataPacket } from 'mysql2/promise';
+import { createConnection, type Pool, type RowDataPacket } from 'mysql2/promise';
 import knexConfig from '../../../knexfile.js';
 import { configurationParameters, type ConfigurationValues } from '../configuration.ts';
 import { databaseOptions, getDatabasePool } from './database.ts';
-import { parseCollectionConfig, parseHistorySettings, parseInstallationConfig } from './config.ts';
+import { parseCollectionConfig, parseHistorySettings, parseInstallationConfig, saveConfiguration } from './config.ts';
 import { hashNewPassword } from './repositories/users.ts';
 
 type Database = Pick<Pool, 'execute'>;
@@ -65,22 +65,6 @@ export function parseSetupValues(form: FormData): ConfigurationValues {
 	if (values.hasSilo === '1' && parseHistorySettings(values).siloSize === null) throw new SetupError('invalid');
 	parseCollectionConfig(values);
 	return values;
-}
-
-async function saveConfiguration(connection: Connection, values: ConfigurationValues): Promise<void> {
-	await connection.beginTransaction();
-	try {
-		for (const param of configurationParameters) {
-			await connection.execute(
-				'INSERT INTO oko_configuration (param, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE value = VALUES(value)',
-				[param, values[param]]
-			);
-		}
-		await connection.commit();
-	} catch (cause) {
-		await connection.rollback();
-		throw cause;
-	}
 }
 
 export async function completeSetup(values: ConfigurationValues, password: string, force: boolean): Promise<void> {

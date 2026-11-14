@@ -15,6 +15,9 @@ const fr = {
 	loginFailed: 'Impossible de traiter la connexion membre.',
 	setupFailed: 'Impossible de vérifier ou terminer la post-installation.',
 	setupInvalid: 'Paramètres de post-installation refusés.',
+	settingsLoadFailed: 'Impossible de charger les paramètres d’administration.',
+	settingsSaveFailed: 'Impossible d’enregistrer les paramètres d’administration.',
+	settingsInvalid: 'Paramètres d’administration refusés.',
 	loginRejected: 'Identifiants de connexion refusés.',
 	loginRateLimited: 'Limite de tentatives de connexion atteinte.',
 	sessionCapacityExceeded: 'Capacité maximale des sessions atteinte.',
@@ -80,6 +83,9 @@ const en: Translations = {
 	loginFailed: 'Unable to process member sign-in.',
 	setupFailed: 'Unable to check or complete post-installation.',
 	setupInvalid: 'Post-installation parameters rejected.',
+	settingsLoadFailed: 'Unable to load administration settings.',
+	settingsSaveFailed: 'Unable to save administration settings.',
+	settingsInvalid: 'Administration settings rejected.',
 	loginRejected: 'Sign-in credentials rejected.',
 	loginRateLimited: 'Sign-in attempt limit reached.',
 	sessionCapacityExceeded: 'Session capacity exceeded.',
@@ -130,6 +136,9 @@ export function getMessages(): Translations {
 export type LogMessageKey =
 	| 'setupFailed'
 	| 'setupInvalid'
+	| 'settingsLoadFailed'
+	| 'settingsSaveFailed'
+	| 'settingsInvalid'
 	| 'loginFailed'
 	| 'loginRejected'
 	| 'loginRateLimited'
