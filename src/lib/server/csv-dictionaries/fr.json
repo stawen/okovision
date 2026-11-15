@@ -59,6 +59,11 @@
         "type": "",
 		"boiler": "CAPPL:LOCAL.L_hk[0].pumpe"
     },
+    "HK1 Mischer": {
+        "name": "Vanne mélangeuse chauffage",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_hk[0].mischer"
+    },
     "HK2 VL Ist[°C]": {
         "name": "Cir.chauff.2 - T°C Départ",
         "type": "",
@@ -83,6 +88,11 @@
         "name": "Cir.chauff.2 - Circulateur Chauffage (On/Off)",
         "type": "",
 		"boiler": "CAPPL:LOCAL.L_hk[1].pumpe"
+    },
+    "HK2 Mischer": {
+        "name": "Cir.chauff.2 - Vanne mélangeuse chauffage",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_hk[1].mischer"
     },
     "WW1 EinT Ist[°C]": {
         "name": "T°C ECS",
@@ -257,7 +267,7 @@
     "PE1 Motor ES": {
         "name": "Moteur alimentation chaudière (On/Off)",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:FA[0].ausgang_motor[11]"
     },
     "PE1 Motor RA": {
         "name": "Moteur extraction silo (On/Off)",
@@ -284,10 +294,50 @@
         "type": "",
 		"boiler": "CAPPL:FA[0].L_drehzahl_uw_ist"
     },
+    "PE1 Motor AV": {
+        "name": "Moteur extraction des cendres",
+        "type": "",
+		"boiler": "CAPPL:FA[0].ausgang_motor[2]"
+    },
+    "PE1 Motor MA": {
+        "name": "Électrovanne",
+        "type": "",
+		"boiler": "CAPPL:FA[0].ausgang_motor[4]"
+    },
     "PE1 Motor RM": {
         "name": "Moteur ramonage",
         "type": "",
 		"boiler": "CAPPL:FA[0].ausgang_motor[5]"
+    },
+    "PE1 CAP RA": {
+        "name": "Capteur capacitif extraction silo",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_kap_sensor_raumentnahme"
+    },
+    "PE1 CAP ZB": {
+        "name": "Capteur capacitif trémie intermédiaire",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_kap_sensor_zwischenbehaelter"
+    },
+    "PE1 AK": {
+        "name": "Chaudière existante",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_alterkessel"
+    },
+    "PE1 Saug-Int[min]": {
+        "name": "Intervalle d'aspiration (min)",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_saugintervall"
+    },
+    "PE1 Fuellstand[kg]": {
+        "name": "Niveau de granulés (kg)",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_fuellstand_aktuell"
+    },
+    "PE1 Fuellstand ZWB[kg]": {
+        "name": "Niveau trémie intermédiaire (kg)",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_zwischenbehaelter_aktuell"
     },
     "PE1 Abgastemp[°C]":{
         "name":"Températures fumées[°C]",
@@ -352,7 +402,7 @@
     "PE2 Motor ES": {
         "name": "OKO 2 - Moteur alimentation chaudière (On/Off)",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:FA[1].ausgang_motor[11]"
     },
     "PE2 Motor RA": {
         "name": "OKO 2 - Moteur extraction silo (On/Off)",

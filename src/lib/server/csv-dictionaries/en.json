@@ -1,11 +1,11 @@
 {
     "Datum": {
-        "name": "jour",
+        "name": "day",
         "type": "",
 		"boiler": ""
     },
     "Zeit": {
-        "name": "heure",
+        "name": "time",
         "type": "",
 		"boiler": ""
     },
@@ -59,30 +59,40 @@
         "type": "",
 		"boiler": "CAPPL:LOCAL.L_hk[0].pumpe"
     },
+    "HK1 Mischer": {
+        "name": "Heating circuit mixing valve",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_hk[0].mischer"
+    },
     "HK2 VL Ist[°C]": {
-        "name": "Cir.chauff.2 - Flow T°C",
+        "name": "Heating circuit 2 - Flow T°C",
         "type": "",
 		"boiler": "CAPPL:LOCAL.L_hk[1].vorlauftemp_ist"
     },
     "HK2 VL Soll[°C]": {
-        "name": "Cir.chauff.2 - Flow T°C Set",
+        "name": "Heating circuit 2 - Flow T°C Set",
         "type": "",
 		"boiler": "CAPPL:LOCAL.L_hk[1].vorlauftemp_soll"
     },
     "HK2 RT Ist[°C]": {
-        "name": "Cir.chauff.2 - Room T°C",
+        "name": "Heating circuit 2 - Room T°C",
         "type": "",
 		"boiler": "CAPPL:LOCAL.L_hk[1].raumtemp_ist"
     },
     "HK2 RT Soll[°C]": {
-        "name": "Cir.chauff.2 - Room T°C Set",
+        "name": "Heating circuit 2 - Room T°C Set",
         "type": "",
 		"boiler": "CAPPL:LOCAL.L_hk[1].raumtemp_soll"
     },
     "HK2 Pumpe": {
-        "name": "Cir.chauff.2 - Heater Pump (On/Off)",
+        "name": "Heating circuit 2 - Heater Pump (On/Off)",
         "type": "",
 		"boiler": "CAPPL:LOCAL.L_hk[1].pumpe"
+    },
+    "HK2 Mischer": {
+        "name": "Heating circuit 2 - Mixing valve",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_hk[1].mischer"
     },
     "WW1 EinT Ist[°C]": {
         "name": "Domestic Hot Water T°C",
@@ -125,7 +135,7 @@
 		"boiler": "CAPPL:LOCAL.L_ww[1].pumpe"
     },
     "Zubrp1 Pumpe": {
-        "name": "Pump (indefini)",
+        "name": "Pump (undefined)",
         "type": "",
 		"boiler": "CAPPL:LOCAL.L_zubrp[0].pumpe"
     },
@@ -257,7 +267,7 @@
     "PE1 Motor ES": {
         "name": "Boiler operation motor (On/Off)",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:FA[0].ausgang_motor[11]"
     },
     "PE1 Motor RA": {
         "name": "Motor Delivery Storage Tank (On/Off)",
@@ -284,10 +294,50 @@
         "type": "",
 		"boiler": "CAPPL:FA[0].L_drehzahl_uw_ist"
     },
+    "PE1 Motor AV": {
+        "name": "Ash removal motor",
+        "type": "",
+		"boiler": "CAPPL:FA[0].ausgang_motor[2]"
+    },
+    "PE1 Motor MA": {
+        "name": "Solenoid valve",
+        "type": "",
+		"boiler": "CAPPL:FA[0].ausgang_motor[4]"
+    },
     "PE1 Motor RM": {
         "name": "Motor Cleaning",
         "type": "",
 		"boiler": "CAPPL:FA[0].ausgang_motor[5]"
+    },
+    "PE1 CAP RA": {
+        "name": "Storage extraction capacitive sensor",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_kap_sensor_raumentnahme"
+    },
+    "PE1 CAP ZB": {
+        "name": "Intermediate hopper capacitive sensor",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_kap_sensor_zwischenbehaelter"
+    },
+    "PE1 AK": {
+        "name": "Existing boiler",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_alterkessel"
+    },
+    "PE1 Saug-Int[min]": {
+        "name": "Suction interval (min)",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_saugintervall"
+    },
+    "PE1 Fuellstand[kg]": {
+        "name": "Pellet level (kg)",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_fuellstand_aktuell"
+    },
+    "PE1 Fuellstand ZWB[kg]": {
+        "name": "Intermediate hopper level (kg)",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_zwischenbehaelter_aktuell"
     },
     "PE1 Abgastemp[°C]":{
         "name":"Flue Gas[°C]",
@@ -352,7 +402,7 @@
     "PE2 Motor ES": {
         "name": "OKO [2] - Boiler operation motor (On/Off)",
         "type": "",
-		"boiler": ""
+		"boiler": "CAPPL:FA[1].ausgang_motor[11]"
     },
     "PE2 Motor RA": {
         "name": "OKO [2] - Motor Delivery Storage Tank (On/Off)",
@@ -360,7 +410,7 @@
 		"boiler": "CAPPL:FA[1].ausgang_motor[8]"
     },
     "PE2 Motor RES1": {
-        "name": "OKO [2] - ausgang_motor[3]",
+        "name": "OKO [2] - Motor Intermediate hopper",
         "type": "",
 		"boiler": "CAPPL:FA[1].ausgang_motor[3]"
     },

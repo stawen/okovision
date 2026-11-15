@@ -53,6 +53,21 @@ describe('matrice CSV', () => {
 		]);
 	});
 
+	it('utilise les libellés anglais pour les capteurs de la matrice', async () => {
+		const execute = vi.fn().mockResolvedValueOnce([[], []]).mockResolvedValue([{}, []]);
+		const query = vi.fn().mockResolvedValueOnce([baseColumns, []]).mockResolvedValueOnce([[], []]).mockResolvedValue([{}, []]);
+
+		await createCsvMappingRepository({ execute, query } as never)
+			.update('Datum;Zeit;HK2 VL Ist[°C];Zubrp1 Pumpe;PE2 Motor RES1;', 'en', 'create');
+
+		expect(execute.mock.calls[1][1]).toEqual([
+			'Heating circuit 2 - Flow T°C', 2, 2, 'HK2 VL Ist[°C]', '', 'CAPPL:LOCAL.L_hk[1].vorlauftemp_ist',
+			'Pump (undefined)', 3, 3, 'Zubrp1 Pumpe', '', 'CAPPL:LOCAL.L_zubrp[0].pumpe',
+			'OKO [2] - Motor Intermediate hopper', 4, 4, 'PE2 Motor RES1', '', 'CAPPL:FA[1].ausgang_motor[3]',
+			'Start Cycle', 5, 5, 'Start Cycle', 'startCycle', ''
+		]);
+	});
+
 	it.each(['fr', 'en'] as const)('associe les capteurs corrigés à la bonne variable chaudière en %s', async (language) => {
 		const mappings = [
 			['HK2 RT Ist[°C]', 'CAPPL:LOCAL.L_hk[1].raumtemp_ist'],
@@ -78,6 +93,35 @@ describe('matrice CSV', () => {
 
 		const values = execute.mock.calls[1][1];
 		for (const [index, [name, boiler]] of mappings.entries()) {
+			expect(values[index * 6 + 3]).toBe(name);
+			expect(values[index * 6 + 5]).toBe(boiler);
+		}
+	});
+
+	it.each(['fr', 'en'] as const)('reconnaît les colonnes supplémentaires de chaudière en %s', async (language) => {
+		const mappings = [
+			['HK1 Mischer', 'CAPPL:LOCAL.L_hk[0].mischer'],
+			['HK2 Mischer', 'CAPPL:LOCAL.L_hk[1].mischer'],
+			['PE1 Motor ES', 'CAPPL:FA[0].ausgang_motor[11]'],
+			['PE2 Motor ES', 'CAPPL:FA[1].ausgang_motor[11]'],
+			['PE1 Motor AV', 'CAPPL:FA[0].ausgang_motor[2]'],
+			['PE1 Motor MA', 'CAPPL:FA[0].ausgang_motor[4]'],
+			['PE1 CAP RA', 'CAPPL:FA[0].L_kap_sensor_raumentnahme'],
+			['PE1 CAP ZB', 'CAPPL:FA[0].L_kap_sensor_zwischenbehaelter'],
+			['PE1 AK', 'CAPPL:FA[0].L_alterkessel'],
+			['PE1 Saug-Int[min]', 'CAPPL:FA[0].L_saugintervall'],
+			['PE1 Fuellstand[kg]', 'CAPPL:FA[0].L_fuellstand_aktuell'],
+			['PE1 Fuellstand ZWB[kg]', 'CAPPL:FA[0].L_zwischenbehaelter_aktuell']
+		];
+		const execute = vi.fn().mockResolvedValueOnce([[], []]).mockResolvedValue([{}, []]);
+		const query = vi.fn().mockResolvedValueOnce([baseColumns, []]).mockResolvedValueOnce([[], []]).mockResolvedValue([{}, []]);
+
+		await createCsvMappingRepository({ execute, query } as never)
+			.update(`Datum;Zeit;${mappings.map(([name]) => name).join(';')};`, language, 'create');
+
+		const values = execute.mock.calls[1][1];
+		for (const [index, [name, boiler]] of mappings.entries()) {
+			expect(values[index * 6]).not.toBe(name);
 			expect(values[index * 6 + 3]).toBe(name);
 			expect(values[index * 6 + 5]).toBe(boiler);
 		}
