@@ -156,6 +156,40 @@ describe('import chaudière', () => {
 		expect(execute.mock.calls[1]?.[1]).toEqual([day, '12:34:00', timestamp, -2.75, 4, 1]);
 	});
 
+	it.each([
+		{ day: '2026-11-14', date: '14.11.2026', otherDay: '2026-11-15', otherDate: '15.11.2026', time: '00:00:19', minute: '00:00:00' },
+		{ day: '2026-11-14', date: '14.11.2026', otherDay: '2026-11-15', otherDate: '15.11.2026', time: '12:34:56', minute: '12:34:00' },
+		{ day: '2026-11-14', date: '14.11.2026', otherDay: '2026-11-12', otherDate: '12.11.2026', time: '06:15:10', minute: '06:15:00' }
+	])('conserve les dates des lignes CSV : $day puis $otherDay à $time', async ({ day, date, otherDay, otherDate, time, minute }) => {
+		const execute = vi.fn()
+			.mockResolvedValueOnce([[
+				{ position: 2, columnOko: 2, type: 'tc_ext', originalName: 'temp' },
+				{ position: 3, columnOko: 3, type: 'status', originalName: 'status' },
+				{ position: -1, columnOko: 99, type: 'startCycle', originalName: 'Start Cycle' }
+			], []])
+			.mockResolvedValue([{ affectedRows: 1 }, []]);
+		const query = vi.fn().mockResolvedValue([[
+			{ Field: 'jour' }, { Field: 'heure' }, { Field: 'timestamp' },
+			{ Field: 'col_2' }, { Field: 'col_3' }, { Field: 'col_99' }
+		], []]);
+		const repository = createBoilerImportRepository({ execute, query } as never);
+
+		const imported = await repository.importCsv([
+			'date;heure;temp;status;',
+			`${date};23:59:19;8,1;4;`,
+			`${otherDate};${time};8,2;4;`
+		].join('\r\n'));
+
+		expect(imported).toBe(2);
+		expect(execute.mock.calls[1]?.[1]).toEqual([
+			day, '23:59:00', Date.parse(`${day}T23:59:00Z`) / 1000, 8.1, 4, 1
+		]);
+		expect(execute.mock.calls[2]?.[1]).toEqual([
+			otherDay, minute, Date.parse(`${otherDay}T${minute}Z`) / 1000, 8.2, 4
+		]);
+		expect(execute.mock.calls[2]?.[0]).not.toContain('`col_99`');
+	});
+
 	it('refuse un CSV invalide avant toute insertion', async () => {
 		const execute = vi.fn().mockResolvedValueOnce([[
 			{ position: 2, columnOko: 2, type: 'tc_ext', originalName: 'temp' },

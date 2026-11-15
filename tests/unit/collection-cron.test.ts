@@ -17,6 +17,7 @@ const mocks = vi.hoisted(() => ({
 vi.mock('mysql2/promise', () => ({ createConnection: async () => mocks.connection }));
 vi.mock('../../src/lib/server/database', () => ({ databaseOptions: () => ({ host: 'localhost', database: 'test' }) }));
 vi.mock('../../src/lib/server/config', () => ({
+	readBoilerAddress: async () => 'http://boiler.test',
 	readCollectionConfig: async () => ({
 		boilerAddress: 'http://boiler.test', timezone: 'Europe/Paris', poidsPellet: 150, tcRef: 20
 	})
@@ -32,7 +33,7 @@ vi.mock('../../src/lib/server/repositories/daily-summary', () => ({
 	createDailySummaryRepository: () => ({ isDayComplete: mocks.complete, save: mocks.save })
 }));
 
-import { collectBoiler } from '../../src/lib/server/collection';
+import { collectBoiler, importManualFile } from '../../src/lib/server/collection';
 
 describe('collecte planifiée', () => {
 	beforeEach(() => {
@@ -54,12 +55,24 @@ describe('collecte planifiée', () => {
 		const result = await collectBoiler(new AbortController().signal, progress, new Set(['2026-11-13']));
 		expect(result).toEqual({ files: 3, imported: 3 });
 		expect(mocks.download).toHaveBeenCalledExactlyOnceWith('http://boiler.test', 'touch_20261111.csv', expect.any(AbortSignal));
-		expect(mocks.importCsv).toHaveBeenCalledWith('csv', '2026-11-11', expect.any(AbortSignal));
+		expect(mocks.importCsv).toHaveBeenCalledWith('csv', expect.any(AbortSignal));
 		expect(mocks.save.mock.calls.map((call) => [call[0], call[2]])).toEqual([
 			['2026-11-11', true], ['2026-11-12', false], ['2026-11-13', true]
 		]);
 		expect(progress).toHaveBeenCalledWith(0, 3, '2026-11-11', true);
 		expect(progress).toHaveBeenCalledWith(1, 3, '2026-11-11', false);
+		expect(mocks.connection.destroy).toHaveBeenCalledOnce();
+	});
+
+	it('transmet le CSV manuel et le signal sans date issue du nom du fichier', async () => {
+		const csv = 'date;heure;temp;status;\n12.11.2026;12:34:56;8,1;4;';
+		mocks.download.mockResolvedValue(csv);
+
+		const imported = await importManualFile('touch_20261114.csv', new AbortController().signal);
+
+		expect(imported).toBe(3);
+		expect(mocks.download).toHaveBeenCalledExactlyOnceWith('http://boiler.test', 'touch_20261114.csv', expect.any(AbortSignal));
+		expect(mocks.importCsv).toHaveBeenCalledExactlyOnceWith(csv, expect.any(AbortSignal));
 		expect(mocks.connection.destroy).toHaveBeenCalledOnce();
 	});
 

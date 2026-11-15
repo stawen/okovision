@@ -50,8 +50,8 @@ function parseValue(value: string): number | null {
 	return result;
 }
 
-/** Validates the controller CSV structure and rejects rows that do not match the requested day. */
-function parseCsv(contents: string, positions: number[], statusPosition: number, expectedDay?: string): CsvRecord[] {
+/** Validates CSV records using each row's own date and time, as in the legacy importer. */
+function parseCsv(contents: string, positions: number[], statusPosition: number): CsvRecord[] {
 	const lines = contents.replace(/^\uFEFF/, '').split(/\r\n|\n|\r/);
 	if (lines.length < 2) throw new BoilerImportError('response');
 	const records: CsvRecord[] = [];
@@ -64,7 +64,6 @@ function parseCsv(contents: string, positions: number[], statusPosition: number,
 		}
 		const values = positions.map((position) => parseValue(fields[position]));
 		const date = parseDate(fields[0]);
-		if (expectedDay && date !== expectedDay) throw new BoilerImportError('response');
 		const time = parseTime(fields[1]);
 		// The legacy connection forces UTC: CSV wall-clock times are stored as UTC.
 		const timestamp = Date.parse(`${date}T${time}Z`) / 1000;
@@ -91,7 +90,7 @@ function quoteColumn(column: string): string {
 export function createBoilerImportRepository(db: Pick<Pool, 'execute' | 'query'>) {
 	return {
 		/** Maps CSV columns through the database sensor mapping and inserts rows idempotently. */
-		async importCsv(contents: string, expectedDay?: string, signal?: AbortSignal): Promise<number> {
+		async importCsv(contents: string, signal?: AbortSignal): Promise<number> {
 			try {
 				const [sensorRows] = await db.execute<SensorRow[]>(
 					`SELECT position_column_csv AS position, column_oko AS columnOko, type, original_name AS originalName
@@ -148,8 +147,7 @@ export function createBoilerImportRepository(db: Pick<Pool, 'execute' | 'query'>
 				const records = parseCsv(
 					contents,
 					orderedSensors.map(([position]) => position),
-					statusSensor.position,
-					expectedDay
+					statusSensor.position
 				);
 				let previousStatus = 0;
 				let imported = 0;

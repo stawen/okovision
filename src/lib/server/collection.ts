@@ -48,11 +48,10 @@ function todayInTimezone(timezone: string): string {
 }
 
 export async function importManualFile(filename: string, signal: AbortSignal): Promise<number> {
-	const day = boilerCsvDay(filename);
 	const address = await readBoilerAddress();
 	const csv = await createBoilerCsvConnector().importFile(address, filename, signal);
 	return withWriteLock(signal, async (db, lockedSignal) =>
-		createBoilerImportRepository(db).importCsv(csv, day, lockedSignal));
+		createBoilerImportRepository(db).importCsv(csv, lockedSignal));
 }
 
 /** Imports available days under one lock, skipping complete summaries and retrying explicitly dirty days. */
@@ -81,7 +80,7 @@ export async function collectBoiler(
 			if (!complete) {
 				const csv = await connector.importFile(config.boilerAddress, file.name, lockedSignal);
 				lockedSignal.throwIfAborted();
-				imported += await importer.importCsv(csv, day, lockedSignal);
+				imported += await importer.importCsv(csv, lockedSignal);
 			}
 			lockedSignal.throwIfAborted();
 			await summaries.save(day, todayInTimezone(config.timezone), !complete || dirtyDays.has(day), config.poidsPellet, config.tcRef);
