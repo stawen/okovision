@@ -6,6 +6,9 @@ import { boilerCsvDay, createBoilerCsvConnector } from './boiler-import.ts';
 import { readBoilerAddress, readCollectionConfig } from './config.ts';
 import { createBoilerImportRepository } from './repositories/boiler-import.ts';
 import { createDailySummaryRepository } from './repositories/daily-summary.ts';
+import { logger } from './logger.ts';
+
+const log = logger.child({ component: 'collection' });
 
 interface LockRow extends RowDataPacket {
 	acquired: number | null;
@@ -50,8 +53,11 @@ function todayInTimezone(timezone: string): string {
 export async function importManualFile(filename: string, signal: AbortSignal): Promise<number> {
 	const address = await readBoilerAddress();
 	const csv = await createBoilerCsvConnector().importFile(address, filename, signal);
-	return withWriteLock(signal, async (db, lockedSignal) =>
-		createBoilerImportRepository(db).importCsv(csv, lockedSignal));
+	return withWriteLock(signal, async (db, lockedSignal) => {
+		const imported = await createBoilerImportRepository(db).importCsv(csv, lockedSignal);
+		log.info('boilerFileImported', { filename, imported });
+		return imported;
+	});
 }
 
 /** Imports available days under one lock, skipping complete summaries and retrying explicitly dirty days. */
@@ -80,7 +86,9 @@ export async function collectBoiler(
 			if (!complete) {
 				const csv = await connector.importFile(config.boilerAddress, file.name, lockedSignal);
 				lockedSignal.throwIfAborted();
-				imported += await importer.importCsv(csv, lockedSignal);
+				const inserted = await importer.importCsv(csv, lockedSignal);
+				imported += inserted;
+				log.info('boilerFileImported', { filename: file.name, imported: inserted });
 			}
 			lockedSignal.throwIfAborted();
 			await summaries.save(day, todayInTimezone(config.timezone), !complete || dirtyDays.has(day), config.poidsPellet, config.tcRef);

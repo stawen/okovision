@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mocks = vi.hoisted(() => ({
 	getFiles: vi.fn(),
@@ -36,6 +36,10 @@ vi.mock('../../src/lib/server/repositories/daily-summary', () => ({
 import { collectBoiler, importManualFile } from '../../src/lib/server/collection';
 
 describe('collecte planifiée', () => {
+	afterEach(() => {
+		vi.restoreAllMocks();
+	});
+
 	beforeEach(() => {
 		vi.resetAllMocks();
 		mocks.connection.execute.mockResolvedValue([[{ acquired: 1 }], []]);
@@ -74,6 +78,30 @@ describe('collecte planifiée', () => {
 		expect(mocks.download).toHaveBeenCalledExactlyOnceWith('http://boiler.test', 'touch_20261114.csv', expect.any(AbortSignal));
 		expect(mocks.importCsv).toHaveBeenCalledExactlyOnceWith(csv, expect.any(AbortSignal));
 		expect(mocks.connection.destroy).toHaveBeenCalledOnce();
+	});
+
+	it('journalise chaque fichier effectivement importé, même sans nouvelle ligne', async () => {
+		const info = vi.spyOn(console, 'info').mockImplementation(() => {});
+		mocks.complete.mockReset().mockResolvedValueOnce(false).mockResolvedValueOnce(true).mockResolvedValueOnce(false);
+		mocks.importCsv.mockReset().mockResolvedValueOnce(3).mockResolvedValueOnce(0);
+
+		expect(await collectBoiler(new AbortController().signal, vi.fn())).toEqual({ files: 3, imported: 3 });
+		expect(info.mock.calls.map(([entry]) => JSON.parse(entry as string))).toEqual([
+			expect.objectContaining({ event: 'boilerFileImported', filename: 'touch_20261111.csv', imported: 3 }),
+			expect.objectContaining({ event: 'boilerFileImported', filename: 'touch_20261113.csv', imported: 0 })
+		]);
+	});
+
+	it('journalise le résultat de l’import manuel sans annoncer les imports échoués', async () => {
+		const info = vi.spyOn(console, 'info').mockImplementation(() => {});
+		await importManualFile('touch_20261114.csv', new AbortController().signal);
+		expect(JSON.parse(info.mock.calls[0][0] as string)).toMatchObject({
+			event: 'boilerFileImported', filename: 'touch_20261114.csv', imported: 3
+		});
+
+		mocks.importCsv.mockRejectedValueOnce(new Error('import failed'));
+		await expect(importManualFile('touch_20261115.csv', new AbortController().signal)).rejects.toThrow('import failed');
+		expect(info).toHaveBeenCalledOnce();
 	});
 
 	it('échoue si un jour interrompu a disparu de la chaudière', async () => {

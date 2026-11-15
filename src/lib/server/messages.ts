@@ -42,6 +42,7 @@ const fr = {
 	collectionFailed: 'Échec de la collecte ou du traitement des tâches.',
 	collectionStarted: 'Collecte et gestionnaire de tâches initialisés.',
 	jobCompleted: 'Tâche terminée.',
+	boilerFileImported: 'Fichier de mesures chaudière importé.',
 	boilerAddressInvalid: 'chaudiere doit être un hôte ou un hôte suivi d’un port valide.',
 	boilerConfigInvalid: 'Adresse de chaudière absente ou invalide dans oko_configuration.',
 	boilerCredentialsUnavailable: 'Identifiants chaudière absents ou invalides dans la ligne admin.',
@@ -113,6 +114,7 @@ const en: Translations = {
 	collectionFailed: 'Collection or job processing failed.',
 	collectionStarted: 'Collection and job manager initialized.',
 	jobCompleted: 'Job completed.',
+	boilerFileImported: 'Boiler readings file imported.',
 	boilerAddressInvalid: 'chaudiere must be a host or a host with a valid port.',
 	boilerConfigInvalid: 'Boiler address is missing or invalid in oko_configuration.',
 	boilerCredentialsUnavailable: 'Boiler credentials are missing or invalid in the admin row.',
@@ -163,6 +165,7 @@ export type LogMessageKey =
 	| 'collectionFailed'
 	| 'collectionStarted'
 	| 'jobCompleted'
+	| 'boilerFileImported'
 	| 'updateFeedFailed'
 	| 'stockStatusFailed'
 	| 'ashtrayStatusFailed'
