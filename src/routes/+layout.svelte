@@ -12,6 +12,8 @@
 	let menuPages = $derived(navigationPages(data.language));
 	let configurationOpen = $state(false);
 	let accountOpen = $state(false);
+	let configurationMenu: HTMLDetailsElement | undefined = $state();
+	let accountMenu: HTMLDetailsElement | undefined = $state();
 	let configurationGroups = $derived([
 		{ key: 'reports', title: text.reports },
 		{ key: 'manual', title: text.manual },
@@ -23,7 +25,11 @@
 </script>
 
 <!-- Restore focus to the menu trigger when Escape closes an open navigation menu. -->
-<svelte:window onkeydown={(event) => {
+<svelte:window onclick={(event) => {
+	if (!(event.target instanceof Node)) return;
+	if (!configurationMenu?.contains(event.target)) configurationOpen = false;
+	if (!accountMenu?.contains(event.target)) accountOpen = false;
+}} onkeydown={(event) => {
 	if (event.key === 'Escape') {
 		if (event.target instanceof HTMLElement) {
 			event.target.closest('details[open]')?.querySelector('summary')?.focus();
@@ -56,8 +62,8 @@
 			<a href={pageHref('/history')} aria-current={current('/history') ? 'page' : undefined}>{text.history}</a>
 			{#if data.member}
 				<a href={pageHref('/private/realtime/settings')} aria-current={data.pathname?.startsWith('/private/realtime/') ? 'page' : undefined}>{text.realtime}</a>
-				<details class="nav-dropdown configuration-menu" bind:open={configurationOpen}>
-					<summary class:active={menuPages.some((page) => configurationGroups.some((group) => group.key === page.group) && current(page.path))}>{text.configuration}<span class="chevron" aria-hidden="true">⌄</span></summary>
+				<details class="nav-dropdown configuration-menu" bind:this={configurationMenu} bind:open={configurationOpen}>
+					<summary class:active={menuPages.some((page) => configurationGroups.some((group) => group.key === page.group) && current(page.path))}>{text.configuration}<svg class="chevron" aria-hidden="true" viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg></summary>
 					<div class="dropdown-panel configuration-panel">
 						{#each configurationGroups as group (group.key)}
 							<div class="menu-group">
@@ -79,10 +85,10 @@
 				</svg>
 			{/snippet}
 			{#if data.member}
-				<details class="nav-dropdown account-menu" bind:open={accountOpen}>
+				<details class="nav-dropdown account-menu" bind:this={accountMenu} bind:open={accountOpen}>
 					<summary class="member-button" aria-label={text.memberArea}>
 						<span class="member-avatar">{@render memberIcon()}</span>
-						<span>{text.account}</span><span class="chevron" aria-hidden="true">⌄</span>
+						<span>{text.account}</span><svg class="chevron" aria-hidden="true" viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
 					</summary>
 					<div class="dropdown-panel account-panel">
 						<p class="member-name">{data.member.name}</p>

@@ -86,7 +86,7 @@ h1, h2, h3, p { margin: 0; }
 .configuration-menu { align-self: stretch; }
 .configuration-menu > summary { display: flex; align-items: center; gap: 0.45rem; height: 100%; padding-inline: 1rem; color: #bdc7d4; font-size: 0.875rem; }
 .configuration-menu > summary:hover, .configuration-menu > summary.active, .configuration-menu[open] > summary { color: white; background: rgb(255 255 255 / 8%); }
-.chevron { font-size: 0.9rem; }
+.chevron { display: block; flex: none; width: 0.85rem; height: 0.85rem; }
 .dropdown-panel { position: absolute; top: calc(100% + 0.5rem); right: 0; padding: 0.65rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 12px 35px rgb(23 33 47 / 18%); }
 .configuration-panel { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; width: min(42rem, calc(100vw - 2rem)); max-height: 70vh; overflow-y: auto; }
 .menu-group > p { padding: 0.4rem 0.65rem; color: var(--muted); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
