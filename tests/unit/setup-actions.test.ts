@@ -50,7 +50,10 @@ describe('setup sans jeton', () => {
 		expect(body).toContain('placeholder="ex: 192.168.1.23"');
 		expect(body).toContain('>Tester</button>');
 		expect(body).toContain('name="initializeMatrix"');
-		expect(body).toContain('L’initialisation de la matrice ne pourra pas se faire');
+		expect(body).toContain('Un test de communication réussi est nécessaire');
+		const submitButton = body.match(/<button[^>]*type="submit"[^>]*>[\s\S]*?<\/button>/)?.[0] ?? '';
+		expect(submitButton).toContain('Installer et enregistrer');
+		expect(submitButton).toContain('disabled');
 		expect(body).not.toContain('type="checkbox" name="initializeMatrix"');
 		expect(body).toContain('aria-describedby="tcRef-help"');
 		expect(body).toContain('aria-describedby="poidsPellet-help"');
@@ -100,6 +103,9 @@ describe('setup sans jeton', () => {
 				}
 			}
 		});
+		const submitButton = body.match(/<button[^>]*type="submit"[^>]*>[\s\S]*?<\/button>/)?.[0] ?? '';
+		expect(submitButton).toContain(language === 'fr' ? 'Enregistrer la configuration' : 'Save configuration');
+		expect(submitButton).not.toContain('disabled');
 		const prefix = language === 'fr' ? 'ex:' : 'e.g.:';
 		const addressInput = body.match(/<input id="chaudiere"[^>]*>/)?.[0];
 		expect(addressInput).toContain(`placeholder="${prefix} 192.168.1.23"`);

@@ -112,7 +112,7 @@
 									{/if}
 								</div>
 								<div class="matrix-status" class:matrix-status-ready={matrixCanInitialize} role="status" aria-live="polite">
-									{matrixCanInitialize ? text.matrixTestReady : text.matrixTestRequired}
+									{matrixCanInitialize ? text.matrixTestReady : installing ? text.installTestRequired : text.matrixTestRequired}
 								</div>
 								<noscript><small>{text.boilerNeedsJavascript}</small></noscript>
 							{/if}
@@ -137,7 +137,9 @@
 				<label class="wide confirmation"><input type="checkbox" name="force" value="yes" required /> {text.force}</label>
 				<label class="wide">{text.forceWord}<input name="forceConfirmation" placeholder={text.forceWordPlaceholder} autocomplete="off" required pattern="INSTALLER" /></label>
 			{/if}
-			<button class="wide" type="submit">{installing ? text.save : text.saveConfig}</button>
+			<button class="wide" type="submit" disabled={installing && (testing || !matrixCanInitialize)}>
+				{installing ? text.save : text.saveConfig}
+			</button>
 		</form>
 	{/if}
 </main>
@@ -158,6 +160,7 @@
 	.matrix-status-ready { border-color: #45a85a; background: #edf8ef; color: #245b2e; }
 	input, select, button { min-width: 0; width: 100%; padding: 0.65rem; border: 1px solid var(--border); border-radius: 5px; font: inherit; }
 	button { background: var(--primary-dark); color: white; cursor: pointer; }
+	button:disabled { border-color: #d3dae2; background: #e4e9ef; color: #778393; cursor: not-allowed; }
 	.wide { grid-column: 1 / -1; }
 	.warning { padding: 1rem; border: 1px solid var(--warning); border-radius: 5px; background: #fff8eb; }
 	.confirmation { display: flex; align-items: flex-start; }
