@@ -16,6 +16,7 @@ export interface Job {
 	createdAt: string;
 	updatedAt: string;
 	author: string;
+	manual?: true;
 	filename?: string;
 	progress?: { completed: number; total: number; day: string; dirty: boolean };
 	result?: { imported: number; files?: number };
@@ -36,7 +37,7 @@ export class JobManager {
 	}
 
 	private runnable(job: Job): boolean {
-		return job.status === 'queued' && (job.kind !== 'collection' || this.allowCollections);
+		return job.status === 'queued' && (job.kind !== 'collection' || this.allowCollections || job.manual === true);
 	}
 
 	/** Persists atomically with private permissions before publishing the new in-memory state. */
@@ -83,6 +84,7 @@ export class JobManager {
 				|| !('createdAt' in value) || typeof value.createdAt !== 'string'
 				|| !('updatedAt' in value) || typeof value.updatedAt !== 'string'
 				|| !('author' in value) || typeof value.author !== 'string'
+				|| ('manual' in value && (value.manual !== true || value.kind !== 'collection'))
 				|| (value.kind === 'import' && (!('filename' in value) || typeof value.filename !== 'string' || !isBoilerCsvFilename(value.filename)))) {
 				throw new Error('Invalid persisted job');
 			}
@@ -111,6 +113,14 @@ export class JobManager {
 	}
 
 	async enqueue(kind: JobKind, author: string, filename?: string): Promise<Job> {
+		return this.enqueueJob(kind, author, filename);
+	}
+
+	async enqueueCollection(author: string): Promise<Job> {
+		return this.enqueueJob('collection', author, undefined, true);
+	}
+
+	private async enqueueJob(kind: JobKind, author: string, filename?: string, manual = false): Promise<Job> {
 		const previous = this.enqueueTail;
 		let release!: () => void;
 		this.enqueueTail = new Promise<void>((resolve) => { release = resolve; });
@@ -119,14 +129,23 @@ export class JobManager {
 			if (this.stopping) throw new Error('Job manager stopping');
 			if (kind === 'import' && (!filename || !isBoilerCsvFilename(filename))) throw new Error('Invalid filename');
 			if (kind === 'collection') {
-				// Only one automatic collection may be queued or running at a time.
+				// Manual and scheduled triggers share a single pending collection.
 				const existing = [...this.jobs.values()].find((job) =>
 					job.kind === 'collection' && (job.status === 'queued' || job.status === 'running'));
-				if (existing) return structuredClone(existing);
+				if (existing) {
+					if (manual && existing.status === 'queued' && !existing.manual) {
+						const activated: Job = { ...existing, manual: true, author, updatedAt: new Date().toISOString() };
+						await this.save(activated);
+						this.wake();
+						return structuredClone(activated);
+					}
+					return structuredClone(existing);
+				}
 			}
 			const now = new Date().toISOString();
 			const job: Job = {
 				id: randomUUID(), kind, status: 'queued', createdAt: now, updatedAt: now, author,
+				...(manual ? { manual: true as const } : {}),
 				...(filename ? { filename } : {})
 			};
 			await this.save(job);

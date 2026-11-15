@@ -119,4 +119,58 @@ describe('gestionnaire durable des imports', () => {
 		await manager.stop();
 		expect(manager.get(job.id)?.status).toBe('interrupted');
 	});
+
+	it('exécute une collecte manuelle en développement et déduplique les demandes', async () => {
+		const directory = await temporaryDirectory();
+		const pending = Promise.withResolvers<{ files: number; imported: number }>();
+		mocks.collect.mockReturnValueOnce(pending.promise);
+		const manager = new JobManager(directory, false);
+		await manager.start();
+		const [one, two] = await Promise.all([
+			manager.enqueueCollection('1'),
+			manager.enqueueCollection('1')
+		]);
+		expect(one.id).toBe(two.id);
+		expect(one).toMatchObject({ kind: 'collection', manual: true, author: '1' });
+		await vi.waitFor(() => expect(mocks.collect).toHaveBeenCalledOnce());
+		pending.resolve({ files: 1, imported: 3 });
+		await vi.waitFor(() => expect(manager.get(one.id)?.status).toBe('completed'));
+		expect(manager.get(one.id)?.result).toEqual({ files: 1, imported: 3 });
+		await manager.stop();
+	});
+
+	it('active la collecte planifiée en attente sans créer de doublon ni activer le calendrier', async () => {
+		const directory = await temporaryDirectory();
+		mocks.collect.mockResolvedValueOnce({ files: 0, imported: 0 });
+		const manager = new JobManager(directory, false);
+		await manager.start();
+		const scheduled = await manager.enqueue('collection', 'scheduler');
+		expect(mocks.collect).not.toHaveBeenCalled();
+		const manual = await manager.enqueueCollection('1');
+		expect(manual.id).toBe(scheduled.id);
+		await vi.waitFor(() => expect(manager.get(manual.id)?.status).toBe('completed'));
+		expect(JSON.parse(await readFile(join(directory, `${manual.id}.json`), 'utf8'))).toMatchObject({
+			manual: true, author: '1', status: 'completed'
+		});
+		const next = await manager.enqueue('collection', 'scheduler');
+		expect(manager.get(next.id)?.status).toBe('queued');
+		expect(mocks.collect).toHaveBeenCalledOnce();
+		await manager.stop();
+	});
+
+	it('reprend une collecte manuelle persistée même sans planification', async () => {
+		const directory = await temporaryDirectory();
+		const id = 'a4e7f416-01f3-4f37-90d4-bde93a899310';
+		await writeFile(join(directory, `${id}.json`), JSON.stringify({
+			id, kind: 'collection', status: 'queued', author: '1', manual: true,
+			createdAt: '2026-11-12T00:00:00.000Z', updatedAt: '2026-11-12T00:00:00.000Z'
+		}));
+		mocks.collect.mockResolvedValueOnce({ files: 1, imported: 2 });
+		const manager = new JobManager(directory, false);
+		await manager.start();
+		await vi.waitFor(() => expect(manager.get(id)?.status).toBe('completed'));
+		expect(mocks.collect).toHaveBeenCalledOnce();
+		expect(manager.get(id)?.result).toEqual({ files: 1, imported: 2 });
+		await manager.stop();
+	});
 });
