@@ -80,6 +80,7 @@ describe('navigation de la cartographie', () => {
 		expect(body).toContain('Boiler settings');
 		expect(body).toContain('Operating indicators, heating, radiator water management and burner settings.');
 		expect(body).toContain('Configuration tracking');
+		expect(body).not.toContain('href="/private/realtime/charts"');
 		expect(body).not.toContain('Réglages chaudière');
 		expect(head).toContain('Boiler settings — OkoVision');
 		const menu = render(Layout, {

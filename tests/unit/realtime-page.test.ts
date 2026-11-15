@@ -40,7 +40,9 @@ describe('page des indicateurs temps réel', () => {
 		expect(body).toContain('Le temps moyen doit être compris entre 25 min et 45 min.');
 		expect(body.match(/class="realtime-reading"/g)).toHaveLength(24);
 		expect(body.match(/class="realtime-info"/g)).toHaveLength(21);
-		expect(body).toContain('Graphiques');
+		expect(body).not.toContain('href="/private/realtime/charts"');
+		expect(body).toContain('href="/private/realtime/settings"');
+		expect(body).toContain('href="/private/realtime/configurations"');
 		expect(body).toContain('Suivi configuration');
 	});
 

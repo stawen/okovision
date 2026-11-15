@@ -271,7 +271,7 @@ Le proxy transmet les nouvelles routes à SvelteKit sans réécriture vers PHP. 
 
 ### Temps réel
 
-Garder initialement un polling proche des trois secondes existantes, mais ne lancer le suivant qu'après la fin du précédent. Arrêter à la sortie de page, annuler les requêtes obsolètes et borner les points conservés en mémoire.
+L'affichage des mesures dans un graphique temps réel n'est pas repris. Si les valeurs sont actualisées périodiquement, ne lancer une interrogation qu'après la fin de la précédente, arrêter à la sortie de page et annuler les requêtes obsolètes.
 
 Le connecteur sérialise les échanges incompatibles entre eux et limite les appels par chaudière. En cas d'échec d'une écriture, ne pas réessayer aveuglément : signaler un résultat incertain et relire l'état si le protocole le permet. Les bornes/diviseurs doivent être validés serveur; une confirmation utilisateur et une trace de commande sont requises. Le statut « configuration enregistrée » doit être distinct de « modification appliquée et vérifiée ».
 

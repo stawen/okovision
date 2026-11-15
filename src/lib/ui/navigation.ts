@@ -22,10 +22,6 @@ export const pages = [
 		titleKey: 'realtimeConfigurationsTitle', descriptionKey: 'realtimeConfigurationsDescription'
 	},
 	{
-		path: '/private/realtime/charts', group: 'realtime', private: true,
-		titleKey: 'realtimeChartsTitle', descriptionKey: 'realtimeChartsDescription'
-	},
-	{
 		path: '/private/configuration/reports', group: 'reports', private: true,
 		titleKey: 'dailyReportsTitle', descriptionKey: 'dailyReportsDescription'
 	},
