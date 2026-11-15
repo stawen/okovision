@@ -1,6 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
+import { readFileSync } from 'node:fs';
+import createKnex from 'knex';
 import type { Pool } from 'mysql2/promise';
 import { createMeasurementsRepository } from '../../src/lib/server/repositories/measurements';
+import { up, down } from '../../migrations/20261115181000_complete_legacy_hotwater_sensor_type.mjs';
 
 function database(sensors: { type: string; columnOko: number }[]) {
 	const execute = vi.fn()
@@ -19,6 +22,46 @@ const sensors = [
 ];
 
 describe('requête des indicateurs', () => {
+	it('limite la migration ECS aux types absents du capteur historique WW1', async () => {
+		const knex = createKnex({ client: 'mysql2' });
+		vi.spyOn(knex.client, 'acquireConnection').mockResolvedValue({});
+		vi.spyOn(knex.client, 'releaseConnection').mockResolvedValue(undefined);
+		const query = vi.spyOn(knex.client, 'query').mockImplementation(async (_connection, sql: unknown) => {
+			if (typeof sql !== 'object' || sql === null) throw new Error('Expected a query object');
+			return { ...sql, response: [{ affectedRows: 1 }, []] };
+		});
+		try {
+			await up(knex);
+			expect(query).toHaveBeenCalledOnce();
+			expect(query.mock.calls[0][1]).toMatchObject({
+				sql: 'update `oko_capteur` set `type` = ? where `original_name` = ? and (`type` is null or `type` = ?)',
+				bindings: ['hotwater[0]', 'WW1 Pumpe', '']
+			});
+			await expect(down()).rejects.toThrow('cannot be restored safely');
+		} finally {
+			await knex.destroy();
+		}
+	});
+
+	it('calcule les quatre indicateurs après import avec la matrice du mode dev:local', async () => {
+		const fixture = readFileSync(new URL('../sql/okovision-dataset-v2.sql', import.meta.url), 'utf8');
+		const matrix = fixture.split('INSERT INTO `oko_capteur`')[1].split(';', 1)[0];
+		const fixtureSensors = [...matrix.matchAll(
+			/\(\d+, '[^']*', \d+, (\d+), '[^']*', '([^']*)', '[^']*'\)/g
+		)].map((match) => ({ columnOko: Number(match[1]), type: match[2] }));
+		const indicatorTypes = sensors.map(({ type }) => type);
+		const { repository, execute, query } = database(
+			fixtureSensors.filter(({ type }) => indicatorTypes.includes(type))
+		);
+		query.mockResolvedValue([fixtureSensors.map(({ columnOko }) => ({ Field: `col_${columnOko}` }))]);
+
+		await expect(repository.getDailyIndicators('2026-11-11', 156)).resolves.toEqual({
+			sampleCount: 2, conso: 1.56, ecs: 0, max: 7.5, min: -2, missingSensors: false
+		});
+		expect(execute.mock.calls[1][0]).toContain('CASE WHEN a.`col_14` = 1');
+		expect(execute.mock.calls[1][1]).toEqual([0.156, 0.156, '2026-11-11']);
+	});
+
 	it('utilise les colonnes vérifiées et paramètre la date et le coefficient', async () => {
 		const { repository, execute } = database(sensors);
 		await expect(repository.getDailyIndicators('2026-11-11', 156)).resolves.toEqual({

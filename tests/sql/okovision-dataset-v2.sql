@@ -130,7 +130,7 @@ INSERT INTO `oko_capteur` (`id`, `name`, `position_column_csv`, `column_oko`, `o
 (10, 'T°C ECS', 11, 11, 'WW1 EinT Ist[°C]', '', 'CAPPL:LOCAL.L_ww[0].einschaltfuehler_ist'),
 (11, 'T°C ECS (arret)', 12, 12, 'WW1 AusT Ist[°C]', '', 'CAPPL:LOCAL.ww[0].temp_absenken'),
 (12, 'T°C ECS Consigne', 13, 13, 'WW1 Soll[°C]', '', 'CAPPL:LOCAL.ww[0].temp_heizen'),
-(13, 'Circulateur ECS', 14, 14, 'WW1 Pumpe', '', 'CAPPL:LOCAL.L_ww[0].pumpe'),
+(13, 'Circulateur ECS', 14, 14, 'WW1 Pumpe', 'hotwater[0]', 'CAPPL:LOCAL.L_ww[0].pumpe'),
 (14, 'Pompe (indefini)', 15, 15, 'Zubrp1 Pumpe', '', 'CAPPL:LOCAL.L_zirkp[0].pumpe'),
 (15, 'T°C panneau solaire', 16, 16, 'SK1 Koll[°C]', '', 'CAPPL:LOCAL.L_sk[0].kollektortemp_ist'),
 (16, 'T°C Ballon Bas', 17, 17, 'SK1 SPUnten[°C]', '', 'CAPPL:LOCAL.L_sk[0].speichertemp_ist'),

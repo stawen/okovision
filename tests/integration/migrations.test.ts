@@ -87,6 +87,7 @@ export const config = { transaction: false };
 			process.env.DB_ADRESSE = env.DB_ADRESSE;
 			assert.equal(await getSetupStatus(connection), 'configure');
 			const [users] = await connection.query<RowDataPacket[]>('SELECT * FROM oko_user ORDER BY id');
+			const [sensors] = await connection.query<RowDataPacket[]>('SELECT * FROM oko_capteur ORDER BY id');
 			await connection.query(
 				'CREATE TABLE oko_configuration (param varchar(100) NOT NULL PRIMARY KEY, value text DEFAULT NULL) ENGINE=InnoDB'
 			);
@@ -101,10 +102,16 @@ export const config = { transaction: false };
 			assert.equal(await getSetupStatus(connection), 'ready');
 			assert.deepEqual((await businessTotals())[0], before);
 			assert.deepEqual((await connection.query<RowDataPacket[]>('SELECT * FROM oko_user ORDER BY id'))[0], users);
+			assert.deepEqual(
+				(await connection.query<RowDataPacket[]>('SELECT * FROM oko_capteur ORDER BY id'))[0],
+				sensors.map((sensor) => sensor.original_name === 'WW1 Pumpe' && !sensor.type
+					? { ...sensor, type: 'hotwater[0]' } : sensor)
+			);
 			const [applied] = await connection.query<RowDataPacket[]>('SELECT name FROM knex_migrations');
-			assert.equal(applied.length, 2);
+			assert.equal(applied.length, 3);
 			assert.ok(applied.some((row) => /create_oko_configuration\.mjs$/.test(row.name)));
 			assert.ok(applied.some((row) => /remove_obsolete_setup_settings\.mjs$/.test(row.name)));
+			assert.ok(applied.some((row) => /complete_legacy_hotwater_sensor_type\.mjs$/.test(row.name)));
 			const [parameters] = await connection.query<RowDataPacket[]>('SELECT param FROM oko_configuration');
 			assert.deepEqual(parameters.map((row) => row.param).sort(), [...configurationParameters].sort());
 		});
