@@ -4,7 +4,7 @@ const { indicators } = vi.hoisted(() => ({ indicators: vi.fn() }));
 vi.mock('../../src/lib/server/repositories/measurements', () => ({
 	createMeasurementsRepository: () => ({ getDailyIndicators: indicators })
 }));
-import { createDailySummaryRepository } from '../../src/lib/server/repositories/daily-summary';
+import { createDailySummaryRepository, DailySummaryNoDataError } from '../../src/lib/server/repositories/daily-summary';
 
 describe('synthèses du cron', () => {
 	const execute = vi.fn();
@@ -28,22 +28,37 @@ describe('synthèses du cron', () => {
 
 	it('force le recalcul avec les agrégats, le DJU et les cycles', async () => {
 		execute.mockResolvedValueOnce([[{ count: 1 }], []])
+			.mockResolvedValueOnce([[{ count: 2 }], []])
 			.mockResolvedValueOnce([[{ columnOko: 99 }], []])
 			.mockResolvedValueOnce([[{ cycles: 2 }], []])
 			.mockResolvedValueOnce([{ affectedRows: 2 }, []]);
 		const repository = createDailySummaryRepository(db);
 		expect(await repository.save('2026-11-12', '2026-11-13', true, 150, 20)).toBe('saved');
-		expect(execute.mock.calls[3][0]).toContain('ON DUPLICATE KEY UPDATE');
-		expect(execute.mock.calls[3][0]).toContain('GREATEST(0, ROUND(? - ((? + ?) / 2), 2))');
-		expect(execute.mock.calls[3][1]).toEqual(['2026-11-12', 8, 4, 0.15, 0.08, 20, 8, 4, 2]);
+		expect(execute.mock.calls[4][0]).toContain('ON DUPLICATE KEY UPDATE');
+		expect(execute.mock.calls[4][0]).toContain('GREATEST(0, ROUND(? - ((? + ?) / 2), 2))');
+		expect(execute.mock.calls[4][1]).toEqual(['2026-11-12', 8, 4, 0.15, 0.08, 20, 8, 4, 2]);
 	});
 
 	it('refuse une synthèse incomplète avant toute écriture', async () => {
-		execute.mockResolvedValueOnce([[{ count: 0 }], []]);
-		indicators.mockResolvedValueOnce({ sampleCount: 0, min: null, max: null, conso: null, ecs: null });
+		execute.mockResolvedValueOnce([[{ count: 0 }], []])
+			.mockResolvedValueOnce([[{ count: 2 }], []]);
+		indicators.mockResolvedValueOnce({ sampleCount: 2, min: null, max: null, conso: null, ecs: null });
 		const repository = createDailySummaryRepository(db);
 		await expect(repository.save('2026-11-12', '2026-11-13', true, 150, 20))
 			.rejects.toThrow('Incomplete measurements');
-		expect(execute).toHaveBeenCalledTimes(1);
+		expect(execute).toHaveBeenCalledTimes(2);
+	});
+
+	it('distingue une journée sans relevés avant de vérifier les capteurs ou d’écrire', async () => {
+		execute.mockResolvedValueOnce([[{ count: 1 }], []])
+			.mockResolvedValueOnce([[{ count: 0 }], []]);
+		const repository = createDailySummaryRepository(db);
+		await expect(repository.save('2026-11-12', '2026-11-13', true, 150, 20))
+			.rejects.toThrow(DailySummaryNoDataError);
+		expect(execute.mock.calls[1]).toEqual([
+			'SELECT COUNT(*) AS count FROM oko_historique_full WHERE jour = ?', ['2026-11-12']
+		]);
+		expect(indicators).not.toHaveBeenCalled();
+		expect(execute).toHaveBeenCalledTimes(2);
 	});
 });

@@ -17,6 +17,13 @@ interface CycleRow extends RowDataPacket {
 	cycles: string | number | null;
 }
 
+export class DailySummaryNoDataError extends Error {
+	constructor(day: string) {
+		super(`No daily measurements for ${day}`);
+		this.name = 'DailySummaryNoDataError';
+	}
+}
+
 export function createDailySummaryRepository(db: Pick<Pool, 'execute' | 'query'>) {
 	const measurements = createMeasurementsRepository(db);
 	return {
@@ -35,6 +42,11 @@ export function createDailySummaryRepository(db: Pick<Pool, 'execute' | 'query'>
 				'SELECT COUNT(*) AS count FROM oko_resume_day WHERE jour = ?', [day]
 			);
 			if (!force && Number(existing[0]?.count) === 1) return 'skipped';
+
+			const [samples] = await db.execute<CountRow[]>(
+				'SELECT COUNT(*) AS count FROM oko_historique_full WHERE jour = ?', [day]
+			);
+			if (Number(samples[0]?.count) === 0) throw new DailySummaryNoDataError(day);
 
 			const indicators = await measurements.getDailyIndicators(day, weight);
 			if (!indicators.sampleCount || indicators.max === null || indicators.min === null

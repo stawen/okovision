@@ -5,6 +5,8 @@ const fr = {
 	dailyIndicatorsFailed: 'Impossible de charger les indicateurs journaliers.',
 	dailyChartsFailed: 'Impossible de charger les graphiques journaliers.',
 	dailyReportsFailed: 'Impossible de gérer les rapports journaliers.',
+	dailySummariesFailed: 'Impossible de calculer les synthèses journalières.',
+	dailySummaryRecalculated: 'Synthèse journalière recalculée.',
 	seasonsFailed: 'Impossible de gérer les saisons.',
 	siloEventsFailed: 'Impossible de gérer les événements de silo.',
 	historyFailed: 'Impossible de charger les données historiques.',
@@ -77,6 +79,8 @@ const en: Translations = {
 	dailyIndicatorsFailed: 'Unable to load daily indicators.',
 	dailyChartsFailed: 'Unable to load daily charts.',
 	dailyReportsFailed: 'Unable to manage daily reports.',
+	dailySummariesFailed: 'Unable to calculate daily summaries.',
+	dailySummaryRecalculated: 'Daily summary recalculated.',
 	seasonsFailed: 'Unable to manage seasons.',
 	siloEventsFailed: 'Unable to manage silo events.',
 	historyFailed: 'Unable to load historical data.',
@@ -156,6 +160,8 @@ export type LogMessageKey =
 	| 'dailyIndicatorsFailed'
 	| 'dailyChartsFailed'
 	| 'dailyReportsFailed'
+	| 'dailySummariesFailed'
+	| 'dailySummaryRecalculated'
 	| 'seasonsFailed'
 	| 'siloEventsFailed'
 	| 'historyFailed'

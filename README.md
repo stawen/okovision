@@ -48,6 +48,29 @@ automatiquement uniquement pour la base jetable `dev:local`. La configuration
 métier est lue dans `oko_configuration`; `config.json` n'est plus utilisé par
 l'application Node.
 
+## Recalcul des synthèses journalières
+
+La page membre `/private/configuration/daily-summaries` permet de choisir deux
+dates incluses et d'afficher toutes les journées de la période, de la plus
+ancienne à la plus récente. Le jour courant, selon le fuseau de l'installation,
+est exclu.
+
+Chaque ligne permet de recalculer sa synthèse. **Tout recalculer** traite les
+lignes successivement, en commençant par la plus ancienne. Après une écriture
+réussie, la ligne clignote en vert puis disparaît (sans clignotement si les
+animations réduites sont activées). En cas d'échec, le traitement continue
+avec la journée suivante ; la ligne reste affichée en rouge avec son erreur
+pour permettre une nouvelle tentative, sans bandeau d'erreur en doublon.
+Si aucun relevé n'existe dans `oko_historique_full` pour la journée, la ligne
+affiche « Aucune donnée journalière pour ce jour » plutôt que l'erreur générique.
+Le bouton **Tout recalculer** est situé
+à droite au-dessus du tableau.
+
+Le calcul réutilise les relevés enregistrés et les paramètres actuels
+(`poidsPellet`, `tcRef`) ; il remplace la synthèse existante dans
+`oko_resume_day` sous le verrou d'écriture partagé avec la collecte.
+Il n'importe aucun fichier et n'envoie aucune commande à la chaudière.
+
 ## Build et contrôles
 
 ```sh
