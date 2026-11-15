@@ -11,6 +11,8 @@ const fr = {
 	siloEventsFailed: 'Impossible de gérer les événements de silo.',
 	historyFailed: 'Impossible de charger les données historiques.',
 	boilerReadFailed: 'Impossible de récupérer les mesures chaudière.',
+	boilerConfigurationFailed: 'Impossible de gérer la configuration chaudière.',
+	boilerCommand: 'Commande de configuration chaudière.',
 	boilerImportFailed: 'Impossible d’importer les fichiers de mesures chaudière.',
 	csvMappingFailed: 'Impossible de gérer la matrice CSV.',
 	updateFeedFailed: 'Impossible de charger le flux des mises à jour.',
@@ -85,6 +87,8 @@ const en: Translations = {
 	siloEventsFailed: 'Unable to manage silo events.',
 	historyFailed: 'Unable to load historical data.',
 	boilerReadFailed: 'Unable to retrieve boiler readings.',
+	boilerConfigurationFailed: 'Unable to manage the boiler configuration.',
+	boilerCommand: 'Boiler configuration command.',
 	boilerImportFailed: 'Unable to import boiler reading files.',
 	csvMappingFailed: 'Unable to manage the CSV mapping.',
 	updateFeedFailed: 'Unable to load the update feed.',
@@ -166,6 +170,8 @@ export type LogMessageKey =
 	| 'siloEventsFailed'
 	| 'historyFailed'
 	| 'boilerReadFailed'
+	| 'boilerConfigurationFailed'
+	| 'boilerCommand'
 	| 'boilerImportFailed'
 	| 'csvMappingFailed'
 	| 'collectionFailed'

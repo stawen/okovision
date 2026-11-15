@@ -221,6 +221,14 @@ export const realtimeIndicators = [
 	...supportingIndicators
 ];
 
+export const editableRealtimeIndicators = realtimeSections
+	.flatMap((section) => section.indicators)
+	.filter((indicator) => !realtimeSections[0].indicators.includes(indicator) && indicator.id !== 'boilerPower');
+
+export function legacySensorId(indicator: RealtimeIndicatorDefinition): string {
+	return indicator.sensorName(1).replace(/CAPPL:LOCAL\.|CAPPL:/g, '').replaceAll('[', '').replaceAll(']', '').replace(/[./]+/g, '_');
+}
+
 /** Produces the controller sensor identifiers for one-based heating circuit numbers. */
 export function realtimeSensorNames(circuit: number): string[] {
 	return realtimeIndicators.map((indicator) => indicator.sensorName(circuit));

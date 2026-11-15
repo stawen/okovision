@@ -38,8 +38,9 @@ describe('page des indicateurs temps réel', () => {
 		expect(body).toContain('aria-label="Information : Temps moyen du brûleur"');
 		expect(body).toContain('aria-describedby="realtime-tooltip-averageBurnerRunTime"');
 		expect(body).toContain('Le temps moyen doit être compris entre 25 min et 45 min.');
-		expect(body.match(/class="realtime-reading"/g)).toHaveLength(24);
-		expect(body.match(/class="realtime-info"/g)).toHaveLength(21);
+		expect(body.match(/class="realtime-reading(?: [^"]*)?"/g)).toHaveLength(24);
+		expect(body.match(/class="realtime-info(?: [^"]*)?"/g)).toHaveLength(21);
+		expect(body.match(/aria-label="Modifier : /g)).toHaveLength(19);
 		expect(body).not.toContain('href="/private/realtime/charts"');
 		expect(body).toContain('href="/private/realtime/settings"');
 		expect(body).toContain('href="/private/realtime/configurations"');
@@ -63,13 +64,13 @@ describe('page des indicateurs temps réel', () => {
 				}
 			}
 		});
-		const cards = body.match(/<article class="realtime-reading">[\s\S]*?<\/article>/g) ?? [];
+		const cards = body.match(/<article class="realtime-reading(?: [^"]*)?">[\s\S]*?<\/article>/g) ?? [];
 		for (const label of withoutInfo) {
 			const card = cards.find((item) => item.includes(label));
 			expect(card).toBeDefined();
 			expect(card).not.toContain('realtime-info');
 		}
-		expect(body.match(/class="realtime-info"/g)).toHaveLength(21);
+		expect(body.match(/class="realtime-info(?: [^"]*)?"/g)).toHaveLength(21);
 	});
 
 	it('signale une erreur de connexion sans présenter de valeurs simulées', () => {

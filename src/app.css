@@ -203,9 +203,10 @@ h1, h2, h3, p { margin: 0; }
 .boiler-import-button:focus-visible { outline: 3px solid rgb(21 150 220 / 45%); outline-offset: 2px; }
 .boiler-import-spinner { width: 1.2rem; height: 1.2rem; border: 2px solid #cbd6e2; border-top-color: var(--primary-dark); border-radius: 50%; animation: boiler-import-spin 0.75s linear infinite; }
 @keyframes boiler-import-spin { to { transform: rotate(360deg); } }
-.page-tabs { display: flex; flex-wrap: wrap; gap: 0.5rem; padding-bottom: 0.8rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border); }
-.page-tabs a { padding: 0.5rem 0.85rem; border-radius: 6px; color: #52647a; font-size: 0.85rem; text-decoration: none; }
-.page-tabs a[aria-current="page"] { color: var(--primary-dark); background: #e5f0fa; }
+.page-tabs { display: flex; flex-wrap: wrap; align-items: end; gap: 0.3rem; padding: 0 0.35rem; margin-bottom: 2rem; border-bottom: 1px solid #aebccd; }
+.page-tabs a { position: relative; display: inline-flex; justify-content: center; padding: 0.6rem 0.9rem; margin-bottom: -1px; border: 1px solid #c5d2df; border-radius: 6px 6px 0 0; background: #e9eef4; color: #52647a; font-size: 0.85rem; font-weight: 600; text-align: center; text-decoration: none; }
+.page-tabs a:hover { background: #dce8f4; color: #174e82; }
+.page-tabs a[aria-current="page"] { border-color: #9eb0c4; border-bottom-color: #f4f7fb; background: #f4f7fb; box-shadow: inset 0 3px 0 var(--primary-dark); color: var(--primary-dark); }
 .realtime-page { padding-block: 1.5rem 3rem; }
 .realtime-page .page-tabs { margin-bottom: 1.3rem; }
 .realtime-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem; margin-bottom: 1.25rem; }
@@ -355,7 +356,8 @@ h1 { color: #1d2b3c; font-size: clamp(1.55rem, 3vw, 2rem); font-weight: 650; let
 .site-footer { background: #ffffff; border-top: 1px solid var(--border); padding-block: 1.1rem; color: var(--muted); font-size: 0.72rem; }
 .footer-content { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
 
-.reports-page { min-height: 65vh; padding-block: 2rem 3rem; }
+.reports-page { min-height: 65vh; }
+.reports-page:not(.realtime-page) { padding-block: 2rem 3rem; }
 .reports-description { max-width: 48rem; margin-top: 0.5rem; color: #536274; }
 .seasons-page .reports-description, .daily-summaries-page .reports-description { max-width: none; }
 .reports-alert { margin-top: 1rem; padding: 0.75rem 1rem; border: 1px solid #e8caca; border-radius: 7px; background: #fff5f4; color: #8e3535; font-size: 0.85rem; }
@@ -486,11 +488,13 @@ h1 { color: #1d2b3c; font-size: clamp(1.55rem, 3vw, 2rem); font-weight: 650; let
 	.indicator-reading { padding: 0.18rem 0.4rem; }
 	.daily-chart-block { padding-inline: 0.65rem; }
 	.realtime-page { padding-top: 1.1rem; }
+	.page-tabs { flex-wrap: nowrap; padding-inline: 0; }
+	.page-tabs a { flex: 1; padding-inline: 0.4rem; }
 	.realtime-status { align-items: flex-start; padding-inline: 0.75rem; }
 	.realtime-reading-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 	.realtime-reading-value { min-height: 5.2rem; }
 	.realtime-reading-label { min-height: 3.5rem; padding-inline: 0.4rem; font-size: 0.75rem; }
-	.reports-page { padding-top: 1.2rem; }
+	.reports-page:not(.realtime-page) { padding-top: 1.2rem; }
 	.reports-panel { padding: 0.9rem; }
 	.reports-filter { grid-template-columns: 1fr auto; width: 100%; }
 	.reports-filter label { grid-column: 1 / -1; }

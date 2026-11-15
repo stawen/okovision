@@ -206,6 +206,16 @@ Sources : [amSynthese.js](../archive/php/js/amSynthese.js), [okofen.class.php](.
 
 **Distinction importante** : le service sait recevoir un numéro de circuit pour certains appels, mais l'action AJAX `rt.getIndic` n'en transmet pas et utilise le circuit par défaut. La lecture/changement du mode de chauffage est exposée par l'API distincte, pas par ce routeur AJAX.
 
+**Portage SvelteKit** : le suivi privé utilise les instantanés `oko_boiler` du
+premier circuit. Les 19 paramètres modifiables sont préparés localement, puis
+enregistrés et appliqués dans la même action, sans confirmation distincte. L'envoi valide les
+bornes et la valeur initiale, puis relit la chaudière; un résultat incertain
+reste signalé. La date et l'heure sont fixées à l'enregistrement : la saisie
+d'une date historique n'est pas reprise.
+Les modifications préparées sont conservées entre les deux écrans temps réel,
+mais pas après rechargement ou départ confirmé. Aucun instantané ancien n'est
+présenté comme une application vérifiée.
+
 Sources : [rt.js](../archive/php/js/rt.js), [realTime.class.php](../archive/php/_include/realTime.class.php), [okofen.class.php](../archive/php/_include/okofen.class.php#L203).
 
 ### F14 — Paramètres généraux

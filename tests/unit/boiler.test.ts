@@ -10,7 +10,7 @@ vi.mock('../../src/lib/server/data-access', () => ({
 const credentials = { username: 'boiler-user', password: 'boiler-password' };
 const address = 'http://boiler.local:8180';
 
-describe('connecteur chaudière Ökofen en lecture seule', () => {
+describe('connecteur chaudière Ökofen', () => {
 	let fetcher: ReturnType<typeof vi.fn<typeof fetch>>;
 
 	beforeEach(() => {
@@ -18,6 +18,84 @@ describe('connecteur chaudière Ökofen en lecture seule', () => {
 		mocks.readBoilerAddress.mockResolvedValue(address);
 		mocks.getAdminBoilerCredentials.mockReset();
 		mocks.getAdminBoilerCredentials.mockResolvedValue(credentials);
+	});
+
+	describe('écriture contrôlée des réglages chaudière', () => {
+		const id = 'hk0_raumtemp_heizen';
+		const name = 'CAPPL:LOCAL.hk[0].raumtemp_heizen';
+		const login = () => new Response(null, { status: 303, headers: { 'set-cookie': 'sid=test; Path=/' } });
+		const reading = (value: number, lowerLimit = 100, upperLimit = 300) => new Response(JSON.stringify([{
+			name, value, divisor: 10, lowerLimit, upperLimit, unitText: 'K', formatTexts: ''
+		}]), { status: 200 });
+
+		it('contrôle les bornes, convertit avec le diviseur et vérifie la valeur relue', async () => {
+			const fetcher = vi.fn<typeof fetch>()
+				.mockResolvedValueOnce(login())
+				.mockResolvedValueOnce(reading(200))
+				.mockResolvedValueOnce(new Response('{}', { status: 200 }))
+				.mockResolvedValueOnce(reading(215));
+			const connector = createBoilerConnector(fetcher);
+			await connector.applyConfiguration(address, credentials, { [id]: { previous: 20, value: 21.5 } });
+			expect(String(fetcher.mock.calls[2][0])).toBe(`${address}/index.cgi?action=set`);
+			expect(JSON.parse(String(fetcher.mock.calls[2][1]?.body))).toEqual({ [name]: 215 });
+			expect(fetcher).toHaveBeenCalledTimes(4);
+		});
+
+		it.each([
+			{ previous: 19, value: 21, code: 'conflict' },
+			{ previous: 20, value: 31, code: 'invalid' },
+			{ previous: 20, value: 20.05, code: 'invalid' }
+		])('refuse avant envoi une modification $code', async ({ previous, value, code }) => {
+			const fetcher = vi.fn<typeof fetch>().mockResolvedValueOnce(login()).mockResolvedValueOnce(reading(200));
+			await expect(createBoilerConnector(fetcher).applyConfiguration(address, credentials, {
+				[id]: { previous, value }
+			})).rejects.toMatchObject({ code });
+			expect(fetcher).toHaveBeenCalledTimes(2);
+		});
+
+		it('ne réémet pas la commande après expiration et signale une valeur non vérifiée', async () => {
+			const fetcher = vi.fn<typeof fetch>()
+				.mockResolvedValueOnce(login())
+				.mockResolvedValueOnce(reading(200))
+				.mockRejectedValueOnce(new Error('timeout'))
+				.mockResolvedValueOnce(reading(200));
+			await expect(createBoilerConnector(fetcher).applyConfiguration(address, credentials, {
+				[id]: { previous: 20, value: 21 }
+			})).rejects.toMatchObject({ code: 'uncertain' });
+			expect(fetcher.mock.calls.filter(([url]) => String(url).includes('action=set'))).toHaveLength(1);
+		});
+
+		it('accepte une commande expirée seulement si la relecture confirme toutes les valeurs', async () => {
+			const fetcher = vi.fn<typeof fetch>()
+				.mockResolvedValueOnce(login())
+				.mockResolvedValueOnce(reading(200))
+				.mockRejectedValueOnce(new Error('timeout'))
+				.mockResolvedValueOnce(reading(210));
+			await expect(createBoilerConnector(fetcher).applyConfiguration(address, credentials, {
+				[id]: { previous: 20, value: 21 }
+			})).resolves.toBeUndefined();
+			expect(fetcher.mock.calls.filter(([url]) => String(url).includes('action=set'))).toHaveLength(1);
+		});
+
+		it('refuse un identifiant non modifiable sans contacter la chaudière', async () => {
+			const fetcher = vi.fn<typeof fetch>();
+			await expect(createBoilerConnector(fetcher).applyConfiguration(address, credentials, {
+				FA0_pe_kesselleistung: { previous: 10, value: 11 }
+			})).rejects.toMatchObject({ code: 'invalid' });
+			expect(fetcher).not.toHaveBeenCalled();
+		});
+
+		it('refuse des bornes malformées avant toute commande', async () => {
+			const fetcher = vi.fn<typeof fetch>()
+				.mockResolvedValueOnce(login())
+				.mockResolvedValueOnce(new Response(JSON.stringify([{
+					name, value: 200, divisor: 10, lowerLimit: false, upperLimit: 300, unitText: 'K'
+				}]), { status: 200 }));
+			await expect(createBoilerConnector(fetcher).applyConfiguration(address, credentials, {
+				[id]: { previous: 20, value: 21 }
+			})).rejects.toMatchObject({ code: 'response' });
+			expect(fetcher).toHaveBeenCalledTimes(2);
+		});
 	});
 
 	it('utilise les identifiants chaudière décodés par le dépôt du compte admin', async () => {

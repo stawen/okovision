@@ -9,6 +9,7 @@ import { createSeasonsRepository } from './repositories/seasons.ts';
 import { createSiloEventsRepository } from './repositories/silo-events.ts';
 import { createBoilerImportRepository } from './repositories/boiler-import.ts';
 import { createCsvMappingRepository } from './repositories/csv-mapping.ts';
+import { createBoilerConfigurationsRepository } from './repositories/boiler-configurations.ts';
 
 function createDataAccess() {
 	const db = getDatabasePool();
@@ -22,7 +23,8 @@ function createDataAccess() {
 		seasons: createSeasonsRepository(db),
 		siloEvents: createSiloEventsRepository(db),
 		boilerImport: createBoilerImportRepository(db),
-		csvMapping: createCsvMappingRepository(db)
+		csvMapping: createCsvMappingRepository(db),
+		boilerConfigurations: createBoilerConfigurationsRepository(db)
 	};
 }
 

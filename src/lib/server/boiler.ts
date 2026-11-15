@@ -5,11 +5,13 @@ import type { BoilerCredentials } from './repositories/users.ts';
 import {
 	realtimeIndicators,
 	realtimeSensorNames,
+	editableRealtimeIndicators,
+	legacySensorId,
 	type RealtimeData,
 	type RealtimeReading
 } from '../indicators/realtime.ts';
 
-export type BoilerErrorCode = 'configuration' | 'credentials' | 'database' | 'connection' | 'response' | 'unavailable';
+export type BoilerErrorCode = 'configuration' | 'credentials' | 'database' | 'connection' | 'response' | 'unavailable' | 'invalid' | 'conflict' | 'uncertain';
 
 export class BoilerError extends Error {
 	constructor(readonly code: BoilerErrorCode, message: string, cause?: unknown) {
@@ -28,6 +30,40 @@ interface BoilerSensor {
 	unitText?: unknown;
 	formatTexts?: unknown;
 	divisor?: unknown;
+	lowerLimit?: unknown;
+	upperLimit?: unknown;
+}
+
+export interface EditableBoilerSensor {
+	value: number;
+	unit: string;
+	min: number;
+	max: number;
+	divisor: number;
+}
+
+export function validateEditableBoilerValue(sensor: EditableBoilerSensor, value: number): void {
+	const raw = value * sensor.divisor;
+	if (!Number.isFinite(value) || value < sensor.min || value > sensor.max || !Number.isSafeInteger(Math.round(raw))
+		|| Math.abs(raw - Math.round(raw)) > 1e-8) throw boilerError('invalid');
+}
+
+function editableSensor(sensor: BoilerSensor): EditableBoilerSensor {
+	const reading = normalizeReading(sensor);
+	function numeric(value: unknown): number {
+		if ((typeof value !== 'number' && typeof value !== 'string')
+			|| (typeof value === 'string' && !/^-?\d+(?:\.\d+)?$/.test(value))) throw boilerError('response');
+		const result = Number(value);
+		if (!Number.isFinite(result)) throw boilerError('response');
+		return result;
+	}
+	const divisor = numeric(sensor.divisor);
+	const lower = numeric(sensor.lowerLimit);
+	const upper = numeric(sensor.upperLimit);
+	if (typeof reading.value !== 'number' || divisor <= 0 || lower > upper) {
+		throw boilerError('response');
+	}
+	return { value: reading.value, unit: reading.unit, min: lower / divisor, max: upper / divisor, divisor };
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -179,8 +215,8 @@ export function createBoilerConnector(fetcher: typeof fetch = fetch) {
 		return cookies.join('; ');
 	}
 
-	async function read(address: URL, cookieHeader: string, circuit: number): Promise<Response> {
-		const sensorNames = ['CAPPL:LOCAL.L_fernwartung_datum_zeit_sek', ...realtimeSensorNames(circuit)];
+	async function readNames(address: URL, cookieHeader: string, names: string[]): Promise<Response> {
+		const sensorNames = ['CAPPL:LOCAL.L_fernwartung_datum_zeit_sek', ...names];
 		return request(new URL('/index.cgi?action=get&attr=1', address), {
 			method: 'POST',
 			headers: {
@@ -191,6 +227,48 @@ export function createBoilerConnector(fetcher: typeof fetch = fetch) {
 			},
 			body: JSON.stringify(sensorNames)
 		});
+	}
+
+	async function readEditable(address: URL, credentials: BoilerCredentials, ids: string[]): Promise<Record<string, EditableBoilerSensor>> {
+		const definitions = ids.map((id) => {
+			const definition = editableRealtimeIndicators.find((indicator) => legacySensorId(indicator) === id);
+			if (!definition) throw boilerError('invalid');
+			return definition;
+		});
+		const identity = `${address.origin}\n${credentials.username}`;
+		if (identity !== sessionIdentity) {
+			cookie = '';
+			sessionIdentity = identity;
+		}
+		const names = definitions.map((definition) => definition.sensorName(1));
+		async function attempt(): Promise<Record<string, EditableBoilerSensor>> {
+			const response = await readNames(address, cookie, names);
+			if (response.status !== 200) throw boilerError('connection');
+			let value: unknown;
+			try {
+				value = await response.json();
+			} catch (cause) {
+				throw new BoilerError('response', getMessages().boilerResponseInvalid, cause);
+			}
+			if (!Array.isArray(value)) throw boilerError('response');
+			const result: Record<string, EditableBoilerSensor> = {};
+			for (const definition of definitions) {
+				const matches = value.filter((item: unknown) => isRecord(item) && item.name === definition.sensorName(1));
+				if (matches.length !== 1 || !isRecord(matches[0])) throw boilerError('response');
+				result[legacySensorId(definition)] = editableSensor(matches[0]);
+			}
+			return result;
+		}
+		if (cookie) {
+			try {
+				return await attempt();
+			} catch (cause) {
+				if (!(cause instanceof BoilerError) || (cause.code !== 'connection' && cause.code !== 'response')) throw cause;
+				cookie = '';
+			}
+		}
+		cookie = await connect(address, credentials);
+		return attempt();
 	}
 
 	return {
@@ -210,7 +288,7 @@ export function createBoilerConnector(fetcher: typeof fetch = fetch) {
 				}
 				let response: Response | undefined;
 				if (cookie) {
-					response = await read(address, cookie, circuit);
+					response = await readNames(address, cookie, realtimeSensorNames(circuit));
 					if (response.status === 200) {
 						try {
 							return await parseResponse(response, circuit);
@@ -222,7 +300,7 @@ export function createBoilerConnector(fetcher: typeof fetch = fetch) {
 				}
 				if (!cookie) {
 					cookie = await connect(address, credentials);
-					response = await read(address, cookie, circuit);
+					response = await readNames(address, cookie, realtimeSensorNames(circuit));
 				}
 				if (!response) throw boilerError('connection');
 				if (response.status !== 200) {
@@ -231,6 +309,57 @@ export function createBoilerConnector(fetcher: typeof fetch = fetch) {
 				}
 				return parseResponse(response, circuit);
 			}, queue);
+		},
+		async getEditableSensor(addressValue: string, credentials: BoilerCredentials, id: string): Promise<EditableBoilerSensor> {
+			return serialize(async () => (await readEditable(new URL(addressValue), credentials, [id]))[id], queue);
+		},
+		async applyConfiguration(
+			addressValue: string,
+			credentials: BoilerCredentials,
+			changes: Record<string, { value: number; previous: number }>
+		): Promise<void> {
+			const ids = Object.keys(changes);
+			if (ids.length === 0 || ids.length > editableRealtimeIndicators.length) throw boilerError('invalid');
+			return serialize(async () => {
+				const address = new URL(addressValue);
+				const current = await readEditable(address, credentials, ids);
+				const payload: Record<string, number> = {};
+				for (const id of ids) {
+					const sensor = current[id];
+					const change = changes[id];
+					if (!sensor || !Number.isFinite(change.value) || !Number.isFinite(change.previous)) throw boilerError('invalid');
+					if (sensor.value !== change.previous) throw boilerError('conflict');
+					if (change.value === change.previous) throw boilerError('invalid');
+					validateEditableBoilerValue(sensor, change.value);
+					const definition = editableRealtimeIndicators.find((indicator) => legacySensorId(indicator) === id);
+					if (!definition) throw boilerError('invalid');
+					payload[definition.sensorName(1)] = Math.round(change.value * sensor.divisor);
+				}
+				let sendFailed: boolean;
+				try {
+					const response = await request(new URL('/index.cgi?action=set', address), {
+						method: 'POST',
+						headers: {
+							accept: 'application/json',
+							'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+							'accept-language': 'en',
+							cookie
+						},
+						body: JSON.stringify(payload)
+					});
+					sendFailed = response.status !== 200;
+				} catch (cause) {
+					if (!(cause instanceof BoilerError) || cause.code !== 'connection') throw cause;
+					sendFailed = true;
+				}
+				try {
+					const verified = await readEditable(address, credentials, ids);
+					if (ids.every((id) => verified[id].value === changes[id].value)) return;
+				} catch (cause) {
+					throw new BoilerError('uncertain', getMessages().boilerResponseInvalid, cause);
+				}
+				throw new BoilerError('uncertain', sendFailed ? getMessages().boilerConnectionFailed : getMessages().boilerResponseInvalid);
+			}, queue);
 		}
 	};
 }
@@ -238,7 +367,7 @@ export function createBoilerConnector(fetcher: typeof fetch = fetch) {
 let connector: ReturnType<typeof createBoilerConnector> | undefined;
 
 /** Uses the stored controller credentials and reuses the process-wide connector. */
-export async function getBoilerIndicators(circuit: number): Promise<RealtimeData> {
+async function boilerConnection(): Promise<{ address: string; credentials: BoilerCredentials }> {
 	let address: string;
 	try {
 		address = await readBoilerAddress();
@@ -254,6 +383,23 @@ export async function getBoilerIndicators(circuit: number): Promise<RealtimeData
 	}
 	if (!credentials) throw boilerError('credentials');
 
+	return { address, credentials };
+}
+
+export async function getBoilerIndicators(circuit: number): Promise<RealtimeData> {
+	const { address, credentials } = await boilerConnection();
 	connector ??= createBoilerConnector();
 	return connector.getIndicators(address, credentials, circuit);
+}
+
+export async function getEditableBoilerSensor(id: string): Promise<EditableBoilerSensor> {
+	const { address, credentials } = await boilerConnection();
+	connector ??= createBoilerConnector();
+	return connector.getEditableSensor(address, credentials, id);
+}
+
+export async function applyBoilerConfiguration(changes: Record<string, { value: number; previous: number }>): Promise<void> {
+	const { address, credentials } = await boilerConnection();
+	connector ??= createBoilerConnector();
+	return connector.applyConfiguration(address, credentials, changes);
 }
