@@ -14,6 +14,7 @@ const fr = {
 	updateFeedFailed: 'Impossible de charger le flux des mises à jour.',
 	ashtrayStatusFailed: 'Impossible de charger le suivi du cendrier.',
 	loginFailed: 'Impossible de traiter la connexion membre.',
+	passwordChangeFailed: 'Impossible de modifier le mot de passe membre.',
 	setupFailed: 'Impossible de vérifier ou terminer la post-installation.',
 	setupMatrixFailed: 'Impossible d’initialiser la matrice CSV pendant la post-installation.',
 	setupInvalid: 'Paramètres de post-installation refusés.',
@@ -84,6 +85,7 @@ const en: Translations = {
 	updateFeedFailed: 'Unable to load the update feed.',
 	ashtrayStatusFailed: 'Unable to load ashtray tracking.',
 	loginFailed: 'Unable to process member sign-in.',
+	passwordChangeFailed: 'Unable to change the member password.',
 	setupFailed: 'Unable to check or complete post-installation.',
 	setupMatrixFailed: 'Unable to initialize the CSV mapping during post-installation.',
 	setupInvalid: 'Post-installation parameters rejected.',
@@ -145,6 +147,7 @@ export type LogMessageKey =
 	| 'settingsSaveFailed'
 	| 'settingsInvalid'
 	| 'loginFailed'
+	| 'passwordChangeFailed'
 	| 'loginRejected'
 	| 'loginRateLimited'
 	| 'installationConfigInvalid'

@@ -44,6 +44,7 @@ describe('navigation de la cartographie', () => {
 		}
 		expect(connected).toContain('href="/private/realtime/settings"');
 		expect(connected).toContain('action="/private/logout"');
+		expect(connected).toContain('>Changer mot de passe</a>');
 		expect(connected).toContain('method="POST"');
 		expect(connected).not.toContain('href="/migration"');
 		expect(connected).not.toMatch(/(?:href|src)="[^"]*(?:archive\/|\.php)/);

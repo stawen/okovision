@@ -13,6 +13,7 @@ describe('authentification MySQL historique en lecture seule', () => {
 		await expect(users.authenticate('member', 'installation-private-password')).resolves.toEqual({
 			id: 7, name: 'member', type: 'admin'
 		});
+
 		await expect(users.authenticate('member', 'okouser')).resolves.toBeNull();
 	});
 	it('utilise une requête paramétrée et ne retourne jamais le mot de passe', async () => {
@@ -79,5 +80,42 @@ describe('authentification MySQL historique en lecture seule', () => {
 		const row = { login: 'boiler-user', pass: Buffer.from('boiler-password').toString('base64') };
 		const execute = vi.fn().mockResolvedValue([[row, row]]);
 		await expect(createUsersRepository({ execute }).getAdminBoilerCredentials()).resolves.toBeNull();
+	});
+});
+
+describe('changement du mot de passe', () => {
+	it.each(['legacy', 'scrypt'])('vérifie le mot de passe %s et le remplace par un hash scrypt', async (kind) => {
+		const stored = kind === 'legacy' ? row.pass : await hashNewPassword('test-password');
+		const execute = vi.fn()
+			.mockResolvedValueOnce([[{ ...row, pass: stored }]])
+			.mockResolvedValueOnce([{ affectedRows: 1 }]);
+		const users = createUsersRepository({ execute });
+		await expect(users.changePassword(7, 'test-password', 'new-private-password')).resolves.toBe(true);
+		expect(execute).toHaveBeenNthCalledWith(1, 'SELECT id, user, pass, type FROM oko_user WHERE id = ? LIMIT 2', [7]);
+		const [sql, params] = execute.mock.calls[1];
+		expect(sql).toBe('UPDATE oko_user SET pass = ? WHERE id = ? AND BINARY pass = BINARY ?');
+		expect(params).toEqual([expect.stringMatching(/^scrypt\$/), 7, stored]);
+		const authenticate = createUsersRepository({ execute: vi.fn().mockResolvedValue([[{ ...row, pass: params[0] }]]) });
+		await expect(authenticate.authenticate('member', 'new-private-password')).resolves.toEqual({
+			id: 7, name: 'member', type: 'admin'
+		});
+		await expect(authenticate.authenticate('member', 'test-password')).resolves.toBeNull();
+	});
+
+	it.each([
+		{ rows: [], password: 'test-password' },
+		{ rows: [row, row], password: 'test-password' },
+		{ rows: [row], password: 'wrong' }
+	])('refuse un compte absent, ambigu ou un mauvais mot de passe', async ({ rows, password }) => {
+		const execute = vi.fn().mockResolvedValue([rows]);
+		await expect(createUsersRepository({ execute }).changePassword(7, password, 'new-private-password')).resolves.toBe(false);
+		expect(execute).toHaveBeenCalledTimes(1);
+	});
+
+	it('refuse une modification concurrente et propage les erreurs de base', async () => {
+		const execute = vi.fn().mockResolvedValueOnce([[row]]).mockResolvedValueOnce([{ affectedRows: 0 }]);
+		await expect(createUsersRepository({ execute }).changePassword(7, 'test-password', 'new-private-password')).resolves.toBe(false);
+		execute.mockRejectedValueOnce(new Error('database unavailable'));
+		await expect(createUsersRepository({ execute }).changePassword(7, 'test-password', 'new-private-password')).rejects.toThrow('database unavailable');
 	});
 });

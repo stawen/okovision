@@ -59,7 +59,7 @@ export const pages = [
 	},
 	{
 		path: '/private/account', group: 'account', private: true,
-		titleKey: 'account', descriptionKey: 'accountDescription'
+		titleKey: 'changePassword', descriptionKey: 'accountDescription'
 	},
 	{
 		path: '/setup', group: 'public', private: false,

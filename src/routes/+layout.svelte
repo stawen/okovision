@@ -92,7 +92,7 @@
 					</summary>
 					<div class="dropdown-panel account-panel">
 						<p class="member-name">{data.member.name}</p>
-						<a href={pageHref('/private/account')} aria-current={current('/private/account') ? 'page' : undefined} onclick={() => accountOpen = false}>{text.account}</a>
+						<a href={pageHref('/private/account')} aria-current={current('/private/account') ? 'page' : undefined} onclick={() => accountOpen = false}>{text.changePassword}</a>
 						<form method="POST" action={resolve('/private/logout')}>
 							<button type="submit">{text.logout}</button>
 						</form>
