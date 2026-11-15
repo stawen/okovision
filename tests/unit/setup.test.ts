@@ -33,8 +33,23 @@ describe('détection du premier lancement', () => {
 			{ param: 'surfaceMaison', value },
 			{ param: 'chaudiere', value: '192.168.1.23' },
 			{ param: 'tcRef', value: '20' }
-		]]);
-		await expect(getSetupStatus({ execute })).resolves.toBe(value === '150' ? 'ready' : 'configure');
+		]]).mockResolvedValueOnce([[{ count: 0 }]]);
+		await expect(getSetupStatus({ execute })).resolves.toBe(value === '150' ? 'matrix' : 'configure');
+	});
+
+	it('ne considère la configuration prête pour la collecte qu’avec une matrice', async () => {
+		const execute = vi.fn()
+			.mockResolvedValueOnce([[
+				{ name: 'oko_capteur' }, { name: 'oko_configuration' }
+			]])
+			.mockResolvedValueOnce([[
+				{ param: 'surfaceMaison', value: '120' },
+				{ param: 'chaudiere', value: '192.168.1.23' },
+				{ param: 'tcRef', value: '20' }
+			]])
+			.mockResolvedValueOnce([[{ count: 1 }]]);
+		await expect(getSetupStatus({ execute })).resolves.toBe('ready');
+		expect(execute).toHaveBeenCalledTimes(3);
 	});
 
 	it('requiert une adresse et une température de référence avant de lancer la collecte', async () => {

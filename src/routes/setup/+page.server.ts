@@ -2,9 +2,10 @@ import { fail, redirect } from '@sveltejs/kit';
 import { resolve } from '$app/paths';
 import { configurationParameters } from '#lib/configuration.js';
 import { allowLogin } from '#lib/server/auth.js';
-import { completeSetup, getSetupState, parseSetupValues, SetupError } from '#lib/server/setup.js';
+import { completeSetup, getSetupState, initializeSetupMatrix, parseSetupValues, SetupError } from '#lib/server/setup.js';
 import { logger } from '#lib/server/logger.js';
 import { setupMessages } from '#lib/ui/setup.js';
+import { BoilerImportError } from '#lib/server/boiler-import-error.js';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = logger.child({ component: 'setup' });
@@ -17,7 +18,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	default: async ({ request, locals, getClientAddress }) => {
+	save: async ({ request, locals, getClientAddress }) => {
 		const text = setupMessages(locals.language);
 		if (!allowLogin(`setup:${getClientAddress()}`)) {
 			log.info('loginRateLimited');
@@ -52,6 +53,41 @@ export const actions: Actions = {
 			}
 			log.error('setupFailed', cause);
 			return fail(503, { message: text.unavailable, values });
+		}
+		if (form.get('initializeMatrix') !== 'yes') {
+			return { matrixPending: true, message: text.matrixTestNotPassed, values };
+		}
+		try {
+			await initializeSetupMatrix(locals.language);
+		} catch (cause) {
+			log.error('setupMatrixFailed', cause);
+			return {
+				matrixPending: true,
+				message: cause instanceof BoilerImportError && cause.code === 'file-not-found'
+					? text.matrixFileMissing : text.matrixUnavailable,
+				values
+			};
+		}
+		redirect(303, resolve('/'));
+	},
+	retryMatrix: async ({ locals, getClientAddress }) => {
+		const text = setupMessages(locals.language);
+		if (locals.member?.type !== 'admin') {
+			return fail(403, { matrixError: true, message: text.matrixAdminRequired });
+		}
+		if (!allowLogin(`setup:${getClientAddress()}`)) {
+			log.info('loginRateLimited');
+			return fail(429, { matrixError: true, message: text.limited });
+		}
+		try {
+			await initializeSetupMatrix(locals.language);
+		} catch (cause) {
+			log.error('setupMatrixFailed', cause);
+			return fail(503, {
+				matrixError: true,
+				message: cause instanceof BoilerImportError && cause.code === 'file-not-found'
+					? text.matrixFileMissing : text.matrixUnavailable
+			});
 		}
 		redirect(303, resolve('/'));
 	}

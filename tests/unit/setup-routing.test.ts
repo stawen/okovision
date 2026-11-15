@@ -20,7 +20,7 @@ function event(path: NonNullable<RequestEvent['route']['id']>) {
 describe('protection pendant la post-installation', () => {
 	afterEach(() => vi.clearAllMocks());
 
-	it.each(['install', 'partial', 'configure'] as const)(
+	it.each(['install', 'partial', 'configure', 'matrix'] as const)(
 		'redirige l’accueil vers /setup si l’installation est %s',
 		async (status) => {
 			vi.mocked(getSetupStatus).mockResolvedValue(status);
@@ -30,14 +30,14 @@ describe('protection pendant la post-installation', () => {
 		}
 	);
 
-	it('ne démarre ni les tâches persistées ni le collecteur avant configuration', async () => {
-		vi.mocked(getSetupStatus).mockResolvedValue('configure');
+	it.each(['configure', 'matrix'] as const)('ne démarre pas la collecte avant la matrice (%s)', async (status) => {
+		vi.mocked(getSetupStatus).mockResolvedValue(status);
 		await init();
 		expect(initializeJobs).not.toHaveBeenCalled();
 	});
 
 	it.each(['/setup', '/login', '/api/v1/health'] as const)('garde %s accessible sans démarrer les tâches', async (path) => {
-		vi.mocked(getSetupStatus).mockResolvedValue('configure');
+		vi.mocked(getSetupStatus).mockResolvedValue('matrix');
 		const resolve = vi.fn(async () => new Response('available'));
 		const response = await handle({ event: event(path), resolve });
 		expect(response.status).toBe(200);

@@ -27,7 +27,7 @@ test('post-installation sur la base Docker vierge dédiée', async (t) => {
 
 		await t.test('installe une base réellement vierge sans confirmation forcée', async () => {
 			await completeSetup(values, password, false);
-			assert.equal(await getSetupStatus(connection), 'ready');
+			assert.equal(await getSetupStatus(connection), 'matrix');
 			const users = createUsersRepository(connection);
 			assert.equal((await users.authenticate('admin', password))?.type, 'admin');
 			assert.ok(await users.getAdminBoilerCredentials());
@@ -49,7 +49,7 @@ test('post-installation sur la base Docker vierge dédiée', async (t) => {
 
 		await t.test('installe explicitement le SQL et le nouveau compte sans mesures de démonstration', async () => {
 			await completeSetup(values, password, true);
-			assert.equal(await getSetupStatus(connection), 'ready');
+			assert.equal(await getSetupStatus(connection), 'matrix');
 			const [columns] = await connection.query<RowDataPacket[]>('SHOW COLUMNS FROM oko_configuration');
 			assert.deepEqual(columns.map((column) => column.Field), ['param', 'value']);
 			const [rows] = await connection.query<RowDataPacket[]>('SELECT param, value FROM oko_configuration');
@@ -87,13 +87,13 @@ test('post-installation sur la base Docker vierge dédiée', async (t) => {
 				await connection.query("SELECT RELEASE_LOCK(CONCAT(DATABASE(), ':setup'))");
 			}
 			await completeSetup(values, '', false);
-			assert.equal(await getSetupStatus(connection), 'ready');
+			assert.equal(await getSetupStatus(connection), 'matrix');
 			assert.equal((await connection.query<RowDataPacket[]>('SELECT conso_kg FROM oko_resume_day'))[0][0].conso_kg, '10.00');
 			assert.equal((await createUsersRepository(connection).authenticate('admin', password))?.type, 'admin');
 			await connection.execute('DELETE FROM oko_configuration');
 			assert.equal(await getSetupStatus(connection), 'configure');
 			await completeSetup(values, '', false);
-			assert.equal(await getSetupStatus(connection), 'ready');
+			assert.equal(await getSetupStatus(connection), 'matrix');
 			assert.equal((await connection.query<RowDataPacket[]>('SELECT COUNT(*) AS count FROM oko_configuration'))[0][0].count, 8);
 			assert.equal((await connection.query<RowDataPacket[]>('SELECT conso_kg FROM oko_resume_day'))[0][0].conso_kg, '10.00');
 			assert.deepEqual(await createUsersRepository(connection).getAdminBoilerCredentials(), boilerCredentials);

@@ -14,9 +14,13 @@
   `config.json`, avec les onze paramètres du fichier historique. Une surface
   absente/vide déclenche le formulaire sans réinstaller les tables existantes.
   Les tâches et la collecte attendent la fin de la configuration.
-- Compléter le provisioning métier : calendrier de référence, saisons
-  pertinentes et matrice des capteurs. Le SQL initial conserve ses limites
-  historiques; il ne suffit pas à rendre une chaudière opérationnelle.
+- Réalisé : le setup affiche un état orange/vert selon le résultat du bouton
+  « Tester » sur l'adresse courante. Après un test positif et l'enregistrement,
+  la création de la matrice est tentée à partir du CSV du jour; en cas d'échec,
+  la configuration est gardée, la collecte reste bloquée et un administrateur
+  peut réessayer. Compléter encore le calendrier de référence et les saisons
+  pertinentes. Le SQL initial conserve ses limites historiques; valider le
+  flux sur une copie isolée.
 - [Knex.js](https://knexjs.org/guide/migrations.html) est intégré avec le pilote
   `mysql2`, sans changer les repositories existants. Les commandes de création,
   de statut et d'application sont décrites dans le

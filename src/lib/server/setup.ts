@@ -4,11 +4,19 @@ import { createConnection, type Pool, type ResultSetHeader, type RowDataPacket }
 import knexConfig from '../../../knexfile.js';
 import { configurationParameters, type ConfigurationValues } from '../configuration.ts';
 import { databaseOptions, getDatabasePool } from './database.ts';
-import { parseCollectionConfig, parseHistorySettings, parseInstallationConfig, saveConfiguration } from './config.ts';
+import {
+	parseBoilerAddress, parseCollectionConfig, parseHistorySettings, parseInstallationConfig,
+	saveConfiguration
+} from './config.ts';
 import { hashNewPassword } from './repositories/users.ts';
+import { createBoilerCsvConnector } from './boiler-import.ts';
+import { withWriteLock } from './collection.ts';
+import { createCsvMappingRepository } from './repositories/csv-mapping.ts';
+import { todayInTimezone } from '../utils/dates.ts';
+import type { Language } from '../ui/i18n.ts';
 
 type Database = Pick<Pool, 'execute'>;
-export type SetupStatus = 'install' | 'partial' | 'configure' | 'ready';
+export type SetupStatus = 'install' | 'partial' | 'configure' | 'matrix' | 'ready';
 
 export class SetupError extends Error {
 	readonly code: 'invalid' | 'force-required' | 'busy' | 'complete';
@@ -41,10 +49,11 @@ export async function getSetupState(db: Database = getDatabasePool()): Promise<{
 	const referenceTemperature = values.tcRef?.trim() ?? '';
 	const collectionConfigured = Boolean(values.chaudiere?.trim()) && referenceTemperature !== ''
 		&& Number.isFinite(Number(referenceTemperature));
-	return {
-		status: Number.isFinite(surface) && surface > 0 && collectionConfigured ? 'ready' : 'configure',
-		values
-	};
+	if (!Number.isFinite(surface) || surface <= 0 || !collectionConfigured) return { status: 'configure', values };
+	const [sensors] = await db.execute<(RowDataPacket & { count: number | string })[]>(
+		'SELECT COUNT(*) AS count FROM oko_capteur'
+	);
+	return { status: Number(sensors[0]?.count) > 0 ? 'ready' : 'matrix', values };
 }
 
 export async function getSetupStatus(db: Database = getDatabasePool()): Promise<SetupStatus> {
@@ -77,7 +86,7 @@ export async function completeSetup(values: ConfigurationValues, password: strin
 		if (lock[0].acquired !== 1) throw new SetupError('busy');
 		locked = true;
 		const status = await getSetupStatus(connection);
-		if (status === 'ready') throw new SetupError('complete');
+		if (status === 'ready' || status === 'matrix') throw new SetupError('complete');
 		if (status === 'partial' && !force) throw new SetupError('force-required');
 		if (status === 'install' || status === 'partial') {
 			if (password.length < 12 || password.length > 1024) throw new SetupError('invalid');
@@ -102,4 +111,23 @@ export async function completeSetup(values: ConfigurationValues, password: strin
 			await connection.end();
 		}
 	}
+}
+
+export async function initializeSetupMatrix(language: Language): Promise<void> {
+	const { status, values } = await getSetupState();
+	if (status === 'ready') return;
+	if (status !== 'matrix') throw new Error('Setup configuration is incomplete');
+
+	const timezone = values.timezone;
+	if (!timezone) throw new Error('Setup time zone is missing');
+	const day = todayInTimezone(timezone);
+	const filename = `touch_${day.replaceAll('-', '')}.csv`;
+	const csv = await createBoilerCsvConnector().importFile(parseBoilerAddress(values), filename);
+	await withWriteLock(new AbortController().signal, async (db, signal) => {
+		signal.throwIfAborted();
+		const repository = createCsvMappingRepository(db);
+		if ((await repository.getSensors()).length) return;
+		signal.throwIfAborted();
+		await repository.update(csv, language, 'create');
+	});
 }

@@ -15,6 +15,7 @@ const fr = {
 	ashtrayStatusFailed: 'Impossible de charger le suivi du cendrier.',
 	loginFailed: 'Impossible de traiter la connexion membre.',
 	setupFailed: 'Impossible de vérifier ou terminer la post-installation.',
+	setupMatrixFailed: 'Impossible d’initialiser la matrice CSV pendant la post-installation.',
 	setupInvalid: 'Paramètres de post-installation refusés.',
 	settingsLoadFailed: 'Impossible de charger les paramètres d’administration.',
 	settingsSaveFailed: 'Impossible d’enregistrer les paramètres d’administration.',
@@ -84,6 +85,7 @@ const en: Translations = {
 	ashtrayStatusFailed: 'Unable to load ashtray tracking.',
 	loginFailed: 'Unable to process member sign-in.',
 	setupFailed: 'Unable to check or complete post-installation.',
+	setupMatrixFailed: 'Unable to initialize the CSV mapping during post-installation.',
 	setupInvalid: 'Post-installation parameters rejected.',
 	settingsLoadFailed: 'Unable to load administration settings.',
 	settingsSaveFailed: 'Unable to save administration settings.',
@@ -137,6 +139,7 @@ export function getMessages(): Translations {
 }
 export type LogMessageKey =
 	| 'setupFailed'
+	| 'setupMatrixFailed'
 	| 'setupInvalid'
 	| 'settingsLoadFailed'
 	| 'settingsSaveFailed'
