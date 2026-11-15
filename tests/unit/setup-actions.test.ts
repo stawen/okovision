@@ -105,7 +105,10 @@ describe('setup sans jeton', () => {
 		});
 		const submitButton = body.match(/<button[^>]*type="submit"[^>]*>[\s\S]*?<\/button>/)?.[0] ?? '';
 		expect(submitButton).toContain(language === 'fr' ? 'Enregistrer la configuration' : 'Save configuration');
-		expect(submitButton).not.toContain('disabled');
+		expect(submitButton).toContain('disabled');
+		expect(body).toContain(language === 'fr'
+			? 'Un test de communication réussi est nécessaire pour activer l’enregistrement.'
+			: 'A successful communication test is required to enable saving.');
 		const prefix = language === 'fr' ? 'ex:' : 'e.g.:';
 		const addressInput = body.match(/<input id="chaudiere"[^>]*>/)?.[0];
 		expect(addressInput).toContain(`placeholder="${prefix} 192.168.1.23"`);

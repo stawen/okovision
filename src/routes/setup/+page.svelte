@@ -112,7 +112,7 @@
 									{/if}
 								</div>
 								<div class="matrix-status" class:matrix-status-ready={matrixCanInitialize} role="status" aria-live="polite">
-									{matrixCanInitialize ? text.matrixTestReady : installing ? text.installTestRequired : text.matrixTestRequired}
+									{matrixCanInitialize ? text.matrixTestReady : text.boilerTestRequired}
 								</div>
 								<noscript><small>{text.boilerNeedsJavascript}</small></noscript>
 							{/if}
@@ -137,7 +137,7 @@
 				<label class="wide confirmation"><input type="checkbox" name="force" value="yes" required /> {text.force}</label>
 				<label class="wide">{text.forceWord}<input name="forceConfirmation" placeholder={text.forceWordPlaceholder} autocomplete="off" required pattern="INSTALLER" /></label>
 			{/if}
-			<button class="wide" type="submit" disabled={installing && (testing || !matrixCanInitialize)}>
+			<button class="wide" type="submit" disabled={testing || !matrixCanInitialize}>
 				{installing ? text.save : text.saveConfig}
 			</button>
 		</form>
