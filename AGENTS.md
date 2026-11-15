@@ -38,6 +38,7 @@
 - Garder une barre de navigation sombre, des surfaces claires, des bordures discrètes et des angles légèrement arrondis.
 - Préférer une interface sobre et moderne, sans grands espaces ou cartes décoratives qui éloignent les données du graphique.
 - Les couleurs historiques restent des repères : bleu pour la consommation, vert pour le maximum extérieur, orange pour le minimum extérieur.
+- Pour les tableaux comparables, prendre celui de [l'administration des événements](./src/routes/private/administration/events/+page.svelte) comme référence et réutiliser les styles partagés : en-tête contrasté, lignes compactes alternées, survol et défilement horizontal sur petit écran. Adapter les colonnes et l'accessibilité au contenu.
 
 ## Organisation de l'accueil
 

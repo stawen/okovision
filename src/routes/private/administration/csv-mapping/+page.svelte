@@ -18,21 +18,23 @@
 	{#if data.loadError}
 		<p class="reports-alert" role="alert">{text.csvMappingLoadFailed}</p>
 	{:else}
-		{#if form?.error}
-			<p class="reports-alert" role="alert">{form.error}</p>
-		{:else if form?.success}
-			<p role="status">{text.csvMappingSuccess}</p>
-		{/if}
 		<p>{data.sensors.length ? text.csvMappingUpdateInfo : text.csvMappingEmpty}</p>
-		<form method="POST">
-			<input type="hidden" name="mode" value={data.sensors.length ? 'update' : 'create'} />
-			<button class="reports-button reports-button-primary" type="submit">
-				{data.sensors.length ? text.csvMappingUpdate : text.csvMappingCreate}
-			</button>
-		</form>
+		<div class="csv-mapping-actions">
+			{#if form?.error}
+				<p class="reports-alert" role="alert">{form.error}</p>
+			{:else if form?.success}
+				<p class="reports-alert reports-alert-success" role="status">{text.csvMappingSuccess}</p>
+			{/if}
+			<form method="POST">
+				<input type="hidden" name="mode" value={data.sensors.length ? 'update' : 'create'} />
+				<button class="reports-button reports-button-primary" type="submit">
+					{data.sensors.length ? text.csvMappingUpdate : text.csvMappingCreate}
+				</button>
+			</form>
+		</div>
 		{#if data.sensors.length}
 			<div class="reports-table-scroll">
-				<table class="reports-table">
+				<table class="reports-table seasons-table">
 					<thead>
 						<tr>
 							<th scope="col">{text.csvMappingOriginal}</th>

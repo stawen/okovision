@@ -112,6 +112,50 @@ describe('page matrice CSV', () => {
 		expect(page([], true)).not.toContain('<form');
 	});
 
+	it('affiche la matrice active avec le rendu partagé et le formulaire de mise à jour avant le tableau', () => {
+		const { body } = render(CsvMappingPage, {
+			props: {
+				params: {}, form: null,
+				data: {
+					language: 'fr', member: null, pathname: '/private/administration/csv-mapping',
+					sensors: [sensor(1, 'AT [°C]', 2, 2), sensor(2, 'Capteur retiré', -1, 3)],
+					loadError: false
+				}
+			}
+		});
+
+		expect(body).toContain('class="csv-mapping-actions"');
+		expect(body).toContain('name="mode" value="update"');
+		expect(body).toContain('class="reports-table seasons-table"');
+		expect(body.indexOf('<form')).toBeLessThan(body.indexOf('<table'));
+		expect(body).toContain('AT [°C]');
+		expect(body).not.toContain('Capteur retiré');
+	});
+
+	it('affiche un cartouche de succès ou une alerte en cas d’échec', () => {
+		const page = (form: { success: true } | { error: string }, loadError = false) => render(CsvMappingPage, {
+			props: {
+				params: {}, form,
+				data: {
+					language: 'fr', member: null, pathname: '/private/administration/csv-mapping',
+					sensors: [sensor(1, 'AT [°C]', 2, 2)], loadError
+				}
+			}
+		}).body;
+
+		expect(page({ success: true })).toContain('<p class="reports-alert reports-alert-success" role="status">La matrice a été enregistrée.</p>');
+		expect(page({ error: 'Échec de la mise à jour.' })).toContain('<p class="reports-alert" role="alert">Échec de la mise à jour.</p>');
+		expect(page({ success: true }, true)).toContain('<p class="reports-alert" role="alert">Impossible de charger la matrice.</p>');
+		for (const [form, role] of [[{ success: true } as const, 'status'], [{ error: 'Échec de la mise à jour.' }, 'alert']] as const) {
+			const body = page(form);
+			const actions = body.indexOf('class="csv-mapping-actions"');
+			const feedback = body.indexOf(`role="${role}"`);
+			expect(body.indexOf('La mise à jour utilise')).toBeLessThan(actions);
+			expect(feedback).toBeGreaterThan(actions);
+			expect(feedback).toBeLessThan(body.indexOf('<form'));
+		}
+	});
+
 	it('télécharge le fichier du jour dans le fuseau configuré puis écrit sous verrou', async () => {
 		vi.useFakeTimers();
 		vi.setSystemTime(new Date('2026-11-14T23:30:00Z'));
