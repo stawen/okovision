@@ -45,11 +45,7 @@ config.json
 Thumbs.db
 import.csv
 matrice.csv
-archive/php/test*
-archive/php/_logs/*
-!archive/php/_logs/readme.md
-archive/php/_tmp/*
-!archive/php/_tmp/readme.md
+archive/
 php.ini
 .c9/
 
