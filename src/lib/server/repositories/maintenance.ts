@@ -6,6 +6,7 @@ interface EmptyingRow extends RowDataPacket {
 }
 
 interface ConsumptionRow extends RowDataPacket {
+	dayCount: string | number;
 	consumption: string | number | null;
 }
 
@@ -34,12 +35,14 @@ export function createMaintenanceRepository(db: Pick<Pool, 'execute'>) {
 			const quantity = Number(event.pelletQuantity);
 			if (!Number.isFinite(quantity)) throw new Error(getMessages().invalidIndicator);
 			const [rows] = await db.execute<ConsumptionRow[]>(
-				'SELECT SUM(conso_kg) AS consumption FROM oko_resume_day WHERE jour > ?',
+				'SELECT COUNT(*) AS dayCount, SUM(conso_kg) AS consumption FROM oko_resume_day WHERE jour > ?',
 				[event.eventDate]
 			);
 			if (!rows[0]) throw new Error(getMessages().stockNoResult);
-			if (rows[0].consumption === null) return { status: 'no-consumption' };
-			const consumption = Number(rows[0].consumption);
+			const dayCount = Number(rows[0].dayCount);
+			if (!Number.isSafeInteger(dayCount) || dayCount < 0) throw new Error(getMessages().invalidIndicator);
+			if (dayCount > 0 && rows[0].consumption === null) return { status: 'no-consumption' };
+			const consumption = dayCount === 0 ? 0 : Number(rows[0].consumption);
 			if (!Number.isFinite(consumption)) throw new Error(getMessages().invalidIndicator);
 			const capacity = hasSilo ? siloSize : quantity;
 			if (capacity === null || capacity <= 0) return { status: 'unavailable' };

@@ -83,15 +83,24 @@ describe('stock historique', () => {
 	] as const)('calcule le stock depuis le dernier remplissage (%s)', async (hasSilo, capacity, type, percent) => {
 		const { execute, maintenance } = database();
 		execute.mockResolvedValueOnce([[{ eventDate: '2026-10-01', pelletQuantity: 2000 }]])
-			.mockResolvedValueOnce([[{ consumption: '100.00' }]]);
+			.mockResolvedValueOnce([[{ dayCount: 1, consumption: '100.00' }]]);
 		await expect(maintenance.getStockStatus(hasSilo, capacity))
 			.resolves.toEqual({ status: 'available', remains: 1900, percent });
 		expect(execute.mock.calls[0][1]).toEqual([type]);
+		expect(execute.mock.calls[1][0]).toContain('COUNT(*) AS dayCount');
 		expect(execute.mock.calls[1][0]).toContain('WHERE jour > ?');
 		expect(execute.mock.calls[1][1]).toEqual(['2026-10-01']);
 	});
 
-	it('signale la configuration, le remplissage ou la consommation manquants', async () => {
+	it('affiche le stock du dernier sac quand aucune consommation ne lui est postérieure', async () => {
+		const { execute, maintenance } = database();
+		execute.mockResolvedValueOnce([[{ eventDate: '2026-10-01', pelletQuantity: 2000 }]])
+			.mockResolvedValueOnce([[{ dayCount: 0, consumption: null }]]);
+		await expect(maintenance.getStockStatus(false, null))
+			.resolves.toEqual({ status: 'available', remains: 2000, percent: 100 });
+	});
+
+	it('signale la configuration, le remplissage ou la consommation inconnus', async () => {
 		const { execute, maintenance } = database();
 		await expect(maintenance.getStockStatus(null, null)).resolves.toEqual({ status: 'unavailable' });
 		await expect(maintenance.getStockStatus(true, null)).resolves.toEqual({ status: 'unavailable' });
@@ -99,7 +108,7 @@ describe('stock historique', () => {
 		execute.mockResolvedValueOnce([[]]);
 		await expect(maintenance.getStockStatus(false, null)).resolves.toEqual({ status: 'no-fill' });
 		execute.mockResolvedValueOnce([[{ eventDate: '2026-10-01', pelletQuantity: 2000 }]])
-			.mockResolvedValueOnce([[{ consumption: null }]]);
+			.mockResolvedValueOnce([[{ dayCount: 1, consumption: null }]]);
 		await expect(maintenance.getStockStatus(false, null)).resolves.toEqual({ status: 'no-consumption' });
 	});
 });
