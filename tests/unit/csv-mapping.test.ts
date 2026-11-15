@@ -53,6 +53,36 @@ describe('matrice CSV', () => {
 		]);
 	});
 
+	it.each(['fr', 'en'] as const)('associe les capteurs corrigés à la bonne variable chaudière en %s', async (language) => {
+		const mappings = [
+			['HK2 RT Ist[°C]', 'CAPPL:LOCAL.L_hk[1].raumtemp_ist'],
+			['HK2 RT Soll[°C]', 'CAPPL:LOCAL.L_hk[1].raumtemp_soll'],
+			['WW1 AusT Ist[°C]', 'CAPPL:LOCAL.L_ww[0].ausschaltfuehler_ist'],
+			['WW1 Soll[°C]', 'CAPPL:LOCAL.L_ww[0].temp_soll'],
+			['WW2 AusT Ist[°C]', 'CAPPL:LOCAL.L_ww[1].ausschaltfuehler_ist'],
+			['WW2 Soll[°C]', 'CAPPL:LOCAL.L_ww[1].temp_soll'],
+			['Zubrp1 Pumpe', 'CAPPL:LOCAL.L_zubrp[0].pumpe'],
+			['PU1 TPO Ist[°C]', 'CAPPL:LOCAL.L_pu[0].einschaltfuehler_ist'],
+			['PU1 TPO Soll[°C]', 'CAPPL:LOCAL.L_pu[0].einschaltfuehler_soll'],
+			['PU1 TPM Ist[°C]', 'CAPPL:LOCAL.L_pu[0].ausschaltfuehler_ist'],
+			['PU1 TPM Soll[°C]', 'CAPPL:LOCAL.L_pu[0].ausschaltfuehler_soll'],
+			['PE2 FRT Soll[°C]', 'CAPPL:FA[1].L_feuerraumtemperatur_soll'],
+			['PE2 Pausenzeit[zs]', 'CAPPL:FA[1].L_pausenzeit'],
+			['PE2 Motor RES1', 'CAPPL:FA[1].ausgang_motor[3]']
+		];
+		const execute = vi.fn().mockResolvedValueOnce([[], []]).mockResolvedValue([{}, []]);
+		const query = vi.fn().mockResolvedValueOnce([baseColumns, []]).mockResolvedValueOnce([[], []]).mockResolvedValue([{}, []]);
+
+		await createCsvMappingRepository({ execute, query } as never)
+			.update(`Datum;Zeit;${mappings.map(([name]) => name).join(';')};`, language, 'create');
+
+		const values = execute.mock.calls[1][1];
+		for (const [index, [name, boiler]] of mappings.entries()) {
+			expect(values[index * 6 + 3]).toBe(name);
+			expect(values[index * 6 + 5]).toBe(boiler);
+		}
+	});
+
 	it('réordonne, réactive, désactive et ajoute sans modifier les colonnes historiques', async () => {
 		const sensors = [
 			sensor(1, 'AT [°C]', 2, 2, 'tc_ext'),

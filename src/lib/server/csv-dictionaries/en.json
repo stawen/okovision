@@ -72,12 +72,12 @@
     "HK2 RT Ist[°C]": {
         "name": "Cir.chauff.2 - Room T°C",
         "type": "",
-		"boiler": "CAPPL:LOCAL.L_hk[0].raumtemp_ist"
+		"boiler": "CAPPL:LOCAL.L_hk[1].raumtemp_ist"
     },
     "HK2 RT Soll[°C]": {
         "name": "Cir.chauff.2 - Room T°C Set",
         "type": "",
-		"boiler": "CAPPL:LOCAL.L_hk[0].raumtemp_soll"
+		"boiler": "CAPPL:LOCAL.L_hk[1].raumtemp_soll"
     },
     "HK2 Pumpe": {
         "name": "Cir.chauff.2 - Heater Pump (On/Off)",
@@ -92,12 +92,12 @@
     "WW1 AusT Ist[°C]": {
         "name": "Domestic Hot Water T°C (stop)",
         "type": "",
-		"boiler": "CAPPL:LOCAL.ww[0].temp_absenken"
+		"boiler": "CAPPL:LOCAL.L_ww[0].ausschaltfuehler_ist"
     },
     "WW1 Soll[°C]": {
         "name": "Domestic Hot Water T°C Set",
         "type": "",
-		"boiler": "CAPPL:LOCAL.ww[0].temp_heizen"
+		"boiler": "CAPPL:LOCAL.L_ww[0].temp_soll"
     },
     "WW1 Pumpe": {
         "name": "Domestic Hot Water Pump",
@@ -112,12 +112,12 @@
     "WW2 AusT Ist[°C]": {
         "name": "Domestic Hot Water [2] T°C (stop)",
         "type": "",
-		"boiler": "CAPPL:LOCAL.ww[1].temp_absenken"
+		"boiler": "CAPPL:LOCAL.L_ww[1].ausschaltfuehler_ist"
     },
     "WW2 Soll[°C]": {
         "name": "Domestic Hot Water [2] T°C Set",
         "type": "",
-		"boiler": "CAPPL:LOCAL.ww[1].temp_heizen"
+		"boiler": "CAPPL:LOCAL.L_ww[1].temp_soll"
     },
     "WW2 Pumpe": {
         "name": "Domestic Hot Water [2] Pump",
@@ -127,27 +127,27 @@
     "Zubrp1 Pumpe": {
         "name": "Pump (indefini)",
         "type": "",
-		"boiler": "CAPPL:LOCAL.L_zirkp[0].pumpe"
+		"boiler": "CAPPL:LOCAL.L_zubrp[0].pumpe"
     },
     "PU1 TPO Ist[°C]": {
         "name": "Buffer tank - T°C Top",
         "type": "",
-		"boiler": "CAPPL:LOCAL.L_pu[0].ausschaltfuehler_ist"
+		"boiler": "CAPPL:LOCAL.L_pu[0].einschaltfuehler_ist"
     },
     "PU1 TPO Soll[°C]": {
         "name": "Buffer tank - T°C Top Set",
         "type": "",
-		"boiler": "CAPPL:LOCAL.L_pu[0].ausschaltfuehler_soll"
+		"boiler": "CAPPL:LOCAL.L_pu[0].einschaltfuehler_soll"
     },
     "PU1 TPM Ist[°C]": {
         "name": "Buffer tank - T°C Middle",
         "type": "",
-		"boiler": "CAPPL:LOCAL.L_pu[0].einschaltfuehler_ist"
+		"boiler": "CAPPL:LOCAL.L_pu[0].ausschaltfuehler_ist"
     },
     "PU1 TPM Soll[°C]": {
         "name": "Buffer tank - T°C Middle Set",
         "type": "",
-		"boiler": "CAPPL:LOCAL.L_pu[0].einschaltfuehler_soll"
+		"boiler": "CAPPL:LOCAL.L_pu[0].ausschaltfuehler_soll"
     },
     "PU1 Pumpe[%]": {
         "name": "Buffer tank - Pump (%)",
@@ -312,7 +312,7 @@
     "PE2 FRT Soll[°C]": {
         "name": "OKO [2] - Combustion Chamber T°C Set",
         "type": "",
-		"boiler": "CAPPL:FA[0].L_feuerraumtemperatur_soll"
+		"boiler": "CAPPL:FA[1].L_feuerraumtemperatur_soll"
     },
     "PE2 Einschublaufzeit[zs]": {
         "name": "OKO [2] - Burner Auger Run Time (ds)",
@@ -322,7 +322,7 @@
     "PE2 Pausenzeit[zs]": {
         "name": "OKO [2] - Burner Auger Pause Time (ds)",
         "type": "",
-        "boiler": "CAPPL:FA[0].L_pausenzeit"
+        "boiler": "CAPPL:FA[1].L_pausenzeit"
     },
     "PE2 Luefterdrehzahl[%]": {
         "name": "OKO [2] - Burner Fan Speed (%)",
@@ -362,7 +362,7 @@
     "PE2 Motor RES1": {
         "name": "OKO [2] - ausgang_motor[3]",
         "type": "",
-		"boiler": "CAPPL:FA[0].ausgang_motor[3]"
+		"boiler": "CAPPL:FA[1].ausgang_motor[3]"
     },
     "PE2 Motor TURBINE": {
         "name": "OKO [2] - Motor Suction Turbine",
