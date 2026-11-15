@@ -5,6 +5,7 @@ import { configurationParameters, type ConfigurationValues } from '../../src/lib
 import { databaseOptions } from '../../src/lib/server/database.ts';
 import { completeSetup, getSetupStatus, SetupError } from '../../src/lib/server/setup.ts';
 import { createUsersRepository } from '../../src/lib/server/repositories/users.ts';
+import { todayInTimezone } from '../../src/lib/utils/dates.ts';
 
 test('post-installation sur la base Docker vierge dédiée', async (t) => {
 	process.env.DB_ADRESSE = `127.0.0.1:${process.env.DEV_SETUP_TEST_DB_PORT || 3310}`;
@@ -28,6 +29,13 @@ test('post-installation sur la base Docker vierge dédiée', async (t) => {
 		await t.test('installe une base réellement vierge sans confirmation forcée', async () => {
 			await completeSetup(values, password, false);
 			assert.equal(await getSetupStatus(connection), 'matrix');
+			const startDate = todayInTimezone(values.timezone);
+			const [seasons] = await connection.query<RowDataPacket[]>(
+				"SELECT saison, DATE_FORMAT(date_debut, '%Y-%m-%d') AS startDate FROM oko_saisons"
+			);
+			assert.equal(seasons.length, 1);
+			assert.equal(seasons[0].saison, `${startDate.slice(0, 4)}-${Number(startDate.slice(0, 4)) + 1}`);
+			assert.equal(seasons[0].startDate, startDate);
 			const users = createUsersRepository(connection);
 			assert.equal((await users.authenticate('admin', password))?.type, 'admin');
 			assert.ok(await users.getAdminBoilerCredentials());
@@ -88,6 +96,7 @@ test('post-installation sur la base Docker vierge dédiée', async (t) => {
 			}
 			await completeSetup(values, '', false);
 			assert.equal(await getSetupStatus(connection), 'matrix');
+			assert.equal((await connection.query<RowDataPacket[]>('SELECT COUNT(*) AS count FROM oko_saisons'))[0][0].count, 1);
 			assert.equal((await connection.query<RowDataPacket[]>('SELECT conso_kg FROM oko_resume_day'))[0][0].conso_kg, '10.00');
 			assert.equal((await createUsersRepository(connection).authenticate('admin', password))?.type, 'admin');
 			await connection.execute('DELETE FROM oko_configuration');

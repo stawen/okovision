@@ -11,14 +11,7 @@ CREATE TABLE IF NOT EXISTS `oko_saisons` (
   `date_debut` date NOT NULL,
   `date_fin` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MYISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
--- Export de données de la table okovision.oko_saisons: ~1 rows (environ)
-DELETE FROM `oko_saisons`;
-/*!40000 ALTER TABLE `oko_saisons` DISABLE KEYS */;
-INSERT INTO `oko_saisons` (`id`, `saison`, `date_debut`, `date_fin`) VALUES
-	(1, '2015-2016', '2015-09-01', '2016-08-31');
-/*!40000 ALTER TABLE `oko_saisons` ENABLE KEYS */;
+) ENGINE=MYISAM DEFAULT CHARSET=utf8;
 
 
 -- Export de la structure de table okovision. oko_dateref

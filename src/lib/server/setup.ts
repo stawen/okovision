@@ -9,6 +9,7 @@ import {
 	saveConfiguration
 } from './config.ts';
 import { hashNewPassword } from './repositories/users.ts';
+import { createSeasonsRepository } from './repositories/seasons.ts';
 import { createBoilerCsvConnector } from './boiler-import.ts';
 import { withWriteLock } from './collection.ts';
 import { createCsvMappingRepository } from './repositories/csv-mapping.ts';
@@ -88,7 +89,8 @@ export async function completeSetup(values: ConfigurationValues, password: strin
 		const status = await getSetupStatus(connection);
 		if (status === 'ready' || status === 'matrix') throw new SetupError('complete');
 		if (status === 'partial' && !force) throw new SetupError('force-required');
-		if (status === 'install' || status === 'partial') {
+		const createInitialSeason = status === 'install' || status === 'partial';
+		if (createInitialSeason) {
 			if (password.length < 12 || password.length > 1024) throw new SetupError('invalid');
 			const hash = await hashNewPassword(password);
 			await connection.query(await readFile('setup/install.sql', 'utf8'));
@@ -104,6 +106,9 @@ export async function completeSetup(values: ConfigurationValues, password: strin
 			await migrations.destroy();
 		}
 		await saveConfiguration(connection, values);
+		if (createInitialSeason) {
+			await createSeasonsRepository(connection).createSeason(todayInTimezone(values.timezone));
+		}
 	} finally {
 		try {
 			if (locked) await connection.execute("SELECT RELEASE_LOCK(CONCAT(DATABASE(), ':setup'))");

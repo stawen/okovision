@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
+import { readFile } from 'node:fs/promises';
 import { configurationParameters } from '../../src/lib/configuration';
 import { getSetupStatus, parseSetupValues } from '../../src/lib/server/setup';
 
@@ -13,6 +14,13 @@ function form() {
 }
 
 describe('détection du premier lancement', () => {
+	it('crée la table des saisons sans y insérer de saison fixe', async () => {
+		const sql = await readFile('setup/install.sql', 'utf8');
+
+		expect(sql).toMatch(/CREATE TABLE IF NOT EXISTS `oko_saisons`/);
+		expect(sql).not.toMatch(/INSERT\s+INTO\s+`?oko_saisons`?/i);
+	});
+
 	it.each([
 		[[], 'install'],
 		[['knex_migrations', 'knex_migrations_lock'], 'install'],
