@@ -1,200 +1,155 @@
 # État à date de la migration
 
-**Date du bilan : 13 novembre 2026**
+**Date du bilan : 15 novembre 2026**
 
-Ce document distingue les fonctions effectivement présentes dans le dépôt des
-éléments seulement prévus par l'architecture cible. Il s'appuie sur le code,
-les tests et la documentation disponibles à cette date, notamment l'[inventaire
-fonctionnel](./inventaire-fonctionnel-actuel.md), l'[architecture
-cible](./architecture-cible-svelte-node.md), l'[analyse de faisabilité](./analyse-technique-et-faisabilite-node-svelte.md),
-le [README](../README.md) et les [actions à clarifier](./actions-a-faire.md).
+Ce bilan recense les chantiers et actions identifiés dans l'[inventaire
+historique](./inventaire-fonctionnel-actuel.md), l'[architecture
+cible](./architecture-cible-svelte-node.md), l'[analyse de
+faisabilité](./analyse-technique-et-faisabilite-node-svelte.md), les
+[actions à faire](./actions-a-faire.md), le [guide
+d'exploitation](./installation-et-exploitation.md) et le code du dépôt.
+Les pistes issues d'autres projets sont distinguées du portage historique :
+elles ne sont pas automatiquement approuvées.
 
-La présence d'une page, d'un repository ou d'un test unitaire ne constitue pas
-à elle seule une preuve de parité avec PHP ni une validation sur une base ou une
-chaudière réelle. Aucun test contre une installation en service, aucune bascule
-et aucune validation opérationnelle complète ne sont établis par ce bilan.
+## Lecture des états
 
-## Synthèse
-
-La migration est bien engagée : le PHP historique est archivé, le nouveau
-socle SvelteKit/Node est en place et plusieurs domaines métier sont utilisables,
-notamment le tableau de bord, l'historique en lecture, les graphiques, les
-saisons, les événements et l'import depuis la chaudière. La collecte IP et les
-traitements asynchrones ont également été portés à un premier niveau.
-
-**La migration n'est pas terminée et n'est pas prête pour une bascule de
-production.** Plusieurs fonctions historiques ne sont pas portées ou ne le
-sont que partiellement; la parité, les scénarios de reprise, la sécurité, la
-persistance d'exploitation et les déploiements avec les deux modes de base
-doivent encore être démontrés.
-
-## Réalisé
-
-### Dépôt et socle technique
-
-- L'application PHP historique est conservée dans [`archive/php/`](../archive/php/)
-  comme référence; la nouvelle application ne la charge pas et ne l'exécute pas.
-- Le socle SvelteKit, Svelte 5, TypeScript strict, `adapter-node`, Vite, ESLint
-  et Vitest est installé avec versions verrouillées.
-- La navigation, la mise en page, les langues FR/EN, le thème inspiré de
-  l'application historique et les pages de transition sont en place.
-- L'accès MySQL est organisé autour d'un pool partagé et de repositories par
-  domaine. Les lectures métier conservent les tables et colonnes historiques;
-  aucun changement du schéma métier n'est inclus dans ce portage.
-- Des tests unitaires couvrent déjà plusieurs domaines : accès aux données,
-  authentification, graphiques, historique, saisons, événements, chaudière,
-  imports et jobs, entre autres.
-- Une image Docker multi-stage et les compositions de base distante ou MariaDB
-  locale existent. Elles constituent un socle préparé, pas une preuve de
-  déploiement complet avec données métier.
-
-### Fonctionnalités déjà portées
-
-| Domaine | État constaté |
+| État | Signification |
 |---|---|
-| Tableau de bord journalier (F03) | Lecture des graphiques configurés, mesures et annotations; zoom et déplacement synchronisés; recalcul des indicateurs sur la plage sélectionnée; états vides et erreurs signalés. |
-| Historique mensuel et saisonnier (F04–F05) | Lecture des synthèses existantes, graphiques et récapitulatifs. Les périodes sans données et certaines règles historiques sont conservées; l'écran reste en lecture seule. |
-| Indicateurs de stock et cendrier (F06) | Calculs à partir des événements et synthèses, avec état indisponible lorsque les informations nécessaires manquent; ce ne sont pas des mesures physiques en temps réel. |
-| Saisons (F08) | Consultation, création, modification et suppression des saisons depuis l'espace privé. |
-| Graphiques journaliers (F09) | Gestion des graphiques et de leurs capteurs, coefficients et ordre. Le déplacement accessible par commandes remplace le glisser-déposer historique. |
-| Événements (F07) | Consultation, création, modification et suppression des événements d'approvisionnement et d'entretien pris en charge par le modèle existant. |
-| Import chaudière (partie de F11) | Liste des fichiers CSV journaliers de la chaudière configurée; demande d'import mise en file et suivi de tâche. Le flux conserve le mapping historique, l'arrondi à la minute et le dédoublonnage des relevés. |
-| Matrice CSV (partie de F10) | Création et mise à jour depuis le fichier du jour de la chaudière, avec maintien des colonnes et capteurs historiques. Les modifications utilisent le verrou de la collecte. |
-| Collecte planifiée (partie de F16) | Ordonnanceur IP intégré au processus Node et tâches persistées dans le stockage applicatif; la collecte complète seulement les journées considérées incomplètes et déclenche les synthèses prévues. |
-| Connexion membre (partie de F02) | Connexion compatible avec les empreintes historiques, session propre à Node, protection des routes privées et déconnexion par POST. Les comptes et mots de passe historiques ne sont pas modifiés. |
-| API et pages transverses (parties de F15/F17/F18) | Endpoint de vitalité, endpoint de recalcul des indicateurs, messages localisés, journalisation applicative et page d'information/version. La vitalité HTTP ne valide pas la base. |
+| **À faire** | Action ou validation identifiée, non démontrée comme réalisée. |
+| **En cours** | Travail engagé dont l'achèvement reste à démontrer; cet état ne présume pas qu'une personne y travaille actuellement. |
+| **Terminé** | Périmètre précis de la ligne réalisé dans le dépôt; ne signifie pas que la migration ou la validation en production est terminée. |
+| **Non repris** | Fonction historique ou piste identifiée sans implémentation correspondante dans la nouvelle application. |
+| **Partiellement repris** | Une partie existe : la dernière colonne précise ce qui est repris et ce qui manque ou reste à valider. |
 
-### Vérifications déjà documentées
+Une page, un test ou un composant présent ne prouve ni la parité PHP, ni
+l'exécution réussie sur une installation réelle. Les états ci-dessous
+décrivent le dépôt, pas une certification opérationnelle.
 
-Le [guide d'installation et d'exploitation](./installation-et-exploitation.md)
-rapporte que le socle initial a passé contrôle de types, lint, deux tests SSR
-et build `adapter-node`, et que les contrôles HTTP, le rendu aux formats
-bureau/mobile et l'absence d'accès public à l'archive ont été vérifiés à
-l'initialisation. Le serveur a également été démarré à partir du seul build de
-production. Ces vérifications précèdent les ajouts métier successifs : elles
-ne remplacent pas une validation complète de l'état courant.
+**Bascule en production : non validée.** La parité, la reprise après
+interruption, la sécurité, les sauvegardes et les deux modes de déploiement
+restent à démontrer. Ne pas modifier une installation PHP en service pour
+réaliser ces essais.
 
-L'audit initial rapporté signalait 14 alertes dans les dépendances de
-développement (4 faibles et 10 modérées, notamment `deepmerge` et `minimatch`)
-et aucune vulnérabilité avec `npm audit --omit=dev`. Cet état est historique :
-il faut relancer l'audit avant une livraison.
+## Socle et environnement
 
-## Couverture fonctionnelle et travaux restants
-
-| Réf. | État au 13 novembre 2026 | Reste principal |
+| Chantier / action | État | Réalisé, limites ou suite |
 |---|---|---|
-| F01 — Installation | Setup sans jeton ni connexion préalable, disponible tant que l'installation ou l'initialisation de la matrice est incomplète; détection du schéma, configuration en base et compte admin choisi. Cartouche orange/vert piloté par le résultat du test HTTP; après résultat positif, tentative serveur de création de matrice depuis le CSV du jour. Échec récupérable et collecte bloquée tant que la matrice manque. Une base partielle exige une confirmation de réinstallation destructive. | Compléter le calendrier; tester la reprise après DDL interrompue et contrôler les schémas incompatibles. Réserver les essais aux bases isolées sauvegardées. |
-| F02 — Connexion et compte | Connexion, routes privées et changement de mot de passe avec déconnexion de la session courante portés. | Réinitialisation de mot de passe, gestion plus complète des comptes et décision sur la persistance des sessions; tests de sécurité et parcours de récupération. |
-| F03 — Journalier | Portage fonctionnel des lectures et graphiques. | Comparaison systématique des valeurs et cas limites avec des références PHP représentatives; validation sur plusieurs capteurs et firmwares. |
-| F04 — Historique mensuel | Lecture portée. | Parité détaillée des agrégats, bornes de périodes, années et jours sans relevés. |
-| F05 — Saisons | Lecture portée. | Parité des totaux, règle d'exclusion du mois courant, arrondis et cas de changement d'heure/année bissextile. |
-| F06 — Stock/cendrier | Indicateurs calculés à partir des paramètres et événements disponibles. | Tester les événements manquants, reliquats, données partielles et seuils; améliorer l'explication de l'indisponibilité et ne jamais présenter une estimation comme un état réel. |
-| F07 — Événements | CRUD porté pour les types pris en charge. | Vérifier les règles métier et les effets sur stock/cendrier avec des jeux de référence; confirmer les limites de dates, unités et valeurs. |
-| F08 — Saisons | CRUD porté. | Caractériser les règles historiques de dates, doublons et suppression; tester les cas calendaires limites. |
-| F09 — Graphiques | Gestion des graphiques, associations et coefficients portée. | Vérifier l'ensemble des contraintes métier et la parité de l'ordre/configuration; le glisser-déposer n'est pas repris intentionnellement. |
-| F10 — Matrice CSV | Création automatique après test de communication positif et enregistrement, et création/mise à jour manuelles à partir du fichier du jour, sans suppression des données historiques. La collecte est suspendue tant qu'une matrice initiale n'existe pas. | Vérifier les variantes de firmwares, la reprise après écriture partielle et la parité sur copie isolée; prévisualisation des changements non portée. |
-| F11 — Imports | Import depuis les fichiers chaudière porté en partie. | Import manuel de CSV local/USB, imports en masse, validation de plusieurs dialectes/firmwares et scénario d'erreur/reprise. Les imports restent limités à 16 Mio et chargés en mémoire. |
-| F12 — Synthèses | Calcul automatique déclenché par la collecte porté en partie. | Parcours privé de calcul/recalcul manuel et par période; tests d'équivalence des formules, des valeurs nulles/zéro et de l'ECS. |
-| F13 — Temps réel | Début de portage de la lecture des valeurs chaudière. | Parité complète des lectures, circuit, graphiques temps réel, configurations datées et commandes. Les commandes chaudière ne sont pas portées et ne doivent pas être activées implicitement. |
-| F14 — Paramètres généraux | Paramètres lus dans `oko_configuration(param, value)` et saisis lors du setup; `config.json` n'est plus lu par Node. | Porter l'édition après installation et la procédure opérateur pour les secrets chaudière. |
-| F15 — API d'intégration | Quelques endpoints natifs existent; les anciens routeurs ne sont pas repris. | Identifier les consommateurs de `ajax.php` et `api.php`, spécifier les contrats nécessaires, migrer les clients et valider les permissions avant bascule. |
-| F16 — Collecte automatique | Collecte IP et gestionnaire de tâches intégrés présents. | Porter le mode sans IP si requis; tester les interruptions, la reprise, le mono-écrivain et MyISAM; monter et sauvegarder le stockage des jobs dans les déploiements. |
-| F17 — Langues et présentation | Langues FR/EN centralisées dans les parties portées. | Étendre et vérifier la couverture des pages restantes, l'accessibilité clavier, les messages d'erreur et l'affichage mobile. |
-| F18 — Maintenance/version | Page d'information et visualisation des mises à jour disponibles. | Définir la politique de version et le processus de livraison/retour arrière. L'auto-mise-à-jour historique et l'envoi de statistiques ne sont pas reconduits. |
+| Archivage du PHP et séparation des applications | **Terminé** | Sources conservées dans [`archive/php/`](../archive/php/) comme référence, sans chargement par SvelteKit ni publication de l'archive. |
+| Socle SvelteKit / Node | **Terminé** | Svelte 5, TypeScript strict, Vite et `adapter-node`, dans un processus applicatif unique; versions et lockfile présents. |
+| Accès MySQL/MariaDB | **Partiellement repris** | Pool partagé, repositories et paramètres DB/TLS existent; vérifier les schémas, droits, moteurs, modes SQL et versions réellement rencontrés sur copies isolées. Les tables historiques sont conservées, avec ajout de `oko_configuration` par migration. |
+| Configuration métier | **Partiellement repris** | Les paramètres sont lus et enregistrés dans `oko_configuration`, plus dans `config.json`; le fichier PHP existant n'est pas importé automatiquement. Définir la reprise des valeurs et secrets, ainsi que leur sauvegarde. |
+| Migrations de structure Knex | **Partiellement repris** | CLI, verrou et suivi des migrations appliquées; migrations de configuration et retrait de paramètres obsolètes. Les migrations sont explicites, sauf setup validé et `dev:local` jetable. Prévoir contrôle des migrations futures, écran de mise à niveau, préconditions legacy et reprise après DDL partielle. |
+| Bases locales de développement | **Terminé** | Modes séparés pour base V2 migrée, base vierge et base V1; bases jetables recréées par les commandes de développement. |
+| Tests et outils de qualité | **Partiellement repris** | Tests unitaires et tests d'intégration sur bases jetables, contrôle TypeScript, lint et build existent. Compléter les tests de parité, de sécurité, de reprise et les validations sur environnements représentatifs. |
+| Image Docker et compositions | **Partiellement repris** | Image multi-stage et modes base distante ou MariaDB locale préparés; le volume privé des jobs n'est pas monté dans les compositions d'exploitation. Démontrer les deux modes avec données métier, permissions, TLS et sauvegardes. |
+| Santé et journalisation | **Partiellement repris** | Logs applicatifs et endpoint de vitalité HTTP; ce dernier ne teste ni la base ni la chaudière. Définir et valider disponibilité DB, surveillance et exploitation des journaux. |
 
-## Chantiers préalables à toute mise en service
+## Portage fonctionnel historique
 
-1. **Références et parité métier**
-   - Constituer des fixtures anonymisées couvrant matrices, firmwares, journée
-     partielle/complète, réimport, trous de relevés, ECS absente, valeurs nulles
-     ou nulles au sens numérique, changements d'heure et années bissextiles.
-   - Comparer les résultats PHP et Node sur les mesures, indicateurs, synthèses,
-     saisons, stock et cendrier aux précisions réellement stockées.
-   - Documenter les versions et volumes MySQL/MariaDB effectivement rencontrés.
+Les références F01 à F18 correspondent au
+[catalogue historique](./inventaire-fonctionnel-actuel.md#3-catalogue-fonctionnel).
+Une fonction présente mais sans preuve complète de parité reste classée
+« Partiellement repris ».
 
-2. **Fiabilité des imports et jobs**
-   - Tester sur copie isolée les écritures MyISAM, erreurs à mi-parcours,
-     dédoublonnage, reprise après arrêt et absence de succès trompeur.
-   - Mesurer la latence HTTP et l'occupation mémoire pendant un import
-     représentatif; passer à une lecture CSV en streaming si les seuils
-     opérationnels l'exigent.
-   - Rendre persistants les répertoires de configuration et de jobs dans les
-     compositions Docker, avec permissions, sauvegarde et rétention définies.
-   - Vérifier qu'un seul processus planifie et écrit, et que l'ancien cron PHP
-     est arrêté avant toute activation de la collecte Node.
+| Réf. / chantier | État | Ce qui est repris et ce qui reste |
+|---|---|---|
+| F01 — Installation et post-installation | **Partiellement repris** | `/setup` détecte une base vierge, partielle ou à configurer; formulaire sans connexion préalable tant que l'installation est incomplète, mot de passe admin choisi et migrations à la validation. Une base partielle exige une confirmation destructive. Tester les schémas incompatibles et la reprise après interruption du SQL initial, uniquement sur copie sauvegardée. |
+| F01 — Première saison et calendrier | **Partiellement repris** | Une première saison est créée au jour courant, dans le fuseau configuré, lors d'une installation neuve ou forcée. Compléter le calendrier de référence et vérifier les saisons pertinentes et les limites calendaires. |
+| F01 — Test chaudière et initialisation de matrice | **Partiellement repris** | Test HTTP depuis le navigateur; après résultat positif et enregistrement, tentative serveur de création à partir du CSV du jour. Une panne conserve la configuration, bloque la collecte et permet un nouvel essai administrateur. Le test navigateur ne prouve pas l'accès serveur ni la présence du CSV. |
+| F02 — Connexion et déconnexion | **Partiellement repris** | Authentification compatible avec les empreintes historiques et scrypt, routes privées et déconnexion POST; sessions Node en mémoire, invalidées au redémarrage. Compléter les tests de permissions et décider de la persistance et des parcours de récupération. |
+| F02 — Changement de mot de passe | **Terminé** | Mot de passe actuel et confirmation exigés, nouveau hash scrypt, invalidation de la session courante. Les autres sessions restent actives; scrypt n'est pas compatible avec la connexion PHP historique. |
+| F02 — Récupération et gestion des comptes | **Non repris** | Pas de réinitialisation de mot de passe ni de gestion complète des utilisateurs, rôles ou MFA; préciser les besoins avant portage. |
+| F03 — Tableau de bord journalier | **Partiellement repris** | Date, graphiques et capteurs configurés, mesures et annotations, zoom/déplacement synchronisés et recalcul des indicateurs de plage. Comparer les résultats et alertes aux références PHP, avec plusieurs capteurs et firmwares. |
+| F04 — Historique mensuel | **Partiellement repris** | Lecture des synthèses, graphiques et récapitulatifs, y compris les périodes sans données. Vérifier agrégats, bornes, années et jours sans relevés; les axes fixes peuvent tronquer des valeurs signalées. |
+| F05 — Synthèse saisonnière | **Partiellement repris** | Graphiques, totaux et tableau mensuel; le mois courant est exclu du graphique mais reste dans les totaux et le tableau. Vérifier arrondis, totaux, changements d'heure et années bissextiles. |
+| F06 — Stock et cendrier | **Partiellement repris** | Estimations à partir des événements, paramètres et synthèses, avec états indisponibles lorsque les entrées manquent. Vérifier reliquats, données partielles et seuils; ce ne sont pas des mesures physiques ni des prévisions. |
+| F07 — Approvisionnements et entretiens | **Partiellement repris** | Consultation et CRUD des événements pris en charge : livraison, sacs, entretien, ramonage et vidage. Vérifier dates, unités, valeurs et effets sur stock/cendrier avec des références. |
+| F08 — Administration des saisons | **Partiellement repris** | Consultation, création, modification et suppression en espace privé. Vérifier règles historiques de dates, doublons, suppression et cas limites. |
+| F09 — Graphiques journaliers | **Partiellement repris** | Gestion des graphiques, associations de capteurs, coefficients et ordre. Les commandes haut/bas accessibles remplacent volontairement le glisser-déposer; vérifier contraintes et ordre face au PHP. |
+| F10 — Matrice CSV | **Partiellement repris** | Création automatique au setup ou manuelle depuis le CSV du jour, mise à jour des capteurs et colonnes en conservant les données historiques; verrou partagé avec la collecte. Vérifier firmwares et reprise après écriture partielle. Téléversement local, prévisualisation et suppression destructive historiques ne sont pas repris. |
+| F11 — Import depuis la chaudière | **Partiellement repris** | Liste des fichiers `touch_YYYYMMDD.csv`, import asynchrone, mapping historique, arrondi à la minute, dédoublonnage et marqueur de cycle. Valider dialectes, firmwares et reprises; les CSV sont chargés en mémoire et limités à 16 Mio. |
+| F11 — Import local/USB et import en masse | **Non repris** | Téléversement d'un fichier local et traitement en série de fichiers déposés côté serveur à porter avec validation, limites et reprise. |
+| F12 — Synthèses journalières | **Partiellement repris** | Calcul et recalcul déclenchés par la collecte IP; le jour courant n'est pas synthétisé. Vérifier formules, null/zéro, ECS, dates et précision par comparaison au PHP. |
+| F12 — Calcul manuel des synthèses | **Non repris** | Page de calcul/recalcul d'une journée, de plusieurs journées ou d'une période non fonctionnelle. |
+| F13 — Lecture temps réel | **Partiellement repris** | Lecture de valeurs chaudière en espace privé et endpoint d'indicateurs; la page utilise le circuit 1. Vérifier l'ensemble des valeurs, circuits, unités et comportements sur les firmwares concernés. |
+| F13 — Graphiques et configurations temps réel | **Non repris** | Graphiques à interrogation périodique, gestion des configurations datées et historique des réglages ne sont pas fonctionnels. |
+| F13 — Écriture et commandes chaudière | **Non repris** | Réglage et pilotage non portés; aucune activation implicite. Une éventuelle reprise nécessite décision explicite, permissions, garde-fous et essais isolés. |
+| F14 — Paramètres généraux | **Partiellement repris** | Saisie au setup et édition administrateur après installation en base, avec test HTTP navigateur de l'adresse chaudière. Le mode d'import local/USB, la sélection de langue dans le formulaire et une procédure de reprise des secrets chaudière restent à traiter; la langue est configurée par `APP_LANG`. |
+| F15 — API et intégrations | **Partiellement repris** | Endpoints natifs de santé et d'indicateurs, ainsi que suivi privé des jobs. Les routeurs `ajax.php` et `api.php` ne sont pas reproduits : recenser les clients, mapper les contrats, migrer et valider permissions et jetons. |
+| F16 — Collecte et synthèses automatiques | **Partiellement repris** | Collecte IP intégrée, tâche au démarrage puis à la minute 02 toutes les deux heures selon le fuseau; file persistée et verrou d'écriture. La présence de 23:59 ne garantit pas une journée sans trous. Valider MyISAM, interruptions, reprise et mono-écrivain; le mode sans IP n'est pas porté. |
+| F17 — Langues, présentation et accessibilité | **Partiellement repris** | Libellés FR/EN, navigation responsive, notifications et gestion des erreurs pour les pages portées. Vérifier couverture, claviers, focus, formulaires privés et affichage mobile. |
+| F18 — Informations et mises à jour | **Partiellement repris** | Page d'information et visualisation des mises à jour disponibles. Définir livraison et retour arrière; l'auto-mise-à-jour et l'envoi de statistiques historiques ne sont pas reconduits. |
 
-3. **Sécurité et accès**
-   - Compléter les tests d'authentification, permissions, protection CSRF,
-     limitation de débit, validation de fichiers et absence de secrets dans les
-     logs ou réponses.
-   - Décider d'une stratégie de modernisation des mots de passe et secrets
-     chaudière compatible avec le retour arrière; ne pas modifier les données
-     d'une installation en service durant les essais.
-   - Recenser et contrôler les routes mutatrices, y compris les endpoints JSON,
-     et documenter les consommateurs d'API externes.
+## Fiabilité, sécurité et mise en service
 
-4. **Exploitation et livraison**
-   - Démontrer les modes Compose avec MariaDB locale et base distante TLS, sans
-     création implicite de schéma ni repli silencieux.
-   - Tester les volumes, sauvegarde/restauration, healthchecks séparés entre
-     vitalité HTTP et disponibilité DB, arrêt gracieux, logs et surveillance.
-   - Définir une procédure de déploiement mono-instance, de retour à PHP et de
-     retour arrière des données/configurations.
-   - Refaire l'audit des dépendances de développement (l'audit initial rapportait
-     14 alertes, sans vulnérabilité de dépendance de production) et confirmer les
-     conditions de licence des bibliothèques graphiques.
+Ces actions conditionnent la bascule indépendamment de la présence des écrans.
 
-## Axes d'amélioration
+| Chantier / action | État | Réalisé, limites ou suite |
+|---|---|---|
+| Inventaire des pages et actions PHP | **Partiellement repris** | Catalogue F01–F18 et inventaire des routeurs disponibles; compléter les contrats, paramètres, méthodes, effets et usages effectifs des clients externes. |
+| Jeux de référence et parité métier | **En cours** | Fixtures V1/V2 et tests existent; constituer des données anonymisées représentatives et comparer PHP/Node pour mesures, indicateurs, synthèses, saisons, stock et cendrier, aux précisions stockées. |
+| Cas limites des données et du temps | **À faire** | Caractériser matrices et firmwares, journée partielle/complète, trous, réimport, ECS absente, null/zéro, heures d'été et années bissextiles; fixer des critères d'acceptation par parcours. |
+| Compatibilité des installations | **À faire** | Recenser versions PHP/MySQL/MariaDB, moteurs, schémas, volumes, navigateurs, firmwares et contraintes d'hébergement réellement utilisés. |
+| Écritures MyISAM et reprise | **Partiellement repris** | Verrous Node et signalement des tâches interrompues existent; tester erreurs à mi-parcours, perte du verrou, postconditions, dédoublonnage et restauration sur copie. MyISAM et les DDL ne sont pas transactionnels. |
+| File, progression et arrêt des jobs | **Partiellement repris** | Demandes, états et progression persistés dans un répertoire privé; tâche en cours marquée interrompue au redémarrage, arrêt du planificateur et du gestionnaire prévus. Tester arrêt gracieux/forcé, reprise, rétention et absence de faux succès. |
+| Performance des imports | **À faire** | Fixer et mesurer latence HTTP, durée et mémoire sur volumes représentatifs; introduire streaming et lots bornés si les seuils opérationnels le nécessitent. |
+| Persistance des jobs en exploitation | **Partiellement repris** | `JOBS_DIR` et stockage privé existent, mais le volume n'est pas monté dans les compositions d'exploitation. Définir montage, droits, espace, sauvegarde et rétention. |
+| Mono-instance et coexistence PHP/Node | **Partiellement repris** | Ordonnanceur et verrouillage intégrés côté Node; démontrer un seul écrivain, arrêter l'ancien cron PHP avant activation de Node et tester les interruptions. Les verrous Node ne protègent pas des écrivains externes. |
+| Authentification, permissions et CSRF | **Partiellement repris** | Sessions, limites de tentatives et protections de routes/formulaires existent. Recenser toutes les mutations et tester autorisations, CSRF, endpoints JSON et limitation côté proxy/application. |
+| Mots de passe et secrets | **Partiellement repris** | Scrypt pour les mots de passe nouvellement définis et compatibilité de lecture SHA-1 historique; secrets DB par fichier possibles. Définir rotation, protection des identifiants chaudière, absence de secrets dans les logs et stratégie de retour à PHP après changement de hash. |
+| Validation des imports et fichiers | **Partiellement repris** | Taille bornée et validation des fichiers chaudière/matrice; compléter les essais de contenu malformé, autorisations et limites, notamment avant tout upload local. |
+| Clients et contrats API externes | **À faire** | Identifier les consommateurs de `ajax.php` et `api.php`, documenter méthodes/réponses/droits, prévoir jetons et rotation, migrer et valider chaque client nécessaire. |
+| Sauvegarde et restauration | **À faire** | Démontrer sauvegarde/restauration de la base, configuration, jobs et éventuelles archives sur environnement isolé; documenter droits, contrôles et rétention. |
+| Déploiement et exploitation Docker | **Partiellement repris** | Socle Compose distant/local, TLS et healthcheck HTTP documentés; valider raccordement métier, volumes, disponibilité DB, arrêt, logs et surveillance sans création implicite de données. |
+| Bascule et retour arrière | **À faire** | Définir procédure mono-instance, arrêt du cron PHP, point de non-retour des données/configurations/mots de passe, restauration et retour à PHP; répéter l'exercice avant décision GO/NO-GO. |
+| Dépendances et licences | **À faire** | Relancer l'audit avant livraison et confirmer les conditions de licence des bibliothèques graphiques. L'audit initial documenté signalait 14 alertes de développement et aucune en production; ce n'est pas un état courant vérifié. |
+| Expérience utilisateur et erreurs | **Partiellement repris** | États vides et erreurs existent sur les parcours portés; harmoniser configuration incomplète, données absentes, panne DB et chaudière indisponible, puis vérifier clavier et responsive sur les pages privées. |
 
-### Priorité avant bascule
+## Pistes fonctionnelles complémentaires à cadrer
 
-- Faire des tests de caractérisation et de parité une porte de passage pour
-  chaque domaine, plutôt que conclure à partir de la seule présence des écrans.
-- Réduire le risque de traitements partiels : streaming/batches si nécessaire,
-  verrous cohérents entre mutations et jobs, progression persistée et essais
-  de restauration sur une copie.
-- Compléter la persistance et l'exploitation Docker (configuration, jobs,
-  rétention, permissions, sauvegardes); les fichiers Compose actuels ne montent
-  pas encore tous ces éléments.
-- Formaliser permissions, CSRF, limites d'import et migration des clients API
-  avant d'exposer les opérations en production.
+Ces propositions proviennent notamment du site de référence et du dépôt
+`bertrandgorge/okovision`; elles ne définissent pas à elles seules la parité
+avec l'application PHP archivée.
 
-### Qualité fonctionnelle et maintenabilité
+| Chantier / action | État | Réalisé, limites ou suite |
+|---|---|---|
+| Journée détaillée et cycles | **Partiellement repris** | Graphiques, indicateurs et marqueur de début de cycle existent; frise brûleur/pompes, analyse de combustion, caractérisation des cycles et synthèse journalière enrichie restent à cadrer. |
+| Analyse du chauffage | **Non repris** | Expliquer arrêts/reprises selon limites de chauffe, consigne, hystérésis, horaires et états; relier les courbes aux réglages actifs. |
+| Loi d'eau et optimisation | **Non repris** | Caractériser la formule, la courbe et sa qualité d'ajustement avant visualisation, estimation des besoins et recommandations; ne pas généraliser une formule observée sur une seule installation. |
+| Analyse ECS enrichie | **Partiellement repris** | Consommation ECS dans les indicateurs et synthèses; analyse du ballon, plages, charges, cycles anti-légionelles et explication des réglages non reprises. |
+| Comparaison enrichie des saisons | **Partiellement repris** | Historique saisonnier avec consommation et DJU disponible; compléter comparaisons entre saisons, euros et ratios aux DJU après validation des agrégats. |
+| Prévisions silo et cendrier | **Partiellement repris** | Estimations courantes de stock et de cendrier; projections, dates d'épuisement/vidage et dépassements de capacité non repris. |
+| Comparaison des lots de granulés | **Non repris** | Définir périodes entre livraisons, correction météo et indicateurs d'énergie relative. |
+| Catalogue et programmation des réglages | **Non repris** | Décrire types, unités, bornes, choix, valeurs d'usine et programmes horaires/soirée/vacances. Toute écriture éventuelle exige validation, simulation, relecture et journalisation. |
+| Historique des réglages chaudière | **Non repris** | Définir profils datés, dédoublonnage et affichage des valeurs anciennes ou indisponibles; aucun profil actuel ne doit être présenté comme historiquement vérifié. |
+| Alertes et notifications externes | **Partiellement repris** | Indicateurs et alertes d'interface stock/cendrier existent; règles étendues et canaux e-mail, Slack, Telegram ou webhook signé ne sont pas repris. |
+| Diagnostic exportable | **Non repris** | Définir un rapport d'installation, réglages, cycles et mesures expurgé des secrets. |
+| Archivage des mesures et restauration | **Non repris** | Définir archivage, contrôles de lignes/empreintes, relecture et restauration, cohérence des vues après purge et sauvegarde des archives. |
+| Reprise de données vers un nouveau modèle | **Non repris** | Si une migration distincte est décidée : correspondance des capteurs, import par lots, événements et profils, recalcul et comparaison des volumes/indicateurs sur copie isolée. L'accès actuel aux tables historiques n'est pas cette reprise. |
+| Connexion par lien unique e-mail | **À faire** | Option à décider séparément : expiration, usage unique, limitation et dépendance au service de messagerie; ne remplace pas implicitement la connexion actuelle. |
 
-- Unifier les contrats de lecture et les messages d'erreur sans introduire de
-  routeur générique de compatibilité PHP.
-- Compléter la matrice de couverture F01–F18 par parcours, jeux de données et
-  critères mesurables d'acceptation.
-- Distinguer visuellement données absentes, configuration incomplète, erreur de
-  connexion et chaudière indisponible; conserver l'interdiction de simuler des
-  mesures.
-- Étendre les vérifications responsive et clavier aux écrans privés et aux
-  formulaires nouvellement portés.
-- Mesurer les performances avant d'ajouter un worker ou une infrastructure
-  supplémentaire; la cible actuelle est un seul processus applicatif.
+## Compatibilité firmware ÖkoFEN V4
 
-## Décisions documentaires à clarifier
+Le connecteur actuel utilise les CSV du répertoire `/logfiles/pelletronic/`.
+La documentation communautaire décrit une API JSON V4, mais ne prouve pas la
+compatibilité de toutes ses variantes. Voir les
+[actions détaillées](./actions-a-faire.md#compatibilité-ökofen-touch-avec-le-firmware-v4).
 
-- Une première version d'[actions-a-faire.md](./actions-a-faire.md) proposait
-  de déplacer la configuration JSON en base, alors que l'architecture cible
-  conserve le schéma métier existant et que l'application actuelle lit
-  `config.json`. Le document a été reformulé en **décision à prendre**, pas en
-  chantier approuvé : préciser les besoins de partage, de sauvegarde et de
-  gestion avant d'envisager une nouvelle table.
-- Les documents d'architecture décrivent en partie une cible souhaitée
-  (bibliothèques, endpoints, sécurité, Docker et POC). Les termes « retenu » ou
-  « prévu » dans ces sections ne prouvent pas que la fonctionnalité est
-  implémentée.
-- Le guide d'installation et d'exploitation décrit les limites opérationnelles
-  courantes; toute nouvelle validation doit être datée et indiquer son
-  environnement, notamment si elle a été faite sur copie isolée ou simulateur.
+| Chantier / action | État | Réalisé, limites ou suite |
+|---|---|---|
+| Caractérisation V4 | **À faire** | Vérifier sur réponses anonymisées versions, configuration API, signification de `log0`, `/all?`, encodage, unités, champs absents et fréquence acceptable. |
+| Acquisition et import V4 en lecture seule | **Non repris** | Ajouter si requis un mode séparé transport/validation/normalisation, préserver les CSV V2/V3, mapper les capteurs, gérer fuseau, bornes, doublons et reprises sans exposer les secrets. |
+| Fixtures et parité V2/V3/V4 | **À faire** | Tester facteurs d'échelle, valeurs énumérées, null/zéro, plusieurs circuits, dates, réponses invalides et téléchargements partiels sans chaudière en service. |
+| Instantanés et temps réel V4 | **Non repris** | Évaluer l'ingestion de `/all?`, avec fréquence mesurée, délais et reprises bornés; si persistée, calculer les transitions de cycle chronologiquement et tester changement de jour et réimports. |
+| Commandes V4, Home Assistant et calculs énergie/coût | **À faire** | Décisions séparées du support V4 en lecture seule; ne pas porter les commandes sans autorisation et validation de sécurité explicites. |
 
-## Conclusion
+## Précisions documentaires et validations
 
-Le projet a dépassé le stade du simple squelette : plusieurs parcours importants
-de supervision et d'administration sont portés, et une première chaîne
-d'import/collecte asynchrone existe. Le prochain objectif ne devrait pas être
-la seule augmentation du nombre de pages, mais la **preuve de parité, de
-reprise fiable et de déploiement sûr**. La bascule reste conditionnée aux
-validations et décisions listées ci-dessus; l'installation PHP en service doit
-rester inchangée jusque-là.
+| Chantier / action | État | Réalisé, limites ou suite |
+|---|---|---|
+| Cohérence des documents de configuration | **À faire** | La dernière section d'[actions-a-faire.md](./actions-a-faire.md#clarifier-le-stockage-de-la-configuration) et certains passages de l'architecture décrivent encore `config.json` comme actuel; le code lit désormais `oko_configuration`. Réviser ces documents séparément sans confondre cible et état constaté. |
+| Vérifications initiales du socle | **Terminé** | Le [guide d'exploitation](./installation-et-exploitation.md#vérifications-initiales-documentées) rapporte les contrôles initiaux de types, lint, SSR, build, HTTP, rendu et accès à l'archive. Ils précèdent les ajouts métier et ne valident pas l'état courant. |
+| Validation complète de l'état courant | **À faire** | Exécuter et dater les contrôles adaptés au code courant, les tests de parité et les essais d'exploitation; préciser l'environnement, notamment copie isolée ou simulateur. |
+
+La prochaine étape est de compléter les parcours requis et surtout d'apporter
+les preuves de parité et d'exploitation nécessaires avant toute bascule.
