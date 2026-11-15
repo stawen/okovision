@@ -1,2 +1,0 @@
-ErrorDocument 401 /errors/401.php
-ErrorDocument 404 /errors/404.php
