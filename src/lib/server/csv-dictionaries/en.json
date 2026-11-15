@@ -1,0 +1,392 @@
+{
+    "Datum": {
+        "name": "jour",
+        "type": "",
+		"boiler": ""
+    },
+    "Zeit": {
+        "name": "heure",
+        "type": "",
+		"boiler": ""
+    },
+    "AT [°C]": {
+        "name": "Outside T°C",
+        "type": "tc_ext",
+        "boiler": "CAPPL:LOCAL.L_aussentemperatur_ist"
+    },
+    "KT Ist [°C]": {
+        "name": "Boiler T°C",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_kesseltemperatur"
+    },
+    "KT Soll [°C]": {
+        "name": "Boiler T°C set",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_kesseltemperatur_soll"
+    },
+    "BR": {
+        "name": "Burner Require (On/Off)",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_br1"
+    },
+    "Sperrzeit": {
+        "name": "Block Time",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.bestke_sperrzeit"
+    },
+    "HK1 VL Ist[°C]": {
+        "name": "Flow T°C",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_hk[0].vorlauftemp_ist"
+    },
+    "HK1 VL Soll[°C]": {
+        "name": "Flow T°C Set",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_hk[0].vorlauftemp_soll"
+    },
+    "HK1 RT Ist[°C]": {
+        "name": "Room T°C",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_hk[0].raumtemp_ist"
+    },
+    "HK1 RT Soll[°C]": {
+        "name": "Room T°C Set",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_hk[0].raumtemp_soll"
+    },
+    "HK1 Pumpe": {
+        "name": "Heater Pump (On/Off)",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_hk[0].pumpe"
+    },
+    "HK2 VL Ist[°C]": {
+        "name": "Cir.chauff.2 - Flow T°C",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_hk[1].vorlauftemp_ist"
+    },
+    "HK2 VL Soll[°C]": {
+        "name": "Cir.chauff.2 - Flow T°C Set",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_hk[1].vorlauftemp_soll"
+    },
+    "HK2 RT Ist[°C]": {
+        "name": "Cir.chauff.2 - Room T°C",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_hk[0].raumtemp_ist"
+    },
+    "HK2 RT Soll[°C]": {
+        "name": "Cir.chauff.2 - Room T°C Set",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_hk[0].raumtemp_soll"
+    },
+    "HK2 Pumpe": {
+        "name": "Cir.chauff.2 - Heater Pump (On/Off)",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_hk[1].pumpe"
+    },
+    "WW1 EinT Ist[°C]": {
+        "name": "Domestic Hot Water T°C",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_ww[0].einschaltfuehler_ist"
+    },
+    "WW1 AusT Ist[°C]": {
+        "name": "Domestic Hot Water T°C (stop)",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.ww[0].temp_absenken"
+    },
+    "WW1 Soll[°C]": {
+        "name": "Domestic Hot Water T°C Set",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.ww[0].temp_heizen"
+    },
+    "WW1 Pumpe": {
+        "name": "Domestic Hot Water Pump",
+        "type": "hotwater[0]",
+		"boiler": "CAPPL:LOCAL.L_ww[0].pumpe"
+    },
+    "WW2 EinT Ist[°C]": {
+        "name": "Domestic Hot Water [2] T°C",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_ww[1].einschaltfuehler_ist"
+    },
+    "WW2 AusT Ist[°C]": {
+        "name": "Domestic Hot Water [2] T°C (stop)",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.ww[1].temp_absenken"
+    },
+    "WW2 Soll[°C]": {
+        "name": "Domestic Hot Water [2] T°C Set",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.ww[1].temp_heizen"
+    },
+    "WW2 Pumpe": {
+        "name": "Domestic Hot Water [2] Pump",
+        "type": "hotwater[1]",
+		"boiler": "CAPPL:LOCAL.L_ww[1].pumpe"
+    },
+    "Zubrp1 Pumpe": {
+        "name": "Pump (indefini)",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_zirkp[0].pumpe"
+    },
+    "PU1 TPO Ist[°C]": {
+        "name": "Buffer tank - T°C Top",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_pu[0].ausschaltfuehler_ist"
+    },
+    "PU1 TPO Soll[°C]": {
+        "name": "Buffer tank - T°C Top Set",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_pu[0].ausschaltfuehler_soll"
+    },
+    "PU1 TPM Ist[°C]": {
+        "name": "Buffer tank - T°C Middle",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_pu[0].einschaltfuehler_ist"
+    },
+    "PU1 TPM Soll[°C]": {
+        "name": "Buffer tank - T°C Middle Set",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_pu[0].einschaltfuehler_soll"
+    },
+    "PU1 Pumpe[%]": {
+        "name": "Buffer tank - Pump (%)",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_pu[0].pumpe"
+    },
+    "SK1 Koll[°C]": {
+        "name": "Solar panel T°C",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_sk[0].kollektortemp_ist"
+    },
+    "SK1 SPUnten[°C]": {
+        "name": "Buffer tank - T°C Bottom",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_sk[0].speichertemp_ist"
+    },
+    "SK1 Pumpe[%]": {
+        "name": "Solar Pump (On/Off)",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_sk[0].pumpe"
+    },
+    "SK2 Koll[°C]": {
+        "name": "Solar [2] - Solar panel T°C" ,
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_sk[1].kollektortemp_ist"
+    },
+    "SK2 SPUnten[°C]": {
+        "name": "Solar [2] - Buffer tank - T°C Bottom",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_sk[1].speichertemp_ist"
+    },
+    "SK2 Pumpe[%]": {
+        "name": "Solar [2] - Solar Pump (On/Off)",
+        "type": "",
+		"boiler": "CAPPL:LOCAL.L_sk[1].pumpe"
+    },
+    "PE1 KT[°C]": {
+        "name": "OKO [1] - Boiler T°C",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_kesseltemperatur"
+    },
+    "PE1_BR1": {
+        "name": "OKO [1] - Burner Require (On/Off)",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_br1"
+    },
+    "PE1 KT_SOLL[°C]": {
+        "name": "OKO [1] - Boiler T°C SET",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_kesseltemperatur_soll_anzeige"
+    },
+    "PE1 FRT Ist[°C]": {
+        "name": "Combustion Chamber T°C",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_feuerraumtemperatur"
+    },
+    "PE1 FRT Soll[°C]": {
+        "name": "Combustion Chamber T°C Set",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_feuerraumtemperatur_soll"
+    },
+    "PE1 Einschublaufzeit[zs]": {
+        "name": "Burner Auger Run Time (ds)",
+        "type": "tps_vis",
+        "boiler": "CAPPL:FA[0].L_einschublaufzeit"
+    },
+    "PE1 Pausenzeit[zs]": {
+        "name": "Burner Auger Pause Time (ds)",
+        "type": "tps_vis_pause",
+        "boiler": "CAPPL:FA[0].L_pausenzeit"
+    },
+    "PE1 Luefterdrehzahl[%]": {
+        "name": "Burner Fan Speed (%)",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_luefterdrehzahl"
+    },
+    "PE1 Saugzugdrehzahl[%]": {
+        "name": "Flue Gas Fan Speed (%)",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_saugzugdrehzahl"
+    },
+    "PE1 Unterdruck Ist[Pa]": {
+        "name": "Negative Draft (Pa)",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_unterdruck"
+    },
+    "PE1 Unterdruck Ist[EH]": {
+        "name": "Negative Draft (Pa)",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_unterdruck"
+    },
+    "PE1 Unterdruck Soll[Pa]": {
+        "name": "Negative Draft Set (Pa)",
+        "type": "",
+		"boiler": "CAPPL:FA[0].unterdruck_sollwert"
+    },
+    "PE1 Unterdruck Soll[EH]": {
+        "name": "Negative Draft Set (Pa)",
+        "type": "",
+		"boiler": "CAPPL:FA[0].unterdruck_sollwert"
+    },
+    "PE1 Status": {
+        "name": "Boiler Status",
+        "type": "status",
+        "boiler": "CAPPL:FA[0].L_kesselstatus"
+    },
+    "PE1 Motor ES": {
+        "name": "Boiler operation motor (On/Off)",
+        "type": "",
+		"boiler": ""
+    },
+    "PE1 Motor RA": {
+        "name": "Motor Delivery Storage Tank (On/Off)",
+        "type": "",
+		"boiler": "CAPPL:FA[0].ausgang_motor[8]"
+    },
+    "PE1 Motor RES1": {
+        "name": "Motor Intermediate hopper",
+        "type": "",
+		"boiler": "CAPPL:FA[0].ausgang_motor[3]"
+    },
+    "PE1 Motor TURBINE": {
+        "name": "Motor Suction Turbine",
+        "type": "",
+		"boiler": "CAPPL:FA[0].ausgang_motor[0]"
+    },
+    "PE1 Motor ZUEND": {
+        "name": "Ignition Stick",
+        "type": "",
+		"boiler": "CAPPL:FA[0].ausgang_motor[1]"
+    },
+    "PE1 Motor UW[%]": {
+        "name": "Speed Boiler Controlled Pump (%)",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_drehzahl_uw_ist"
+    },
+    "PE1 Motor RM": {
+        "name": "Motor Cleaning",
+        "type": "",
+		"boiler": "CAPPL:FA[0].ausgang_motor[5]"
+    },
+    "PE1 Abgastemp[°C]":{
+        "name":"Flue Gas[°C]",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_abgastemperatur"
+    },
+    "PE2 KT[°C]": {
+        "name": "OKO [2] - Boiler T°C",
+        "type": "",
+		"boiler": "CAPPL:FA[1].L_kesseltemperatur"
+    },
+    "PE2 KT_SOLL[°C]": {
+        "name": "OKO [2] - Boiler T°C Set",
+        "type": "",
+		"boiler": "CAPPL:FA[1].L_kesseltemperatur_soll_anzeige"
+    },
+    "PE2 FRT Ist[°C]": {
+        "name": "OKO [2] - Combustion Chamber T°C",
+        "type": "",
+		"boiler": "CAPPL:FA[1].L_feuerraumtemperatur"
+    },
+    "PE2 FRT Soll[°C]": {
+        "name": "OKO [2] - Combustion Chamber T°C Set",
+        "type": "",
+		"boiler": "CAPPL:FA[0].L_feuerraumtemperatur_soll"
+    },
+    "PE2 Einschublaufzeit[zs]": {
+        "name": "OKO [2] - Burner Auger Run Time (ds)",
+        "type": "",
+        "boiler": "CAPPL:FA[1].L_einschublaufzeit"
+    },
+    "PE2 Pausenzeit[zs]": {
+        "name": "OKO [2] - Burner Auger Pause Time (ds)",
+        "type": "",
+        "boiler": "CAPPL:FA[0].L_pausenzeit"
+    },
+    "PE2 Luefterdrehzahl[%]": {
+        "name": "OKO [2] - Burner Fan Speed (%)",
+        "type": "",
+		"boiler": "CAPPL:FA[1].L_luefterdrehzahl"
+    },
+    "PE2 Saugzugdrehzahl[%]": {
+        "name": "OKO [2] - Flue Gas Fan Speed (%)",
+        "type": "",
+		"boiler": "CAPPL:FA[1].L_saugzugdrehzahl"
+    },
+    "PE2 Unterdruck Ist[Pa]": {
+        "name": "OKO [2] - Negative Draft (Pa)",
+        "type": "",
+		"boiler": "CAPPL:FA[1].L_unterdruck"
+    },
+    "PE2 Unterdruck Soll[Pa]": {
+        "name": "OKO [2] - Negative Draft Set (Pa)",
+        "type": "",
+		"boiler": "CAPPL:FA[1].unterdruck_sollwert"
+    },
+    "PE2 Status": {
+        "name": "OKO [2] - Boiler Status",
+        "type": "",
+        "boiler": "CAPPL:FA[1].L_kesselstatus"
+    },
+    "PE2 Motor ES": {
+        "name": "OKO [2] - Boiler operation motor (On/Off)",
+        "type": "",
+		"boiler": ""
+    },
+    "PE2 Motor RA": {
+        "name": "OKO [2] - Motor Delivery Storage Tank (On/Off)",
+        "type": "",
+		"boiler": "CAPPL:FA[1].ausgang_motor[8]"
+    },
+    "PE2 Motor RES1": {
+        "name": "OKO [2] - ausgang_motor[3]",
+        "type": "",
+		"boiler": "CAPPL:FA[0].ausgang_motor[3]"
+    },
+    "PE2 Motor TURBINE": {
+        "name": "OKO [2] - Motor Suction Turbine",
+        "type": "",
+		"boiler": "CAPPL:FA[1].ausgang_motor[0]"
+    },
+    "PE2 Motor ZUEND": {
+        "name": "OKO [2] - Ignition Stick",
+        "type": "",
+		"boiler": "CAPPL:FA[1].ausgang_motor[1]"
+    },
+    "PE2 Motor UW[%]": {
+        "name": "OKO [2] - Speed Boiler Controlled Pump (%)",
+        "type": "",
+		"boiler": "CAPPL:FA[1].L_drehzahl_uw_ist"
+    },
+    "PE2 Motor RM": {
+        "name": "OKO [2] - Motor Cleaning",
+        "type": "",
+		"boiler": "CAPPL:FA[1].ausgang_motor[5]"
+    },
+    "PE2 Abgastemp[°C]":{
+        "name":"OKO [2] - Flue Gas[°C]",
+        "type": "",
+		"boiler": "CAPPL:FA[1].L_abgastemperatur"
+    }
+}

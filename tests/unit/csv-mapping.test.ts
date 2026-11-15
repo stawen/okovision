@@ -1,0 +1,158 @@
+import { render } from 'svelte/server';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { createCsvMappingRepository, parseCsvHeader, type CsvSensor } from '../../src/lib/server/repositories/csv-mapping';
+import { BoilerImportError } from '../../src/lib/server/boiler-import-error';
+import CsvMappingPage from '../../src/routes/private/administration/csv-mapping/+page.svelte';
+
+const mocks = vi.hoisted(() => ({
+	getSensors: vi.fn(),
+	readConfiguration: vi.fn(),
+	parseBoilerAddress: vi.fn(),
+	importFile: vi.fn(),
+	withWriteLock: vi.fn(),
+	update: vi.fn()
+}));
+vi.mock('../../src/lib/server/data-access', () => ({
+	getDataAccess: () => ({ csvMapping: { getSensors: mocks.getSensors } })
+}));
+vi.mock('../../src/lib/server/config', () => ({
+	readConfiguration: mocks.readConfiguration, parseBoilerAddress: mocks.parseBoilerAddress
+}));
+vi.mock('../../src/lib/server/boiler-import', () => ({
+	createBoilerCsvConnector: () => ({ importFile: mocks.importFile })
+}));
+vi.mock('../../src/lib/server/collection', () => ({ withWriteLock: mocks.withWriteLock }));
+vi.mock('../../src/lib/server/repositories/csv-mapping', async (importOriginal) => {
+	const original = await importOriginal<typeof import('../../src/lib/server/repositories/csv-mapping')>();
+	return { ...original, createCsvMappingRepository: (db: unknown) =>
+		db === 'locked' ? { update: mocks.update } : original.createCsvMappingRepository(db as never) };
+});
+
+import { actions } from '../../src/routes/private/administration/csv-mapping/+page.server';
+
+const baseColumns = ['jour', 'heure', 'timestamp'].map((Field) => ({ Field }));
+const sensor = (id: number, originalName: string, position: number, columnOko: number, type = '') => ({
+	id, originalName, name: `Nom ${id}`, position, columnOko, type, boiler: ''
+});
+
+describe('matrice CSV', () => {
+	it('initialise les colonnes, les noms connus et inconnus et le début de cycle', async () => {
+		const execute = vi.fn().mockResolvedValueOnce([[], []]).mockResolvedValue([{}, []]);
+		const query = vi.fn().mockResolvedValueOnce([baseColumns, []]).mockResolvedValueOnce([[], []]).mockResolvedValue([{}, []]);
+		const repository = createCsvMappingRepository({ execute, query } as never);
+
+		await repository.update('\uFEFFDatum;Zeit;AT [°C];PE1 Status;inconnu;\r\n', 'fr', 'create');
+
+		expect(query.mock.calls[2][0]).toContain('ADD COLUMN `col_2` DECIMAL(6,2)');
+		expect(query.mock.calls[2][0]).toContain('ADD COLUMN `col_5` DECIMAL(6,2)');
+		expect(execute.mock.calls[1][1]).toEqual([
+			'T°C Extérieure', 2, 2, 'AT [°C]', 'tc_ext', 'CAPPL:LOCAL.L_aussentemperatur_ist',
+			'Statut chaudière', 3, 3, 'PE1 Status', 'status', 'CAPPL:FA[0].L_kesselstatus',
+			'inconnu', 4, 4, 'inconnu', '', '',
+			'Start Cycle', 5, 5, 'Start Cycle', 'startCycle', ''
+		]);
+	});
+
+	it('réordonne, réactive, désactive et ajoute sans modifier les colonnes historiques', async () => {
+		const sensors = [
+			sensor(1, 'AT [°C]', 2, 2, 'tc_ext'),
+			sensor(2, 'absent', 3, 3),
+			sensor(3, 'retour', -1, 4),
+			sensor(4, 'Start Cycle', 4, 5, 'startCycle')
+		];
+		const execute = vi.fn().mockResolvedValueOnce([sensors, []]).mockResolvedValue([{}, []]);
+		const query = vi.fn().mockResolvedValueOnce([[...baseColumns, ...[2, 3, 4, 5].map((n) => ({ Field: `col_${n}` }))], []])
+			.mockResolvedValue([{}, []]);
+		await createCsvMappingRepository({ execute, query } as never)
+			.update('Datum;Zeit;retour;AT [°C];nouveau;', 'fr', 'update');
+
+		expect(query.mock.calls[1][0]).toContain('ADD COLUMN `col_6`');
+		expect(execute.mock.calls[1][1]).toEqual(['nouveau', 4, 6, 'nouveau', '', '']);
+		expect(execute.mock.calls[2][1]).toEqual([3, 2, 1, 3, 4, 5, 2, -1, 3, 1, 4, 2]);
+		expect(execute.mock.calls[2][0]).not.toContain('column_oko');
+	});
+
+	it.each(['Datum;Zeit;A;A;', 'Datum;Zeit;;A;', '<html>;', 'wrong;header;A;', 'Datum;Zeit;Start Cycle;'])(
+		'refuse un en-tête invalide avant toute écriture : %s', async (header) => {
+			const execute = vi.fn();
+			const query = vi.fn();
+			await expect(createCsvMappingRepository({ execute, query } as never).update(header, 'fr', 'create')).rejects.toThrow();
+			expect(execute).not.toHaveBeenCalled();
+			expect(query).not.toHaveBeenCalled();
+		}
+	);
+
+	it('refuse une colonne orpheline ou un changement concurrent de mode', async () => {
+		const execute = vi.fn().mockResolvedValue([[], []]);
+		const query = vi.fn().mockResolvedValue([[...baseColumns, { Field: 'col_2' }], []]);
+		const repository = createCsvMappingRepository({ execute, query } as never);
+		await expect(repository.update('Datum;Zeit;A;', 'fr', 'create')).rejects.toThrow('Unmapped history column');
+		await expect(repository.update('Datum;Zeit;A;', 'fr', 'update')).rejects.toThrow('Matrix state changed');
+		expect(execute).toHaveBeenCalledTimes(2);
+		expect(query).toHaveBeenCalledTimes(1);
+	});
+
+	it('traite les fins de ligne et les en-têtes sans point-virgule final', () => {
+		expect(parseCsvHeader('Datum;Zeit;AT [°C]\n')).toEqual(['Datum', 'Zeit', 'AT [°C]']);
+	});
+});
+
+describe('page matrice CSV', () => {
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
+
+	it('propose la création seulement si la matrice est vide et la mise à jour sinon', () => {
+		const page = (sensors: CsvSensor[], loadError = false) => render(CsvMappingPage, {
+			props: { params: {}, form: null, data: { language: 'fr', member: null, pathname: '/private/administration/csv-mapping', sensors, loadError } }
+		}).body;
+		expect(page([])).toContain('Créer la matrice');
+		expect(page([sensor(1, 'AT [°C]', 2, 2)])).toContain('Mettre à jour');
+		expect(page([sensor(1, 'AT [°C]', 2, 2)])).toContain('AT [°C]');
+		expect(page([], true)).not.toContain('<form');
+	});
+
+	it('télécharge le fichier du jour dans le fuseau configuré puis écrit sous verrou', async () => {
+		vi.useFakeTimers();
+		vi.setSystemTime(new Date('2026-11-14T23:30:00Z'));
+		try {
+			mocks.readConfiguration.mockResolvedValue({ timezone: 'Europe/Paris' });
+			mocks.parseBoilerAddress.mockReturnValue('http://boiler.local');
+			mocks.importFile.mockResolvedValue('Datum;Zeit;A;');
+			mocks.withWriteLock.mockImplementation(async (_signal, callback) => callback('locked', new AbortController().signal));
+			const request = new Request('http://localhost', {
+				method: 'POST', body: new URLSearchParams({ mode: 'update' })
+			});
+			const result = await actions.default!({ request, locals: { language: 'fr', member: { id: 1 } } } as never);
+			expect(result).toEqual({ success: true });
+			expect(mocks.importFile).toHaveBeenCalledWith('http://boiler.local', 'touch_20261115.csv');
+			expect(mocks.update).toHaveBeenCalledWith('Datum;Zeit;A;', 'fr', 'update');
+		} finally {
+			vi.useRealTimers();
+		}
+	});
+
+	it('ne modifie pas la base si le fichier du jour est inaccessible', async () => {
+		mocks.readConfiguration.mockResolvedValue({ timezone: 'Europe/Paris' });
+		mocks.parseBoilerAddress.mockReturnValue('http://boiler.local');
+		mocks.importFile.mockRejectedValue(new Error('missing'));
+		const request = new Request('http://localhost', {
+			method: 'POST', body: new URLSearchParams({ mode: 'create' })
+		});
+		const result = await actions.default!({ request, locals: { language: 'fr', member: { id: 1 } } } as never);
+		expect(result).toMatchObject({ status: 500, data: { error: expect.any(String) } });
+		expect(mocks.withWriteLock).not.toHaveBeenCalled();
+	});
+
+	it('indique explicitement quand le fichier du jour est absent', async () => {
+		mocks.readConfiguration.mockResolvedValue({ timezone: 'Europe/Paris' });
+		mocks.parseBoilerAddress.mockReturnValue('http://boiler.local');
+		mocks.importFile.mockRejectedValue(new BoilerImportError('file-not-found'));
+		const request = new Request('http://localhost', {
+			method: 'POST', body: new URLSearchParams({ mode: 'create' })
+		});
+		const result = await actions.default!({ request, locals: { language: 'fr', member: { id: 1 } } } as never);
+		expect(result).toMatchObject({ status: 404, data: { error: expect.stringContaining('introuvable') } });
+		expect(mocks.withWriteLock).not.toHaveBeenCalled();
+	});
+});

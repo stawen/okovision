@@ -5,6 +5,7 @@ interface SensorRow extends RowDataPacket {
 	position: number;
 	columnOko: number;
 	type: string | null;
+	originalName: string;
 }
 
 interface ColumnRow extends RowDataPacket {
@@ -93,7 +94,7 @@ export function createBoilerImportRepository(db: Pick<Pool, 'execute' | 'query'>
 		async importCsv(contents: string, expectedDay?: string, signal?: AbortSignal): Promise<number> {
 			try {
 				const [sensorRows] = await db.execute<SensorRow[]>(
-					`SELECT position_column_csv AS position, column_oko AS columnOko, type
+					`SELECT position_column_csv AS position, column_oko AS columnOko, type, original_name AS originalName
 					 FROM oko_capteur
 					 WHERE position_column_csv <> -1 OR type = 'startCycle'
 					 ORDER BY position_column_csv`
@@ -127,6 +128,10 @@ export function createBoilerImportRepository(db: Pick<Pool, 'execute' | 'query'>
 					throw new BoilerImportError('mapping');
 				}
 				const orderedSensors = [...positions.entries()].sort(([left], [right]) => left - right);
+				const header = contents.replace(/^\uFEFF/, '').split(/\r\n|\n|\r/, 1)[0].split(';');
+				if (orderedSensors.some(([position, sensor]) => header[position]?.trim() !== sensor.originalName)) {
+					throw new BoilerImportError('mapping');
+				}
 				const columnsByPosition = orderedSensors.map(([, sensor]) => {
 					const column = `col_${sensor.columnOko}`;
 					if (!existingColumns.has(column)) throw new BoilerImportError('mapping');

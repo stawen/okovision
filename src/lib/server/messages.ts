@@ -10,6 +10,7 @@ const fr = {
 	historyFailed: 'Impossible de charger les données historiques.',
 	boilerReadFailed: 'Impossible de récupérer les mesures chaudière.',
 	boilerImportFailed: 'Impossible d’importer les fichiers de mesures chaudière.',
+	csvMappingFailed: 'Impossible de gérer la matrice CSV.',
 	updateFeedFailed: 'Impossible de charger le flux des mises à jour.',
 	ashtrayStatusFailed: 'Impossible de charger le suivi du cendrier.',
 	loginFailed: 'Impossible de traiter la connexion membre.',
@@ -78,6 +79,7 @@ const en: Translations = {
 	historyFailed: 'Unable to load historical data.',
 	boilerReadFailed: 'Unable to retrieve boiler readings.',
 	boilerImportFailed: 'Unable to import boiler reading files.',
+	csvMappingFailed: 'Unable to manage the CSV mapping.',
 	updateFeedFailed: 'Unable to load the update feed.',
 	ashtrayStatusFailed: 'Unable to load ashtray tracking.',
 	loginFailed: 'Unable to process member sign-in.',
@@ -151,6 +153,7 @@ export type LogMessageKey =
 	| 'historyFailed'
 	| 'boilerReadFailed'
 	| 'boilerImportFailed'
+	| 'csvMappingFailed'
 	| 'collectionFailed'
 	| 'collectionStarted'
 	| 'jobCompleted'

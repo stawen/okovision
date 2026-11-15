@@ -98,9 +98,9 @@ describe('import chaudière', () => {
 	it('importe selon le mapping, arrondit les secondes et marque le front montant du statut 4', async () => {
 		const execute = vi.fn()
 			.mockResolvedValueOnce([[
-				{ position: 2, columnOko: 2, type: 'tc_ext' },
-				{ position: 3, columnOko: 3, type: 'status' },
-				{ position: 4, columnOko: 99, type: 'startCycle' }
+				{ position: 2, columnOko: 2, type: 'tc_ext', originalName: 'temp' },
+				{ position: 3, columnOko: 3, type: 'status', originalName: 'status' },
+				{ position: 4, columnOko: 99, type: 'startCycle', originalName: 'Start Cycle' }
 			], []])
 			.mockResolvedValueOnce([{ affectedRows: 1 }, []])
 			.mockResolvedValueOnce([{ affectedRows: 1 }, []])
@@ -139,9 +139,9 @@ describe('import chaudière', () => {
 	])('conserve le timestamp UTC legacy et les colonnes remappées pour $day', async ({ date, day, timestamp }) => {
 		const execute = vi.fn()
 			.mockResolvedValueOnce([[
-				{ position: 2, columnOko: 18, type: 'tc_ext' },
-				{ position: 4, columnOko: 7, type: 'status' },
-				{ position: 5, columnOko: 99, type: 'startCycle' }
+				{ position: 2, columnOko: 18, type: 'tc_ext', originalName: 'temp' },
+				{ position: 4, columnOko: 7, type: 'status', originalName: 'status' },
+				{ position: 5, columnOko: 99, type: 'startCycle', originalName: 'Start Cycle' }
 			], []])
 			.mockResolvedValue([{ affectedRows: 1 }, []]);
 		const query = vi.fn().mockResolvedValue([[
@@ -158,9 +158,9 @@ describe('import chaudière', () => {
 
 	it('refuse un CSV invalide avant toute insertion', async () => {
 		const execute = vi.fn().mockResolvedValueOnce([[
-			{ position: 2, columnOko: 2, type: 'tc_ext' },
-			{ position: 3, columnOko: 3, type: 'status' },
-			{ position: -1, columnOko: 99, type: 'startCycle' }
+			{ position: 2, columnOko: 2, type: 'tc_ext', originalName: 'temp' },
+			{ position: 3, columnOko: 3, type: 'status', originalName: 'status' },
+			{ position: -1, columnOko: 99, type: 'startCycle', originalName: 'Start Cycle' }
 		], []]);
 		const query = vi.fn().mockResolvedValue([[
 			{ Field: 'jour' },
@@ -174,6 +174,22 @@ describe('import chaudière', () => {
 
 		await expect(repository.importCsv('date;heure;temp;status;\n31.02.2026;12:34:00;12,5;0;'))
 			.rejects.toBeInstanceOf(BoilerImportError);
+		expect(execute).toHaveBeenCalledTimes(1);
+	});
+
+	it('refuse un fichier dont les colonnes ne correspondent plus à la matrice avant insertion', async () => {
+		const execute = vi.fn().mockResolvedValueOnce([[
+			{ position: 2, columnOko: 2, type: 'tc_ext', originalName: 'temp' },
+			{ position: 3, columnOko: 3, type: 'status', originalName: 'status' },
+			{ position: 4, columnOko: 4, type: 'startCycle', originalName: 'Start Cycle' }
+		], []]);
+		const query = vi.fn().mockResolvedValue([[
+			{ Field: 'jour' }, { Field: 'heure' }, { Field: 'timestamp' },
+			{ Field: 'col_2' }, { Field: 'col_3' }, { Field: 'col_4' }
+		], []]);
+		const repository = createBoilerImportRepository({ execute, query } as never);
+		await expect(repository.importCsv('date;heure;status;temp;\n03.02.2026;12:34:00;4;12;'))
+			.rejects.toMatchObject({ code: 'mapping' });
 		expect(execute).toHaveBeenCalledTimes(1);
 	});
 });

@@ -59,6 +59,7 @@ doivent encore être démontrés.
 | Graphiques journaliers (F09) | Gestion des graphiques et de leurs capteurs, coefficients et ordre. Le déplacement accessible par commandes remplace le glisser-déposer historique. |
 | Événements (F07) | Consultation, création, modification et suppression des événements d'approvisionnement et d'entretien pris en charge par le modèle existant. |
 | Import chaudière (partie de F11) | Liste des fichiers CSV journaliers de la chaudière configurée; demande d'import mise en file et suivi de tâche. Le flux conserve le mapping historique, l'arrondi à la minute et le dédoublonnage des relevés. |
+| Matrice CSV (partie de F10) | Création et mise à jour depuis le fichier du jour de la chaudière, avec maintien des colonnes et capteurs historiques. Les modifications utilisent le verrou de la collecte. |
 | Collecte planifiée (partie de F16) | Ordonnanceur IP intégré au processus Node et tâches persistées dans le stockage applicatif; la collecte complète seulement les journées considérées incomplètes et déclenche les synthèses prévues. |
 | Connexion membre (partie de F02) | Connexion compatible avec les empreintes historiques, session propre à Node, protection des routes privées et déconnexion par POST. Les comptes et mots de passe historiques ne sont pas modifiés. |
 | API et pages transverses (parties de F15/F17/F18) | Endpoint de vitalité, endpoint de recalcul des indicateurs, messages localisés, journalisation applicative et page d'information/version. La vitalité HTTP ne valide pas la base. |
@@ -82,7 +83,7 @@ il faut relancer l'audit avant une livraison.
 
 | Réf. | État au 13 novembre 2026 | Reste principal |
 |---|---|---|
-| F01 — Installation | Setup sans jeton ni connexion préalable, disponible uniquement tant que l'installation est incomplète; détection du schéma, formulaire de configuration en base et compte admin avec mot de passe choisi. Une base partielle exige une confirmation de réinstallation destructive. | Compléter calendrier et matrice des capteurs; reprise après DDL interrompue et contrôle complet des schémas incompatibles. Réserver les essais aux bases isolées sauvegardées. |
+| F01 — Installation | Setup sans jeton ni connexion préalable, disponible uniquement tant que l'installation est incomplète; détection du schéma, formulaire de configuration en base et compte admin avec mot de passe choisi. Une base partielle exige une confirmation de réinstallation destructive. | Compléter le calendrier; reprise après DDL interrompue et contrôle complet des schémas incompatibles. Réserver les essais aux bases isolées sauvegardées. |
 | F02 — Connexion et compte | Connexion et routes privées portées en partie. | Changement/réinitialisation de mot de passe, gestion plus complète des comptes et décision sur la persistance des sessions; tests de sécurité et parcours de récupération. |
 | F03 — Journalier | Portage fonctionnel des lectures et graphiques. | Comparaison systématique des valeurs et cas limites avec des références PHP représentatives; validation sur plusieurs capteurs et firmwares. |
 | F04 — Historique mensuel | Lecture portée. | Parité détaillée des agrégats, bornes de périodes, années et jours sans relevés. |
@@ -91,7 +92,7 @@ il faut relancer l'audit avant une livraison.
 | F07 — Événements | CRUD porté pour les types pris en charge. | Vérifier les règles métier et les effets sur stock/cendrier avec des jeux de référence; confirmer les limites de dates, unités et valeurs. |
 | F08 — Saisons | CRUD porté. | Caractériser les règles historiques de dates, doublons et suppression; tester les cas calendaires limites. |
 | F09 — Graphiques | Gestion des graphiques, associations et coefficients portée. | Vérifier l'ensemble des contraintes métier et la parité de l'ordre/configuration; le glisser-déposer n'est pas repris intentionnellement. |
-| F10 — Matrice CSV | Non portée comme outil d'administration complet. | Détection, prévisualisation et mise à jour contrôlée de matrice; gestion des capteurs et colonnes dynamiques; protections, sauvegarde et confirmation avant toute opération destructive. |
+| F10 — Matrice CSV | Création et mise à jour manuelles à partir du fichier du jour, sans suppression des données historiques. | Vérifier les variantes de firmwares, la reprise après écriture partielle et la parité sur copie isolée; prévisualisation des changements non portée. |
 | F11 — Imports | Import depuis les fichiers chaudière porté en partie. | Import manuel de CSV local/USB, imports en masse, validation de plusieurs dialectes/firmwares et scénario d'erreur/reprise. Les imports restent limités à 16 Mio et chargés en mémoire. |
 | F12 — Synthèses | Calcul automatique déclenché par la collecte porté en partie. | Parcours privé de calcul/recalcul manuel et par période; tests d'équivalence des formules, des valeurs nulles/zéro et de l'ECS. |
 | F13 — Temps réel | Début de portage de la lecture des valeurs chaudière. | Parité complète des lectures, circuit, graphiques temps réel, configurations datées et commandes. Les commandes chaudière ne sont pas portées et ne doivent pas être activées implicitement. |
