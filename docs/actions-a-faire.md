@@ -227,6 +227,15 @@ formules et impacts sur les données historiques.
 - Pour les tests de connexion, utiliser les paramètres du fichier privé `.env` sans les recopier dans le dépôt. Sur la base existante, limiter les vérifications à la lecture.
 
 
-## Recuperation des noms des capteurs depuis Oekofen
+## Preparation V2
 
-pour la V2 : http://fernwartung.pelletsheizung.at/res/remotecontrol/v02.00m/js/config.min.js
+
+La V2 inclus des nouvelles fonctionnalites pour les données, et aussi la communication avec les version du Firmware V4
+
+Terminée : Recuperation des dictionnaite : http://fernwartung.pelletsheizung.at/res/remotecontrol/v02.00m/js/config.min.js
+
+Pour les nouvelles fonctionnalités et Firmware V4, repartir de là en incluant l'exposition d'un API pour Home Assistant : https://github.com/nicouchot/okovision-ha-api/blob/master/README.md
+
+
+
+
