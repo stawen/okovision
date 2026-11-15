@@ -1,6 +1,3 @@
-import { mkdtemp, readdir, readFile, rmdir, unlink, writeFile } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const mocks = vi.hoisted(() => ({ collect: vi.fn(), importFile: vi.fn() }));
@@ -11,46 +8,32 @@ vi.mock('../../src/lib/server/collection', () => ({
 
 import { JobManager } from '../../src/lib/server/jobs';
 
-const directories: string[] = [];
-async function temporaryDirectory() {
-	const directory = await mkdtemp(join(tmpdir(), 'okovision-jobs-'));
-	directories.push(directory);
-	return directory;
-}
-
 afterEach(async () => {
-	for (const directory of directories.splice(0)) {
-		for (const name of await readdir(directory)) await unlink(join(directory, name));
-		await rmdir(directory);
-	}
+	vi.useRealTimers();
 	vi.resetAllMocks();
 });
 
-describe('gestionnaire durable des imports', () => {
-	it('persiste puis sérialise les imports manuels', async () => {
-		const directory = await temporaryDirectory();
+describe('gestionnaire mémoire des imports', () => {
+	it('sérialise les imports manuels et oublie les tâches dans un nouveau processus', async () => {
 		const first = Promise.withResolvers<number>();
 		mocks.importFile.mockReturnValueOnce(first.promise).mockResolvedValueOnce(3);
-		const manager = new JobManager(directory);
-		await manager.start();
+		const manager = new JobManager();
 		const one = await manager.enqueue('import', '1', 'touch_20261112.csv');
 		const two = await manager.enqueue('import', '1', 'touch_20261113.csv');
 		await vi.waitFor(() => expect(mocks.importFile).toHaveBeenCalledTimes(1));
 		expect(manager.get(two.id)?.status).toBe('queued');
-		expect(JSON.parse(await readFile(join(directory, `${two.id}.json`), 'utf8')).status).toBe('queued');
 		first.resolve(2);
 		await vi.waitFor(() => expect(manager.get(two.id)?.status).toBe('completed'));
 		expect(manager.get(one.id)).toMatchObject({ status: 'completed', result: { imported: 2 } });
 		expect(manager.get(two.id)).toMatchObject({ status: 'completed', result: { imported: 3 } });
+		expect(new JobManager().get(one.id)).toBeUndefined();
 		await manager.stop();
 	});
 
 	it('déduplique les déclenchements simultanés', async () => {
-		const directory = await temporaryDirectory();
 		const pending = Promise.withResolvers<{ files: number; imported: number }>();
 		mocks.collect.mockReturnValueOnce(pending.promise);
-		const manager = new JobManager(directory);
-		await manager.start();
+		const manager = new JobManager();
 		const [one, two] = await Promise.all([
 			manager.enqueue('collection', 'scheduler'),
 			manager.enqueue('collection', 'scheduler')
@@ -61,59 +44,51 @@ describe('gestionnaire durable des imports', () => {
 		await manager.stop();
 	});
 
-	it('signale une interruption et impose le recalcul du jour partiellement importé', async () => {
-		const directory = await temporaryDirectory();
-		const id = 'a4e7f416-01f3-4f37-90d4-bde93a899310';
-		await writeFile(join(directory, `${id}.json`), JSON.stringify({
-			id, kind: 'collection', status: 'running', author: 'scheduler',
-			createdAt: '2026-11-12T00:00:00.000Z', updatedAt: '2026-11-12T00:01:00.000Z',
-			progress: { completed: 0, total: 1, day: '2026-11-12', dirty: true }
-		}));
-		mocks.collect.mockResolvedValueOnce({ files: 1, imported: 1 });
-		const manager = new JobManager(directory);
-		await manager.start();
-		expect(manager.get(id)?.status).toBe('interrupted');
+	it('impose le recalcul d’un jour partiellement importé lors d’une nouvelle collecte', async () => {
+		vi.useFakeTimers({ toFake: ['Date'] });
+		const startedAt = new Date('2026-11-15T12:00:00.000Z');
+		vi.setSystemTime(startedAt);
+		mocks.collect
+			.mockImplementationOnce(async (_signal: AbortSignal, progress: (completed: number, total: number, day: string, dirty: boolean) => Promise<void>) => {
+				await progress(0, 1, '2026-11-12', true);
+				throw new Error('simulated partial import');
+			})
+			.mockResolvedValueOnce({ files: 1, imported: 1 });
+		const manager = new JobManager();
+		const failed = await manager.enqueue('collection', 'scheduler');
+		await vi.waitFor(() => expect(manager.get(failed.id)?.status).toBe('failed'));
+		vi.setSystemTime(startedAt.getTime() + 60 * 60 * 1000);
+		expect(manager.get(failed.id)).toBeUndefined();
 		const retry = await manager.enqueue('collection', 'scheduler');
 		await vi.waitFor(() => expect(manager.get(retry.id)?.status).toBe('completed'));
-		expect(mocks.collect.mock.calls[0][2]).toEqual(new Set(['2026-11-12']));
-		expect(manager.get(id)?.progress?.dirty).toBe(false);
+		expect(mocks.collect.mock.calls[1][2]).toEqual(new Set(['2026-11-12']));
 		await manager.stop();
 	});
 
 	it('ne transforme pas une erreur d’import en succès', async () => {
-		const directory = await temporaryDirectory();
 		mocks.importFile.mockRejectedValueOnce(new Error('simulated failure'));
-		const manager = new JobManager(directory);
-		await manager.start();
+		const manager = new JobManager();
 		const job = await manager.enqueue('import', '1', 'touch_20261113.csv');
 		await vi.waitFor(() => expect(manager.get(job.id)?.status).toBe('failed'));
 		expect(manager.get(job.id)?.result).toBeUndefined();
 		await manager.stop();
 	});
 
-	it('ne reprend pas de collecte planifiée en développement', async () => {
-		const directory = await temporaryDirectory();
-		const id = 'a4e7f416-01f3-4f37-90d4-bde93a899310';
-		await writeFile(join(directory, `${id}.json`), JSON.stringify({
-			id, kind: 'collection', status: 'queued', author: 'scheduler',
-			createdAt: '2026-11-12T00:00:00.000Z', updatedAt: '2026-11-12T00:00:00.000Z'
-		}));
+	it('ne lance pas de collecte planifiée en développement', async () => {
 		mocks.importFile.mockResolvedValueOnce(1);
-		const manager = new JobManager(directory, false);
-		await manager.start();
+		const manager = new JobManager(false);
+		const scheduled = await manager.enqueue('collection', 'scheduler');
 		const manual = await manager.enqueue('import', '1', 'touch_20261113.csv');
 		await vi.waitFor(() => expect(manager.get(manual.id)?.status).toBe('completed'));
-		expect(manager.get(id)?.status).toBe('queued');
+		expect(manager.get(scheduled.id)?.status).toBe('queued');
 		expect(mocks.collect).not.toHaveBeenCalled();
 		await manager.stop();
 	});
 
 	it('marque une tâche en cours interrompue à l’arrêt', async () => {
-		const directory = await temporaryDirectory();
 		mocks.importFile.mockImplementation((_filename: string, signal: AbortSignal) =>
 			new Promise((_resolve, reject) => signal.addEventListener('abort', () => reject(signal.reason), { once: true })));
-		const manager = new JobManager(directory);
-		await manager.start();
+		const manager = new JobManager();
 		const job = await manager.enqueue('import', '1', 'touch_20261113.csv');
 		await vi.waitFor(() => expect(mocks.importFile).toHaveBeenCalledOnce());
 		await manager.stop();
@@ -121,11 +96,9 @@ describe('gestionnaire durable des imports', () => {
 	});
 
 	it('exécute une collecte manuelle en développement et déduplique les demandes', async () => {
-		const directory = await temporaryDirectory();
 		const pending = Promise.withResolvers<{ files: number; imported: number }>();
 		mocks.collect.mockReturnValueOnce(pending.promise);
-		const manager = new JobManager(directory, false);
-		await manager.start();
+		const manager = new JobManager(false);
 		const [one, two] = await Promise.all([
 			manager.enqueueCollection('1'),
 			manager.enqueueCollection('1')
@@ -140,37 +113,38 @@ describe('gestionnaire durable des imports', () => {
 	});
 
 	it('active la collecte planifiée en attente sans créer de doublon ni activer le calendrier', async () => {
-		const directory = await temporaryDirectory();
 		mocks.collect.mockResolvedValueOnce({ files: 0, imported: 0 });
-		const manager = new JobManager(directory, false);
-		await manager.start();
+		const manager = new JobManager(false);
 		const scheduled = await manager.enqueue('collection', 'scheduler');
 		expect(mocks.collect).not.toHaveBeenCalled();
 		const manual = await manager.enqueueCollection('1');
 		expect(manual.id).toBe(scheduled.id);
 		await vi.waitFor(() => expect(manager.get(manual.id)?.status).toBe('completed'));
-		expect(JSON.parse(await readFile(join(directory, `${manual.id}.json`), 'utf8'))).toMatchObject({
-			manual: true, author: '1', status: 'completed'
-		});
+		expect(manager.get(manual.id)).toMatchObject({ manual: true, author: '1', status: 'completed' });
 		const next = await manager.enqueue('collection', 'scheduler');
 		expect(manager.get(next.id)?.status).toBe('queued');
 		expect(mocks.collect).toHaveBeenCalledOnce();
 		await manager.stop();
 	});
 
-	it('reprend une collecte manuelle persistée même sans planification', async () => {
-		const directory = await temporaryDirectory();
-		const id = 'a4e7f416-01f3-4f37-90d4-bde93a899310';
-		await writeFile(join(directory, `${id}.json`), JSON.stringify({
-			id, kind: 'collection', status: 'queued', author: '1', manual: true,
-			createdAt: '2026-11-12T00:00:00.000Z', updatedAt: '2026-11-12T00:00:00.000Z'
-		}));
-		mocks.collect.mockResolvedValueOnce({ files: 1, imported: 2 });
-		const manager = new JobManager(directory, false);
-		await manager.start();
-		await vi.waitFor(() => expect(manager.get(id)?.status).toBe('completed'));
-		expect(mocks.collect).toHaveBeenCalledOnce();
-		expect(manager.get(id)?.result).toEqual({ files: 1, imported: 2 });
+	it('expire les tâches terminales une heure après leur dernière mise à jour', async () => {
+		vi.useFakeTimers({ toFake: ['Date'] });
+		const startedAt = new Date('2026-11-15T12:00:00.000Z');
+		vi.setSystemTime(startedAt);
+		const pending = Promise.withResolvers<number>();
+		mocks.importFile.mockReturnValueOnce(pending.promise);
+		const manager = new JobManager();
+		const job = await manager.enqueue('import', '1', 'touch_20261113.csv');
+		await vi.waitFor(() => expect(mocks.importFile).toHaveBeenCalledOnce());
+		vi.setSystemTime(startedAt.getTime() + 60 * 60 * 1000);
+		expect(manager.get(job.id)?.status).toBe('running');
+		pending.resolve(1);
+		await vi.waitFor(() => expect(manager.get(job.id)?.status).toBe('completed'));
+		const completedAt = Date.parse(manager.get(job.id)!.updatedAt);
+		vi.setSystemTime(completedAt + 60 * 60 * 1000 - 1);
+		expect(manager.get(job.id)?.status).toBe('completed');
+		vi.setSystemTime(completedAt + 60 * 60 * 1000);
+		expect(manager.get(job.id)).toBeUndefined();
 		await manager.stop();
 	});
 });

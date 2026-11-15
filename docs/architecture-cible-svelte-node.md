@@ -34,7 +34,7 @@ flowchart TB
     Services["Services métier TypeScript"]
     Repo["Repositories mysql2 : schéma existant"]
     end
-    Files["Volume privé : sessions, jobs, CSV, configuration"]
+    Files["Volume privé : sessions, CSV, configuration"]
     MySQL[("MariaDB locale en conteneur OU MySQL/MariaDB distante")]
     Boiler["Chaudière : HTTP / CSV / cookies"]
     Browser --> Proxy
@@ -44,13 +44,12 @@ flowchart TB
     Services --> Repo
     Repo --> MySQL
     Web --> Files
-    Web -->|"Enregistrer une demande durable"| Jobs
-    Jobs --> Files
+    Web -->|"Créer une demande en mémoire"| Jobs
     Jobs --> Services
     Services --> Boiler
 ```
 
-Les pages, API, services métier et traitements planifiés appartiennent au **même projet SvelteKit et au même processus serveur**. Le planificateur est initialisé une seule fois au démarrage, sans cron sur l'hôte ni second service Node. Le gestionnaire de tâches exécute les demandes persistées indépendamment de la durée des requêtes navigateur. Le navigateur n'accède jamais directement à MySQL ni à la chaudière.
+Les pages, API, services métier et traitements planifiés appartiennent au **même projet SvelteKit et au même processus serveur**. Le planificateur est initialisé une seule fois au démarrage, sans cron sur l'hôte ni second service Node. Le gestionnaire de tâches exécute les demandes en mémoire indépendamment de la durée des requêtes navigateur. Le navigateur n'accède jamais directement à MySQL ni à la chaudière.
 
 ### Pourquoi ce choix
 
@@ -126,7 +125,7 @@ compose.db.yaml
 
 Cette arborescence est un schéma de destination, pas une liste de fichiers créés. Le code `server` et ses secrets ne doivent jamais être importés par les composants. Les contrats partagés contiennent types et schémas de validation, sans accès DB.
 
-Les modules `jobs` font partie du build serveur SvelteKit, sans exécutable ni build séparé. `scheduler.ts` planifie les collectes, `runner.ts` exécute les tâches et `store.ts` persiste demandes, progression et résultats. Ils appellent les mêmes services que les routes, avec des paramètres explicites plutôt qu'un contexte HTTP `event.locals`. L'initialisation est raccordée au cycle de démarrage serveur décrit en section 8.
+Les modules `jobs` font partie du build serveur SvelteKit, sans exécutable ni build séparé. `scheduler.ts` planifie les collectes, `runner.ts` exécute les tâches et `store.ts` garde demandes, progression et résultats en mémoire; les tâches terminales expirent après une heure. Ils appellent les mêmes services que les routes, avec des paramètres explicites plutôt qu'un contexte HTTP `event.locals`. L'initialisation est raccordée au cycle de démarrage serveur décrit en section 8.
 
 ## 4. Bibliothèques recommandées
 
@@ -165,7 +164,7 @@ Les notifications peuvent être un composant applicatif avec région `aria-live`
 | Logs | [`pino`](https://github.com/pinojs/pino) | Retenu. JSON structuré, identifiant de requête/job et masquage des secrets; sortie standard récupérée par le superviseur. |
 | Cryptographie | `node:crypto` | Utiliser `randomBytes`, `scrypt` asynchrone, comparaison à temps constant et chiffrement authentifié si stockage de secrets nécessaire. Pas de JWT ni de nouveau framework d'identité requis pour ce déploiement local. |
 | Fichiers et verrous métier | `node:fs/promises`, verrous MySQL nommés sur connexion dédiée | Retenus. Stockage privé hors assets publics; les verrous couvrent les mutations HTTP et les tâches intégrées. Un verrou ne remplace pas une transaction MyISAM. |
-| Planification intégrée au serveur SvelteKit | [`node-cron`](https://nodecron.com/api-reference) | Retenu dans le processus applicatif. Planifier la collecte avec fuseau explicite et prévention des chevauchements; ne remplace ni le stockage durable des demandes ni les verrous métier. |
+| Planification intégrée au serveur SvelteKit | [`node-cron`](https://nodecron.com/api-reference) | Retenu dans le processus applicatif. Planifier la collecte avec fuseau explicite et prévention des chevauchements; ne remplace pas les verrous métier. |
 
 Le support réel des versions MySQL/MariaDB déployées doit être testé avec le pilote choisi. L'ancien changelog ne garantit ni la version de production ni ses modes SQL.
 
@@ -282,33 +281,33 @@ WebSockets et SSE ne sont pas nécessaires pour reproduire les fonctions actuell
 
 ### Exécution intégrée et cycle de vie
 
-Le serveur SvelteKit héberge le planificateur et le gestionnaire de tâches dans son propre processus Node. Initialiser ce service une seule fois via le hook serveur `init` de `hooks.server.ts`, avec une version SvelteKit qui le prend en charge. L'initialisation valide la configuration, récupère les états interrompus et démarre la consommation des demandes; elle n'attend pas l'exécution des imports pour rendre le serveur disponible.
+Le serveur SvelteKit héberge le planificateur et le gestionnaire de tâches dans son propre processus Node. Initialiser ce service une seule fois via le hook serveur `init` de `hooks.server.ts`, avec une version SvelteKit qui le prend en charge. L'initialisation valide la configuration et démarre la consommation des demandes; elle n'attend pas l'exécution des imports pour rendre le serveur disponible.
 
-**État du portage** : la collecte IP utilise `node-cron` à la minute 02 toutes les deux heures, avec fuseau explicite, et crée aussi une demande au démarrage lorsque `tcRef` et les autres paramètres sont configurés. Les demandes sont stockées dans un répertoire privé et l'import manuel utilise la même file. Les tâches interrompues restent signalées et les journées partiellement traitées sont reprises par une collecte ultérieure. Le mode sans IP n'est pas porté. Les CSV restent actuellement chargés en mémoire avec une limite de 16 Mio : le streaming, la mesure de latence et la validation complète sur une base MyISAM restent nécessaires avant mise en service. Les configurations Docker fournies ne montent pas encore le répertoire de tâches.
+**État du portage** : la collecte IP utilise `node-cron` à la minute 02 toutes les deux heures, avec fuseau explicite, et crée aussi une demande au démarrage lorsque `tcRef` et les autres paramètres sont configurés. Les demandes et résultats sont conservés en mémoire; les tâches terminales expirent après une heure. Un redémarrage perd l'historique, les demandes en attente et les marqueurs de jours partiellement traités. Le mode sans IP n'est pas porté. Les CSV restent actuellement chargés en mémoire avec une limite de 16 Mio : le streaming, la mesure de latence et la validation complète sur une base MyISAM restent nécessaires avant mise en service.
 
 Ne pas démarrer de tâches pendant le build ou le prerender (`building` de `$app/env`), ni depuis `load`, un composant, le hook de requête `handle` ou un endpoint. En développement, désactiver la planification réelle par défaut pour éviter les doubles déclenchements liés au rechargement; les tests utilisent une activation explicite et un connecteur simulé. Le POC vérifie l'initialisation unique dans le build `adapter-node` de production.
 
-`node-cron` déclenche l'enregistrement de demandes durables; le gestionnaire intégré les consomme avec une concurrence bornée, initialement une seule tâche d'écriture métier à la fois. Les imports HTTP et les tâches planifiées empruntent cette même file. Les mutations directes incompatibles, notamment de matrice, prennent les mêmes verrous. Aucun simple appel asynchrone lancé puis oublié depuis un endpoint ne tient lieu de gestionnaire de tâches.
+`node-cron` ajoute des demandes en mémoire; le gestionnaire intégré les consomme avec une concurrence bornée, initialement une seule tâche d'écriture métier à la fois. Les imports HTTP et les tâches planifiées empruntent cette même file. Les mutations directes incompatibles, notamment de matrice, prennent les mêmes verrous. Aucun simple appel asynchrone lancé puis oublié depuis un endpoint ne tient lieu de gestionnaire de tâches.
 
 ### Parcours d'un import
 
 1. L'upload passe par un endpoint streaming; contrôle de la taille, du contenu, de la matrice et du nom avant traitement. Le plafond de départ peut reprendre les 3 000 000 octets indiqués par les scripts actuels, à confirmer sur les fichiers réels; le proxy doit laisser la marge multipart nécessaire.
 2. Créer un fichier de travail propre au job, hors répertoire public. Ne plus utiliser un unique fichier d'import partagé.
-3. Déposer une demande durable sur volume privé, avec identifiant, type, auteur et état; répondre au navigateur avec l'identifiant du job uniquement après confirmation de sa persistance.
+3. Créer une demande en mémoire avec identifiant, type, auteur et état; répondre au navigateur avec l'identifiant du job après son ajout à la file.
 4. Le gestionnaire intégré réclame les demandes de façon exclusive, prévalide et exécute les imports/synthèses en réutilisant les services, sans maintenir la requête HTTP ouverte.
-5. Un journal de job et son résultat persistent par écriture atomique. Après redémarrage, un job marqué en cours passe en récupération/échec explicite avant toute reprise.
+5. Garder le suivi et le résultat en mémoire jusqu'à une heure après la dernière mise à jour terminale. Après redémarrage, les tâches et leur historique sont perdus; aucune reprise n'est annoncée.
 6. Un verrou nommé MySQL sur une connexion dédiée empêche les imports/matrices concurrents entre tâches et mutations HTTP. La perte de cette connexion doit arrêter le traitement; ne pas remettre la connexion verrouillée dans le pool.
 7. La reprise s'appuie sur le dédoublonnage historique et des vérifications de lignes/jours; ne pas promettre un « exactement une fois » avec MyISAM.
 
 ### Réactivité, reprise et arrêt
 
-La fréquence et le fuseau de collecte sont validés au démarrage; aucune fréquence n'est inventée par la migration. Au redémarrage, le gestionnaire examine les jobs interrompus et les jours à rattraper; l'ordonnanceur en mémoire n'est pas une garantie de rattrapage. Préserver une progression consultable via l'API et distinguer attente, exécution, récupération, succès et échec. Toute erreur est persistée et journalisée, sans promesse de reprise automatique d'une commande chaudière incertaine.
+La fréquence et le fuseau de collecte sont validés au démarrage; aucune fréquence n'est inventée par la migration. Les jours partiellement traités sont gardés en mémoire pour une collecte ultérieure dans le même processus, mais ne sont pas récupérables après redémarrage. Préserver une progression consultable via l'API et distinguer attente, exécution, succès et échec. Toute erreur est journalisée, sans promesse de reprise automatique d'une commande chaudière incertaine.
 
 Les traitements partagent la boucle événementielle avec HTTP : `async` ne rend pas un calcul synchrone non bloquant. Lire les CSV en streaming, travailler en lots bornés, rendre régulièrement la main à la boucle événementielle et limiter la pression sur le pool MySQL. Éviter les accès disque synchrones et les calculs longs sans interruption. Mesurer la latence des pages/API pendant un import représentatif; le monolithe n'est accepté que si les seuils fixés sont respectés.
 
-Prévoir un arrêt gracieux sur `SIGTERM` et `SIGINT`, coordonné avec celui d'`adapter-node` : arrêter la planification et la prise de nouvelles tâches, laisser finir ou interrompre proprement le lot courant dans un délai borné, persister l'état puis fermer les ressources. Aligner le délai d'arrêt Docker avec celui du serveur; tester également un arrêt forcé, qui doit conduire à un état récupérable et non à un faux succès.
+Prévoir un arrêt gracieux sur `SIGTERM` et `SIGINT`, coordonné avec celui d'`adapter-node` : arrêter la planification et la prise de nouvelles tâches, laisser finir ou interrompre proprement le lot courant dans un délai borné, puis fermer les ressources. Aligner le délai d'arrêt Docker avec celui du serveur; un arrêt forcé perd l'état des tâches et ne doit pas être présenté comme un succès.
 
-Le volume privé stocke sessions, demandes, résultats et fichiers temporaires; sa sauvegarde, rétention, espace disponible et permissions font partie du déploiement. Ce choix convient au mono-hôte; si plusieurs hôtes deviennent requis, remplacer ce mécanisme par une infrastructure partagée via une décision distincte.
+Le stockage des tâches est volatil et n'exige pas de volume dédié. Les sessions, fichiers temporaires et fichiers de configuration restent hors répertoires servis publiquement; leur sauvegarde, rétention et permissions font partie du déploiement.
 
 **Coexistence PHP/Node** : les verrous Node n'arrêtent pas le vieux cron PHP. Désactiver opérationnellement l'ancien écrivain avant activation de son remplacement.
 
@@ -320,7 +319,7 @@ Prévoir un `Dockerfile` multi-stage : installation reproductible avec lockfile,
 
 | Service Compose | Image / commande prévues | Réseau et persistance |
 |---|---|---|
-| `app` | Image applicative; `node build` pour le serveur `adapter-node`, avec planificateur et gestionnaire de tâches intégrés | Une seule instance, port HTTP interne exposé au proxy. Volume privé pour sessions, configuration, demandes/résultats de jobs et CSV |
+| `app` | Image applicative; `node build` pour le serveur `adapter-node`, avec planificateur et gestionnaire de tâches intégrés | Une seule instance, port HTTP interne exposé au proxy. Volume privé pour sessions, configuration et CSV |
 | `db` — mode local uniquement | Image officielle MariaDB, version compatible testée et épinglée | Volume dédié `/var/lib/mysql`; port 3306 accessible sur le réseau Compose, non publié sur l'hôte par défaut |
 
 MariaDB est la proposition pour le service local; une base distante peut être MySQL ou MariaDB après validation de compatibilité. Remplacer l'image MariaDB par MySQL exige une configuration d'initialisation adaptée et un import logique contrôlé : les volumes de données ne sont pas interchangeables entre ces moteurs.
@@ -372,8 +371,8 @@ Le compte courant reçoit les droits métier nécessaires, pas un accès root. L
 - **Base locale neuve** : provisionner le moteur et le compte, puis lancer une commande d'initialisation séparée, refusant les tables existantes. Ne pas monter le SQL destructif historique en script automatique d'initialisation de l'image DB.
 - **Reprise des données existantes en local** : sauvegarde logique, import/restauration vers le service choisi, contrôles de structure et de résultats avant bascule. Conserver les moteurs/types/colonnes et vérifier leur support par la version choisie.
 - **Base distante existante** : diagnostic et raccordement, sans copier les données par défaut et sans initialisation automatique.
-- Le volume DB local, les configurations et le stockage des jobs sont persistants indépendamment du cycle de vie des conteneurs. Sauvegarder la base via une procédure cohérente avec MyISAM; un volume Docker seul n'est pas une sauvegarde.
-- Les fichiers de demandes/résultats, CSV, sessions et secrets sont hors répertoires servis publiquement; limiter les montages par service au strict nécessaire.
+- Le volume DB local et les configurations sont persistants indépendamment du cycle de vie des conteneurs. Sauvegarder la base via une procédure cohérente avec MyISAM; un volume Docker seul n'est pas une sauvegarde.
+- Les fichiers CSV, sessions et secrets sont hors répertoires servis publiquement; limiter les montages par service au strict nécessaire.
 - Le mode distant déplace la responsabilité de sauvegarde/restauration DB vers l'exploitant du serveur; les volumes applicatifs restent à sauvegarder.
 
 ### 9.5 Livraison, réseau et surveillance
@@ -422,7 +421,7 @@ Le FTP dormant, la prévision d'épuisement de stock et les exports non raccord�
 | Calculs journaliers et saisonniers | Égalité des résultats au niveau de précision stocké; cas zéro/null/ECS absent, changement d'heure et année bissextile couverts |
 | Graphique Svelte | Zoom partagé, changement de jour, séries dynamiques et destruction propre; licence et absence d'appel d'export externe vérifiées |
 | Session et permissions | Mutations refusées sans authentification/CSRF appropriés; rotation et expiration testées; aucun secret dans le bundle |
-| Jobs intégrés | Redémarrage en cours de tâche, concurrence planification/import et erreur DB n'aboutissent pas à un faux succès; progression persistée et un seul écrivain confirmé |
+| Jobs intégrés | Concurrence planification/import et erreur DB n'aboutissent pas à un faux succès; états conservés une heure en mémoire et un seul écrivain confirmé |
 | Cycle de vie du serveur | Une seule initialisation du planificateur en production; aucune collecte pendant build/prerender; arrêt gracieux et récupération après arrêt forcé testés |
 | Réactivité pendant les traitements | Latence pages/API et occupation du pool mesurées pendant import/synthèse représentatifs; seuils d'acceptation respectés sans processus séparé |
 | Chaudière | Lecture/reconnexion sur simulateur puis appareil de test; commandes manuelles encadrées, jamais pendant une comparaison en lecture seule |
