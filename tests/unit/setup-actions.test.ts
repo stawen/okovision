@@ -47,7 +47,7 @@ describe('setup sans jeton', () => {
 		});
 		expect(body).toContain('name="adminPassword"');
 		expect(body).not.toContain('name="setupToken"');
-		expect(body).toContain('placeholder="192.168.1.23"');
+		expect(body).toContain('placeholder="ex: 192.168.1.23"');
 		expect(body).toContain('>Tester</button>');
 		expect(body).toContain('name="initializeMatrix"');
 		expect(body).toContain('L’initialisation de la matrice ne pourra pas se faire');
@@ -58,6 +58,75 @@ describe('setup sans jeton', () => {
 		expect(body).not.toContain('getDataFromChaudiere');
 		expect(body).not.toContain('sendToWeb');
 		expect(body).not.toContain('name="lang"');
+		const siloSelect = body.match(/<select id="hasSilo"[^>]*>[\s\S]*?<\/select>/)?.[0];
+		expect(siloSelect).toContain('<option value="1" selected');
+		expect(body).toContain('Mode de chargement des pellets :');
+		expect(siloSelect).toContain('Utilisation de sacs');
+		expect(siloSelect).toContain('Présence d’un silo');
+		const capacityField = body.match(/<div class="field[^"]*"[^>]*><label for="siloSize"[\s\S]*?<\/div>/)?.[0];
+		expect(capacityField).toBeDefined();
+		expect(capacityField).not.toMatch(/^<div[^>]*\shidden(?:=|\s|>)/);
+		expect(capacityField?.match(/<input id="siloSize"[^>]*>/)?.[0]).toMatch(/\srequired(?:=|\s|>)/);
+		const select = body.match(/<select id="timezone"[^>]*>[\s\S]*?<\/select>/)?.[0];
+		expect(select).toContain('aria-describedby="timezone-help"');
+		expect(select).toContain('required');
+		expect(select).toContain('<option value="Europe/Paris" selected');
+		for (const timezone of [...Intl.supportedValuesOf('timeZone'), 'UTC']) {
+			expect(select).toContain(`value="${timezone}"`);
+		}
+		const sections = [...body.matchAll(/<fieldset[^>]*>([\s\S]*?)<\/fieldset>/g)].map((match) => match[1]);
+		expect(sections).toHaveLength(2);
+		expect(sections[0]).toContain('Installation</legend>');
+		expect(sections[1]).toContain('Granulés et stockage</legend>');
+		const help = [...body.matchAll(/<details[^>]*>[\s\S]*?<\/details>/g)].map((match) => match[0]);
+		expect(help).toHaveLength(2);
+		expect(help.every((details) => !/<details[^>]*\sopen(?:\s|=|>)/.test(details))).toBe(true);
+		expect(help[0]).toContain('id="tcRef-help"');
+		expect(help[1]).toContain('id="poidsPellet-help"');
+		expect(body.replace(/<details[^>]*>[\s\S]*?<\/details>/g, '')).toContain('Capacité obligatoire si un silo est présent.');
+		for (const example of ['20', '150', '120', '6000', '1000']) {
+			expect(body).toContain(`placeholder="ex: ${example}"`);
+			expect(body).not.toContain(`value="${example}"`);
+		}
+	});
+
+	it.each(['fr', 'en'] as const)('distingue les exemples des valeurs configurées en %s', (language) => {
+		const { body } = render(SetupPage, {
+			props: {
+				params: {}, form: null,
+				data: {
+					language, member: null, pathname: '/setup', status: 'configure', admin: true,
+					values: { chaudiere: 'boiler.local', tcRef: '21' }
+				}
+			}
+		});
+		const prefix = language === 'fr' ? 'ex:' : 'e.g.:';
+		const addressInput = body.match(/<input id="chaudiere"[^>]*>/)?.[0];
+		expect(addressInput).toContain(`placeholder="${prefix} 192.168.1.23"`);
+		expect(addressInput).toContain('value="boiler.local"');
+		const temperatureInput = body.match(/<input id="tcRef"[^>]*>/)?.[0];
+		expect(temperatureInput).toContain(`placeholder="${prefix} 20"`);
+		expect(temperatureInput).toContain('value="21"');
+	});
+
+	it('conserve le fuseau et le mode sacs soumis après une erreur de validation', () => {
+		const { body } = render(SetupPage, {
+			props: {
+				params: {},
+				form: { values: { timezone: 'Asia/Tokyo', hasSilo: '0', siloSize: '6200' }, message: 'Valeurs invalides' },
+				data: { language: 'fr', member: null, pathname: '/setup', status: 'configure', admin: true, values: { timezone: 'Europe/Paris', hasSilo: '1' } }
+			}
+		});
+		const select = body.match(/<select id="timezone"[^>]*>[\s\S]*?<\/select>/)?.[0];
+		expect(select).toContain('value="Asia/Tokyo" selected');
+		expect(select).not.toContain('value="Europe/Paris" selected');
+		const siloSelect = body.match(/<select id="hasSilo"[^>]*>[\s\S]*?<\/select>/)?.[0];
+		expect(siloSelect).toContain('<option value="0" selected');
+		const capacityField = body.match(/<div class="field[^"]*"[^>]*><label for="siloSize"[\s\S]*?<\/div>/)?.[0];
+		expect(capacityField).toMatch(/^<div[^>]*\shidden(?:=|\s|>)/);
+		const input = capacityField?.match(/<input id="siloSize"[^>]*>/)?.[0];
+		expect(input).toContain('value="6200"');
+		expect(input).not.toMatch(/\srequired(?:=|\s|>)/);
 	});
 
 	it('n’affiche ni le lien de connexion admin ni l’introduction supprimée', () => {

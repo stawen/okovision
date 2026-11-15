@@ -1,8 +1,20 @@
 import type { Language } from './i18n.ts';
 import type { ConfigurationParameter } from '../configuration.ts';
 
+export const configurationSections = [
+	{ key: 'installation', parameters: ['chaudiere', 'tcRef', 'surfaceMaison', 'timezone'] },
+	{ key: 'pellets', parameters: ['poidsPellet', 'hasSilo', 'siloSize', 'ashtray'] }
+] as const satisfies readonly { key: string; parameters: readonly ConfigurationParameter[] }[];
+
 const fr = {
 	title: 'Post-installation',
+	sections: { installation: 'Installation', pellets: 'Granulés et stockage' },
+	moreInformation: 'Plus d’informations',
+	examplePrefix: 'ex:',
+	boilerFormat: 'Hôte[:port], sans http://.',
+	siloRequired: 'Capacité obligatoire si un silo est présent.',
+	loadingModes: { bags: 'Utilisation de sacs', silo: 'Présence d’un silo' },
+	loadingModeNeedsJavascript: 'Le changement de mode de chargement nécessite JavaScript.',
 	install: 'La table oko_capteur est absente. La validation installera le schéma avec setup/install.sql.',
 	partial: 'Base partiellement initialisée : l’installation forcée supprime et recrée les tables historiques visées par setup/install.sql. Sauvegardez la base avant de continuer.',
 	configure: 'Le schéma historique est présent. Seule la configuration sera ajoutée ou complétée, sans réinstaller les tables existantes.',
@@ -45,8 +57,8 @@ const fr = {
 		tcRef: 'Température utilisée pour calculer les DJU. Avec deux consignes, indiquez leur moyenne : par exemple 19 °C et 21 °C donnent 20 °C.',
 		poidsPellet: 'Poids de granulés en grammes délivré par la vis d’alimentation du foyer pendant 60 secondes.',
 		surfaceMaison: 'Surface de la maison en m², sous forme d’un nombre positif.',
-		timezone: 'Fuseau horaire IANA de l’installation, par exemple Europe/Paris.',
-		hasSilo: 'Indiquez si votre installation possède un silo de stockage.',
+		timezone: 'Sélectionnez le fuseau horaire IANA de l’installation. Europe/Paris est présélectionné par défaut.',
+		hasSilo: 'Choisissez le chargement des pellets par sacs ou via un silo de stockage.',
 		siloSize: 'Capacité totale du silo en kg ; obligatoire si un silo est présent.',
 		ashtray: 'Quantité de granulés consommés en kg correspondant au remplissage du cendrier, par exemple 1000.'
 	} satisfies Record<ConfigurationParameter, string>,
@@ -68,12 +80,12 @@ const fr = {
 		ashtray: '1000'
 	} satisfies Record<ConfigurationParameter, string>,
 	fields: {
-		chaudiere: 'Adresse chaudière (hôte[:port], sans http://) *',
+		chaudiere: 'Adresse chaudière *',
 		tcRef: 'Température de référence (°C) *',
 		poidsPellet: 'Débit de granulés (g/min) *',
-		surfaceMaison: 'Surface de la maison (m²) *',
-		timezone: 'Fuseau horaire IANA *',
-		hasSilo: 'Silo présent',
+		surfaceMaison: 'Surface habitable (m²) *',
+		timezone: 'Fuseau horaire *',
+		hasSilo: 'Mode de chargement des pellets :',
 		siloSize: 'Capacité du silo (kg)',
 		ashtray: 'Seuil du cendrier (kg)'
 	} satisfies Record<ConfigurationParameter, string>
@@ -81,6 +93,13 @@ const fr = {
 
 const en: typeof fr = {
 	title: 'Post-installation',
+	sections: { installation: 'Installation', pellets: 'Pellets and storage' },
+	moreInformation: 'More information',
+	examplePrefix: 'e.g.:',
+	boilerFormat: 'Host[:port], without http://.',
+	siloRequired: 'Capacity is required when a silo is present.',
+	loadingModes: { bags: 'Use of bags', silo: 'Storage tanks' },
+	loadingModeNeedsJavascript: 'Changing the pellet loading mode requires JavaScript.',
 	install: 'oko_capteur is missing. Submitting will install the schema using setup/install.sql.',
 	partial: 'Partially initialized database: forced installation drops and recreates the legacy tables targeted by setup/install.sql. Back up the database before continuing.',
 	configure: 'The legacy schema exists. Only configuration will be added or completed; existing tables will not be reinstalled.',
@@ -123,8 +142,8 @@ const en: typeof fr = {
 		tcRef: 'Temperature used to calculate degree days. With two setpoints, enter their average: for example, 19 °C and 21 °C give 20 °C.',
 		poidsPellet: 'Weight in grams of pellets delivered by the burner feed screw over 60 seconds.',
 		surfaceMaison: 'House surface area in m², as a positive number.',
-		timezone: 'IANA time zone of the installation, for example Europe/Paris.',
-		hasSilo: 'Indicate whether the installation has a storage silo.',
+		timezone: 'Select the installation’s IANA time zone. Europe/Paris is selected by default.',
+		hasSilo: 'Choose pellet loading from bags or a storage tank.',
 		siloSize: 'Total silo capacity in kg; required when a silo is present.',
 		ashtray: 'Quantity of pellets consumed in kg before the ashtray is full, for example 1000.'
 	},
@@ -146,12 +165,12 @@ const en: typeof fr = {
 		ashtray: '1000'
 	},
 	fields: {
-		chaudiere: 'Boiler address (host[:port], without http://) *',
+		chaudiere: 'Boiler address *',
 		tcRef: 'Reference temperature (°C) *',
 		poidsPellet: 'Pellet flow (g/min) *',
-		surfaceMaison: 'House surface (m²) *',
-		timezone: 'IANA timezone *',
-		hasSilo: 'Silo present',
+		surfaceMaison: 'Living area (m²) *',
+		timezone: 'Time zone *',
+		hasSilo: 'Pellet loading mode :',
 		siloSize: 'Silo capacity (kg)',
 		ashtray: 'Ashtray threshold (kg)'
 	}
@@ -159,4 +178,10 @@ const en: typeof fr = {
 
 export function setupMessages(language: Language) {
 	return language === 'fr' ? fr : en;
+}
+
+const timezones = [...Intl.supportedValuesOf('timeZone'), 'UTC'];
+
+export function timezoneOptions(current: string) {
+	return [...new Set([...timezones, current || 'Europe/Paris'])].sort();
 }

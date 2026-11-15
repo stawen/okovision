@@ -99,6 +99,79 @@ describe('paramètres d’administration', () => {
 		expect(connection.release).toHaveBeenCalledOnce();
 	});
 
+	it.each(['fr', 'en'] as const)('regroupe les champs avec des aides repliées en %s', (language) => {
+		const { body } = render(SettingsPage, {
+			props: {
+				params: {}, form: null,
+				data: { language, member: null, pathname: '/private/administration/settings', values }
+			}
+		});
+		const sections = [...body.matchAll(/<fieldset[^>]*>([\s\S]*?)<\/fieldset>/g)].map((match) => match[1]);
+		expect(sections).toHaveLength(2);
+		for (const param of ['chaudiere', 'tcRef', 'surfaceMaison', 'timezone']) {
+			expect(sections[0]).toContain(`name="${param}"`);
+			expect(sections[1]).not.toContain(`name="${param}"`);
+		}
+		for (const param of ['poidsPellet', 'hasSilo', 'siloSize', 'ashtray']) {
+			expect(sections[1]).toContain(`name="${param}"`);
+			expect(sections[0]).not.toContain(`name="${param}"`);
+		}
+		const help = [...body.matchAll(/<details[^>]*>[\s\S]*?<\/details>/g)].map((match) => match[0]);
+		expect(help).toHaveLength(2);
+		expect(help.every((details) => !/<details[^>]*\sopen(?:\s|=|>)/.test(details))).toBe(true);
+		expect(help[0]).toContain(language === 'fr' ? 'Plus d’informations' : 'More information');
+		for (const param of configurationParameters) {
+			expect(help.join('')).toContain(`id="${param}-help"`);
+			expect(body.match(new RegExp(`name="${param}"`, 'g'))).toHaveLength(1);
+		}
+		const visible = body.replace(/<details[^>]*>[\s\S]*?<\/details>/g, '');
+		expect(visible).toContain('id="siloSize-requirement"');
+		expect(visible).not.toContain('id="tcRef-help"');
+	});
+
+	it.each(['', 'America/New_York', 'UTC', 'US/Eastern'])('sélectionne le fuseau configuré %j ou Paris par défaut', (timezone) => {
+		const { body } = render(SettingsPage, {
+			props: {
+				params: {},
+				form: null,
+				data: {
+					language: 'fr',
+					member: null,
+					pathname: '/private/administration/settings',
+					values: { ...values, timezone }
+				}
+			}
+		});
+		const select = body.match(/<select id="timezone"[^>]*>[\s\S]*?<\/select>/)?.[0];
+		expect(select).toContain(`value="${timezone || 'Europe/Paris'}" selected`);
+		for (const zone of [...Intl.supportedValuesOf('timeZone'), 'UTC']) {
+			expect(select).toContain(`value="${zone}"`);
+		}
+	});
+
+	it.each(['0', '1'])('affiche la capacité uniquement pour le mode silo (hasSilo=%s)', (hasSilo) => {
+		const { body } = render(SettingsPage, {
+			props: {
+				params: {}, form: null,
+				data: { language: 'fr', member: null, pathname: '/private/administration/settings', values: { ...values, hasSilo, siloSize: '6200' } }
+			}
+		});
+		expect(body).toContain('Mode de chargement des pellets :');
+		expect(body).toContain('Utilisation de sacs');
+		expect(body).toContain('Présence d’un silo');
+		const capacityField = body.match(/<div class="field[^"]*"[^>]*><label for="siloSize"[\s\S]*?<\/div>/)?.[0];
+		expect(capacityField).toBeDefined();
+		const input = capacityField?.match(/<input id="siloSize"[^>]*>/)?.[0];
+		expect(input).toContain('value="6200"');
+		if (hasSilo === '0') {
+			expect(capacityField).toMatch(/^<div[^>]*\shidden(?:=|\s|>)/);
+			expect(input).not.toMatch(/\srequired(?:=|\s|>)/);
+		} else {
+			expect(capacityField).not.toMatch(/^<div[^>]*\shidden(?:=|\s|>)/);
+			expect(input).toMatch(/\srequired(?:=|\s|>)/);
+		}
+	});
+
 	it('refuse les valeurs invalides sans écrire en base', async () => {
 		const result = await actions.default(event(
 			{ id: 1, name: 'admin', type: 'admin' },

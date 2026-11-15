@@ -31,6 +31,65 @@ h1, h2, h3, p { margin: 0; }
 .skip-link:focus { top: 0.5rem; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
+.configuration-section {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	grid-column: 1 / -1;
+	gap: 1rem;
+	min-width: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+.configuration-section + .configuration-section { margin-top: 0.5rem; }
+.configuration-section .field[hidden] { display: none; }
+.configuration-section > legend {
+	width: 100%;
+	padding: 0 0 0.55rem;
+	margin-bottom: 1rem;
+	border-bottom: 1px solid var(--border);
+	color: #263d54;
+	font-size: 1rem;
+	font-weight: 600;
+}
+.configuration-help { grid-column: 1 / -1; color: #5b6b7f; font-size: 0.8rem; }
+.configuration-help > summary { width: fit-content; color: var(--primary-dark); cursor: pointer; }
+.configuration-help dl { display: grid; gap: 0.65rem; margin: 0.75rem 0 0; }
+.configuration-help dt { color: #46566b; font-weight: 600; }
+.configuration-help dd { margin: 0.15rem 0 0; overflow-wrap: anywhere; }
+@media (max-width: 640px) {
+	.configuration-section { grid-template-columns: minmax(0, 1fr); }
+}
+
+.setup-page .field > label, .settings-page .field > label {
+	margin-bottom: 0.15rem;
+	color: #263d54;
+	font-size: 0.9rem;
+	font-weight: 600;
+	line-height: 1.4;
+}
+
+.setup-page .field small, .settings-page .field small {
+	color: #5b6b7f;
+	font-size: 0.8rem;
+	line-height: 1.5;
+}
+
+.setup-page .field select, .settings-page .field select {
+	appearance: none;
+	padding-inline-end: 2.5rem;
+	background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='m3 6 5 5 5-5' stroke='%2353647a' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 0.9rem center / 1rem;
+	color: inherit;
+	cursor: pointer;
+}
+
+@media (forced-colors: active) {
+	.setup-page .field select, .settings-page .field select {
+		appearance: auto;
+		background-image: none;
+	}
+}
+
 .site-header {
 	position: relative;
 	z-index: 1;

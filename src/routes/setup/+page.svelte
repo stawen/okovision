@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { configurationParameters } from '#lib/configuration.js';
 	import { testBoilerConnection } from '#lib/boiler-address.js';
-	import { setupMessages } from '#lib/ui/setup.js';
+	import { configurationSections, setupMessages, timezoneOptions } from '#lib/ui/setup.js';
 	import { resolve } from '$app/paths';
 	import type { PageProps } from './$types';
 
@@ -9,6 +8,8 @@
 	const text = $derived(setupMessages(data.language));
 	const installing = $derived(data.status === 'install' || data.status === 'partial');
 	const values = $derived(form?.values ?? data.values);
+	const timezones = $derived(timezoneOptions(values.timezone ?? ''));
+	let loadingMode = $derived(values.hasSilo || '1');
 	const matrixPending = $derived(data.status === 'matrix' || form?.matrixPending === true);
 	let address = $derived(values.chaudiere ?? '');
 	let testing = $state(false);
@@ -61,47 +62,71 @@
 		{/if}
 	{:else}
 		<form method="POST" action="?/save">
-			{#each configurationParameters as param (param)}
-				<div class="field">
-					<label for={param}>{text.fields[param]}</label>
-					{#if param === 'hasSilo'}
-						<select id={param} name={param} value={values[param] || '0'} aria-describedby={`${param}-help`}>
-							<option value="0">{text.no}</option><option value="1">{text.yes}</option>
-						</select>
-					{:else if param === 'chaudiere'}
-						<div class="boiler-address">
-							<input id={param} name={param} bind:value={address} oninput={addressChanged}
-								placeholder={text.examples[param]} aria-describedby={`${param}-help`} required maxlength="255" />
-							<button class="test-button" type="button" onclick={testAddress} disabled={testing}>
-								{testing ? text.testingBoiler : text.testBoiler}
-							</button>
-						</div>
-					{:else}
-						<input id={param} name={param} value={values[param] || (param === 'timezone' ? 'Europe/Paris' : '')}
-							placeholder={text.examples[param]}
-							aria-describedby={`${param}-help`}
-							required={['chaudiere', 'tcRef', 'poidsPellet', 'surfaceMaison', 'timezone'].includes(param)}
-							maxlength="255" />
-					{/if}
-					<small id={`${param}-help`}>{text.help[param]}</small>
-					{#if param === 'chaudiere'}
-						<div class="test-result" aria-live="polite">
-							{#if testedAddress === address && testResult?.status === 'reachable'}
-								<p>{text.boilerResponded}</p>
-								<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-								<a href={testResult.url} target="_blank" rel="noopener noreferrer">{text.boilerFiles}</a>
-							{:else if testedAddress === address && testResult?.status === 'invalid'}
-								<p class="test-error">{text.boilerInvalid}</p>
-							{:else if testedAddress === address && testResult?.status === 'unreachable'}
-								<p class="test-error">{text.boilerUnreachable}</p>
+			{#each configurationSections as section (section.key)}
+				<fieldset class="configuration-section">
+					<legend>{text.sections[section.key]}</legend>
+					{#each section.parameters as param (param)}
+						<div class="field" hidden={param === 'siloSize' && loadingMode !== '1'}>
+							<label for={param}>{text.fields[param]}</label>
+							{#if param === 'hasSilo'}
+								<select id={param} name={param} bind:value={loadingMode} aria-describedby={`${param}-help`}>
+									<option value="0">{text.loadingModes.bags}</option><option value="1">{text.loadingModes.silo}</option>
+								</select>
+								<noscript><small>{text.loadingModeNeedsJavascript}</small></noscript>
+							{:else if param === 'timezone'}
+								<select id={param} name={param} value={values[param] || 'Europe/Paris'} aria-describedby={`${param}-help`} required>
+									{#each timezones as timezone (timezone)}
+										<option value={timezone}>{timezone}</option>
+									{/each}
+								</select>
+							{:else if param === 'chaudiere'}
+								<div class="boiler-address">
+									<input id={param} name={param} bind:value={address} oninput={addressChanged}
+										placeholder={`${text.examplePrefix} ${text.examples[param]}`} aria-describedby={`${param}-format ${param}-help`} required maxlength="255" />
+									<button class="test-button" type="button" onclick={testAddress} disabled={testing}>
+										{testing ? text.testingBoiler : text.testBoiler}
+									</button>
+								</div>
+							{:else}
+								<input id={param} name={param} value={values[param] || ''}
+									placeholder={`${text.examplePrefix} ${text.examples[param]}`}
+									aria-describedby={param === 'siloSize' ? `${param}-requirement ${param}-help` : `${param}-help`}
+									required={['tcRef', 'poidsPellet', 'surfaceMaison'].includes(param) || (param === 'siloSize' && loadingMode === '1')}
+									maxlength="255" />
+							{/if}
+							{#if param === 'siloSize'}
+								<small id={`${param}-requirement`}>{text.siloRequired}</small>
+							{:else if param === 'chaudiere'}
+								<small id={`${param}-format`}>{text.boilerFormat}</small>
+							{/if}
+							{#if param === 'chaudiere'}
+								<div class="test-result" aria-live="polite">
+									{#if testedAddress === address && testResult?.status === 'reachable'}
+										<p>{text.boilerResponded}</p>
+										<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+										<a href={testResult.url} target="_blank" rel="noopener noreferrer">{text.boilerFiles}</a>
+									{:else if testedAddress === address && testResult?.status === 'invalid'}
+										<p class="test-error">{text.boilerInvalid}</p>
+									{:else if testedAddress === address && testResult?.status === 'unreachable'}
+										<p class="test-error">{text.boilerUnreachable}</p>
+									{/if}
+								</div>
+								<div class="matrix-status" class:matrix-status-ready={matrixCanInitialize} role="status" aria-live="polite">
+									{matrixCanInitialize ? text.matrixTestReady : text.matrixTestRequired}
+								</div>
+								<noscript><small>{text.boilerNeedsJavascript}</small></noscript>
 							{/if}
 						</div>
-						<div class="matrix-status" class:matrix-status-ready={matrixCanInitialize} role="status" aria-live="polite">
-							{matrixCanInitialize ? text.matrixTestReady : text.matrixTestRequired}
-						</div>
-						<noscript><small>{text.boilerNeedsJavascript}</small></noscript>
-					{/if}
-				</div>
+					{/each}
+					<details class="configuration-help">
+						<summary>{text.moreInformation}<span class="visually-hidden"> — {text.sections[section.key]}</span></summary>
+						<dl>
+							{#each section.parameters as param (param)}
+								<div><dt>{text.fields[param]}</dt><dd id={`${param}-help`}>{text.help[param]}</dd></div>
+							{/each}
+						</dl>
+					</details>
+				</fieldset>
 			{/each}
 			<input type="hidden" name="initializeMatrix" value={matrixCanInitialize ? 'yes' : 'no'} />
 			{#if installing}
@@ -123,8 +148,7 @@
 	form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; padding: 1.25rem; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
 	label { display: grid; gap: 0.35rem; font-size: 0.9rem; }
 	.field { display: grid; align-content: start; gap: 0.35rem; min-width: 0; }
-	.field label { font-size: 0.9rem; }
-	.field small { color: #536274; font-size: 0.8rem; }
+	.field input::placeholder { color: rgb(37 50 71 / 70%); opacity: 1; }
 	.boiler-address { display: flex; gap: 0.5rem; }
 	.boiler-address input { flex: 1; }
 	.boiler-address .test-button { width: auto; flex: 0 0 auto; }

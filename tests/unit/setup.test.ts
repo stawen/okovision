@@ -95,4 +95,15 @@ describe('valeurs du formulaire', () => {
 		expect(() => parseSetupValues(data)).toThrow();
 	});
 
+	it('accepte les sacs sans capacité et exige une capacité positive pour le silo', () => {
+		const data = form();
+		expect(parseSetupValues(data).siloSize).toBe('');
+		data.set('hasSilo', '1');
+		expect(() => parseSetupValues(data)).toThrow();
+		data.set('siloSize', '6200');
+		expect(parseSetupValues(data)).toMatchObject({ hasSilo: '1', siloSize: '6200' });
+		data.set('hasSilo', '0');
+		expect(parseSetupValues(data)).toMatchObject({ hasSilo: '0', siloSize: '6200' });
+	});
+
 });
