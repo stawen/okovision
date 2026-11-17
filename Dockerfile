@@ -1,12 +1,13 @@
-FROM node:26.13.0-bookworm-slim AS build
+FROM node:26.13.0-bookworm-slim AS base
 WORKDIR /app
+
+FROM base AS build
 COPY .npmrc package.json package-lock.json ./
 RUN npm ci --ignore-scripts
 COPY . .
 RUN npm run build
 
-FROM node:26.13.0-bookworm-slim AS runtime
-WORKDIR /app
+FROM base AS runtime
 ENV NODE_ENV=production HOST=0.0.0.0 PORT=3000
 COPY .npmrc package.json package-lock.json ./
 RUN npm ci --omit=dev --ignore-scripts
