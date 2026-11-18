@@ -89,8 +89,9 @@ npm run build
 Pour lancer le build Node en local : `ORIGIN=http://localhost:3000 npm start`.
 Pour Docker Compose, les modes base distante et MariaDB locale sont décrits
 dans le [guide d'installation et d'exploitation](./docs/installation-et-exploitation.md).
-La [publication d'une release candidate Docker sur GHCR](./docs/installation-et-exploitation.md#publication-dune-release-candidate)
-se lance manuellement depuis GitHub Actions.
+La [publication d'une release stable Docker sur GHCR](./docs/installation-et-exploitation.md#publication-dune-release-stable)
+et la [publication d'une release candidate](./docs/installation-et-exploitation.md#publication-dune-release-candidate)
+se lancent manuellement depuis GitHub Actions.
 
 ## Documentation
 

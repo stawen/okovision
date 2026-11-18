@@ -13,9 +13,10 @@ une base MariaDB sur la même machine, ou une base MySQL/MariaDB déjà existant
 - Une machine qui reste allumée si vous souhaitez une collecte régulière.
 - Une image OkoVision publiée : le tag `v2.0.0-rc.1` ci-dessous est un
   **exemple**, à remplacer par un tag réellement disponible dans les
-  [releases](https://github.com/stawen/okovision/releases). Aucun tag `latest`
-  n'est publié automatiquement. Si l'image est privée, connectez-vous à GHCR
-  avec `docker login ghcr.io`.
+  [releases](https://github.com/stawen/okovision/releases). Pour une release
+  stable, le tag `latest` n'est publié que si cette option est cochée dans le
+  workflow de release. Si l'image est privée, connectez-vous à GHCR avec
+  `docker login ghcr.io`.
 
 ## Option 1 : OkoVision avec une base de données persistante
 
