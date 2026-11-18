@@ -32,6 +32,9 @@ vi.mock('../../src/lib/server/repositories/boiler-import', () => ({
 vi.mock('../../src/lib/server/repositories/daily-summary', () => ({
 	createDailySummaryRepository: () => ({ isDayComplete: mocks.complete, save: mocks.save })
 }));
+vi.mock('../../src/lib/server/repositories/energy', () => ({
+	createEnergyRepository: () => ({ mutate: (_signal: AbortSignal, mutation: () => Promise<unknown>) => mutation() })
+}));
 
 import { collectBoiler, importManualFile } from '../../src/lib/server/collection';
 

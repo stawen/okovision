@@ -6,10 +6,13 @@ import { configurationParameters } from '../../src/lib/configuration';
 import { readConfiguration, saveConfiguration } from '../../src/lib/server/config';
 import type { RequestEvent } from '../../src/routes/private/administration/settings/$types';
 
-const { getConnection } = vi.hoisted(() => ({ getConnection: vi.fn() }));
-
-vi.mock('../../src/lib/server/database', () => ({
-	getDatabasePool: () => ({ getConnection })
+const { connection } = vi.hoisted(() => ({ connection: {} }));
+vi.mock('../../src/lib/server/collection', () => ({
+	withWriteLock: (_signal: AbortSignal, run: (db: object, signal: AbortSignal) => Promise<unknown>) =>
+		run(connection, new AbortController().signal)
+}));
+vi.mock('../../src/lib/server/repositories/energy', () => ({
+	createEnergyRepository: () => ({ mutate: (_signal: AbortSignal, mutation: () => Promise<unknown>) => mutation() })
 }));
 vi.mock('../../src/lib/server/config', async (importOriginal) => ({
 	...await importOriginal<typeof import('../../src/lib/server/config')>(),
@@ -25,7 +28,9 @@ const values = {
 	timezone: 'Europe/Paris',
 	hasSilo: '0',
 	siloSize: '',
-	ashtray: ''
+	ashtray: '',
+	pciPellet: '4.90',
+	rendementChaudiere: '89.50'
 };
 
 function formData(overrides: Record<string, string> = {}): FormData {
@@ -77,6 +82,7 @@ describe('paramètres d’administration', () => {
 				}
 			}
 		});
+
 		for (const param of configurationParameters) expect(body).toContain(`name="${param}"`);
 		expect(body).toContain('Enregistrer la configuration');
 		expect(body).not.toContain('Configuration de la communication chaudière');
@@ -88,15 +94,26 @@ describe('paramètres d’administration', () => {
 		expect(body).not.toContain('forceConfirmation');
 	});
 
-	it('valide puis enregistre les paramètres dans une connexion transactionnelle', async () => {
-		const connection = { release: vi.fn() };
-		getConnection.mockResolvedValue(connection);
+	it('affiche les valeurs énergétiques enregistrées sans les remplacer par les valeurs initiales', () => {
+		const { body } = render(SettingsPage, {
+			props: {
+				params: {}, form: null,
+				data: {
+					language: 'fr', member: null, pathname: '/private/administration/settings',
+					values: { ...values, pciPellet: '4.30', rendementChaudiere: '85' }
+				}
+			}
+		});
+		expect(body).toMatch(/name="pciPellet"[^>]*value="4\.30"/);
+		expect(body).toMatch(/name="rendementChaudiere"[^>]*value="85"/);
+	});
+
+	it('valide puis enregistre les paramètres sous le verrou partagé', async () => {
 		vi.mocked(saveConfiguration).mockResolvedValue();
 
 		await expect(actions.default(event({ id: 1, name: 'admin', type: 'admin' })))
 			.resolves.toMatchObject({ success: true, values });
 		expect(saveConfiguration).toHaveBeenCalledWith(connection, expect.objectContaining(values));
-		expect(connection.release).toHaveBeenCalledOnce();
 	});
 
 	it.each(['fr', 'en'] as const)('regroupe les champs avec des aides repliées en %s', (language) => {
@@ -112,7 +129,7 @@ describe('paramètres d’administration', () => {
 			expect(sections[0]).toContain(`name="${param}"`);
 			expect(sections[1]).not.toContain(`name="${param}"`);
 		}
-		for (const param of ['poidsPellet', 'hasSilo', 'siloSize', 'ashtray']) {
+		for (const param of ['poidsPellet', 'hasSilo', 'siloSize', 'ashtray', 'pciPellet', 'rendementChaudiere']) {
 			expect(sections[1]).toContain(`name="${param}"`);
 			expect(sections[0]).not.toContain(`name="${param}"`);
 		}

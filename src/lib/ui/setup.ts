@@ -3,7 +3,7 @@ import type { ConfigurationParameter } from '../configuration.ts';
 
 export const configurationSections = [
 	{ key: 'installation', parameters: ['chaudiere', 'tcRef', 'surfaceMaison', 'timezone'] },
-	{ key: 'pellets', parameters: ['poidsPellet', 'hasSilo', 'siloSize', 'ashtray'] }
+	{ key: 'pellets', parameters: ['poidsPellet', 'hasSilo', 'siloSize', 'ashtray', 'pciPellet', 'rendementChaudiere'] }
 ] as const satisfies readonly { key: string; parameters: readonly ConfigurationParameter[] }[];
 
 const fr = {
@@ -60,7 +60,9 @@ const fr = {
 		timezone: 'Sélectionnez le fuseau horaire IANA de l’installation. Europe/Paris est présélectionné par défaut.',
 		hasSilo: 'Choisissez le chargement des pellets par sacs ou via un silo de stockage.',
 		siloSize: 'Capacité totale du silo en kg ; obligatoire si un silo est présent.',
-		ashtray: 'Quantité de granulés consommés en kg correspondant au remplissage du cendrier, par exemple 1000.'
+		ashtray: 'Quantité de granulés consommés en kg correspondant au remplissage du cendrier, par exemple 1000.',
+		pciPellet: 'Pouvoir calorifique inférieur des granulés en kWh/kg. Vérifiez la valeur selon votre combustible.',
+		rendementChaudiere: 'Rendement estimé de la chaudière en pourcentage. Vérifiez la valeur selon votre installation.'
 	} satisfies Record<ConfigurationParameter, string>,
 	invalid: 'Vérifiez les valeurs : adresse et température de chaudière valides, poids et surface positifs, fuseau IANA valide, capacité si silo, et mot de passe confirmé pour une installation.',
 	limited: 'Trop de tentatives. Réessayez plus tard.',
@@ -77,7 +79,9 @@ const fr = {
 		timezone: 'Europe/Paris',
 		hasSilo: '',
 		siloSize: '6000',
-		ashtray: '1000'
+		ashtray: '1000',
+		pciPellet: '4.90',
+		rendementChaudiere: '89.50'
 	} satisfies Record<ConfigurationParameter, string>,
 	fields: {
 		chaudiere: 'Adresse chaudière *',
@@ -87,7 +91,9 @@ const fr = {
 		timezone: 'Fuseau horaire *',
 		hasSilo: 'Mode de chargement des pellets :',
 		siloSize: 'Capacité du silo (kg)',
-		ashtray: 'Seuil du cendrier (kg)'
+		ashtray: 'Seuil du cendrier (kg)',
+		pciPellet: 'PCI des granulés (kWh/kg) *',
+		rendementChaudiere: 'Rendement de la chaudière (%) *'
 	} satisfies Record<ConfigurationParameter, string>
 };
 
@@ -145,7 +151,9 @@ const en: typeof fr = {
 		timezone: 'Select the installation’s IANA time zone. Europe/Paris is selected by default.',
 		hasSilo: 'Choose pellet loading from bags or a storage tank.',
 		siloSize: 'Total silo capacity in kg; required when a silo is present.',
-		ashtray: 'Quantity of pellets consumed in kg before the ashtray is full, for example 1000.'
+		ashtray: 'Quantity of pellets consumed in kg before the ashtray is full, for example 1000.',
+		pciPellet: 'Lower heating value of pellets in kWh/kg. Check the value for your fuel.',
+		rendementChaudiere: 'Estimated boiler efficiency as a percentage. Check the value for your installation.'
 	},
 	invalid: 'Check the values: valid boiler address and reference temperature, positive weight and surface, valid IANA timezone, capacity if a silo exists, and a confirmed password for installation.',
 	limited: 'Too many attempts. Try again later.',
@@ -162,7 +170,9 @@ const en: typeof fr = {
 		timezone: 'Europe/Paris',
 		hasSilo: '',
 		siloSize: '6000',
-		ashtray: '1000'
+		ashtray: '1000',
+		pciPellet: '4.90',
+		rendementChaudiere: '89.50'
 	},
 	fields: {
 		chaudiere: 'Boiler address *',
@@ -172,7 +182,9 @@ const en: typeof fr = {
 		timezone: 'Time zone *',
 		hasSilo: 'Pellet loading mode :',
 		siloSize: 'Silo capacity (kg)',
-		ashtray: 'Ashtray threshold (kg)'
+		ashtray: 'Ashtray threshold (kg)',
+		pciPellet: 'Pellet heating value (kWh/kg) *',
+		rendementChaudiere: 'Boiler efficiency (%) *'
 	}
 };
 

@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => ({
 	getMonthlyHistory: vi.fn(),
 	getSeasonHistory: vi.fn(),
 	getStockStatus: vi.fn(),
+	energyStatus: vi.fn(),
 	readHistoryConfig: vi.fn(),
 	logError: vi.fn()
 }));
@@ -17,7 +18,8 @@ vi.mock('../../src/lib/server/data-access', () => ({
 			getMonthlyHistory: mocks.getMonthlyHistory,
 			getSeasonHistory: mocks.getSeasonHistory
 		},
-		maintenance: { getStockStatus: mocks.getStockStatus }
+		maintenance: { getStockStatus: mocks.getStockStatus },
+		energy: { status: mocks.energyStatus }
 	})
 }));
 vi.mock('../../src/lib/server/config', () => ({
@@ -67,13 +69,14 @@ describe('chargement de l’historique', () => {
 		mocks.getMonthlyHistory.mockResolvedValue({ indicators: { sampleCount: 0 }, chart: {} });
 		mocks.getSeasonHistory.mockResolvedValue({ season: seasons[1], months: [] });
 		mocks.getStockStatus.mockResolvedValue({ status: 'unavailable' });
+		mocks.energyStatus.mockResolvedValue('unavailable');
 	});
 
 	it('utilise les filtres demandés et conserve les deux périodes', async () => {
 		const result = await selectHistory(selection({ month: '2', year: '2025', season: '2' }));
 		expect(result).toMatchObject({ month: 2, year: 2025, selectedSeasonId: 2, databaseError: false });
-		expect(mocks.getMonthlyHistory).toHaveBeenCalledWith(2, 2025);
-		expect(mocks.getSeasonHistory).toHaveBeenCalledWith(seasons[1], 150);
+		expect(mocks.getMonthlyHistory).toHaveBeenCalledWith(2, 2025, false, expect.any(String));
+		expect(mocks.getSeasonHistory).toHaveBeenCalledWith(seasons[1], 150, false, expect.any(String));
 		expect(mocks.getStockStatus).toHaveBeenCalledWith(true, 4000);
 	});
 
@@ -83,7 +86,7 @@ describe('chargement de l’historique', () => {
 		try {
 			const result = await load(event());
 			expect(result).toMatchObject({ month: 10, year: 2026, years: [2026, 2025] });
-			expect(mocks.getMonthlyHistory).toHaveBeenCalledWith(10, 2026);
+			expect(mocks.getMonthlyHistory).toHaveBeenCalledWith(10, 2026, false, expect.any(String));
 		} finally {
 			vi.useRealTimers();
 		}
@@ -117,7 +120,7 @@ describe('chargement de l’historique', () => {
 	])('change d’année en naviguant par mois', async ({ month, year, direction, expectedMonth, expectedYear }) => {
 		const result = await selectHistory(selection({ month, year, direction, season: '2' }));
 		expect(result).toMatchObject({ month: expectedMonth, year: expectedYear, selectedSeasonId: 2 });
-		expect(mocks.getMonthlyHistory).toHaveBeenCalledWith(expectedMonth, expectedYear);
+		expect(mocks.getMonthlyHistory).toHaveBeenCalledWith(expectedMonth, expectedYear, false, expect.any(String));
 	});
 
 	it('redirige les anciennes URL avec paramètres vers l’historique sans paramètres', async () => {

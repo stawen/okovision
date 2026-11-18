@@ -54,6 +54,14 @@ automatiquement uniquement pour la base jetable `dev:local`. La configuration
 métier est lue dans `oko_configuration`; `config.json` n'est plus utilisé par
 l'application Node.
 
+Les paramètres d'énergie sont initialisés à un PCI de 4,90 kWh/kg et à un
+rendement de 89,50 %. Vérifiez et adaptez ces valeurs à l'installation dans
+l'administration. La migration conserve les valeurs déjà enregistrées.
+L'énergie est estimée à partir des synthèses existantes ; elle n'est pas
+mesurée directement. Une simulation puis une reprise explicite sont disponibles
+sur la page des synthèses ; l'historique affiche les résultats et signale les
+totaux incomplets. Voir les [précautions de reprise](./docs/installation-et-exploitation.md#reprise-des-indicateurs-énergétiques).
+
 ## Recalcul des synthèses journalières
 
 La page membre `/private/configuration/daily-summaries` permet de choisir deux

@@ -6,6 +6,10 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 import { promisify } from 'node:util';
 import { createConnection, type RowDataPacket } from 'mysql2/promise';
+import createKnex from 'knex';
+import knexConfig from '../../knexfile.js';
+import { up as addEnergyConfiguration } from '../../migrations/20261118150000_add_energy_configuration.mjs';
+import { up as addDailyEnergy } from '../../migrations/20261118153000_add_daily_energy.mjs';
 import { configurationParameters } from '../../src/lib/configuration.ts';
 import { databaseOptions } from '../../src/lib/server/database.ts';
 import { getSetupStatus, completeSetup } from '../../src/lib/server/setup.ts';
@@ -86,6 +90,7 @@ export const config = { transaction: false };
 		await t.test('supprime les options historiques sans toucher aux comptes ni aux synthèses', async () => {
 			process.env.DB_ADRESSE = env.DB_ADRESSE;
 			assert.equal(await getSetupStatus(connection), 'configure');
+			assert.equal((await connection.query<RowDataPacket[]>("SHOW TABLES LIKE 'oko_energy_state'"))[0].length, 0);
 			const [users] = await connection.query<RowDataPacket[]>('SELECT * FROM oko_user ORDER BY id');
 			const [sensors] = await connection.query<RowDataPacket[]>('SELECT * FROM oko_capteur ORDER BY id');
 			await connection.query(
@@ -97,7 +102,8 @@ export const config = { transaction: false };
 			);
 			await completeSetup({
 				chaudiere: '192.168.1.23', tcRef: '20', poidsPellet: '150', surfaceMaison: '120',
-				timezone: 'Europe/Paris', hasSilo: '0', siloSize: '', ashtray: ''
+				timezone: 'Europe/Paris', hasSilo: '0', siloSize: '', ashtray: '',
+				pciPellet: '4.90', rendementChaudiere: '89.50'
 			}, '', false);
 			assert.equal(await getSetupStatus(connection), 'ready');
 			assert.deepEqual((await businessTotals())[0], before);
@@ -108,12 +114,66 @@ export const config = { transaction: false };
 					? { ...sensor, type: 'hotwater[0]' } : sensor)
 			);
 			const [applied] = await connection.query<RowDataPacket[]>('SELECT name FROM knex_migrations');
-			assert.equal(applied.length, 3);
+			assert.equal(applied.length, 5);
 			assert.ok(applied.some((row) => /create_oko_configuration\.mjs$/.test(row.name)));
 			assert.ok(applied.some((row) => /remove_obsolete_setup_settings\.mjs$/.test(row.name)));
 			assert.ok(applied.some((row) => /complete_legacy_hotwater_sensor_type\.mjs$/.test(row.name)));
+			assert.ok(applied.some((row) => /add_daily_energy\.mjs$/.test(row.name)));
+			const [energyTable] = await connection.query<RowDataPacket[]>(
+				"SELECT ENGINE FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'oko_energy_state'"
+			);
+			assert.equal(String(energyTable[0]?.ENGINE).toLowerCase(), 'innodb');
+			const [energyState] = await connection.query<RowDataPacket[]>('SELECT id, dirty FROM oko_energy_state');
+			assert.deepEqual(energyState.map((row) => [row.id, row.dirty]), [[1, 1]]);
 			const [parameters] = await connection.query<RowDataPacket[]>('SELECT param FROM oko_configuration');
 			assert.deepEqual(parameters.map((row) => row.param).sort(), [...configurationParameters].sort());
+		});
+		await t.test('ajoute les paramètres énergie absents sans remplacer une valeur existante', async () => {
+			await connection.execute(
+				"UPDATE oko_configuration SET value = '4.30' WHERE param = 'pciPellet'"
+			);
+			await connection.execute("DELETE FROM oko_configuration WHERE param = 'rendementChaudiere'");
+			const knex = createKnex(knexConfig);
+			try {
+				await addEnergyConfiguration(knex);
+				await addEnergyConfiguration(knex);
+			} finally {
+				await knex.destroy();
+			}
+			const [rows] = await connection.query<RowDataPacket[]>(
+				"SELECT param, value FROM oko_configuration WHERE param IN ('pciPellet', 'rendementChaudiere')"
+			);
+			assert.deepEqual(Object.fromEntries(rows.map((row) => [row.param, row.value])), {
+				pciPellet: '4.30', rendementChaudiere: '89.50'
+			});
+			await t.test('reprend le DDL énergie sans écraser les synthèses existantes', async () => {
+				await connection.execute("UPDATE oko_resume_day SET conso_kwh = 12.34 ORDER BY jour LIMIT 1");
+				const knex = createKnex(knexConfig);
+				try {
+					await addDailyEnergy(knex);
+					await addDailyEnergy(knex);
+				} finally {
+					await knex.destroy();
+				}
+				const [rows] = await connection.query<RowDataPacket[]>(
+					'SELECT conso_kwh FROM oko_resume_day ORDER BY jour LIMIT 1'
+				);
+				assert.equal(Number(rows[0].conso_kwh), 12.34);
+				const [state] = await connection.query<RowDataPacket[]>('SELECT dirty FROM oko_energy_state WHERE id = 1');
+				assert.equal(Number(state[0].dirty), 1);
+				assert.deepEqual((await businessTotals())[0], before);
+			});
+			await t.test('refuse une colonne énergétique existante incompatible', async () => {
+				await connection.query('ALTER TABLE oko_resume_day MODIFY prix_kg DECIMAL(8,2) NULL');
+				const knex = createKnex(knexConfig);
+				try {
+					await assert.rejects(addDailyEnergy(knex), /prix_kg incompatible/);
+				} finally {
+					await knex.destroy();
+					await connection.query('ALTER TABLE oko_resume_day MODIFY prix_kg DECIMAL(10,4) NULL');
+				}
+				assert.deepEqual((await businessTotals())[0], before);
+			});
 		});
 	} finally {
 		await connection.end();

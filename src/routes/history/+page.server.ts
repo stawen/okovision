@@ -61,7 +61,9 @@ async function history(language: Language, selection: {
 	let year = requestedYear;
 	try {
 		const history = getDataAccess().history;
-		const [years, seasons] = await Promise.all([history.getYears(), history.getSeasons()]);
+		const [years, seasons, energyStatus] = await Promise.all([
+			history.getYears(), history.getSeasons(), getDataAccess().energy.status()
+		]);
 		if (yearValue === null && years.length > 0 && !years.includes(year)) {
 			year = years[0];
 		} else if (yearValue !== null && years.length > 0 && !years.includes(year)) {
@@ -84,8 +86,8 @@ async function history(language: Language, selection: {
 		if (seasonIdValue !== null && !selectedSeason) error(400, text.invalidHistorySelection);
 
 		const [monthly, seasonal] = await Promise.all([
-			history.getMonthlyHistory(month, year),
-			selectedSeason ? history.getSeasonHistory(selectedSeason, settings.surfaceMaison) : null
+			history.getMonthlyHistory(month, year, energyStatus === 'ready', today),
+			selectedSeason ? history.getSeasonHistory(selectedSeason, settings.surfaceMaison, energyStatus === 'ready', today) : null
 		]);
 		return {
 			month,
@@ -95,6 +97,7 @@ async function history(language: Language, selection: {
 			selectedSeasonId: selectedSeason?.id ?? null,
 			monthly,
 			seasonal,
+			energyStatus,
 			today,
 			stock,
 			databaseError: false
@@ -111,6 +114,7 @@ async function history(language: Language, selection: {
 			selectedSeasonId: null,
 			monthly: null,
 			seasonal: null,
+			energyStatus: 'unavailable' as const,
 			today,
 			stock,
 			databaseError: true

@@ -17,6 +17,7 @@ function event(type?: string, testPassed = true) {
 	for (const [param, value] of Object.entries({
 		chaudiere: '192.168.1.23', tcRef: '20', poidsPellet: '150', surfaceMaison: '120',
 		timezone: 'Europe/Paris', hasSilo: '0', siloSize: '', ashtray: '',
+		pciPellet: '4.90', rendementChaudiere: '89.50',
 		adminPassword: 'setup-test-password', confirmPassword: 'setup-test-password',
 		...(testPassed ? { initializeMatrix: 'yes' } : {})
 	})) form.set(param, value);
@@ -57,6 +58,8 @@ describe('setup sans jeton', () => {
 		expect(body).not.toContain('type="checkbox" name="initializeMatrix"');
 		expect(body).toContain('aria-describedby="tcRef-help"');
 		expect(body).toContain('aria-describedby="poidsPellet-help"');
+		expect(body).toMatch(/name="pciPellet"[^>]*value="4\.90"/);
+		expect(body).toMatch(/name="rendementChaudiere"[^>]*value="89\.50"/);
 		expect(body).not.toContain('Visualiser les fichiers CSV sur la chaudière');
 		expect(body).not.toContain('getDataFromChaudiere');
 		expect(body).not.toContain('sendToWeb');

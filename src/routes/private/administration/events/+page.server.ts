@@ -2,7 +2,9 @@ import { fail } from '@sveltejs/kit';
 import { uiMessages } from '#lib/ui/i18n.js';
 import { getDataAccess } from '#lib/server/data-access.js';
 import { logger } from '#lib/server/logger.js';
-import { SiloEventError, type SiloEventErrorCode, type SiloEventInput } from '#lib/server/repositories/silo-events.js';
+import { createSiloEventsRepository, SiloEventError, type SiloEventErrorCode, type SiloEventInput } from '#lib/server/repositories/silo-events.js';
+import { createEnergyRepository } from '#lib/server/repositories/energy.js';
+import { withWriteLock } from '#lib/server/collection.js';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = logger.child({ component: 'silo-events' });
@@ -67,20 +69,24 @@ export const actions: Actions = {
 
 		try {
 			operation = formText(form, 'operation');
-			const events = getDataAccess().siloEvents;
-			switch (operation) {
-				case 'create-event':
-					await events.createEvent(eventInput(form));
-					break;
-				case 'update-event':
-					await events.updateEvent(formId(form, 'eventId'), eventInput(form));
-					break;
-				case 'delete-event':
-					await events.deleteEvent(formId(form, 'eventId'));
-					break;
-				default:
-					throw new SiloEventError('invalid-input');
-			}
+			await withWriteLock(request.signal, async (db, signal) =>
+				createEnergyRepository(db).mutate(signal, async () => {
+					const events = createSiloEventsRepository(db);
+					switch (operation) {
+						case 'create-event':
+							await events.createEvent(eventInput(form));
+							break;
+						case 'update-event':
+							await events.updateEvent(formId(form, 'eventId'), eventInput(form));
+							break;
+						case 'delete-event':
+							await events.deleteEvent(formId(form, 'eventId'));
+							break;
+						default:
+							throw new SiloEventError('invalid-input');
+					}
+				}, (cause) => cause instanceof SiloEventError)
+			);
 			return await eventsPageData(locals.language);
 		} catch (cause) {
 			if (cause instanceof SiloEventError) {

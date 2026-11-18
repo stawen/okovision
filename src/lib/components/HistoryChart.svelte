@@ -12,6 +12,7 @@
 			max: (number | null)[];
 			min: (number | null)[];
 			consumption: (number | null)[];
+			energy: (number | null)[];
 			dju: (number | null)[];
 			cycles: (number | null)[];
 		} | null;
@@ -22,6 +23,7 @@
 				max: number | null;
 				min: number | null;
 				consumption: number | null;
+				energy: number | null;
 				dju: number | null;
 				cycles: number | null;
 				ecs: number | null;
@@ -48,7 +50,8 @@
 					{ name: text.minOutside, color: '#3972e8', shape: 'line' },
 					{ name: text.consumption, color: '#75aee7', shape: 'box' },
 					{ name: text.historyDegreeDays, color: '#858585', shape: 'line' },
-					{ name: text.historyBurnerCycles, color: '#ecb962', shape: 'box' }
+					{ name: text.historyBurnerCycles, color: '#ecb962', shape: 'box' },
+					{ name: text.historyEnergy, color: '#FF6B35', shape: 'box' }
 				]
 			: [
 					{ name: text.maxOutside, color: '#e65050', shape: 'line' },
@@ -56,7 +59,8 @@
 					{ name: text.consumption, color: '#75aee7', shape: 'box' },
 					{ name: text.historyDegreeDays, color: '#858585', shape: 'line' },
 					{ name: text.historyBurnerCycles, color: '#ecb962', shape: 'box' },
-					{ name: text.hotWaterConsumption, color: '#389448', shape: 'line' }
+					{ name: text.hotWaterConsumption, color: '#389448', shape: 'line' },
+					{ name: text.historyEnergy, color: '#FF6B35', shape: 'box' }
 				]
 	);
 	let accessibleLabel = $derived(kind === 'monthly' ? text.historyMonthlyTitle : text.historySeasonTitle);
@@ -69,7 +73,7 @@
 					{ values: monthlyData.dju, ...consumptionScale },
 					{ values: monthlyData.cycles, ...cyclesScale }
 				].some(({ values, min, max }) => values.some((value) => value !== null && (value < min || value > max)))
-			: chartValues().some((values, index) => {
+			: chartValues().slice(0, 6).some((values, index) => {
 					const max = [
 						seasonTemperatureScale.max, seasonTemperatureScale.max,
 						seasonConsumptionScale.max, seasonConsumptionScale.max,
@@ -86,12 +90,13 @@
 				monthlyData?.min ?? [],
 				monthlyData?.consumption ?? [],
 				monthlyData?.dju ?? [],
-				monthlyData?.cycles ?? []
+				monthlyData?.cycles ?? [],
+				monthlyData?.energy ?? []
 			];
 		}
 		const months = seasonalData?.months ?? [];
 		// The current month is incomplete, so omit it from the seasonal comparison.
-		const points = (key: 'max' | 'min' | 'consumption' | 'dju' | 'cycles' | 'ecs') =>
+		const points = (key: 'max' | 'min' | 'consumption' | 'dju' | 'cycles' | 'ecs' | 'energy') =>
 			months.map((month) =>
 				`${month.year}-${String(month.month).padStart(2, '0')}` === today.slice(0, 7)
 					? null
@@ -103,7 +108,8 @@
 			points('consumption'),
 			points('dju'),
 			points('cycles'),
-			points('ecs')
+			points('ecs'),
+			points('energy')
 		];
 	}
 
@@ -138,7 +144,8 @@
 							{ type: 'spline', name: text.minOutside, color: '#3972e8', data: [], zIndex: 2, marker: { enabled: true } },
 							{ type: 'column', name: text.consumption, color: '#75aee7', data: [], yAxis: 1, zIndex: 1 },
 							{ type: 'spline', name: text.historyDegreeDays, color: '#858585', data: [], yAxis: 1, zIndex: 4, marker: { enabled: true } },
-							{ type: 'column', name: text.historyBurnerCycles, color: '#ecb962', data: [], yAxis: 2 }
+							{ type: 'column', name: text.historyBurnerCycles, color: '#ecb962', data: [], yAxis: 2 },
+							{ type: 'column', name: text.historyEnergy, color: '#FF6B35', data: [], yAxis: 3, dataLabels: { enabled: true, rotation: -90, color: '#fff' } }
 						]
 					: [
 							{ type: 'spline', name: text.maxOutside, color: '#e65050', data: [], zIndex: 3, marker: { enabled: true } },
@@ -146,7 +153,8 @@
 							{ type: 'column', name: text.consumption, color: '#75aee7', data: [], yAxis: 1, zIndex: 1 },
 							{ type: 'spline', name: text.historyDegreeDays, color: '#858585', data: [], yAxis: 1, zIndex: 4, marker: { enabled: true } },
 							{ type: 'column', name: text.historyBurnerCycles, color: '#ecb962', data: [], yAxis: 2 },
-							{ type: 'spline', name: text.hotWaterConsumption, color: '#389448', data: [], yAxis: 1, zIndex: 1, marker: { enabled: true } }
+							{ type: 'spline', name: text.hotWaterConsumption, color: '#389448', data: [], yAxis: 1, zIndex: 1, marker: { enabled: true } },
+							{ type: 'column', name: text.historyEnergy, color: '#FF6B35', data: [], yAxis: 3, dataLabels: { enabled: true, rotation: -90, color: '#fff' } }
 						];
 
 			const axes: Highcharts.YAxisOptions[] = [
@@ -173,6 +181,12 @@
 						style: { color: '#936300' }
 					},
 					...(kind === 'monthly' ? cyclesScale : seasonCyclesScale),
+					opposite: true
+				},
+				{
+					gridLineWidth: 0,
+					title: { text: `${text.historyEnergy} (kWh)`, style: { color: '#c34b25' } },
+					min: 0,
 					opposite: true
 				}
 			];

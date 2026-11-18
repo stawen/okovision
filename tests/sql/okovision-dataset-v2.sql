@@ -186,7 +186,9 @@ INSERT INTO `oko_configuration` (`param`, `value`) VALUES
 ('timezone', 'Europe/Paris'),
 ('hasSilo', '1'),
 ('siloSize', '6200'),
-('ashtray', '1000');
+('ashtray', '1000'),
+('pciPellet', '4.90'),
+('rendementChaudiere', '89.50');
 
 -- --------------------------------------------------------
 
@@ -8704,8 +8706,22 @@ CREATE TABLE `oko_resume_day` (
   `conso_kg` decimal(6,2) DEFAULT NULL,
   `conso_ecs_kg` decimal(6,2) DEFAULT NULL,
   `dju` decimal(6,2) DEFAULT NULL,
-  `nb_cycle` int(1) UNSIGNED ZEROFILL DEFAULT '0'
+  `nb_cycle` int(1) UNSIGNED ZEROFILL DEFAULT '0',
+  `conso_kwh` decimal(10,2) DEFAULT NULL,
+  `cumul_kg` decimal(10,2) DEFAULT NULL,
+  `cumul_kwh` decimal(10,2) DEFAULT NULL,
+  `cumul_cycle` int UNSIGNED DEFAULT NULL,
+  `prix_kg` decimal(10,4) DEFAULT NULL,
+  `prix_kwh` decimal(10,4) DEFAULT NULL,
+  `cumul_partiel` tinyint DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `oko_energy_state`;
+CREATE TABLE `oko_energy_state` (
+  `id` tinyint UNSIGNED NOT NULL PRIMARY KEY,
+  `dirty` tinyint UNSIGNED NOT NULL
+) ENGINE=InnoDB;
+INSERT INTO `oko_energy_state` (`id`, `dirty`) VALUES (1, 1);
 
 --
 -- Contenu de la table `oko_resume_day`

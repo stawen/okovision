@@ -6,7 +6,7 @@
 	import { summaryDays } from '#lib/ui/daily-summaries.js';
 	import type { PageProps } from './$types';
 
-	let { data }: PageProps = $props();
+	let { data, form }: PageProps = $props();
 	let text = $derived(uiMessages(data.language));
 	let start = $state('');
 	let end = $state('');
@@ -117,6 +117,32 @@
 	<h2>{text.dailySummariesTitle}</h2>
 	<p class="reports-description">{text.dailySummariesDescription}</p>
 	<p class="reports-description">{text.dailySummariesHelp}</p>
+
+	<section aria-labelledby="energy-rebuild-title">
+		<h3 id="energy-rebuild-title">{text.energyRebuildTitle}</h3>
+		<p class="reports-description">{text.energyRebuildHelp}</p>
+		{#if form && 'error' in form && form.error}
+			<p class="reports-alert" role="alert">{form.error}</p>
+		{/if}
+		<form method="POST" action="?/energyPreview">
+			<button type="submit" class="reports-button" disabled={busy || data.loadError}>{text.energyPreview}</button>
+		</form>
+		{#if form && 'energyReport' in form && form.energyReport}
+			{@const report = form.energyReport}
+			<div role="status">
+				<strong>{report.saved ? text.energySavedResult : text.energyPreviewResult}</strong>
+				<p>{text.energyPeriod} : {report.firstDay && report.lastDay ? `${displayDate(report.firstDay)} — ${displayDate(report.lastDay)}` : text.unavailable}</p>
+				<p>{text.energyRows} : {report.count} · {text.energyPartial} : {report.partial} · {text.energyMissing} : {report.missingEnergy} · {text.energyPriceMissing} : {report.missingPrice}</p>
+				<p>{text.energyParameters} : {report.parameters ? `${report.parameters.pci} kWh/kg / ${report.parameters.efficiency} %` : text.unavailable}</p>
+			</div>
+			{#if !report.saved}
+				<form method="POST" action="?/energyRecalculate">
+					<input type="hidden" name="confirmed" value="yes" />
+					<button type="submit" class="reports-button reports-button-primary" disabled={busy || data.loadError}>{text.energyApply}</button>
+				</form>
+			{/if}
+		{/if}
+	</section>
 
 	{#if data.loadError}
 		<p class="reports-alert" role="alert">{text.dailySummariesLoadFailed}</p>

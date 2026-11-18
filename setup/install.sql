@@ -3,6 +3,14 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
+CREATE TABLE IF NOT EXISTS `oko_energy_state` (
+  `id` tinyint unsigned NOT NULL,
+  `dirty` tinyint unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+INSERT INTO `oko_energy_state` (`id`, `dirty`) VALUES (1, 1)
+  ON DUPLICATE KEY UPDATE `dirty` = 1;
+
 -- Export de la structure de table okovision. oko_saisons
 DROP TABLE IF EXISTS `oko_saisons`;
 CREATE TABLE IF NOT EXISTS `oko_saisons` (
@@ -32,6 +40,13 @@ CREATE TABLE IF NOT EXISTS `oko_resume_day` (
   `conso_ecs_kg` decimal(6,2) DEFAULT NULL,
   `dju` decimal(6,2) DEFAULT NULL,
   `nb_cycle` int(1) unsigned zerofill DEFAULT '0',
+  `conso_kwh` decimal(10,2) DEFAULT NULL,
+  `cumul_kg` decimal(10,2) DEFAULT NULL,
+  `cumul_kwh` decimal(10,2) DEFAULT NULL,
+  `cumul_cycle` int unsigned DEFAULT NULL,
+  `prix_kg` decimal(10,4) DEFAULT NULL,
+  `prix_kwh` decimal(10,4) DEFAULT NULL,
+  `cumul_partiel` tinyint DEFAULT NULL,
   PRIMARY KEY (`jour`)
 ) ENGINE=MYISAM DEFAULT CHARSET=utf8;
 

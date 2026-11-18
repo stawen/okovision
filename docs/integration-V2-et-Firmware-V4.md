@@ -115,6 +115,13 @@ suivante avant d'avoir satisfait ses critères de sortie. Les tests de données
 et de migration se font sur des fixtures ou bases jetables; toute comparaison
 à une installation existante se fait sur une copie sauvegardée et isolée.
 
+**Périmètre énergie demandé :** les étapes 5 et 6 portent les sections 3, 4,
+5 et 8 du README du fork. Elles sont indépendantes des étapes 0 à 4 et 7 :
+aucune adaptation de firmware ni intégration externe n'est nécessaire pour
+les réaliser. L'étape 6 dépend de la validation des calculs de l'étape 5.
+La section 8 du README concerne ici la migration des données énergétiques;
+elle ne doit pas être confondue avec l'étape 8 de ce document.
+
 ### Étape 0 — Cadrer les variantes et les décisions métier
 
 **But :** fixer ce qui sera réellement livré, sans modifier le code métier ni
@@ -299,66 +306,143 @@ modification de réglage envoyée à l'équipement.
 
 ### Étape 5 — Porter l'énergie, les cumuls et les prix FIFO
 
-**But :** ajouter les calculs du README sans altérer les anciennes données ni
-masquer une configuration inconnue.
+**But :** porter les sections 3, 4 et 8 du README sans altérer les données
+historiques ni présenter une estimation inconnue comme une valeur réelle.
+Ces actions ne dépendent pas du support d'un nouveau firmware.
 
-- Valider les paramètres PCI (kWh/kg) et rendement (%) avec l'administrateur;
-  ne pas traiter les valeurs par défaut du fork (4,90 et 89,50) comme adaptées
-  à toutes les installations.
-- Formaliser si `conso_kwh` signifie énergie utile (formule du README) ou
-  énergie combustible, et documenter unités, arrondis, précision et effets
-  d'une modification ultérieure des paramètres.
-- Définir calcul des cumuls lorsque des jours manquent, des synthèses sont
-  recalculées ou une période ancienne est corrigée. Préférer une source de
-  vérité recalculable à l'enchaînement aveugle d'un cumul précédent.
-- Formaliser les règles FIFO : événement de livraison, quantité/prix invalides,
-  dates identiques, consommation antérieure à la première livraison, cumul
-  supérieur aux livraisons connues, changement de PCI/rendement et coût cumulé.
-  Sans donnée de coût fiable, exposer `null`/indisponible plutôt qu'un prix
-  supposé.
-- Ajouter les colonnes nécessaires par une migration Knex versionnée,
-  réversible lorsque cela est sûr, non destructive et compatible avec les
-  installations legacy. Les calculs de remplissage sont une étape distincte
-  de l'ajout DDL; produire un rapport de simulation avant toute écriture de
-  reprise sur une copie isolée sauvegardée.
-- Mettre à jour le repository de synthèses et l'accès historique; garder les
-  calculs existants kg/ECS/DJU/cycles identiques.
+#### 5.1 — Fixer les règles métier
 
-**Critères de sortie :** tests de formules et de cas FIFO; vérification de
-parité sur jeux anonymisés; migration testée sur bases jetables vierge et
-legacy; valeurs absentes conservées; aucune migration exécutée en service.
+**Choix validés :** les paramètres actuels s'appliquent à tout l'historique;
+les cumuls portent sur les journées disponibles et sont signalés comme partiels
+après un trou; le prix est celui du lot actif en fin de journée, selon
+l'approximation du fork. Un prix de livraison nul est considéré inconnu. Pour
+le stock initial inconnu, la consommation cumulée est supposée commencer au
+premier lot, comme dans le fork. La reprise après migration doit être lancée
+depuis la page existante de recalcul des synthèses. Les lots `PELLET` et `BAG`
+sont triés par date puis identifiant ; une livraison postérieure à la journée
+ne peut pas déterminer son prix. Aucun coût FIFO exact n'est calculé.
+
+**Avancement :** le calcul métier et ses tests sont présents dans
+[`energy.ts`](../src/lib/indicators/energy.ts) et
+[`energy.test.ts`](../tests/unit/energy.test.ts). La migration, la simulation,
+la reprise et l'affichage sont raccordés. Les paramètres sont enregistrés dans
+`oko_configuration`, avec les valeurs initiales 4,90 kWh/kg et 89,50 % à vérifier
+selon l'installation. Un état durable masque les résultats après interruption,
+mais MyISAM ne permet pas de revenir en arrière transactionnellement. La
+validation de migration et de reprise sur base jetable reste nécessaire avant
+une utilisation sur copie sauvegardée ; aucun écrivain PHP ne doit fonctionner
+en parallèle.
+
+- Utiliser la formule du README pour l'**énergie utile estimée** :
+  `conso_kwh = conso_kg × PCI_PELLET × rendement / 100`. Le prix unitaire
+  correspondant est `prix_kwh = prix_kg / (PCI_PELLET × rendement / 100)`.
+  Documenter unités, précision et arrondis, ainsi que l'absence de mesure
+  directe de l'énergie.
+- Avant l'implémentation, faire valider les règles qui ne sont pas précisées
+  par le README : historique ou non des paramètres PCI/rendement; traitement
+  des jours manquants et des synthèses incomplètes; point de départ des cumuls;
+  effets d'une correction ou suppression de synthèse.
+- Définir le FIFO pour le stock initial et la consommation antérieure à la
+  première livraison, les livraisons de même date, les quantités ou prix
+  absents/invalides, et la consommation dépassant les stocks connus. Décider
+  explicitement si les événements `BAG` participent aux lots, en plus de
+  `PELLET`, selon le mode de stockage.
+- Préciser le prix d'une journée qui traverse plusieurs lots : le README ne
+  décrit qu'un prix du lot actif par jour. Décider si le coût journalier doit
+  répartir la consommation entre lots ou reprendre cette approximation; ne
+  pas présenter un prix unique comme un coût FIFO exact sans cette règle.
+  Définir aussi le traitement d'un prix nul et, si demandé, du coût cumulé.
+- Sans données ou paramètres fiables, conserver `null`/indisponible plutôt que
+  supposer un prix, une énergie ou un cumul complet. Distinguer une valeur
+  nulle connue d'une valeur absente.
+
+#### 5.2 — Paramètres et calculs
+
+- Ajouter PCI (kWh/kg) et rendement (%) aux paramètres existants dans
+  [`configuration.ts`](../src/lib/configuration.ts), leur validation serveur
+  et l'administration. Les valeurs initiales 4,90 et 89,50 doivent être
+  vérifiées pour chaque installation; la migration ne remplace pas les valeurs
+  déjà enregistrées. Une configuration absente ne doit pas bloquer les fonctions
+  historiques.
+- Implémenter les calculs à partir des synthèses et des événements existants :
+  [`daily-summary.ts`](../src/lib/server/repositories/daily-summary.ts),
+  [`silo-events.ts`](../src/lib/server/repositories/silo-events.ts) et
+  [`history.ts`](../src/lib/server/repositories/history.ts). Préserver les
+  calculs existants kg/ECS/DJU/cycles et leurs comportements.
+- Prévoir la propagation des changements : recalcul d'une journée ancienne,
+  création/modification/suppression d'un événement, changement de PCI ou de
+  rendement. Déterminer la première journée affectée et recalculer les données
+  dépendantes jusqu'à la fin, selon les règles validées, sans laisser de
+  cumuls ou prix obsolètes. Coordonner les écritures avec le verrou existant et
+  signaler toute interruption ou erreur.
+
+#### 5.3 — Migration et reprise des données
+
+- Ajouter par migration Knex versionnée et non destructive les colonnes
+  nullables `conso_kwh`, `cumul_kg`, `cumul_kwh`, `cumul_cycle`, `prix_kg`
+  et `prix_kwh` dans `oko_resume_day`, avec les types et précisions vérifiés.
+  Vérifier la compatibilité des colonnes déjà présentes, notamment sur une base
+  issue du fork; ne pas écraser leurs données ni ignorer un type incompatible.
+- Séparer le changement de schéma du remplissage historique. Prévoir une
+  simulation sans écriture indiquant période, lignes concernées, paramètres,
+  données insuffisantes et anomalies, puis une reprise explicite, ordonnée,
+  relançable et vérifiable. Documenter les droits nécessaires, les limites
+  transactionnelles du DDL et la procédure de sauvegarde/restauration.
+- Tester installation vierge et schémas legacy sur bases jetables, y compris
+  colonnes existantes, interruption et relance. Avant tout essai sur données
+  existantes, utiliser une copie isolée sauvegardée, arrêter les autres
+  écrivains et vérifier les résultats avant/après. Ne jamais lancer les scripts
+  PHP du fork ni une reprise sur une base en service.
+
+**Critères de sortie :** règles et paramètres validés; tests de formule,
+arrondis, valeurs absentes, cumuls et FIFO, notamment changement de lot dans
+la journée; corrections anciennes répercutées; migration et reprise vérifiées
+sur bases jetables; aucun changement aux indicateurs historiques ni opération
+sur une installation en service.
 
 **Demande à envoyer :**
 
-> Réalise l'étape 5 du plan. Commence par les formules et cas limites, puis
-> implémente uniquement les paramètres et calculs acceptés, avec tests et
-> migration Knex non destructive. N'exécute pas de DDL ni de recalcul sur une
-> base réelle; prévois une simulation et un rapport de vérification sur fixtures.
+> Poursuis l'étape 5 du plan, indépendamment des autres volets, en respectant
+> les choix validés ci-dessus. Implémente les paramètres, calculs, propagation
+> et migration Knex non destructive, avec tests ciblés et protection contre les
+> interruptions sur MyISAM. Prévois une simulation et un rapport de reprise;
+> n'exécute aucun DDL ni recalcul sur une base réelle.
 
 ### Étape 6 — Présenter les indicateurs d'énergie dans l'interface
 
-**But :** rendre les nouvelles valeurs compréhensibles sans brouiller les
-indicateurs historiques.
+**But :** porter la section 5 du README dans la page Historique, après
+validation des calculs et de la reprise de l'étape 5.
 
-- Ajouter l'énergie (kWh) aux synthèses journalières, historiques mensuels et
-  saisonniers uniquement après validation des agrégats de l'étape 5.
-- Décider séparément de la présentation des cumuls et du prix; distinguer
-  estimation, valeur calculée et indisponibilité.
-- Réutiliser les patterns des pages et graphiques Svelte existants; ne pas
-  reprendre le HTML/Bootstrap du fork.
-- Prévoir libellés, unités, format numérique français, valeurs nulles et
-  accessibilité clavier/mobile.
+- Étendre [`history.ts`](../src/lib/server/repositories/history.ts) pour
+  transmettre les valeurs kWh par jour et par mois et leurs totaux mensuel et
+  saisonnier. Définir et signaler les agrégats incomplets : une somme SQL
+  ignorant les valeurs nulles ne doit pas être présentée comme un total complet.
+- Dans [`history/+page.svelte`](../src/routes/history/+page.svelte), ajouter
+  un indicateur « Énergie (kWh) » au-dessus de chaque graphique et une colonne
+  kWh au tableau existant des mois de la saison. Ce tableau est le récapitulatif
+  mensuel de la page actuelle; ne pas créer un second tableau sans besoin.
+- Dans [`HistoryChart.svelte`](../src/lib/components/HistoryChart.svelte),
+  ajouter aux graphiques mensuel et saisonnier une série de colonnes orange
+  `#FF6B35`, avec axe Y dédié en kWh et étiquettes blanches à −90° comme dans
+  le README. Préserver la lisibilité et la légende, les autres séries et la
+  règle actuelle d'exclusion du mois courant du graphique saisonnier.
+- Réutiliser les styles et composants existants, sans reprendre le
+  HTML/Bootstrap du fork. Prévoir localisation, unités, accessibilité clavier
+  et mobile, valeurs nulles et jours sans relevés; les données indisponibles
+  restent indisponibles, jamais affichées comme zéro.
+- Les cumuls et prix sont calculés à l'étape 5; leur présentation n'est pas
+  demandée par la section 5 et reste une décision séparée.
 
-**Critères de sortie :** tests SSR ciblés, validations TypeScript/lint et build;
-les données non disponibles ne sont jamais affichées comme zéro ou données
-réelles.
+**Critères de sortie :** tests ciblés du repository et du rendu pour valeurs
+présentes, absentes et agrégats incomplets; contrôles TypeScript, lint et
+build; vérification visuelle si possible sur grand écran et mobile.
 
 **Demande à envoyer :**
 
-> Réalise l'étape 6 après validation des calculs. Ajoute l'affichage kWh aux
-> vues convenues en respectant les conventions Svelte 5 du dépôt, le format
-> français et les états indisponibles. Ajoute des tests des seules vues
-> modifiées et lance les contrôles documentés.
+> Réalise l'étape 6 après validation de l'étape 5. Ajoute les indicateurs kWh,
+> la colonne du tableau et les deux séries de graphique selon le plan, sans
+> modifier les autres indicateurs. Couvre les valeurs indisponibles et les
+> totaux incomplets, puis lance les contrôles documentés.
 
 ### Étape 7 — Exposer une API Home Assistant en lecture seule
 

@@ -13,6 +13,7 @@ const emptyData = {
 	selectedSeasonId: null,
 	monthly: null,
 	seasonal: null,
+	energyStatus: 'unavailable' as const,
 	today: '2026-11-12',
 	stock: { status: 'unavailable' as const },
 	databaseError: false
@@ -40,9 +41,9 @@ describe('historique', () => {
 		{ max: [0], min: [0], consumption: [0], dju: [-1], cycles: [0], warning: true },
 		{ max: [0], min: [0], consumption: [0], dju: [0], cycles: [61], warning: true }
 	])('signale les valeurs mensuelles hors des limites fixes', ({ warning, ...chart }) => {
-		const indicators = { sampleCount: 1, conso: null, ecs: null, max: null, mean: null, min: null, dju: null, cycles: null };
+		const indicators = { sampleCount: 1, conso: null, energy: null, energyPartial: false, ecs: null, max: null, mean: null, min: null, dju: null, cycles: null };
 		const { body } = render(History, {
-			props: { params: {}, form: null, data: { ...emptyData, monthly: { indicators, chart }, seasonal: null } }
+			props: { params: {}, form: null, data: { ...emptyData, monthly: { indicators, chart: { ...chart, energy: [] } }, seasonal: null } }
 		});
 		expect(body.includes('Certaines valeurs dépassent les limites fixes du graphique.')).toBe(warning);
 	});
@@ -55,20 +56,20 @@ describe('historique', () => {
 		{ max: 0, min: 0, consumption: 0, dju: 0, cycles: 0, ecs: 2001, month: 10, warning: true },
 		{ max: 51, min: 0, consumption: 2001, dju: 0, cycles: 401, ecs: 0, month: 11, warning: false }
 	])('signale les valeurs saisonnières représentées au-delà des limites fixes', ({ warning, ...values }) => {
-		const indicators = { sampleCount: 1, conso: null, ecs: null, max: null, mean: null, min: null, dju: null, cycles: null };
+		const indicators = { sampleCount: 1, conso: null, energy: null, energyPartial: false, ecs: null, max: null, mean: null, min: null, dju: null, cycles: null };
 		const season = { id: 1, name: 'Saison', startDate: '2026-09-01', endDate: '2027-08-31' };
 		const { body } = render(History, {
 			props: { params: {}, form: null, data: {
 				...emptyData,
-				monthly: { indicators, chart: { max: [], min: [], consumption: [], dju: [], cycles: [] } },
-				seasonal: { season, indicators, months: [{ ...values, year: 2026, sampleCount: 1, efficiency: null }] }
+				monthly: { indicators, chart: { max: [], min: [], consumption: [], energy: [], dju: [], cycles: [] } },
+				seasonal: { season, indicators, months: [{ ...values, energy: null, energyPartial: false, year: 2026, sampleCount: 1, efficiency: null }] }
 			} }
 		});
 		expect(body.includes('Certaines valeurs dépassent les limites fixes du graphique.')).toBe(warning);
 	});
 
 	it('affiche les données, les zéros réels, la sélection et la table de saison', () => {
-		const indicators = { sampleCount: 1, conso: 12.5, ecs: 0, max: 8, mean: 3, min: -2, dju: 10, cycles: 4 };
+		const indicators = { sampleCount: 1, conso: 12.5, energy: 54.81, energyPartial: true, ecs: 0, max: 8, mean: 3, min: -2, dju: 10, cycles: 4 };
 		const season = { id: 2, name: '2025-2026', startDate: '2025-09-01', endDate: '2026-08-31' };
 		const { body } = render(History, {
 			props: {
@@ -76,19 +77,20 @@ describe('historique', () => {
 				form: null,
 				data: {
 					...emptyData,
+					energyStatus: 'ready',
 					seasons: [season],
 					selectedSeasonId: 2,
 					stock: { status: 'available', remains: 1800, percent: 45 },
 					monthly: {
 						indicators,
-						chart: { max: [8], min: [-2], consumption: [12.5], dju: [10], cycles: [4] }
+						chart: { max: [8], min: [-2], consumption: [12.5], energy: [54.81], dju: [10], cycles: [4] }
 					},
 					seasonal: {
 						season,
 						indicators,
 						months: [{
 							year: 2026, month: 1, sampleCount: 1, max: 8, min: -2,
-							consumption: 12.5, ecs: 0, dju: 10, cycles: 4, efficiency: 8.33
+							consumption: 12.5, energy: 54.81, energyPartial: true, ecs: 0, dju: 10, cycles: 4, efficiency: 8.33
 						}]
 					}
 				}
@@ -96,6 +98,7 @@ describe('historique', () => {
 		});
 
 		expect(body).toContain('12,50');
+		expect(body).toContain('54,81');
 		expect(body).toContain('0,00');
 		expect(body).toContain('8,33');
 		expect(body).toContain('janvier 2026');
@@ -112,8 +115,8 @@ describe('historique', () => {
 		{ month: 12, year: 2025 }
 	])('propose une navigation par formulaire sans paramètres dans l’URL', ({ month, year }) => {
 		const season = { id: 2, name: 'Saison', startDate: '2025-09-01', endDate: '2026-08-31' };
-		const indicators = { sampleCount: 0, conso: null, ecs: null, max: null, mean: null, min: null, dju: null, cycles: null };
-		const monthly = { indicators, chart: { max: [], min: [], consumption: [], dju: [], cycles: [] } };
+		const indicators = { sampleCount: 0, conso: null, energy: null, energyPartial: false, ecs: null, max: null, mean: null, min: null, dju: null, cycles: null };
+		const monthly = { indicators, chart: { max: [], min: [], consumption: [], energy: [], dju: [], cycles: [] } };
 		const { body } = render(History, {
 			props: { params: {}, form: null, data: { ...emptyData, month, year, monthly, seasons: [season], selectedSeasonId: 2 } }
 		});
@@ -173,7 +176,7 @@ describe('historique', () => {
 		{ language: 'en', unavailable: 'Unavailable', zero: '0.00' }
 	] as const)('affiche un tiret accessible pour chaque valeur manquante en $language, sans masquer les zéros', ({ language, unavailable, zero }) => {
 		const season = { id: 2, name: 'Saison', startDate: '2026-01-01', endDate: '2026-02-28' };
-		const indicators = { sampleCount: 1, conso: 0, ecs: null, max: null, mean: null, min: null, dju: null, cycles: 0 };
+		const indicators = { sampleCount: 1, conso: 0, energy: null, energyPartial: false, ecs: null, max: null, mean: null, min: null, dju: null, cycles: 0 };
 		const { body } = render(History, {
 			props: {
 				params: {},
@@ -183,22 +186,22 @@ describe('historique', () => {
 					language,
 					monthly: {
 						indicators,
-						chart: { max: [], min: [], consumption: [], dju: [], cycles: [] }
+						chart: { max: [], min: [], consumption: [], energy: [], dju: [], cycles: [] }
 					},
 					seasonal: {
 						season,
 						indicators,
 						months: [
-							{ year: 2026, month: 1, sampleCount: 0, max: null, min: null, consumption: null, ecs: null, dju: null, cycles: null, efficiency: null },
-							{ year: 2026, month: 2, sampleCount: 1, max: null, min: null, consumption: 0, ecs: null, dju: null, cycles: 0, efficiency: null }
+							{ year: 2026, month: 1, sampleCount: 0, max: null, min: null, consumption: null, energy: null, energyPartial: false, ecs: null, dju: null, cycles: null, efficiency: null },
+							{ year: 2026, month: 2, sampleCount: 1, max: null, min: null, consumption: 0, energy: null, energyPartial: false, ecs: null, dju: null, cycles: 0, efficiency: null }
 						]
 					}
 				}
 			}
 		});
 		const table = body.match(/<tbody\b[^>]*>[\s\S]*?<\/tbody>/)?.[0] ?? '';
-		expect(table.match(/aria-hidden="true">-<\/span>/g)).toHaveLength(8);
-		expect(table.match(new RegExp(`class="visually-hidden">${unavailable}</span>`, 'g'))).toHaveLength(8);
+		expect(table.match(/aria-hidden="true">-<\/span>/g)).toHaveLength(10);
+		expect(table.match(new RegExp(`class="visually-hidden">${unavailable}</span>`, 'g'))).toHaveLength(10);
 		expect(table).toContain(zero);
 		expect(table).toMatch(/<td[^>]*>(?:<!--.*?-->)*0(?:<!--.*?-->)*<\/td>/);
 	});

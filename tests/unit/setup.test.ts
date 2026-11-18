@@ -1,12 +1,13 @@
 import { describe, expect, it, vi } from 'vitest';
 import { readFile } from 'node:fs/promises';
-import { configurationParameters } from '../../src/lib/configuration';
+import { configurationParameters, energyConfigurationDefaults } from '../../src/lib/configuration';
 import { getSetupStatus, parseSetupValues } from '../../src/lib/server/setup';
 
 function form() {
 	const values = {
 		chaudiere: '192.168.1.23', tcRef: '20', poidsPellet: '150', surfaceMaison: '120',
-		timezone: 'Europe/Paris', hasSilo: '0', siloSize: '', ashtray: ''
+		timezone: 'Europe/Paris', hasSilo: '0', siloSize: '', ashtray: '',
+		pciPellet: '4.90', rendementChaudiere: '89.50'
 	};
 	const data = new FormData();
 	for (const [key, value] of Object.entries(values)) data.set(key, value);
@@ -19,6 +20,13 @@ describe('détection du premier lancement', () => {
 
 		expect(sql).toMatch(/CREATE TABLE IF NOT EXISTS `oko_saisons`/);
 		expect(sql).not.toMatch(/INSERT\s+INTO\s+`?oko_saisons`?/i);
+	});
+
+	it('initialise l’état énergétique avant de recréer les synthèses', async () => {
+		const sql = await readFile('setup/install.sql', 'utf8');
+		expect(sql).toMatch(/CREATE TABLE IF NOT EXISTS `oko_energy_state`[\s\S]*?ENGINE=InnoDB/i);
+		expect(sql).toMatch(/INSERT INTO `oko_energy_state` \(`id`, `dirty`\) VALUES \(1, 1\)\s+ON DUPLICATE KEY UPDATE `dirty` = 1/i);
+		expect(sql.indexOf('INSERT INTO `oko_energy_state`')).toBeLessThan(sql.indexOf('DROP TABLE IF EXISTS `oko_resume_day`'));
 	});
 
 	it.each([
@@ -80,6 +88,17 @@ describe('détection du premier lancement', () => {
 });
 
 describe('valeurs du formulaire', () => {
+	it('fournit une configuration V2 complète et valide dans le jeu de développement', async () => {
+		const fixture = await readFile('tests/sql/okovision-dataset-v2.sql', 'utf8');
+		const insert = fixture.split('INSERT INTO `oko_configuration` (`param`, `value`) VALUES')[1]?.split(';', 1)[0];
+		expect(insert).toBeDefined();
+		const rows = [...(insert ?? '').matchAll(/\('([^']+)', '([^']*)'\)/g)];
+		expect(rows.map((row) => row[1]).sort()).toEqual([...configurationParameters].sort());
+		const data = new FormData();
+		for (const row of rows) data.set(row[1], row[2]);
+		expect(parseSetupValues(data)).toMatchObject(energyConfigurationDefaults);
+	});
+
 	it('conserve uniquement les paramètres de configuration actifs', () => {
 		const values = parseSetupValues(form());
 		expect(Object.keys(values)).toEqual([...configurationParameters]);
@@ -88,7 +107,9 @@ describe('valeurs du formulaire', () => {
 
 	it.each([
 		['surfaceMaison', ''], ['poidsPellet', '-1'], ['timezone', 'wrong'],
-		['chaudiere', ''], ['tcRef', 'wrong'], ['hasSilo', '1']
+		['chaudiere', ''], ['tcRef', 'wrong'], ['hasSilo', '1'],
+		['pciPellet', '0'], ['pciPellet', ''], ['pciPellet', 'Infinity'],
+		['rendementChaudiere', '0'], ['rendementChaudiere', '101'], ['rendementChaudiere', '']
 	])('refuse %s = %s sans compléter des paramètres manquants', (param, value) => {
 		const data = form();
 		data.set(param, value);

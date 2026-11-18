@@ -8,9 +8,17 @@ import { readCollectionConfig } from '../../src/lib/server/config';
 import { withWriteLock } from '../../src/lib/server/collection';
 import { DailySummaryNoDataError } from '../../src/lib/server/repositories/daily-summary';
 
-const { save } = vi.hoisted(() => ({ save: vi.fn() }));
+const { save, energyStatus, energyCalculate, energyRebuild } = vi.hoisted(() => ({
+	save: vi.fn(), energyStatus: vi.fn(), energyCalculate: vi.fn(), energyRebuild: vi.fn()
+}));
 vi.mock('../../src/lib/server/config', () => ({ readCollectionConfig: vi.fn() }));
 vi.mock('../../src/lib/server/collection', () => ({ withWriteLock: vi.fn() }));
+vi.mock('../../src/lib/server/repositories/energy', () => ({
+	createEnergyRepository: () => ({
+		mutate: (_signal: AbortSignal, mutation: () => Promise<unknown>) => mutation(),
+		status: energyStatus, calculate: energyCalculate, rebuild: energyRebuild
+	})
+}));
 vi.mock('../../src/lib/server/repositories/daily-summary', async (importOriginal) => ({
 	...await importOriginal<typeof import('../../src/lib/server/repositories/daily-summary')>(),
 	createDailySummaryRepository: () => ({ save })
@@ -88,6 +96,7 @@ describe('recalcul serveur des synthèses', () => {
 		});
 		vi.mocked(withWriteLock).mockImplementation(async (signal, run) => run({} as never, signal));
 		save.mockResolvedValue('saved');
+		energyStatus.mockResolvedValue('dirty');
 		vi.spyOn(console, 'info').mockImplementation(() => {});
 		vi.spyOn(console, 'error').mockImplementation(() => {});
 	});
@@ -143,5 +152,30 @@ describe('recalcul serveur des synthèses', () => {
 		vi.mocked(readCollectionConfig).mockRejectedValueOnce(new Error('database unavailable'));
 		await expect(load(loadEvent())).resolves.toMatchObject({ latestDay: '', loadError: true });
 		expect(console.error).toHaveBeenCalled();
+	});
+
+	it('simule sans écrire puis exige une confirmation avant la reprise', async () => {
+		const result = { summaries: [], parameters: { pci: 4.9, efficiency: 89.5 } };
+		energyCalculate.mockResolvedValue(result);
+		energyRebuild.mockResolvedValue(result);
+		await expect(actions.energyPreview(event('2026-11-13'))).resolves.toMatchObject({
+			energyReport: { saved: false, count: 0, parameters: result.parameters }
+		});
+		expect(energyRebuild).not.toHaveBeenCalled();
+		await expect(actions.energyRecalculate(event('2026-11-13'))).resolves.toMatchObject({ status: 400 });
+		const request = event('2026-11-13');
+		const form = new FormData();
+		form.set('confirmed', 'yes');
+		const confirmed = { ...request, request: new Request(request.request.url, { method: 'POST', body: form }) };
+		await expect(actions.energyRecalculate(confirmed)).resolves.toMatchObject({
+			energyReport: { saved: true, count: 0 }
+		});
+		expect(energyRebuild).toHaveBeenCalledOnce();
+	});
+
+	it('refuse la simulation et la reprise avant migration', async () => {
+		energyStatus.mockResolvedValue('unavailable');
+		await expect(actions.energyPreview(event('2026-11-13'))).resolves.toMatchObject({ status: 422 });
+		expect(energyCalculate).not.toHaveBeenCalled();
 	});
 });

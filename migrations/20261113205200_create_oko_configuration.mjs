@@ -1,4 +1,7 @@
-import { configurationParameters } from '../src/lib/configuration.ts';
+const configurationParameters = [
+	'chaudiere', 'tcRef', 'poidsPellet', 'surfaceMaison', 'timezone',
+	'hasSilo', 'siloSize', 'ashtray'
+];
 
 /** @param {import('knex').Knex} knex */
 export async function up(knex) {

@@ -12,7 +12,8 @@ test('post-installation sur la base Docker vierge dédiée', async (t) => {
 	const connection = await createConnection(databaseOptions(process.env));
 	const values: ConfigurationValues = {
 		chaudiere: '192.168.1.23', tcRef: '20', poidsPellet: '150', surfaceMaison: '120',
-		timezone: 'Europe/Paris', hasSilo: '0', siloSize: '', ashtray: ''
+		timezone: 'Europe/Paris', hasSilo: '0', siloSize: '', ashtray: '',
+		pciPellet: '4.90', rendementChaudiere: '89.50'
 	};
 	const password = 'setup-test-private-password';
 	try {
@@ -29,6 +30,8 @@ test('post-installation sur la base Docker vierge dédiée', async (t) => {
 		await t.test('installe une base réellement vierge sans confirmation forcée', async () => {
 			await completeSetup(values, password, false);
 			assert.equal(await getSetupStatus(connection), 'matrix');
+			const [energyState] = await connection.query<RowDataPacket[]>('SELECT id, dirty FROM oko_energy_state');
+			assert.deepEqual(energyState.map((row) => [row.id, row.dirty]), [[1, 1]]);
 			const startDate = todayInTimezone(values.timezone);
 			const [seasons] = await connection.query<RowDataPacket[]>(
 				"SELECT saison, DATE_FORMAT(date_debut, '%Y-%m-%d') AS startDate FROM oko_saisons"
@@ -56,8 +59,12 @@ test('post-installation sur la base Docker vierge dédiée', async (t) => {
 		});
 
 		await t.test('installe explicitement le SQL et le nouveau compte sans mesures de démonstration', async () => {
+			await connection.execute('UPDATE oko_energy_state SET dirty = 0 WHERE id = 1');
 			await completeSetup(values, password, true);
 			assert.equal(await getSetupStatus(connection), 'matrix');
+			assert.equal((await connection.query<RowDataPacket[]>('SELECT dirty FROM oko_energy_state WHERE id = 1'))[0][0].dirty, 1);
+			const [summaryColumns] = await connection.query<RowDataPacket[]>('SHOW COLUMNS FROM oko_resume_day');
+			assert.ok(summaryColumns.some((column) => column.Field === 'conso_kwh'));
 			const [columns] = await connection.query<RowDataPacket[]>('SHOW COLUMNS FROM oko_configuration');
 			assert.deepEqual(columns.map((column) => column.Field), ['param', 'value']);
 			const [rows] = await connection.query<RowDataPacket[]>('SELECT param, value FROM oko_configuration');
@@ -103,7 +110,7 @@ test('post-installation sur la base Docker vierge dédiée', async (t) => {
 			assert.equal(await getSetupStatus(connection), 'configure');
 			await completeSetup(values, '', false);
 			assert.equal(await getSetupStatus(connection), 'matrix');
-			assert.equal((await connection.query<RowDataPacket[]>('SELECT COUNT(*) AS count FROM oko_configuration'))[0][0].count, 8);
+			assert.equal((await connection.query<RowDataPacket[]>('SELECT COUNT(*) AS count FROM oko_configuration'))[0][0].count, configurationParameters.length);
 			assert.equal((await connection.query<RowDataPacket[]>('SELECT conso_kg FROM oko_resume_day'))[0][0].conso_kg, '10.00');
 			assert.deepEqual(await createUsersRepository(connection).getAdminBoilerCredentials(), boilerCredentials);
 		});

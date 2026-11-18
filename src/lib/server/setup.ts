@@ -74,6 +74,12 @@ export function parseSetupValues(form: FormData): ConfigurationValues {
 	if (!['0', '1'].includes(values.hasSilo)) throw new SetupError('invalid');
 	if (values.hasSilo === '1' && parseHistorySettings(values).siloSize === null) throw new SetupError('invalid');
 	parseCollectionConfig(values);
+	const pci = Number(values.pciPellet);
+	const efficiency = Number(values.rendementChaudiere);
+	if (!values.pciPellet || !Number.isFinite(pci) || pci <= 0
+		|| !values.rendementChaudiere || !Number.isFinite(efficiency) || efficiency <= 0 || efficiency > 100) {
+		throw new SetupError('invalid');
+	}
 	return values;
 }
 
@@ -105,6 +111,10 @@ export async function completeSetup(values: ConfigurationValues, password: strin
 		} finally {
 			await migrations.destroy();
 		}
+		const [energyState] = await connection.execute<ResultSetHeader>(
+			'UPDATE oko_energy_state SET dirty = 1 WHERE id = 1'
+		);
+		if (energyState.affectedRows !== 1) throw new Error('Missing energy state');
 		await saveConfiguration(connection, values);
 		if (createInitialSeason) {
 			await createSeasonsRepository(connection).createSeason(todayInTimezone(values.timezone));

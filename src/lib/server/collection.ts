@@ -6,6 +6,7 @@ import { boilerCsvDay, createBoilerCsvConnector } from './boiler-import.ts';
 import { readBoilerAddress, readCollectionConfig } from './config.ts';
 import { createBoilerImportRepository } from './repositories/boiler-import.ts';
 import { createDailySummaryRepository } from './repositories/daily-summary.ts';
+import { createEnergyRepository } from './repositories/energy.ts';
 import { logger } from './logger.ts';
 
 const log = logger.child({ component: 'collection' });
@@ -76,25 +77,28 @@ export async function collectBoiler(
 	return withWriteLock(signal, async (db, lockedSignal) => {
 		const summaries = createDailySummaryRepository(db);
 		const importer = createBoilerImportRepository(db);
-		let imported = 0;
-		let completed = 0;
-		for (const file of files) {
-			lockedSignal.throwIfAborted();
-			const day = boilerCsvDay(file.name);
-			const complete = await summaries.isDayComplete(day);
-			await progress(completed, files.length, day, true);
-			if (!complete) {
-				const csv = await connector.importFile(config.boilerAddress, file.name, lockedSignal);
+		const energy = createEnergyRepository(db);
+		return energy.mutate(lockedSignal, async () => {
+			let imported = 0;
+			let completed = 0;
+			for (const file of files) {
 				lockedSignal.throwIfAborted();
-				const inserted = await importer.importCsv(csv, lockedSignal);
-				imported += inserted;
-				log.info('boilerFileImported', { filename: file.name, imported: inserted });
+				const day = boilerCsvDay(file.name);
+				const complete = await summaries.isDayComplete(day);
+				await progress(completed, files.length, day, true);
+				if (!complete) {
+					const csv = await connector.importFile(config.boilerAddress, file.name, lockedSignal);
+					lockedSignal.throwIfAborted();
+					const inserted = await importer.importCsv(csv, lockedSignal);
+					imported += inserted;
+					log.info('boilerFileImported', { filename: file.name, imported: inserted });
+				}
+				lockedSignal.throwIfAborted();
+				await summaries.save(day, todayInTimezone(config.timezone), !complete || dirtyDays.has(day), config.poidsPellet, config.tcRef);
+				completed++;
+				await progress(completed, files.length, day, false);
 			}
-			lockedSignal.throwIfAborted();
-			await summaries.save(day, todayInTimezone(config.timezone), !complete || dirtyDays.has(day), config.poidsPellet, config.tcRef);
-			completed++;
-			await progress(completed, files.length, day, false);
-		}
-		return { files: completed, imported };
+			return { files: completed, imported };
+		});
 	});
 }

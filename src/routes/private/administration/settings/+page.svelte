@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { testBoilerConnection } from '#lib/boiler-address.js';
 	import { configurationSections, setupMessages, timezoneOptions } from '#lib/ui/setup.js';
+	import { energyConfigurationDefaults } from '#lib/configuration.js';
 	import { uiMessages } from '#lib/ui/i18n.js';
 	import type { PageProps } from './$types';
 
@@ -68,10 +69,10 @@
 								</button>
 							</div>
 						{:else}
-							<input id={param} name={param} value={values[param] || ''}
+							<input id={param} name={param} value={values[param] ?? (param === 'pciPellet' || param === 'rendementChaudiere' ? energyConfigurationDefaults[param] : '')}
 								placeholder={text.examples[param]}
 								aria-describedby={param === 'siloSize' ? `${param}-requirement ${param}-help` : `${param}-help`}
-								required={['tcRef', 'poidsPellet', 'surfaceMaison'].includes(param) || (param === 'siloSize' && loadingMode === '1')}
+								required={['tcRef', 'poidsPellet', 'surfaceMaison', 'pciPellet', 'rendementChaudiere'].includes(param) || (param === 'siloSize' && loadingMode === '1')}
 								maxlength="255" />
 						{/if}
 						{#if param === 'siloSize'}

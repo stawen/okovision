@@ -5,7 +5,7 @@ import { createMaintenanceRepository } from '../../src/lib/server/repositories/m
 
 const totals = {
 	sampleCount: 2, tcExtMax: '8.0', tcExtMin: '-2.0', consoKg: '12.50',
-	consoEcsKg: '0.00', dju: '10.00', nbCycle: 4
+	consoEcsKg: '0.00', consoKwh: null, energyCount: 0, dju: '10.00', nbCycle: 4
 };
 const season = { id: 2, name: 'Saison', startDate: '2025-09-10', endDate: '2026-09-15' };
 
@@ -28,17 +28,17 @@ describe('requêtes de synthèse historique', () => {
 	it('aligne les journées sur le calendrier et calcule les totaux sur toutes les synthèses', async () => {
 		const { execute, history } = database();
 		execute.mockResolvedValueOnce([[
-			{ day: 1, tcExtMax: '8.0', tcExtMin: '-2.0', consoKg: '12.5', dju: '10', nbCycle: 4 },
-			{ day: 3, tcExtMax: null, tcExtMin: null, consoKg: null, dju: null, nbCycle: null }
+			{ day: 1, tcExtMax: '8.0', tcExtMin: '-2.0', consoKg: '12.5', consoKwh: null, dju: '10', nbCycle: 4 },
+			{ day: 3, tcExtMax: null, tcExtMin: null, consoKg: null, consoKwh: null, dju: null, nbCycle: null }
 		]]).mockResolvedValueOnce([[totals]]);
 		const result = await history.getMonthlyHistory(2, 2024);
 		expect(result.chart.max).toHaveLength(29);
 		expect(result.chart.max.slice(0, 3)).toEqual([8, null, null]);
 		expect(result.indicators).toEqual({
-			sampleCount: 2, conso: 12.5, ecs: 0, max: 8, mean: 3, min: -2, dju: 10, cycles: 4
+			sampleCount: 2, conso: 12.5, energy: null, energyPartial: false, ecs: 0, max: 8, mean: 3, min: -2, dju: 10, cycles: 4
 		});
 		expect(execute.mock.calls[0][1]).toEqual(['2024-02-01', '2024-02-01']);
-		expect(execute.mock.calls[1][0]).toContain('FROM oko_resume_day WHERE jour BETWEEN ? AND ?');
+		expect(execute.mock.calls[1][0]).toContain('FROM oko_resume_day AS summary WHERE jour BETWEEN ? AND ?');
 		expect(execute.mock.calls[1][1]).toEqual(['2024-02-01', '2024-02-29']);
 	});
 
@@ -61,11 +61,11 @@ describe('requêtes de synthèse historique', () => {
 	it('ne fabrique ni totaux ni efficacité en l’absence de données', async () => {
 		const { execute, history } = database();
 		execute.mockResolvedValueOnce([[]]).mockResolvedValueOnce([[
-			{ sampleCount: 0, tcExtMax: null, tcExtMin: null, consoKg: null, consoEcsKg: null, dju: null, nbCycle: null }
+			{ sampleCount: 0, tcExtMax: null, tcExtMin: null, consoKg: null, consoEcsKg: null, consoKwh: null, energyCount: 0, dju: null, nbCycle: null }
 		]]);
 		const result = await history.getMonthlyHistory(11, 2026);
 		expect(result.indicators).toEqual({
-			sampleCount: 0, conso: null, ecs: null, max: null, mean: null, min: null, dju: null, cycles: null
+			sampleCount: 0, conso: null, energy: null, energyPartial: false, ecs: null, max: null, mean: null, min: null, dju: null, cycles: null
 		});
 	});
 
@@ -73,6 +73,16 @@ describe('requêtes de synthèse historique', () => {
 		const { execute, history } = database();
 		execute.mockResolvedValueOnce([[]]).mockResolvedValueOnce([[{ ...totals, consoKg: 'invalid' }]]);
 		await expect(history.getMonthlyHistory(1, 2026)).rejects.toThrow('Valeur d’indicateur invalide');
+	});
+
+	it('signale un total énergétique incomplet sans compter les jours futurs', async () => {
+		const { execute, history } = database();
+		execute.mockResolvedValueOnce([[]]).mockResolvedValueOnce([[
+			{ ...totals, consoKwh: '12.30', energyCount: 2 }
+		]]);
+		const result = await history.getMonthlyHistory(2, 2024, true, '2024-02-04');
+		expect(result.indicators).toMatchObject({ energy: 12.3, energyPartial: true });
+		expect(execute.mock.calls[1][0]).toContain('(SELECT dirty FROM oko_energy_state WHERE id = 1) = 0');
 	});
 });
 

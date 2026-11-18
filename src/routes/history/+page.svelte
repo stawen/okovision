@@ -6,7 +6,7 @@
   import type { PageProps } from "./$types";
   import HistoryChart from "#lib/components/HistoryChart.svelte";
 
-  type IndicatorKey = "conso" | "ecs" | "max" | "mean" | "min" | "dju" | "cycles";
+  type IndicatorKey = "conso" | "ecs" | "energy" | "max" | "mean" | "min" | "dju" | "cycles";
   type IndicatorGroup = {
     id: string;
     label: string;
@@ -35,6 +35,7 @@
       items: [
         { id: "consumption", key: "conso", label: text.consumption, unit: "kg", tone: "blue", digits: 2 },
         { id: "hot-water", key: "ecs", label: text.historyHotWaterLabel, unit: "kg", tone: "blue", digits: 2 },
+        { id: "energy", key: "energy", label: text.historyEnergy, unit: "kWh", tone: "orange", digits: 2 },
       ],
     },
     {
@@ -165,6 +166,9 @@
       <span>{text.historyDataUnavailable}</span>
     </p>
   {/if}
+  {#if current.energyStatus === "dirty"}
+    <p class="history-notice" role="status">{text.historyEnergyPending}</p>
+  {/if}
 
   <section class="history-section" aria-labelledby="monthly-title">
     <div class="section-heading">
@@ -209,6 +213,7 @@
       label: text.historyMonthlyTitle,
       unavailable: text.unavailable,
       indicators: current.monthly?.indicators ?? null,
+      partial: text.historyEnergyPartial,
       format,
     })}
 
@@ -253,6 +258,7 @@
       label: text.historySeasonTitle,
       unavailable: text.unavailable,
       indicators: current.seasonal?.indicators ?? null,
+      partial: text.historyEnergyPartial,
       format,
     })}
 
@@ -265,7 +271,7 @@
         seasonalData={current.seasonal}
         hasData={current.seasonal?.months.some((month) =>
           `${month.year}-${String(month.month).padStart(2, "0")}` !== current.today.slice(0, 7)
-          && [month.max, month.min, month.consumption, month.dju, month.cycles, month.ecs].some((value) => value !== null),
+          && [month.max, month.min, month.consumption, month.dju, month.cycles, month.ecs, month.energy].some((value) => value !== null),
         ) ?? false}
       />
     </div>
@@ -284,6 +290,7 @@
               <th scope="col">{text.historyTableDju}</th>
               <th scope="col">{text.historyTableConsumption}</th>
               <th scope="col">{text.historyTableEcs}</th>
+              <th scope="col">{text.historyEnergy} (kWh)</th>
               <th scope="col">{text.historyTableEfficiency}</th>
             </tr>
           </thead>
@@ -296,11 +303,12 @@
                   <td>{@render TableValue(month.dju, 2)}</td>
                   <td>{@render TableValue(month.consumption, 2)}</td>
                   <td>{@render TableValue(month.ecs, 2)}</td>
+                  <td>{@render TableValue(month.energy, 2)}{#if month.energyPartial} <span title={text.historyEnergyPartial} aria-label={text.historyEnergyPartial}>*</span>{/if}</td>
                   <td>{@render TableValue(month.efficiency, 2)}</td>
                 </tr>
               {/each}
             {:else}
-              <tr><td colspan="6">{text.historyTableUnavailable}</td></tr>
+              <tr><td colspan="7">{text.historyTableUnavailable}</td></tr>
             {/if}
           </tbody>
         </table>
@@ -321,14 +329,18 @@
   groups,
   label,
   unavailable,
+  partial,
   indicators,
   format,
 }: {
   groups: IndicatorGroup[];
   label: string;
   unavailable: string;
+  partial: string;
   indicators: {
     conso: number | null;
+    energy: number | null;
+    energyPartial: boolean;
     ecs: number | null;
     max: number | null;
     mean: number | null;
@@ -355,6 +367,7 @@
                   {format(indicators[indicator.key], indicator.digits)}
                 {/if}
                 {#if indicator.unit}<small>{indicator.unit}</small>{/if}
+                {#if indicator.key === "energy" && indicators?.energyPartial}<small title={partial} aria-label={partial}>*</small>{/if}
               </strong>
             </div>
           {/each}

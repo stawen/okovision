@@ -1,7 +1,8 @@
 import { error, fail } from '@sveltejs/kit';
 import { configurationParameters } from '#lib/configuration.js';
-import { getDatabasePool } from '#lib/server/database.js';
 import { readConfiguration, saveConfiguration } from '#lib/server/config.js';
+import { withWriteLock } from '#lib/server/collection.js';
+import { createEnergyRepository } from '#lib/server/repositories/energy.js';
 import { logger } from '#lib/server/logger.js';
 import { parseSetupValues } from '#lib/server/setup.js';
 import { setupMessages } from '#lib/ui/setup.js';
@@ -43,16 +44,14 @@ export const actions: Actions = {
 			return fail(400, { message: text.settingsInvalid, values: submittedValues(form) });
 		}
 
-		let connection;
 		try {
-			connection = await getDatabasePool().getConnection();
-			await saveConfiguration(connection, values);
+			await withWriteLock(request.signal, async (db, signal) =>
+				createEnergyRepository(db).mutate(signal, () => saveConfiguration(db, values))
+			);
 			return { success: true, values };
 		} catch (cause) {
 			log.error('settingsSaveFailed', cause);
 			return fail(503, { message: text.settingsSaveFailed, values });
-		} finally {
-			connection?.release();
 		}
 	}
 };
